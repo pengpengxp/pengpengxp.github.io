@@ -1,0 +1,270 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-08-24-emacs-use-mu4e
+
+
+* 中文搜索设置
+  需要设置一个环境变量，emacs中这样设置：
+  #+BEGIN_SRC elisp
+    (setenv "XAPIAN_CJK_NGRAM" "1")
+  #+END_SRC
+
+  shell中直接 =export XAPIAN_CJK_NGRAM=1= 就可以了。
+  
+  搜索中文件的时候不能直接输入中文。需要使用条件搜索。先看看 =mu help
+  find= 的例子：
+  #+BEGIN_EXAMPLE
+    Some examples:
+     # get all messages with 'bananas' in body, subject or recipient fields:
+     $ mu find bananas
+
+     # get all messages regarding bananas from John with an attachment:
+     $ mu find from:john flag:attach bananas
+
+     # get all messages with subject wombat in June 2009
+     $ mu find subject:wombat date:20090601..20090630
+
+    See the `mu-find' and `mu-easy' man-pages for more information.
+  #+END_EXAMPLE
+  
+  实际测试中，使用 =b:中文= 可以搜到内容中的中文。（没有空格）
+
+  实际测试中，使用 =s: 中文= 可以搜到subject（抬头）中的中文。（有空格）
+  
+  好像使用 =b:中文= 更全面一点。
+  
+  其实直接搜中文都可以的。这个需要再看下mu4e的搜索规则。
+
+* mu4e快捷键
+  #+BEGIN_EXAMPLE
+    Using the below key bindings, you can do various things with these
+    messages; these actions are also listed in the Headers menu in the
+    emacs menu bar.
+
+    key          description
+    ===========================================================
+    n,p          view the next, previous message
+    ],[          move to the next, previous unread message
+    y            select the message view (if it's visible)
+    RET          open the message at point in the message view
+
+    searching
+    ---------
+    s            search
+    S            edit last query
+    /            narrow the search
+    b            search bookmark
+    B            edit bookmark before search
+    j            jump to maildir
+    M-left,\     previous query
+    M-right      next query
+
+    O            change sort order
+    P            toggle threading
+    Q            toggle full-search
+    V            toggle skip-duplicates
+    W            toggle include-related
+
+    marking
+    -------
+    d            mark for moving to the trash folder
+    =            mark for removing trash flag ('untrash')
+    DEL,D        mark for complete deletion
+    m            mark for moving to another maildir folder
+    r            mark for refiling
+    +,-          mark for flagging/unflagging
+    ?,!          mark message as unread, read
+
+    u            unmark message at point
+    U            unmark *all* messages
+
+    %            mark based on a regular expression
+    T,t          mark whole thread, subthread
+
+    <insert>,*   mark for 'something' (decide later)
+    #            resolve deferred 'something' marks
+
+    x            execute actions for the marked messages
+
+    composition
+    -----------
+    R,F,C        reply/forward/compose
+    E            edit (only allowed for draft messages)
+
+
+    misc
+    ----
+    ;            switch focus
+    a            execute some custom action on a header
+    |            pipe message through shell command
+    C-+,C--      increase / decrease the number of headers shown
+    H            get help
+    C-S-u        update mail & reindex
+    q            leave the headers buffer
+  #+END_EXAMPLE
+  
+  我常用的：
+  |------+----------------------------------|
+  | key  | describe                         |
+  |------+----------------------------------|
+  | e    | 保存光标所在的副件               |
+  | g    | goto url use `browse-url'        |
+  | A    | 对附件做自定义操作               |
+  | a    | 对邮件的操作                     |
+  | 回车 | 应该是直接使用默认浏览器访问链接 |
+  |------+----------------------------------|
+
+* 处理附件
+  #+BEGIN_EXAMPLE
+    5.3 Opening and saving attachments
+
+    By default, mu4e uses the xdg-open-program 26 or (on MacOS) the open program for opening attachments. If you want to use another program, you do so by setting the MU_PLAY_PROGRAM environment variable to the program to be used.
+
+    The default directory for extracting (saving) attachments is your home directory (~/); you can change this using the variable mu4e-attachment-dir, for example:
+
+    (setq mu4e-attachment-dir  "~/Downloads")
+
+    For more flexibility, mu4e-attachment-dir can also be a user-provided function. This function receives two parameters: the file-name and the mime-type as found in the e-mail message27 of the attachment, either or both of which can be nil. For example:
+
+    (setq mu4e-attachment-dir
+      (lambda (fname mtype)
+        (cond
+          ;; docfiles go to ~/Desktop
+          ((and fname (string-match "\\.doc$" fname))  "~/Desktop")
+          ;; ... other cases  ...
+          (t "~/Downloads")))) ;; everything else
+
+    You can extract multiple attachments at once by prefixing the extracting command by C-u; so C-u e asks you for a range of attachments to extract (for example, 1 3-6 8). The range "‘a’" is a shortcut for all attachments.
+  #+END_EXAMPLE
+  我是这样设置的：
+  #+BEGIN_SRC elisp
+    (setq mu4e-attachment-dir
+      (lambda (fname mtype)
+        (cond
+          ;; zip and rar file go to ~/Downloads
+          ((and fname (string-match "\\.zip$" fname))  "~/Downloads")
+          ((and fname (string-match "\\.rar$" fname))  "~/Downloads")
+
+          ;; document to and rar file go to ~/Documents
+          ((and fname (string-match "\\.pdf$" fname))  "~/Documents")
+          ((and fname (string-match "\\.doc$" fname))  "~/Documents")
+
+          ;; ... other cases  ...
+          (t "/tmp")))) ;; everything else
+  #+END_SRC
+  
+  这样可以使用 =C-u e= 来保存所有附件。
+
+* 如何搜索
+  #+BEGIN_EXAMPLE
+7.1 Queries
+
+mu4e queries are the same as the ones that mu find understands^30.
+Let’s look at some examples here, please refer to the mu-find and
+mu-easy man pages for details and more examples.
+
+  ,* Get all messages regarding bananas:
+   
+    bananas
+    
+  ,* Get all messages regarding bananas from John with an attachment:
+   
+    from:john flag:attach bananas
+    
+  ,* Get all messages with subject wombat in June 2009
+   
+    subject:wombat date:20090601..20090630
+    
+  ,* Get all messages with PDF attachments in the /projects folder
+   
+    maildir:/projects mime:application/pdf
+    
+  ,* Get all messages about Rupert in the /Sent Items folder. Note
+    that maildirs with spaces must be quoted.
+   
+    maildir:"/Sent Items" rupert
+    
+  ,* Get all important messages which are signed:
+   
+    flag:signed prio:high
+    
+  ,* Get all messages from Jim without an attachment:
+   
+    from:jim AND NOT flag:attach
+    
+  ,* Get all messages with Alice in one of the contacts-fields (to,
+    from, cc, bcc):
+   
+    contact:alice
+    
+  ,* Get all unread messages where the subject mentions Ångström:
+    (search is case-insensitive and accent-insensitive, so this
+    matches Ångström, angstrom, aNGstrøM, ...)
+   
+    subject:Ångström flag:unread
+    
+  ,* Get all unread messages between Mar-2002 and Aug-2003 about some
+    bird:
+   
+    date:20020301..20030831 nightingale flag:unread
+    
+  ,* Get today’s messages:
+   
+    date:today..now
+    
+    or, unless you have a really old Xapian
+   
+    date:today
+    
+  ,* Get all messages we got in the last two weeks regarding emacs:
+   
+    date:2w..now emacs
+    
+    or, unless you have a really old Xapian
+   
+    date:2w.. emacs
+    
+  ,* Get messages from the Mu mailing list:
+   
+    list:mu-discuss.googlegroups.com
+    
+    Note - in the Headers view you may see the ’friendly name’ for a
+    list; however, when searching you need the real name. You can see
+    the real name for a mailing list from the friendly name’s
+    tool-tip.
+   
+  ,* Get messages with a subject soccer, Socrates, society, ...; note
+    that the ’*’-wildcard can only appear as a term’s rightmost
+    character:
+   
+    subject:soc*
+    
+  ,* Get all messages not sent to a mailing-list:
+   
+    NOT flag:list
+    
+  ,* Get all mails with attachments with filenames starting with pic;
+    note that the ’*’ wildcard can only appear as the term’s
+    rightmost character:
+   
+    file:pic*
+    
+  ,* Get all messages with PDF-attachments:
+   
+    mime:application/pdf
+    
+    Get all messages with image attachments, and note that the ’*’
+    wildcard can only appear as the term’s rightmost character:
+   
+    mime:image/*
+  #+END_EXAMPLE
+
+* 重新index邮件
+
+  使用过程中，我只遇到过一次，index不知道怎么被搞坏了。
+
+  1. 我先删了原来的index，应该是 =~/.mu= 目录。
+  2. 然后使用 !mu index --maildir=~/mutt_mail! 来重新index。
+  3. 最后在mu4e中按 =U= 重新update一下就ok了。

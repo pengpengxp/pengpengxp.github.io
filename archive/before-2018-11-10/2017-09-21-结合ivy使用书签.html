@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2017-09-21-结合ivy使用书签</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2017-09-21-结合ivy使用书签</h1>
+<p>
+使用浏览器书签时，有时候太多了，找起来很麻烦。最近我开始使用emacs-w3m
+来存书签。默认保存到 <code>~/.w3m/bookmark.html</code> 文件中。
+</p>
+
+<p>
+然后我尝试了 <a href="https://github.com/emacs-helm/helm/blob/master/helm-bookmark.el">helm-bookmarks</a> ，它可以使用helm来帮助选择书签。
+</p>
+
+<p>
+但我是 <code>ivy</code> 用户，平时少有使用helm。还有一个问题是我的书签中有很多中
+文标题，如果需要选择中文标题的书签时，还需要切换输入法。
+</p>
+
+<p>
+针对中文标题这个问题，由于之前我 <a href="https://github.com/pengpengxp/swiper/wiki/ivy-support-chinese-pinyin">hack</a> 过一下ivy，使它可以支持拼音首字
+母搜索，可以参考一下 <a href="https://raw.githubusercontent.com/pengpengxp/.emacs.d/ubuntu16.04/lisp/init-ivy.el">我的配置</a> 。所以我只需要使用ivy帮助我选择书签就可
+以了。
+</p>
+
+<p>
+首先需要解析我的书签文件，使用 <code>libxml-parse-html-region</code> 可以解析文件，
+返回一个 <code>DOM object</code> 。还需要 <a href="https://github.com/pengpengxp/.emacs.d/blob/ubuntu16.04/site-lisp/dom.el">dom.el</a> 来解析 <code>DOM object</code> 。不过据说
+<code>Emacs 25</code> 已经内置了 <code>dom.el</code> 了。如果使用 <code>Emacs 24</code> 的同学可能需要
+自行下载一下。
+</p>
+
+<p>
+思路很简单，把所有的 <code>a</code> 标签全部解析出来，做出来一个 <code>((name1 url1)
+(name2 url2) ...)</code> 这样格式的列表。使用 <code>ivy-read</code> 来选择一个 <code>name</code>
+，最后根据 <code>name</code> 找到对应的 <code>url</code> 。
+</p>
+
+<p>
+代码如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">  <span style="color: #6c6c6c; font-style: italic;">;;; </span><span style="color: #6c6c6c; font-style: italic;">use `</span><span style="color: #5fafd7; font-style: italic;">ivy</span><span style="color: #6c6c6c; font-style: italic;">' to use w3m-bookmarks</span>
+  (<span style="color: #a1db00;">require</span> '<span style="color: #5fafd7;">dom</span>)
+  <span style="color: #6c6c6c; font-style: italic;">;;; </span><span style="color: #6c6c6c; font-style: italic;">where your bookmark file located</span>
+  (<span style="color: #a1db00;">setq</span> peng-bookmark-file <span style="color: #ff4ea3;">"~/.w3m/bookmark.html"</span>)
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-ivy-get-bookmarks</span> ()
+    <span style="color: #ff4b4b;">"use `</span><span style="color: #5fafd7;">ivy-read</span><span style="color: #ff4b4b;">' to select bookmark and return its url</span>
+<span style="color: #ff4b4b;">  "</span>
+    (<span style="color: #a1db00;">let*</span> ((dom (<span style="color: #a1db00;">with-temp-buffer</span>
+                  (insert-file-contents peng-bookmark-file)
+                  (libxml-parse-html-region (point-min)
+                                            (point-max))))
+           (a (dom-by-tag dom 'a))
+           (mylist (mapcar 'peng-parse-dom-tag-to-personal-format a))
+           (name (ivy-read <span style="color: #ff4ea3;">"Jump to bookmarks:"</span> (mapcar 'car mylist)))
+           <span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">todo: I need to find `</span><span style="color: #5fafd7; font-style: italic;">name</span><span style="color: #6c6c6c; font-style: italic;">' in mylist, if find, break the</span>
+           <span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">loop. But now, I just use `</span><span style="color: #5fafd7; font-style: italic;">mapcar</span><span style="color: #6c6c6c; font-style: italic;">' to deal with every</span>
+           <span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">element in mylist and get `</span><span style="color: #5fafd7; font-style: italic;">final-result</span><span style="color: #6c6c6c; font-style: italic;">' by removing all</span>
+           <span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">nil element in the list `</span><span style="color: #5fafd7; font-style: italic;">result</span><span style="color: #6c6c6c; font-style: italic;">'. It's very ugly code!</span>
+           (result (mapcar #'(lambda (data)
+                               (<span style="color: #a1db00;">if</span> (string= (car data)
+                                            name)
+                                   (cdr data)
+                                 nil))
+                           mylist))
+           (final-result (caar (remove nil result))))
+      final-result))
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-parse-dom-tag-to-personal-format</span> (dom)
+    <span style="color: #ff4b4b;">"parse a tag to `(name url) format'"</span>
+    (<span style="color: #a1db00;">let</span> ((url (<span style="color: #a1db00;">dom-attr</span> dom 'href))
+          (name (dom-text dom)))
+      (list name url)))
+</pre>
+</div>
+
+<p>
+最后，写几个 <code>interactive</code> 的函数来选择用不同的浏览器打开：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-bookmarks-firefox</span> ()
+    (<span style="color: #a1db00;">interactive</span>)
+    (<span style="color: #a1db00;">let</span> ((url (peng-ivy-get-bookmarks)))
+      (browse-url-firefox url)))
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-bookmarks-chrome</span> ()
+    (<span style="color: #a1db00;">interactive</span>)
+    (<span style="color: #a1db00;">let</span> ((url (peng-ivy-get-bookmarks)))
+      (browse-url-chromium url)))
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-bookmarks-w3m</span> ()
+    (<span style="color: #a1db00;">interactive</span>)
+    (<span style="color: #a1db00;">let</span> ((url (peng-ivy-get-bookmarks)))
+      (w3m-goto-url-new-session url)))
+</pre>
+</div>
+
+<p>
+在函数 <code>peng-ivy-get-bookmarks</code> 中，得到标题名 <code>title</code> 后，从 <code>((name1
+url1) (name2 url2) ...)</code> 列表中找对应的url时，我写得很丑：用map返回一
+个 <code>(nil nil (URL) nil ...)</code> 这样的列表，然后又用 <code>remove</code> 把所有的
+<code>nil</code> 去掉。最后剩下的就是需要的 <code>url</code> 。其实应该是循环 <code>mylist</code> ，找
+到对应的 <code>name</code> 后就退出的。但我不知道怎么写。至少现在是可以工作了。
+</p>
+
+<p>
+最后，我尝试了把我 <code>firefox</code> 的书签导出到html中，使用上面的函数也可以
+工作。只需要把 <code>peng-bookmark-file</code> 改成对应的html文件就好。
+</p>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

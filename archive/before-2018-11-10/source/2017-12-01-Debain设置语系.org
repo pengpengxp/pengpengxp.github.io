@@ -1,0 +1,54 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+
+
+#+TITLE: 2017-12-01-Debain设置语系
+
+有时候安装系统时，安装的时候可能没有选中文。然后使用时有时候对中文件支
+持就不是很好。我又需要重新设置一下。于是查询了一个locale（语系）相关的
+概念。参考 [[https://wiki.debian.org/Locale][Debain Wiki]] 。
+
+大多数Linux的变量 =LANG= 是用来指定语系的。
+  
+查询语系：
+#+BEGIN_SRC sh
+locale -a  
+#+END_SRC
+
+如果设置了LANG变量，又设置了地区。LANG变量会覆盖地区的设置。
+
+程序都支持使用环境变量来决定显示时间的格式，字符的显示等。主要是下面
+这些变量：
+|----------------+--------------------------------------------------------------------------------------------|
+| LANG           | Determines the default locale in the absence of other locale related environment variables |
+| LANGUAGE       | List of fallback message translation languages (GNU only)                                  |
+| LC_ADDRESS     | Convention used for formatting of street or postal addresses                               |
+| LC_ALL         | Overrides all other locale variables (except LANGUAGE)                                     |
+| LC_COLLATE     | Collation order                                                                            |
+| LC_CTYPE       | Character classification and case conversion                                               |
+| LC_MONETARY    | Monetary formatting                                                                        |
+| LC_MEASUREMENT | Default measurement system used within the region                                          |
+| LC_MESSAGES    | Format of interactive words and responses                                                  |
+| LC_NUMERIC     | Numeric formatting                                                                         |
+| LC_PAPER       | Default paper size for region                                                              |
+| LC_RESPONSE    | Determines how responses (such as Yes and No) appear in the local language                 |
+| LC_TELEPHONE   | Conventions used for representation of telephone numbers                                   |
+| LC_TIME        | Date and time formats                                                                      |
+|----------------+--------------------------------------------------------------------------------------------|
+  
+可以看出来，其实只要设置 =LANG= 这个变量就可以了。 =LC_ALL= 这个变量
+一般不要在启动脚本中设置，因为它会覆盖所有变量。这个变量可以这么用：
+如果希望程序的错误日志输出都是英文，可以设置该变量然后再启动程序。
+  
+在Debain中可以使用 =dpkg-reconfigure locales= ，然后选择一个做为默认语
+系。我设置为了 =zh_CN.utf8= 。
+  
+剩下的就是在对应的脚本中加入设置语句就可以了。我在 =.zshrc= 中加入
+=export LANG=zh_CN.utf8= 。
+
+我还在emacs的配置文件中加入了语系的设置：
+#+BEGIN_SRC emacs-lisp
+(setenv "LANG" "zh_CN.UTF-8")
+#+END_SRC

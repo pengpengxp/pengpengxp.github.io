@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Azure中Linux主机推荐的布署模型</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Azure中Linux主机推荐的布署模型</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2d3e226">1. 单个VM</a></li>
+<li><a href="#orge433c40">2. Load balanced的多个虚拟机</a></li>
+<li><a href="#org3d4bcd2">3. N层网络的应用</a></li>
+<li><a href="#org70dff5f">4. 多区域的服务</a></li>
+<li><a href="#org8271c3a">5. 文档地址</a></li>
+</ul>
+</div>
+</div>
+<hr />
+<p>
+介绍微软推荐的linux vm的几种布署方式。这些都是在arm模式下的布署方式，
+在asm模式中，只是一些概念不同，原理都是相同的。
+</p>
+<hr />
+
+<div id="outline-container-org2d3e226" class="outline-2">
+<h2 id="org2d3e226"><span class="section-number-2">1</span> 单个VM</h2>
+<div class="outline-text-2" id="text-1">
+
+<div class="figure">
+<p><img src="./images/azure_linux_single_vm.png" alt="azure_linux_single_vm.png" />
+</p>
+</div>
+
+<p>
+<code>public ip</code> 是一种资源，从外网中访问该资源组都只能通过它。如果资源组
+中只有一台机器的时候，访问 <code>public ip</code> 就能直接访问到内部的虚拟机
+（public ip是attach到虚拟机的）。
+</p>
+
+<p>
+<code>Virtual network</code> 是一种资源。虚拟网络可以划分子网 <code>Subnet</code> ，该示例
+中只划分了一个子网。创建虚拟网络的时候可以选择地址段，可以随便找一个
+私有的地址段分配（10.0.0.0/8这样）。
+</p>
+
+<p>
+网卡 <code>nic</code> 也是资源（Network interface card）。网卡在新建的时候需要
+指定ip地址。可以是dhcp，也可以是静态分配，它需要在一个子网内，本例中
+的nic就是在subnet这个子网中的。网卡可以attach到虚拟机上。这样虚拟机
+才存在于网络中。
+</p>
+
+<p>
+综上所述，本例中我们可以使用 <code>public ip</code> 来ssh到vm，但是使用
+<code>ifconfig</code> 查出来vm的ip却是一个内网地址（一般是一个10网络的地址，就
+是subnet中的一个地址。）。
+</p>
+
+<p>
+<code>VM storage account</code> 是用于存储的。拉起的虚拟机的磁盘都可以存储在里
+面，存在它里面的数据都是持久化的，不会丢失。我认为这个存储账户中的数
+据微软应该是自己做了冗余、灾备的。
+</p>
+
+<p>
+<code>temp</code> ，这个是给虚拟机分配的临时存储空间 <code>Temporary disk</code> ，它们一
+般就直接存在拉起虚拟机的物理机上。存在其上的数据是没有持久化的。虚拟
+机重启或删除，数据就删除了。
+</p>
+
+<p>
+<code>Diagnostic logs</code> 是用于存储一些虚拟机的诊断日志的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge433c40" class="outline-2">
+<h2 id="orge433c40"><span class="section-number-2">2</span> Load balanced的多个虚拟机</h2>
+<div class="outline-text-2" id="text-2">
+
+<div class="figure">
+<p><img src="./images/azure_linux_load_balanced_vm.png" alt="azure_linux_load_balanced_vm.png" />
+</p>
+</div>
+
+<p>
+这种情况，由于拉起了多个虚拟机，前面一般需要架设一个 <code>load balance</code>
+来分配流量。
+</p>
+
+<p>
+<code>load balance</code> 可以配置，它的前端（front end）可以配置成 <code>public ip</code>
+，把 <code>VM1</code> 和 <code>VM2</code> 加入它的后端池。这样流量来以后，load balance会自
+动分配流量。
+</p>
+
+<p>
+这种情况下，如果想用ssh登陆内部的虚拟机，只有一个public ip地址，不设
+置的话，只能是随机登陆一个。可以通过设置端口映射的方式来固定登陆某台
+机器。
+</p>
+
+<p>
+同一个虚拟网络中的多台机器是互通的。也可以随机登陆到一台机器后，用内
+网地址来访问其它机器。
+</p>
+
+<p>
+这里多了一个 <code>Availiability Set</code> （可用性集）的概念。一个可用性集中
+至少应该有两台机器。它是微软给用户的一个保证：不管什么时候，保证同一
+个可用性集中的机器至少有一个可用。原理大概就是把加入同一个可用性集的
+多个机器尽量地分到不同的机房、地域。这样万一机房停电了或者出问题，其
+它机器还是可用的。而且有时候微软执行系统维护需要机器重启的时候，也不
+会重启一个可用性集中的所有机器。
+</p>
+
+<p>
+因为每个存储账户的 <code>IOPS（input/output operations per second）</code> 有限
+制。推荐为每一个vm建一个独立的存储账号。这样可以避免 <code>IOPS</code> 成为性能
+瓶颈。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3d4bcd2" class="outline-2">
+<h2 id="org3d4bcd2"><span class="section-number-2">3</span> N层网络的应用</h2>
+<div class="outline-text-2" id="text-3">
+
+<div class="figure">
+<p><img src="./images/azure_linux_N_tier_application.png" alt="azure_linux_N_tier_application.png" />
+</p>
+</div>
+
+<p>
+该示例和 <code>load_balance</code> 示例相比，把虚拟网络分为了四个子网：web tier
+提供web服务、Business tier提供XX服务、Data tier提供数据存储服务，另
+外，管理员可以登陆到Management网络，使用内网地址来对整个应用进行管理。
+</p>
+
+<p>
+<code>NSG（network security group）</code> 网络安全组的作用就相当于防火墙。它可
+以应用于单个虚拟机。也可以应用于一个子网。该例中每个子网都有一个NSG。
+可以根据每个子网不同的功能来定制每个NSG。比如Data tier subnet层的NSG
+可以限制本subnet只接受Business tier subnet和Management subnet这两个
+网络中的流量。而Management subnet的NSG可以限制只接受一些可信的公网地
+址的访问。
+</p>
+
+<p>
+两个load balance，左边一个（外部load balance）功能和 <code>load_balance</code>
+示例中的相同。右边一个是internal load balance，它只会处理直接到达云
+服务内部资源的流量。
+</p>
+
+<p>
+该示例中有两个public ip，一个是在外部load balance上，一个是在Jumpbox
+这台虚拟机上。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org70dff5f" class="outline-2">
+<h2 id="org70dff5f"><span class="section-number-2">4</span> 多区域的服务</h2>
+<div class="outline-text-2" id="text-4">
+
+<div class="figure">
+<p><img src="./images/azure_linux_multiple_regions.png" alt="azure_linux_multiple_regions.png" />
+</p>
+</div>
+
+<p>
+这样的模型一般是为灾备、跨区域性能考虑。
+</p>
+
+<p>
+前面的 <code>Traffic Manager</code> 在一种资源。它可以根据性能、优先级等流量导
+到后面两个region中的其中一个或两个。
+</p>
+
+<p>
+如果是灾备，可以设置其中一个region为主，一个为备。正常情况下，
+ <code>Traffic Manager</code> 把流量导入到主。如果主出问题，它可以自动把流量切
+ 换到备上。
+</p>
+
+<p>
+ <code>Traffic Manager</code> 本身是没有 <code>public ip</code> 的，它只有一个域名
+<code>XX.trafficmanager.cn</code> 。假设两个 <code>region</code> 的 <code>public ip</code> 分别为ip1
+和ip2。其中ip1为主，ip2为备。设置 <code>Traffic Manager</code> 时，把ip1的优先
+级设置较高。访问 <code>Traffic Manager</code> 的域名 <code>XX.trafficmanager.cn</code> 时，
+会解析到ip1的地址。如果主出问题了，再访问域名，则解析到ip2。
+</p>
+
+<p>
+另外，两个region中的数据应该保证一致性。微软推荐的是使用开源分布式
+NoSQL数据库系统 <code>Apache Cassandra</code> 。这要求两个region中的数据层的机
+器应该是相通的。 <a href="https://github.com/DSPN/azure-deployment-guide/blob/master/bestpractices.md">这里</a> 推荐了几种方法：public ip、VPN和专用线路。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8271c3a" class="outline-2">
+<h2 id="org8271c3a"><span class="section-number-2">5</span> 文档地址</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+<a href="https://docs.microsoft.com/zh-cn/azure/architecture/reference-architectures/virtual-machines-linux/single-vm">Run a Linux VM on Azure</a>
+</p>
+
+<p>
+<a href="https://docs.microsoft.com/zh-cn/azure/architecture/reference-architectures/virtual-machines-linux/multi-vm">Run load-balanced VMs for scalability and availability</a>
+</p>
+
+<p>
+<a href="https://docs.microsoft.com/zh-cn/azure/architecture/reference-architectures/virtual-machines-linux/n-tier">Run Linux VMs for an N-tier application</a>
+</p>
+
+<p>
+<a href="https://docs.microsoft.com/zh-cn/azure/architecture/reference-architectures/virtual-machines-linux/multi-region-application">Run Linux VMs in multiple regions for high availability</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

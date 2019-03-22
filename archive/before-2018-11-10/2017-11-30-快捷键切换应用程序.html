@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2017-11-30-快捷键切换应用程序</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2017-11-30-快捷键切换应用程序</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgaa8571b">1. 安装</a></li>
+<li><a href="#orgbd2e92e">2. 简单使用</a></li>
+<li><a href="#org20aa6e3">3. 结合虚拟桌面使用</a></li>
+</ul>
+</div>
+</div>
+<p>
+开始使用电脑时总是使用鼠标点点点来切换应用程序。后来我发现 <code>Atl+Tab</code>
+可以很大的提升效率。最后我发现如果把常用应用程序绑到固定的快捷键上可以
+省去更多的时间，还可以把每个程序都全屏。
+</p>
+
+<p>
+在windows上有 <code>AutoHotkey</code> 。 Mac上我之前使用过 <code>karabiner</code> 。今天写一
+写Linux下的 <code>wmctrl</code> 。* wmctrl来控制窗口
+</p>
+
+<div id="outline-container-orgaa8571b" class="outline-2">
+<h2 id="orgaa8571b"><span class="section-number-2">1</span> 安装</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+ubuntu 16.04和Debain中可以直接使用apt来安装：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo apt-get install wmctrl
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbd2e92e" class="outline-2">
+<h2 id="orgbd2e92e"><span class="section-number-2">2</span> 简单使用</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+对于wmctrl来说，它可以“看到”当前打开的所有窗口（window）。可以这样查看
+一下当前所有的window：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">wmctrl -xlG
+</pre>
+</div>
+
+<p>
+最简单的使用方法就是在打开对应的应用程序后，直接使用下面的命令来激活：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    wmctrl -a emacs
+    wmctrl -a firefox
+    wmctrl -a terminal
+</pre>
+</div>
+<p>
+这个是根据名字来的。我最开始的时候就直接使用的这种方法。一般Gnome，KDE
+和xfce中都有设置快捷键的地方。找到对应的地方添加快捷键绑定到该脚本中即
+可。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org20aa6e3" class="outline-2">
+<h2 id="org20aa6e3"><span class="section-number-2">3</span> 结合虚拟桌面使用</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+当我使用虚拟桌面时，上述设置就不太满虽我需求了。我一般每个桌面做的事
+情不同，可以桌面1是在本机，桌面2可能都在远程。所以我的需求就变成了：
+快捷键只能切换本桌面的窗口，不能切到其它桌面的窗口。
+</p>
+
+<p>
+已经有人提过这样的 <a href="https://askubuntu.com/questions/194703/make-wmctrl-ignore-other-than-current-workspaces-windows">问题</a> 了。
+</p>
+
+<p>
+最后我搞了一个这样的脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/</span><span style="color: #a1db00;">bash</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">only switch to the application on current screen</span>
+
+<span style="color: #ff8700;">SCREEN_W</span>=$(xwininfo -root | sed -n <span style="color: #ff4ea3;">'s/^  Width: \(.*\)$/\1/p'</span>)
+<span style="color: #ff8700;">SCREEN_H</span>=$(xwininfo -root | sed -n <span style="color: #ff4ea3;">'s/^  Height: \(.*\)$/\1/p'</span>)
+
+<span style="color: #ff8700;">CURRENT_DESKTOP</span>=<span style="color: #fa8072;">`wmctrl -d|grep '*'|awk '{print $1}'`</span>
+
+
+<span style="color: #a1db00;">if</span> [ $<span style="color: #ff8700;">#</span> != 1 ];<span style="color: #a1db00;">then</span>
+    <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"usage pwmctrl emacs.Emacs"</span>
+    <span style="color: #a1db00;">exit</span> 1
+<span style="color: #a1db00;">fi</span> 
+
+<span style="color: #ff8700;">NAME</span>=$<span style="color: #ff8700;">1</span>
+
+wmctrl -xlG | awk -v <span style="color: #ff8700;">W</span>=<span style="color: #ff4ea3;">"$SCREEN_W"</span> -v <span style="color: #ff8700;">H</span>=<span style="color: #ff4ea3;">"$SCREEN_H"</span> -v <span style="color: #ff8700;">NAME</span>=<span style="color: #ff4ea3;">"$NAME"</span> -v <span style="color: #ff8700;">CURRENT_DESKTOP</span>=<span style="color: #ff4ea3;">"$CURRENT_DESKTOP"</span> <span style="color: #ff4ea3;">'$7==NAME &amp;&amp; $3&gt;=0 &amp;&amp; $3&lt;W &amp;&amp; $4&gt;=0 &amp;&amp; $4&lt;H &amp;&amp; $2==CURRENT_DESKTOP {print $1}'</span> | <span style="color: #a1db00;">while </span><span style="color: #d18aff;">read</span> WINS; <span style="color: #a1db00;">do</span> wmctrl -ia <span style="color: #ff4ea3;">"$WINS"</span>; <span style="color: #a1db00;">done</span> 
+
+<span style="color: #a1db00;">exit</span> 0
+</pre>
+</div>
+
+<p>
+要理解上面脚本，先得搞清楚 <code>wmctrl -xlg</code> 输出的每行的内容：
+</p>
+<pre class="example">
+0x0120013a  0 0    0    1600 900  emacs.Emacs           pengpengxp-thinkpad emacs@pengpengxp-thinkpad
+</pre>
+
+<p>
+我理解如下：
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">0x0120013a</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1600</td>
+<td class="org-right">900</td>
+<td class="org-left">emacs.Emacs</td>
+<td class="org-left">pengpengxp-thinkpad emacs@pengpengxp-thinkpad</td>
+</tr>
+
+<tr>
+<td class="org-right">唯一标识id</td>
+<td class="org-right">虚拟桌面号</td>
+<td class="org-right">N/A</td>
+<td class="org-right">N/A</td>
+<td class="org-right">宽度</td>
+<td class="org-right">长度</td>
+<td class="org-left">WM_CLASS，可以匹分应用程序</td>
+<td class="org-left">窗口的title</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+可以使用 <code>wmctrl -d</code> 找到当前桌面号（带星号的一行）。
+</p>
+
+<p>
+上面的脚本就是输入一个WM_CLASS，然后找到窗口的最大长度和宽度以及当前
+桌面号。通过awk判断是当前桌面，且宽度和长度都没有超过当前屏幕时，才
+切换窗口。
+</p>
+
+<p>
+把上述脚本放到 <code>/yourpath/pwmctrl</code> 目录后，选择合适的按键绑到这些内
+容就可以了：
+</p>
+<pre class="example">
+/yourpath/pwmctrl emacs.Emacs
+/yourpath/pwmctrl lilyterm.Lilyterm
+/yourpath/pwmctrl Telegram.TelegramDesktop
+/yourpath/pwmctrl google-chrome.Google-chrome
+/yourpath/pwmctrl Opera.Opera
+/yourpath/pwmctrl Navigator.Firefox-esr
+</pre>
+
+<p>
+这样就只在当前桌面切换啦。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

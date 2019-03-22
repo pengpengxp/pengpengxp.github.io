@@ -1,0 +1,114 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 定制nginx的gunzip模块
+
+* gunzip and gzip
+  :PROPERTIES:
+  :CUSTOM_ID: gunzip
+  :END:
+
+  #+BEGIN_SRC artist
+           +---------------------------+        (3)        +---------------------+
+           |                           |<------------------|                     |
+           |   Host 2: Nginx proxy     |                   |  Host 3: Upstream   |
+           |                           |------------------>|                     |
+           +---------------------------+        (2)        +---------------------+
+                |                 ^                
+            (4) |                 | (1)            
+                v                 |     
+           +---------------------------+
+           |                           |
+           |   Host 2: Client          |
+           |                           |
+           +---------------------------+
+  #+END_SRC
+  + gzip模块针对上图中的 (4) 。即返回给client的时候进行压缩。
+  + gunzip模块针对 (4) 。返回给client的时候，如果client是老式的不支持
+    解析压缩数据的客户[fn:1:比如curl。]。把这个开关打开后，Host 2中的
+    nginx会把数据解压后再返回给client。如果client支持解压gzip文件
+    [fn:2:如chrome。]，则Host 2在第 (4) 步的时候不会进行解压。
+  + [X] gzip开启后，第 (2) 步会不会进行压缩？这一步进不进行压缩要考虑两方面。
+    + Nginx请求给upstream时有没有加入对应的http头
+      #+BEGIN_EXAMPLE
+        "Accept-Encoding: gzip"
+      #+END_EXAMPLE
+    + Upstream支不支持压缩数据
+  + [X] gzip开启后， (3) 压缩了以后，在第 (4) 步会不会进行二次压缩？我
+    觉得应该不会了
+  + [X] nginx的gunzip对第 (2) 步能不能生效？不会，nginx在host 2上，管
+    不了host 3上的server。
+
+* 特殊情况的下定制nginx的gunzip模块
+  如果有一个第三方定制模块 =my_module= ，每次upstream返回给客户的数据
+  它都需要做一些加工处理。这种情况下，如果upstream返回的是压缩后的数据，
+  =my_module= 处理不了。
+
+  以 [[#gunzip]] 的图为例，现在 =my_module= 要求upstream (3) 回的消息不能
+  是zip过的。
+
+  现在使用nginx的gunzip模块，在我们 =my_module= 模块去处理upstream的
+  reponse之前对reponse先做处理，如果是zip的文件，就先unzip后再给
+  =my_module=模块处理。
+
+  支持这样的功能后，upstream可以通过压缩数据的方式减少upstream到proxy
+  （内网）的网络流量[fn:3:因为有些用户服务器可能出现cpu没满而网卡满了
+  的情况。]。
+
+  修改点：
+  1) 编译nginx时，需要修改modules的加载顺序，使gunzip在 =my_module= 之
+     前加载[fn:4:当前默认编译时，gunzip在第三方filter模块 =my_module=
+     之后。]。
+  2) 默认gunzip中有一个判断，如果客户发起的请求中显示有
+     =Accept-encoding: gzip= 这样的http header。表示客户支持解压zip文
+     件。这时默认gunzip模块不会对upstream传回来的压缩后的zip文件进行解
+     压的。这不符合我们的使用要求（我们要求是zip的数据就全部都解压让我
+     们的 =my_module= 处理）。于是我们修改了一下原始的gunzip模块，如果
+     加载了我们的模块，则对response全部都做解压。然后再交给
+     =my_module= 模块处理。
+     #+BEGIN_SRC C
+       static ngx_int_t
+       ngx_http_gunzip_header_filter(ngx_http_request_t *r)
+       {
+
+           /* ... */
+           if (!r->gzip_tested) {
+               /* 在这里做的判断 */
+               if (ngx_http_gzip_ok(r) == NGX_OK) {
+                   return ngx_http_next_header_filter(r);
+               }
+
+           }
+           else if (r->gzip_ok) {
+               return ngx_http_next_header_filter(r);
+           }
+       }
+     #+END_SRC
+    修改为：
+     #+BEGIN_SRC C
+       if (!r->gzip_tested) {
+           if (ngx_http_gzip_ok(r) == NGX_OK) {
+               /**
+                ,* Always unzip the gzip stream from upstream before
+                ,* it send to RAS modules.
+                ,*/
+               if (r->headers_in.gunzip) {
+                   r->gzip_tested = 1;
+               }
+               else {
+                   return ngx_http_next_header_filter(r);
+               }
+           }
+
+       } else if (r->gzip_ok) {
+     #+END_SRC
+     在结构体 =ngx_http_headers_in_t= 里面添加 =gunzip= 位。如果配置文
+     件中设置了 =gunzip on= ，则它的值应不为0。
+     #+BEGIN_SRC C
+       typedef struct {
+           ngx_list_t                        headers;
+           /* ... */
+           unsigned                          gunzip:2;
+       } ngx_http_headers_in_t;
+     #+END_SRC

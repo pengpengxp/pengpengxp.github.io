@@ -1,0 +1,13 @@
+/* --------------------------------------------------------------------------------------------- */
+/* layout */
+* {
+box-sizing: border-box;
+}
+
+body {
+font-family: Arial, Helvetica, sans-serif;
+background-image: url(http://pengpengxp.github.io/images/bg-paper-with-binder-1800.jpg);
+background-size:contain;
+margin-left: 5%; margin-right: 5%;
+}
+

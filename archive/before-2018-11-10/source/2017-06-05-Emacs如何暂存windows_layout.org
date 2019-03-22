@@ -1,0 +1,90 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+Title: Emacs如何暂存windows layout
+#+Date: 2017-06-24
+
+
+我使用大屏幕显示器是，经常开至少两个window进行操作。
+
+我总有这样的需求：暂存一下某个 =windows layout= ，去做完其它事情然后迅速我切
+回来。
+
+刚开始时我找到了 `window-configuration-to-register' 这个函数。它可以把
+=windows layout= 存到寄存器中。需要调出来的时候直接 `jump-to-register'
+就搞定。但是经常registor一多，我就忘了哪些是存过的哪些是没有存过的。这
+样的话，就容易把之前存的内容覆盖掉。于是我写了这两个函数：
+#+BEGIN_SRC elisp
+  (defun peng-found-in-register-alist-p (r)
+    "whether the register is in `register-alist'"
+    (let ((plist register-alist)
+          (value)
+          (flag-p nil))
+
+      (while (and plist
+                  (not flag-p))
+        (setq value (car (car plist)))
+        (if (equal value r)
+            (progn
+              (setq flag-p t)
+              t))
+        (setq plist (cdr plist))
+        )
+
+      ;; flag-p is t when found
+      (if flag-p
+          t
+        nil))) 
+  (defun peng-window-configuration-to-register ()
+    "put window configuration to register, when register is
+  used. Make sure override or not"
+    (interactive)
+    (let ((r (read-char  "Put windows  to register: ")))
+
+      (if (peng-found-in-register-alist-p  r)
+          (progn
+            (if (y-or-n-p "The register is in using, Override or not?")
+                (progn
+                  (window-configuration-to-register r)
+                  (message "Save windows-conf-in %s" (char-to-string r))
+                  )
+              (message "Do not thing")))
+        (progn
+          (window-configuration-to-register r)
+          (message "Save windows-conf-in %s" (char-to-string r))
+          )
+        )))
+#+END_SRC
+使用 `peng-window-configuration-to-register' 来存，如果原来的 =r= 中保
+存了内容，会提示你是否覆盖。
+
+过了一段时间，我发现原来 `ivy' 也提供类似的功能。主要就是
+`ivy-push-view' 和 `ivy-pop-view' 。具体见 [[https://oremacs.com/2016/06/27/ivy-push-view/][这里]] 。
+
+简单来讲，调用 `ivy-push-view' 可以保存一个类似于 ={} bufname1
+bufname2 xxx= 这样的一个 =view= 。使用 `ivy-switch-buffer' 可以切换过
+去。一般很少以 ={= 开头的buffer。所以一般输入 ={= 后就可以切换已经保存
+过的 =windows layout= 啦。如果对应文件已关闭了，它还会打开它。
+
+另外，把 `ivy-use-virtual-buffers' 设置 为 =t= 。 `ivy-switch-buffer'
+就可以切换最近打开的文件和bookmarks。那这样的话，该函数可以打开已开启
+的buffer，最近的文件，bookmarkd，和 =windows layout= 。很方便了。
+
+我由于使用 =windows layout= 比较多。就参考 `ivy-switch-buffer' 改了一
+个这样的小函数：
+#+BEGIN_SRC elisp
+  (defun peng-ivy-switch-buffer-to-views ()
+    "Switch to another buffer with { as default value"
+    (interactive)
+    (let ((this-command 'ivy-switch-buffer))
+      (ivy-read "Switch to buffer: " 'internal-complete-buffer
+                :initial-input "{ "
+                :matcher #'ivy--switch-buffer-matcher
+                :preselect (buffer-name (other-buffer (current-buffer)))
+                :action #'ivy--switch-buffer-action
+                :keymap ivy-switch-buffer-map
+                :caller 'ivy-switch-buffer)))
+
+#+END_SRC
+
+如果还有其它更方便的方法，欢迎联系我 :)

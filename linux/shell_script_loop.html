@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>shell脚本中的循环</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="linux_blog.html">Back to Linux Info</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <h1>shell脚本中的循环</h1>
+        
+
+        <div class="peng-time">
+            <time>2018-11-28</time>
+          </div>
+
+
+        <h2>在新一点的shell中，可以使用下面两种写法来写循环。</h2>
+
+        <pre class="bash"><span class="variable-name">SERVICE_NAME</span>=(api ess collect registry ras-cluster)
+<span class="function-name">loop</span>() {
+    <span class="builtin">echo</span> <span class="string">"Clean RCS service."</span>
+
+    <span class="keyword">for</span> service<span class="keyword"> in</span> <span class="string">"${SERVICE_NAME[@]}"</span>
+    <span class="keyword">do</span>
+        <span class="builtin">echo</span> $<span class="variable-name">service</span>
+    <span class="keyword">done</span>
+
+}
+
+loop
+
+<span class="builtin">echo</span> <span class="string">"######"</span>
+<span class="builtin">echo</span>  ${<span class="variable-name">SERVICE_NAME</span>[1]}
+
+<span class="builtin">echo</span> <span class="string">"${SERVICE_NAME[@]}"</span>
+<span class="variable-name">SERVICE</span>=<span class="string">"api     ess    collect registry ras-cluster"</span>
+<span class="keyword">for</span> i<span class="keyword"> in</span> $<span class="variable-name">SERVICE</span>; <span class="keyword">do</span>
+    <span class="builtin">echo</span> $<span class="variable-name">i</span>/bin
+<span class="keyword">done</span>
+</pre>
+
+        <h2>老一点的shell中需要这样写。</h2>
+
+<pre class="bash"><span class="keyword">for</span> i<span class="keyword"> in</span> <span class="sh-quoted-exec">`seq 1 5`</span>;<span class="keyword">do </span><span class="builtin">echo</span> $<span class="variable-name">i</span>;<span class="keyword">done</span>  </pre>
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

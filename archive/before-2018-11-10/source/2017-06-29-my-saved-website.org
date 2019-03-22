@@ -1,0 +1,64 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TODO: 未读 | 已读
+#+TITLE: 我的Bookmarks
+
+
+* [[http://zhidao.baidu.com/question/32098049.html][2016-09-27 等额本息还贷和等额本金还贷有什么区别?]]                  :fangdai:
+* [[http://ergoemacs.org/misc/programer_workflow_efficiency.html][2016-09-27 Programer Workflow Efficiency]]                   :emacs_workflow:
+* [[https://coderwall.com/p/vbndzq/emacs-daemon-macosx-workflow][2016-09-27 Emacs Daemon MacOSX Workflow]]                    :emacs_workflow:
+* [[http://stackoverflow.com/questions/2014636/how-to-maintain-an-emacs-based-knowledge-base][2016-09-27 org mode - How to maintain an emacs-based knowledge base? - Stack Overflow]] :knowledgemanagement:
+* [[http://emacsist.com/10284][2016-09-27 Use Emacs's Org-mode to Effectively Manage Small Projects - Emacs & Emacsist]] :knowledgemanagement:
+* [[http://www.excelhome.net/][2016-09-28 ExcelHome - 全球领先的Excel门户,Office视频教程培训中心]]   :excel:
+* [[https://www.zhihu.com/question/21745865][2016-09-28 (1 条消息) 等额本息与等额本金，从财务管理的角度充分考虑货币时间价值，哪个对于购房人来说更划算？ - 知乎]] :fangdai:
+* [[http://blog.csdn.net/whiterbear/article/details/49356815][2016-09-29 Mac下iPython－notebook搭建及使用 - whiterbear的专栏 - 博客频道 - CSDN.NET]] :ipython:notebook:
+* [[http://mindonmind.github.io/2013/02/08/ipython-notebook-interactive-computing-new-era/][2016-09-29 IPython Notebook: 交互计算新时代 | Mind on Mind]]       :notebook:
+* [[http://172.16.2.250/NewComer/][2016-09-29 Index of /NewComer]]                               :reversecurity:
+* [[https://jsuper.github.io/emacs/using-org-mode-to-write-jekyll-post.html][2016-09-30 使用org-mode撰写jekyll博客]]               :jekyll:org:mode:emacs:
+* [[https://rubygems.org/gems][2016-10-01 Gems | RubyGems.org | Ruby 社区 Gem 托管]]        :ruby:gemsource:
+* 未读 [[https://wsgzao.github.io/post/fq/][2016-10-06 GFW翻墙小结 | HelloDog]]                                :gfw:
+* 未读 [[http://magikh0e.ihtb.org/pubPapers/ssh_gymnastics_tunneling.html][2016-10-08 SSH Gymnastics and Tunneling with ProxyChains]]     :gfw:ssh:
+* [[http://www.scpta.gov.cn/news/morenews.aspx?Id=50][2016-10-08 四川人事考试网 — 新闻 市洲公招]]     :liuqing:gongzhao:gongwuyuan:
+* [[http://tmyam.github.io/blog/2014/05/07/duo-githubzhang-hu-she-zhi/][2016-10-08 一个客户端设置多个github账号 - tmyam's blog]]   :github:multiuser:
+* [[http://www.open-open.com/][2016-10-09 深度开源 - Java开源大全，开源信息发掘、分享、交流]] :opensource:doc:
+* [[https://fogproject.org/][2016-10-09 FOG Project]]                                                :fog:
+* [[https://jiji262.github.io/wooyun_articles/drops/NMAP%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B.html][2016-10-09 NMAP 基础教程 - he1renyagao]]                               :nmap:
+* [[https://wiki.archlinux.org/index.php/LVM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E4.BD.BF.E7.94.A8lvresize.E5.A2.9E.E5.8A.A0.E6.88.96.E7.BC.A9.E5.B0.8F.E5.AE.B9.E9.87.8F][2016-10-11 LVM (简体中文) - ArchWiki]]                                  :lvm:
+* [[https://zh.wikipedia.org/wiki/IEEE_802.1Q][2016-10-11 IEEE 802.1Q - 维基百科，自由的百科全书]]                    :vlan:
+* [[https://yoo2080.wordpress.com/2011/12/31/lexical-scoping-and-dynamic-scoping-in-emacs-lisp/][2016-10-12 lexical scoping and dynamic scoping in Emacs Lisp | Yoo Box]] :词法作用域:动态作用域:
+* [[http://es.xiaoleilu.com/010_Intro/00_README.html][2016-10-12 入门 | Elasticsearch权威指南（中文版）]]        :es:Elasticsearch:
+* [[file:~/Documents/iproute2.html][2016-10-19 iproute2]]                                              :iproute2:
+* [[http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/][2016-10-10 Introducing Linux Network Namespaces]] :network:namespace:virtual:ethernet:
+* [[http://www.opencloudblog.com/?p=66][2016-10-20 Linux Switching – Interconnecting Namespaces – Open Cloud Blog]] :namespace:tap:veth:
+* [[https://raamdev.com/2007/replace-os-x-commandtab-with-witch/][2016-10-21 Replace OS X Command+Tab with Witch – Raam Dev]]           :emacs:
+* [[https://en.wikipedia.org/wiki/Ethernet_frame][2016-10-25 Ethernet frame - Wikipedia]]                            :ethernet:
+* [[https://www.safaribooksonline.com/s/?q=*&filter=Python&limit=30][2016-10-25 Queue: Safari]]                                       :safaribook:
+* [[https://zhuanlan.zhihu.com/p/22983834][2016-10-28 学习编程道路上的入门书籍之Python篇 - 学习编程 - 知乎专栏]] :python_book:
+* [[http://wcm1.web.rice.edu/mutt-tips.html][2016-11-16 Tips for Using Mutt | W. Caleb McDaniel]]  :mutt:macos:attachment:
+* [[http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html][2016-11-22 字符编码笔记：ASCII，Unicode和UTF-8 - 阮一峰的网络日志]] :uft:8:encodeing:
+* [[http://www.joelonsoftware.com/articles/Unicode.html][2016-11-22 The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!) - Joel on Software]] :encodeing:编码:
+* [[http://books.gigatux.nl/mirror/applescript/0596008503/toc.html][2017-04-05 "apple script"]]
+* [[http://blog.rainy.im/2016/04/07/python-thread-and-coroutine/][2017-05-02 "Python 线程与协程 - Yusheng's Tech Blog"]]
+* [[https://www.zhihu.com/question/59227720/answer/163594782?utm_medium=social&utm_source=wechat_session][2017-05-05 "有哪些命令行的软件堪称神器？ - 知乎"]]                    :tools:
+* [[https://kombu.readthedocs.io/en/latest/][2017-05-05 "Kombu Documentation — Kombu 3.0.37 documentation"]]
+* [[http://zh-google-styleguide.readthedocs.io/en/latest/][2017-05-18 "Google 开源项目风格指南 (中文版) — Google 开源项目风格指南"]] :编程规范:
+* 未读 [[http://ergoemacs.org/emacs/emacs_align_and_sort.html][2017-06-03 "Emacs: Align Text"]]                   :emacs_sort_or_align:
+* [[http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868328251266d86585fc9514536a638f06b41908d44000][2017-06-07 "hashlib - 廖雪峰的官方网站"]]
+* [[http://jonas.nitro.dk/tig/tigrc.5.html][2017-06-13 "tigrc(5)" tig manual]]
+* [[http://lists.gnu.org/][2017-06-19 "lists.gnu.org"]]
+* [[https://oremacs.com/][2017-06-21 "(or emacs · irrelevant)" ivy作者的blog abo-abo]]
+* [[http://www.infoworld.com/article/3085150/application-development/dont-just-code-career-advice-from-the-programming-masters.html][2017-06-21 "Don't just code: Career advice from the programming masters | InfoWorld"]]
+* [[https://serholiu.com/python-closures][2017-07-10 "浅显理解 Python 闭包 - I'm SErHo"]]
+* [[http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html][2017-07-10 "进程与线程的一个简单解释 - 阮一峰的网络日志"]]
+* [[http://pythonguidecn.readthedocs.io/zh/latest/starting/which-python.html][2017-07-18 "选择一个解释器 — The Hitchhiker's Guide to Python"]]
+* [[https://maskray.me/blog/2016-02-12-gmail-offlineimap-xoauth2][2017-07-31 "Gmail的OfflineIMAP XOAUTH2认证 | MaskRay"]]
+* [[https://www.emacswiki.org/emacs/SendingMail][2017-08-01 "EmacsWiki: Sending Mail"]]
+* [[http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html][2017-08-03 "Systemd 入门教程：命令篇 - 阮一峰的网络日志"]]
+* [[http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html][2017-08-03 "Linux 的启动流程 - 阮一峰的网络日志"]]
+* [[http://www.ruanyifeng.com/blog/2013/02/booting.html][2017-08-03 "计算机是如何启动的？ - 阮一峰的网络日志"]]
+* [[http://zh.wikihow.com/%25E5%2588%25B6%25E4%25BD%259C%25E7%25BD%2591%25E7%25BA%25BF][2017-09-13 如何制作网线]]
+* [[https://csl.name/post/gtags/][Using GNU Global with C++ and Git]]                                   :gtags:
+  可以使用 =git= 的hook来更新gtags。好像还可以添加一个 =git gtags= 的
+  命令。

@@ -1,0 +1,83 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-07-31-syslog导致的死锁
+
+我写了一个程序，启动两个线程，t1和t2,线程通过互斥量进行同步。
+
+线程t1是主线程，满足条件通过互斥量通知t2,t2线程进行fork()。子进程处理
+业务。父进程使用waitpid等待子进程执行完毕。
+
+导致该问题的一原因是syslog不是可重入的函数，它里面是有一把锁 =mutex S=
+的，查资料说是因为它下面调用了malloc，malloc是不可重入的。出问题的情况
+可能如下：
+1. thread 1在通知thread 2后，自已也会调用syslog接口来写日志。
+2. 当thread 1正在调syslog写日志的时候，thread 2执行了fork。
+3. 这时如果 thread 1这边调用syslog刚好锁住了 =mutex S= 。此时fork出来
+   的子进程中的这把锁可能是一直都锁住的。这样的话，子进程只要调用
+   syslog来写日志都会卡住。因为锁 =mutex S= 一直是锁住的。
+
+#+BEGIN_SRC artist
+     +------------+        +----------+                                          
+     |            |        |          |             +-------------------------------+
+     |            |        |          |           />|  child process: syslog(XXXXXX)|
+     |            |        |          |        /--  +-------------------------------+
+     | thread 1   |        | thread 2 |    /---    
+     |            |        |          | /--        
+     |            |        |         /+-           
+     | signal-----+--------+>fork()---|
+     |            |        |          \---
+     |            |        |          |   \---
+     | syslog(XXX)|        |          |       \---  +------------------------------+
+     |            |        |          |           \>|  parrent process: waitpid()  |
+     |            |        |          |             +------------------------------+
+     |            |        |          |                                             
+     +------------+        +----------+                                             
+#+END_SRC
+
+附：两个线程同步使用的是互斥量。参考的《UNIX环境高级编程》写的。死锁的
+伪码如下：
+#+BEGIN_SRC C
+pthread_cond_t qready = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t qlock = PTHREAD_MUTEX_INITIALIZER;
+
+thread1()
+{
+    while(1)
+    {
+        pthread_mutex_lock(&qlock);
+        /* ... */
+        pthread_mutex_unlock(&qlock);
+        pthread_cond_signal(&qready);
+
+        /* 在写这条日志时thread2进行了fork */
+        syslog("This is in thread1\n");
+    }
+}
+
+thread2()
+{
+    pthread_mutex_lock(&qlock);
+
+    /* 我理解：这里wait的时候会释放互斥量，等另外的线程通过
+     ,* `pthread_cond_signal'唤醒条件变量时再锁住互斥量往下走，这样可以
+     ,* 保正下面访问的临界资源不冲突。 */
+    pthread_cond_wait(&qready, &qlock);
+    
+    pid = fork();
+
+    if (pid == 0)
+    {
+        /* child */
+        syslog("child may be locked here\n");
+    }
+    else
+    {
+        /* parrent */
+        waitpid(pid);
+    }
+    
+    pthread_mutex_unlock(&qlock);
+}
+#+END_SRC

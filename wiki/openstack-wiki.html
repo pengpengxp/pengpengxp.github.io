@@ -1,0 +1,1726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-18 一 16:46 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Openstack wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Openstack wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge1033c7">1. metadata service</a></li>
+<li><a href="#orgba00796">2. links</a>
+<ul>
+<li><a href="#org8958c89">2.1. 2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference&#xa0;&#xa0;&#xa0;<span class="tag"><span class="commandline">commandline</span></span></a></li>
+<li><a href="#org264e345">2.2. 2016-09-28 OpenStack Docs: Network focused</a></li>
+<li><a href="#orgb6f5d7c">2.3. oreilly-openstack-ops-guide.epub&#xa0;&#xa0;&#xa0;<span class="tag"><span class="book">book</span></span></a></li>
+</ul>
+</li>
+<li><a href="#orga997649">3. Networking website&#xa0;&#xa0;&#xa0;<span class="tag"><span class="neutron">neutron</span></span></a>
+<ul>
+<li><a href="#orgfd63b42">3.1. arp</a></li>
+<li><a href="#orgbe57b89">3.2. nat</a></li>
+<li><a href="#org62a6617">3.3. nova-network:</a></li>
+<li><a href="#org867490d">3.4. neutron-network:</a></li>
+<li><a href="#orga16b700">3.5. difference betweent nova-networking and neutron</a></li>
+<li><a href="#org9b8984b">3.6. Firewalls and default ports</a></li>
+<li><a href="#orgccb770a">3.7. newtron preinstall</a></li>
+</ul>
+</li>
+<li><a href="#org61f71e9">4. Compute&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nova">nova</span></span></a></li>
+<li><a href="#org7690c1e">5. Orchestration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="heat">heat</span></span></a></li>
+<li><a href="#org8f347b9">6. Object storage&#xa0;&#xa0;&#xa0;<span class="tag"><span class="swift">swift</span></span></a>
+<ul>
+<li><a href="#org05e076f">6.1. swift install on object node</a></li>
+<li><a href="#org00adf75">6.2. swift install on controller node</a></li>
+<li><a href="#orgc07056c">6.3. start service</a></li>
+<li><a href="#org19b4847">6.4. recreate rings on controller</a></li>
+<li><a href="#org39d00a6">6.5. recreate endpoint on controller</a></li>
+</ul>
+</li>
+<li><a href="#orgee47568">7. Image service&#xa0;&#xa0;&#xa0;<span class="tag"><span class="glance">glance</span></span></a></li>
+<li><a href="#org07ae23e">8. launch instance</a></li>
+<li><a href="#org384933f">9. 如何查看一对veth中某interface对应的peer</a></li>
+<li><a href="#org7216a9b">10. <code>eth0:0,tap,veth,vlan,bridge</code> 等</a></li>
+<li><a href="#org1c43887">11. openstack float ip&#xa0;&#xa0;&#xa0;<span class="tag"><span class="float_ip">float_ip</span></span></a></li>
+<li><a href="#org0f4df23">12. openstack sdk document api实现先按照这个来</a></li>
+<li><a href="#cloud_init">13. cloud-init</a></li>
+<li><a href="#orgf255743">14. curl restfull api example</a></li>
+<li><a href="#org9e82b1a">15. cinder</a></li>
+<li><a href="#org460a971">16. openstack python sdk区别</a></li>
+<li><a href="#org2b1dd53">17. 给openstack上的机器根目录扩容</a>
+<ul>
+<li><a href="#org04d10b8">17.1. 新建volume并attach到对应的机器上</a></li>
+<li><a href="#org1c1a666">17.2. 扩大lvm</a></li>
+</ul>
+</li>
+<li><a href="#org32c6d85">18. 直接使用python来给虚拟机attach其它硬盘</a></li>
+<li><a href="#org83cf3fe">19. userdata和metadata</a></li>
+<li><a href="#org4b461c2">20. openstack region availability<sub>zone</sub></a></li>
+<li><a href="#user_domain_project_role">21. domains, user, project, role</a></li>
+<li><a href="#org6e28e89">22. block查询剩余多少空间</a></li>
+<li><a href="#org73df79c">23. ephemeral disk</a></li>
+<li><a href="#org1b7a56c">24. image的size可能小于flavor的disk</a></li>
+<li><a href="#orgb5deda6">25. compute的安装步骤</a></li>
+<li><a href="#org692e533">26. <span class="todo TODO">TODO</span> Question</a>
+<ul>
+<li><a href="#org2dbecf8">26.1. <span class="todo TODO">TODO</span> openstack curl restfull api example  这个链接可以参考</a></li>
+<li><a href="#orgd3f6d61">26.2. <span class="todo TODO">TODO</span> openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orge1033c7" class="outline-2">
+<h2 id="orge1033c7"><span class="section-number-2">1</span> metadata service</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<code>====================================================================</code>
+一句话总结：为instance提供配置文件的服务。
+<code>====================================================================</code>
+</p>
+
+<p>
+<a href="http://docs.openstack.org/newton/install-guide-ubuntu/neutron-controller-install.html">here</a> ：
+</p>
+<pre class="example">
+    The metadata agent provides configuration information such as credentials to instances.
+</pre>
+
+<p>
+使用cloud<sub>init</sub> <a href="#cloud_init">13</a> 的时候，实例中需要到一个统一的地方去取配
+置文件和脚本等。
+</p>
+
+
+<p>
+<a href="http://docs.openstack.org/admin-guide/compute-networking-nova.html#metadata-service">这里</a> 介绍：
+</p>
+<pre class="example">
+    The metadata service is implemented by either the nova-api service or
+    the nova-api-metadata service. Note that the nova-api-metadata service
+    is generally only used when running in multi-host mode, as it
+    retrieves instance-specific metadata. If you are running the nova-api
+    service, you must have metadata as one of the elements listed in the
+    enabled_apis configuration option in /etc/nova/nova.conf. The default
+    enabled_apis configuration setting includes the metadata service, so
+    you do not need to modify it.
+
+    Hosts access the service at 169.254.169.254:80, and this is translated
+    to metadata_host:metadata_port by an iptables rule established by the
+    nova-network service. In multi-host mode, you can set metadata_host to
+    127.0.0.1.
+
+    For instances to reach the metadata service, the nova-network service
+    must configure iptables to NAT port 80 of the 169.254.169.254 address
+    to the IP address specified in metadata_host (this defaults to $my_ip,
+    which is the IP address of the nova-network service) and port
+    specified in metadata_port (which defaults to 8775) in
+    /etc/nova/nova.conf.
+</pre>
+<p>
+在实例中是固定访问 <code>169.254.169.254</code> 这个ip地址。然后通过iptable配置
+路由来访问真正的server。
+</p>
+
+<p>
+这里的server我理解就是 metadata service。
+</p>
+
+<p>
+metadata service可以是nova-api或者nova-api-metadata来实现。只不过后
+者一般只在multi-host mode这种模式下使用。
+</p>
+
+<p>
+该服务需要配置nova和neutron。nova要在 <code>nova.conf</code> 里这样enable：
+</p>
+<pre class="example">
+    enabled_apis=osapi_compute,metadata
+</pre>
+
+<p>
+<code>/etc/neutron/metadata_agent.ini</code> 文件配置newtron：
+</p>
+<pre class="example">
+    nova_metadata_ip = controller
+    metadata_proxy_shared_secret = metadata1703
+</pre>
+<p>
+这里面还可以配置端口号。不配默认是8775。
+</p>
+
+<p>
+需要注意的是，nova和neutron中配置文件里
+<code>metadata_proxy_shared_secret</code> 这个配置项的值必须相同。这个值是自定
+义的。应该是instance在访问metadata时候加入的这个头，openstack会对它
+做校验。匹配才能访问。
+</p>
+
+<p>
+配置好meta-data后，可以直接在拉起的虚拟机中使用 <code>curl</code> 来测试：
+</p>
+<pre class="example">
+    river@ubuntu-test-cloud-init:~$ curl 169.254.169.254
+    1.0
+    2007-01-19
+    2007-03-01
+    2007-08-29
+    2007-10-10
+    2007-12-15
+    2008-02-01
+    2008-09-01
+    2009-04-04
+    latestriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04
+    meta-data/
+    user-datariver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/
+    ami-id
+    ami-launch-index
+    ami-manifest-path
+    block-device-mapping/
+    hostname
+    instance-action
+    instance-id
+    instance-type
+    local-hostname
+    local-ipv4
+    placement/
+    public-hostname
+    public-ipv4
+    public-keys/
+    reservation-id
+    security-groupsriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/hostname
+    ubuntu-test-cloud-init.novalocalriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/ami-launch-index
+    0river@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/reservation-id
+    r-h8qwawfhriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/public-ipv4
+    river@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/ami-manifest-path
+    FIXMEriver@ubuntu-test-cloud-init:~$
+</pre>
+</div>
+</div>
+<div id="outline-container-orgba00796" class="outline-2">
+<h2 id="orgba00796"><span class="section-number-2">2</span> links</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org8958c89" class="outline-3">
+<h3 id="org8958c89"><span class="section-number-3">2.1</span> <a href="http://docs.openstack.org/cli-reference/">2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="commandline">commandline</span></span></h3>
+</div>
+<div id="outline-container-org264e345" class="outline-3">
+<h3 id="org264e345"><span class="section-number-3">2.2</span> <a href="http://docs.openstack.org/arch-design/network-focus.html">2016-09-28 OpenStack Docs: Network focused</a></h3>
+</div>
+<div id="outline-container-orgb6f5d7c" class="outline-3">
+<h3 id="orgb6f5d7c"><span class="section-number-3">2.3</span> <a href="file:///home/pengpengxp/Downloads/oreilly-openstack-ops-guide.epub">oreilly-openstack-ops-guide.epub</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="book">book</span></span></h3>
+</div>
+</div>
+<div id="outline-container-orga997649" class="outline-2">
+<h2 id="orga997649"><span class="section-number-2">3</span> Networking <a href="http://docs.openstack.org/mitaka/networking-guide/intro.html">website</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="neutron">neutron</span></span></h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgfd63b42" class="outline-3">
+<h3 id="orgfd63b42"><span class="section-number-3">3.1</span> arp</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+ARP assumes that all machines that are in the same subnet are on
+the same local network(Ethernet network).
+</p>
+</div>
+</div>
+<div id="outline-container-orgbe57b89" class="outline-3">
+<h3 id="orgbe57b89"><span class="section-number-3">3.2</span> nat</h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li>DNAT: OpenStack uses DNAT to route packets from instances to the
+OpenStack metadata service.</li>
+<li>SNAT: OpenStack uses SNAT to enable applications running inside
+of instances to connect out to the public Internet.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org62a6617" class="outline-3">
+<h3 id="org62a6617"><span class="section-number-3">3.3</span> nova-network:</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+The Network Controller manages the networking resources on host
+machines.
+</p>
+<ul class="org-ul">
+<li>Allocating fixed IP addresses</li>
+<li>Configuring VLANs for projects</li>
+<li>Configuring networks for compute nodes</li>
+</ul>
+
+<pre class="example">
+     Currently, Compute with nova-network only supports Linux bridge
+     networking that allows virtual interfaces to connect to the outside
+     network through the physical interface.
+</pre>
+</div>
+</div>
+<div id="outline-container-org867490d" class="outline-3">
+<h3 id="org867490d"><span class="section-number-3">3.4</span> neutron-network:</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+The OpenStack Networking service provides an API that allows users
+to set up and define network connectivity and addressing in the
+cloud.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga16b700" class="outline-3">
+<h3 id="orga16b700"><span class="section-number-3">3.5</span> difference betweent nova-networking and neutron</h3>
+<div class="outline-text-3" id="text-3-5">
+<pre class="example">
+     First there was nova-network
+
+     OpenStack was created by bringing together NASA's Nebula cloud
+     computing project and Rackspace's Swift Object storage project. Nebula
+     was did all the basics - managing networking, compute and (block)
+     storage because for the NASA, it had to. Very quickly, Nebula's core
+     became split into the Nova (compute and networking), Cinder (block
+     storage functions) and Glance (image management functions) projects,
+     all tied together through the API calls that still bind the many
+     projects that comprise OpenStack.  Nova-network remained embedded as a
+     sub-process in the compute-focused Nova project.
+
+     The overall OpenStack development approach is build projects that
+     focus on a single task reduced the complexity involved any one
+     project. It also simplified internal interactions that an integrated
+     project would have required and allowed people with the interest and
+     expertise in a particular aspect of the OpenStack system to focus on
+     that particular functionality. Simpler projects, easier/faster
+     development.
+
+     Then there were two.
+
+     Neutron (originally named Quantum) was the project intended to finally
+     peel networking functionality out of Nova for the development reasons
+     just mentioned.  Neutron has been the focus of extending OpenStack's
+     networking capabilities. Today it provides enhanced networking
+     functionality above and beyond what nova-network was ever intended
+     for; functions like LBaaS, FWaaS, VPNaaS and tunneling protocols. It
+     also enables a range of plugin functions to allow management of
+     third-party networking hardware and software (e.g. switches and
+     routers) as well as a number of advanced SDN systems. Again, something
+     beyond what the creators of Nova's networking function ever planned
+     for.
+
+     Note that there are OpenStack systems still running on older OpenStack
+     releases where the simple networking functionality of nova-network are
+     sufficient and migrating to a more advanced release is considered too
+     much of a bother.  This is likely the only reason to consider getting
+     to know nova-network functionality.  For a new system Neutron is the
+     way to do OpenStack networking.
+</pre>
+</div>
+</div>
+<div id="outline-container-org9b8984b" class="outline-3">
+<h3 id="org9b8984b"><span class="section-number-3">3.6</span> <a href="http://docs.openstack.org/mitaka/config-reference/firewalls-default-ports.html">Firewalls and default ports</a></h3>
+</div>
+<div id="outline-container-orgccb770a" class="outline-3">
+<h3 id="orgccb770a"><span class="section-number-3">3.7</span> newtron preinstall</h3>
+<div class="outline-text-3" id="text-3-7">
+<div class="org-src-container">
+<pre class="src src-sh">     apt-get install software-properties-common
+     add-apt-repository cloud-archive:newton
+     add-apt-repository cloud-archive:newton-proposed
+     apt-get update &amp;&amp; apt-get dist-upgrade
+     apt-get install python-openstackclient -y
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org61f71e9" class="outline-2">
+<h2 id="org61f71e9"><span class="section-number-2">4</span> Compute&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nova">nova</span></span></h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26597;&#30475;&#25152;&#26377;compute&#33410;&#28857;</span>
+    nova hypervisor-list
+    
+    nova boot --image &lt;uuid&gt; --flavor m1.tiny --key_name test --availability-zone nova:server2
+
+    nova boot --image cirros --flavor m1.nano --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 nova-test
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7690c1e" class="outline-2">
+<h2 id="org7690c1e"><span class="section-number-2">5</span> Orchestration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="heat">heat</span></span></h2>
+<div class="outline-text-2" id="text-5">
+<p>
+<a href="https://wiki.openstack.org/wiki/Heat">Openstack wiki</a>
+</p>
+
+<p>
+<a href="http://docs.openstack.org/developer/heat/template_guide/hot_guide.html">Heat Orchestration Template (HOT) Guide</a>
+</p>
+
+<p>
+<code>====================================================================</code>
+The mission of the OpenStack Orchestration program is to create a
+human- and machine-accessible service for managing the entire
+lifecycle of infrastructure and applications within OpenStack
+clouds.
+<code>====================================================================</code>
+</p>
+
+<p>
+Stack domain users allow the Orchestration service to authorize and
+start the following operations within booted virtual machines:
+</p>
+
+<ul class="org-ul">
+<li>Provide metadata to agents inside instances. Agents poll for
+changes and apply the configuration that is expressed in the
+metadata to the instance.</li>
+<li>Detect when an action is complete. Typically, software
+configuration on a virtual machine after it is booted. Compute
+moves the VM state to “Active” as soon as it creates it, not when
+the Orchestration service has fully configured it.</li>
+<li>Provide application level status or meters from inside the
+instance. For example, allow auto-scaling actions to be performed
+in response to some measure of performance or quality of service.</li>
+
+<li>给实例中的agent提供metadata。agent从metadata中携带的信息中读取并应
+用配置。</li>
+
+<li>检测操作什么时候结束。一般来说，软件会在一个虚拟机启动后来配置它。
+Compute节点只要一创建VM，就立即把它的状态置为“Active”，而不是等
+Orchestration服务完全配置好它。</li>
+
+<li>从实例内部提供应用层面的数据。比如：某种程序上，执行自动伸缩操作来
+做为对性能和QoS的响应。</li>
+</ul>
+
+
+<p>
+<a href="http://docs.openstack.org/developer/heat/template_guide/hot_spec.html#hot-spec-template-version">heat version</a>
+</p>
+
+<p>
+2016-10-14 | newton
+</p>
+
+<p>
+下面是一个最简单的模版的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-yaml">    <span style="color: #8fbc8f;">heat_template_version</span>: 2015-04-30
+
+    <span style="color: #8fbc8f;">description</span>: &gt;
+      <span style="color: #ffa500;">This is my test stack</span>
+
+    <span style="color: #8fbc8f;">resources</span>:
+      <span style="color: #8fbc8f;">my_heat_instance1</span>:
+        <span style="color: #8fbc8f;">type</span>: OS::Nova::Server
+        <span style="color: #8fbc8f;">properties</span>:
+          <span style="color: #8fbc8f;">key_name</span>: mykey
+          <span style="color: #8fbc8f;">image</span>: cirros
+          <span style="color: #8fbc8f;">flavor</span>: m1.nano
+          <span style="color: #8fbc8f;">networks</span>:
+            - <span style="color: #8fbc8f;">network</span>: provider
+      <span style="color: #8fbc8f;">my_heat_instance2</span>:
+        <span style="color: #8fbc8f;">type</span>: OS::Nova::Server
+        <span style="color: #8fbc8f;">properties</span>:
+          <span style="color: #8fbc8f;">key_name</span>: mykey
+          <span style="color: #8fbc8f;">image</span>: cirros
+          <span style="color: #8fbc8f;">flavor</span>: m1.nano
+          <span style="color: #8fbc8f;">networks</span>:
+            - <span style="color: #8fbc8f;">network</span>: private-net1
+      <span style="color: #8fbc8f;">my_heat_instance3</span>:
+        <span style="color: #8fbc8f;">type</span>: OS::Nova::Server
+        <span style="color: #8fbc8f;">properties</span>:
+          <span style="color: #8fbc8f;">key_name</span>: mykey
+          <span style="color: #8fbc8f;">image</span>: cirros
+          <span style="color: #8fbc8f;">flavor</span>: m1.nano
+          <span style="color: #8fbc8f;">networks</span>:
+            - <span style="color: #8fbc8f;">network</span>: provider
+          
+</pre>
+</div>
+
+<p>
+有了这个例子，可以直接通过这个模版来拉起实例：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#20197;`head'&#24320;&#22836;&#30340;&#21629;&#20196;&#37117;&#26159;&#36807;&#26102;&#30340;&#20102;&#65292;&#24212;&#35813;&#20351;&#29992;&#20197;`openstack'&#24320;&#22836;&#30340;&#21629;&#20196;</span>
+    heat stack-list
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#36825;&#37324;&#30340;&#36825;&#20010;hello.yaml&#23601;&#26159;&#21069;&#25991;&#25552;&#21040;&#30340;&#27169;&#29256;&#25991;&#20214;</span>
+    openstack stack create -f yaml -t /tmp/hello.yaml teststack
+    openstack stack delete teststack
+    openstack stack list
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f347b9" class="outline-2">
+<h2 id="org8f347b9"><span class="section-number-2">6</span> Object storage&#xa0;&#xa0;&#xa0;<span class="tag"><span class="swift">swift</span></span></h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org05e076f" class="outline-3">
+<h3 id="org05e076f"><span class="section-number-3">6.1</span> swift install on object node</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+These operation has been done in the <code>object-newton.img</code> :
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     apt-get install software-properties-common
+     add-apt-repository cloud-archive:newton
+     add-apt-repository cloud-archive:newton-proposed
+     apt-get update &amp;&amp; apt-get dist-upgrade
+     apt-get install python-openstackclient -y
+
+     apt-get install xfsprogs rsync -y
+     apt-get install swift swift-account swift-container swift-object -y
+
+     mkdir -p /srv/node/sdb;mkdir -p /srv/node/sdc
+
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">curl -o /etc/swift/account-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/account-server.conf-sample?h=stable/mitaka</span>
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">curl -o /etc/swift/container-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/container-server.conf-sample?h=stable/mitaka</span>
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">curl -o /etc/swift/object-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/object-server.conf-sample?h=stable/mitaka</span>
+
+     sudo curl -o /etc/swift/account-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/account-server.conf-sample?<span style="color: #8fbc8f;">h</span>=stable/newton
+     sudo curl -o /etc/swift/container-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/container-server.conf-sample?<span style="color: #8fbc8f;">h</span>=stable/newton
+     sudo curl -o /etc/swift/object-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/object-server.conf-sample?<span style="color: #8fbc8f;">h</span>=stable/newton
+
+     chown -R swift:swift /srv/node
+     mkdir -p /var/cache/swift
+     chown -R root:swift /var/cache/swift
+     chmod -R 775 /var/cache/swift
+
+</pre>
+</div>
+
+<p>
+things need to do after installing the template:
+</p>
+<ul class="org-ul">
+<li>/etc/hostname</li>
+<li>/etc/network/interfaces</li>
+<li>/etc/rsync.conf</li>
+<li>/etc/swift/account-server.conf</li>
+<li>/etc/swift/container-server.conf</li>
+<li>/etc/swift/object-server.conf</li>
+<li><p>
+then, create <code>/dev/sda6</code> and add it to <code>/dev/object-vg</code>
+</p>
+<pre class="example">
+       fdisk /dev/sda
+       ... 
+       cd /dev
+       vgextend object-vg /dev/sda6 
+       vgdisplay 
+       lvresize -l +100%FREE object-vg/root
+       resize2fs object-vg/root 
+       df -lh
+</pre></li>
+<li><p>
+create <code>/dev/sda7</code> and <code>/dev/sda8</code> and make file system
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">after config lvm and fdisk /dev/sda</span>
+       mkfs.xfs /dev/sda7
+       mkfs.xfs /dev/sda8
+
+       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">after edit /etc/fstab</span>
+       mount /dev/sda7 /srv/node/sdb
+       mount /dev/sda8 /srv/node/sdc
+
+       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">start the servers</span>
+       service rsync start
+</pre>
+</div></li>
+</ul>
+
+<p>
+edit /etc/fstab for auto-mount:
+</p>
+<pre class="example">
+     /dev/sda7 /srv/node/sdb xfs noatime,nodiratime,nobarrier,logbufs=8 0 2
+     /dev/sda8 /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8 0 2
+</pre>
+</div>
+</div>
+<div id="outline-container-org00adf75" class="outline-3">
+<h3 id="org00adf75"><span class="section-number-3">6.2</span> swift install on controller node</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+proxy<sub>conf</sub>:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     sudo curl -o /etc/swift/proxy-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/proxy-server.conf-sample?<span style="color: #8fbc8f;">h</span>=stable/newton
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">recreate rings</span>
+     <span style="color: #b0c4de;">cd</span> /etc/swift
+     sudo rm account.* object.* container.*
+
+     sudo swift-ring-builder account.builder create 10 3 1
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder rebalance
+     sudo swift-ring-builder account.builder 
+
+     sudo swift-ring-builder container.builder create 10 3 1
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder rebalance
+     sudo swift-ring-builder container.builder
+
+     sudo swift-ring-builder object.builder create 10 3 1
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder rebalance
+     sudo swift-ring-builder object.builder
+
+     scp *.gz object@object1:/tmp
+     scp *.gz object@object2:/tmp
+
+</pre>
+</div>
+
+<p>
+swift<sub>config</sub> file and start:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     sudo curl -o /etc/swift/swift.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/swift.conf-sample?<span style="color: #8fbc8f;">h</span>=stable/newton
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">modified it</span>
+
+     sudo chown -R root:swift /etc/swift;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc07056c" class="outline-3">
+<h3 id="orgc07056c"><span class="section-number-3">6.3</span> start service</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+on controller:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     sudo service memcached restart;
+     sudo service swift-proxy restart
+</pre>
+</div>
+
+<p>
+on each object node:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     sudo swift-init all start
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org19b4847" class="outline-3">
+<h3 id="org19b4847"><span class="section-number-3">6.4</span> recreate rings on controller</h3>
+<div class="outline-text-3" id="text-6-4">
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">recreate rings</span>
+     <span style="color: #b0c4de;">cd</span> /etc/swift
+     sudo rm account.* object.* container.*
+     sudo swift-ring-builder account.builder create 10 3 1
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder rebalance
+     sudo swift-ring-builder account.builder 
+
+     sudo swift-ring-builder container.builder create 10 3 1
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder rebalance
+     sudo swift-ring-builder container.builder
+
+     sudo swift-ring-builder object.builder create 10 3 1
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder rebalance
+     sudo swift-ring-builder object.builder
+
+     scp *.gz object@object1:/tmp
+     scp *.gz object@object2:/tmp
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org39d00a6" class="outline-3">
+<h3 id="org39d00a6"><span class="section-number-3">6.5</span> recreate endpoint on controller</h3>
+<div class="outline-text-3" id="text-6-5">
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">recreate endpoint</span>
+     <span style="color: PaleYellow;">for</span> i<span style="color: PaleYellow;"> in</span> <span style="color: #fa8072;">`openstack endpoint list|grep swift|awk '{print $2}'`</span>;<span style="color: PaleYellow;">do </span><span style="color: #b0c4de;">echo</span> $<span style="color: #8fbc8f;">i</span>;openstack endpoint delete $<span style="color: #8fbc8f;">i</span>;<span style="color: PaleYellow;">done</span>
+     openstack endpoint list|grep swift
+     openstack endpoint create --region RegionOne object-store public http://controller:8080/v1/AUTH_%<span style="color: #ffa500;">\(</span>tenant_id<span style="color: #ffa500;">\)</span>s
+     openstack endpoint create --region RegionOne object-store internal http://controller:8080/v1/AUTH_%<span style="color: #ffa500;">\(</span>tenant_id<span style="color: #ffa500;">\)</span>s
+     openstack endpoint create --region RegionOne object-store admin http://controller:8080/v1
+     openstack endpoint list|grep swift
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgee47568" class="outline-2">
+<h2 id="orgee47568"><span class="section-number-2">7</span> Image service&#xa0;&#xa0;&#xa0;<span class="tag"><span class="glance">glance</span></span></h2>
+<div class="outline-text-2" id="text-7">
+<p>
+glance是不存image的。Object Storage或者filesystem这些存的。
+</p>
+
+<p>
+Though images are not stored in glance—rather in a back end, which
+could be Object Storage, a filesystem or any other supported
+method—the connection is made from the compute node to the Image
+service and the image is transferred over this connection. The Image
+service streams the image from the back end to the compute node.
+</p>
+
+<p>
+分disk-format和container-format：
+</p>
+<pre class="example">
+    Disk Format
+
+    The disk format of a virtual machine image is the format of the
+    underlying disk image. Virtual appliance vendors have different
+    formats for laying out the information contained in a virtual machine
+    disk image.
+
+    Container Format
+
+    The container format refers to whether the virtual machine image is in
+    a file format that also contains metadata about the actual virtual
+    machine.
+
+    Note that the container format string is not currently used by Glance
+    or other OpenStack components, so it is safe to simply specify bare as
+    the container format if you are unsure.
+
+    You can set your image’s container format to one of the following:
+</pre>
+<p>
+disk-format是指镜像包实际的格式。container-format现在并没有什么用。
+</p>
+
+<p>
+指定container-format来上传ova格式才可以：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    openstack image create <span style="color: #ffa500;">"peng_test"</span> --file peng_test.ova --disk-format raw --container-format ova --public
+</pre>
+</div>
+
+<p>
+但是拉不起来。结果像这样了：
+<img src="./img/./77826T1y.png" alt="77826T1y.png" />
+</p>
+
+<p>
+转换image：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    qemu-img convert -f ova -O qcow2 image.vmdk image.img
+</pre>
+</div>
+<p>
+实际使用我参考了 <a href="http://edoceo.com/notabene/ova-to-vmdk-to-qcow2">这篇博客</a> 。其实就是解开ova，然后转换其中的 <code>vmdk</code>
+就可以了。例子：
+</p>
+<pre class="example">
+    ~ $ tar -xvf Evergreen_trunk_Squeeze.ova
+    Evergreen_trunk_Squeeze.ovf
+    Evergreen_trunk_Squeeze-disk1.vmdk
+
+    ~ $ qemu-img convert -O qcow2 Evergreen_trunk_Squeeze-disk1.vmdk Evergreen_trunk_Squeeze.qcow2
+
+</pre>
+
+<p>
+如果是把ova导入到了vmware中，需要使用下面的命令来完成转换：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    qemu-img convert -f vmdk -O qcow2 55fd458-disk1.vmdk guoyuting.qcow2
+</pre>
+</div>
+
+<p>
+上传image：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#21629;&#20196;&#34892;&#19978;&#20256;image</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">openstack image create --disk-format qcow2 --container-format bare --public --file ./centos63.qcow2 centos63-image</span>
+    openstack image create --disk-format raw --public --file /tmp/win7.img win7-raw
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org07ae23e" class="outline-2">
+<h2 id="org07ae23e"><span class="section-number-2">8</span> launch instance</h2>
+<div class="outline-text-2" id="text-8">
+<div class="org-src-container">
+<pre class="src src-sh">
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26032;&#24314;&#19968;&#20010;cirros&#23454;&#20363;</span>
+    openstack server create --flavor m1.nano --image cirros --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey cirros-ptest1
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">To view the list of valid zones</span>
+    openstack availability zone list
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">To view the list of valid compute hosts</span>
+    openstack host list
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">To view the list of valid compute nodes</span>
+    openstack hypervisor list
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">template</span>
+    openstack server create --image IMAGE --flavor m1.tiny --key-name KEY --availability-zone ZONE:HOST:NODE --nic net-id=UUID SERVER
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#22312;compute3&#19978;&#25289;&#19968;&#20010;&#23454;&#20363;&#65292;&#36825;&#20010;&#21482;&#33021;admin&#29992;&#25143;&#25165;&#21487;&#20197;&#20351;&#29992;&#65292;&#36825;&#37324;&#25226;HOST&#30465;&#30053;&#20102;</span>
+    openstack server create --flavor m1.nano --image cirros --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey --availability-zone nova::compute3 cirros-ptest-to-cp3
+
+    openstack server delete  cirros-test-instance1
+    openstack server delete  cirros-test-instance2
+    openstack server delete  cirros-test-instance3
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26032;&#24314;&#19968;&#20010;ubuntu&#23454;&#20363; </span>
+    openstack server create --flavor m1.medium --image ubuntu-16.04-server  --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ubuntu-test-instance
+    openstack server create --flavor m1.medium --image ubuntu-16.04-server  --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ubuntu-test-instance2
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26032;&#24314;&#19968;&#20010;10.10.222.0/24&#32593;&#27573;&#30340;instance</span>
+    openstack server create --flavor m1.medium --image ubuntu-16.04-server --nic net-id=cd874f3e-6f51-455e-b063-b9d45fcfbce8 --security-group default --key-name mykey ubuntu-ptest-1010
+
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#20351;&#29992;iso&#23433;&#35013;&#20809;&#30424;&#25289;&#23454;&#20363;</span>
+    openstack server create --flavor m1.medium --image demo-image --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey demo-image-ptest
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25289;&#36215;rs&#30340;OVA&#65292;&#36825;&#20010;&#27809;&#26377;&#25104;&#21151;</span>
+    openstack server create --flavor m1.medium --image peng_test  --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey peng_rs_test
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">launch windows</span>
+    openstack server create --flavor m1.medium --image Windows_Server_2012 --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ws2012
+    openstack server create --flavor m1.medium --image Windows_Server_2012 --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ws2012-2
+    
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#19978;&#20256;&#19968;&#20010;image&#65292;&#25226;&#23427;&#24324;&#25104;&#20844;&#26377;&#30340;</span>
+    openstack image create --disk-format qcow2 --public --file ws2012.qcow2 ws2012
+
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">show&#20986;&#26469;&#23454;&#20363;&#30340;url</span>
+    openstack console url show ubuntu-test-instance
+    openstack console url show ubuntu-test-instance2
+    openstack console url show cirros-ptest-instance1
+    openstack console url show cirros-ptest-instance2
+    openstack console url show demo-image-ptest
+    openstack console url show cirros-test2
+    openstack console url show ubuntun-instance
+    openstack console url show cirros-ptest-instance2
+    openstack console url show
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org384933f" class="outline-2">
+<h2 id="org384933f"><span class="section-number-2">9</span> 如何查看一对veth中某interface对应的peer</h2>
+<div class="outline-text-2" id="text-9">
+<div class="org-src-container">
+<pre class="src src-sh">    ethtool -S veth0
+</pre>
+</div>
+
+<p>
+输出结果：
+</p>
+<pre class="example">
+    NIC statistics:
+         peer_ifindex: 9
+</pre>
+
+<p>
+说明在veth0的peer对应的namespace中使用`ip link'查出来的索引号是9。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7216a9b" class="outline-2">
+<h2 id="org7216a9b"><span class="section-number-2">10</span> <code>eth0:0,tap,veth,vlan,bridge</code> 等</h2>
+<div class="outline-text-2" id="text-10">
+<div class="org-src-container">
+<pre class="src src-sh">    ifconfig eth0:1 192.168.56.2 netmask 255.255.255.0
+</pre>
+</div>
+<p>
+这样添加的不是虚拟网卡。而是在eth0网卡上多设置了一个ip。现在已经不推
+荐这样使用啦。使用ifconfig是查不出来的。需要使用 <code>ip address</code> 才可以
+查询出来：
+</p>
+<pre class="example">
+    2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+        link/ether 08:00:27:80:4f:6d brd ff:ff:ff:ff:ff:ff
+        inet 192.168.56.2/24 brd 192.168.56.255 scope global eth0
+           valid_lft forever preferred_lft forever
+        inet 192.168.56.119/24 brd 192.168.56.255 scope global secondary eth0:1
+           valid_lft forever preferred_lft forever
+        inet6 fe80::a00:27ff:fe80:4f6d/64 scope link 
+           valid_lft forever preferred_lft forever
+</pre>
+<p>
+你看，这是在eth0上整了两个ip。理解了这种方式的原理后就知道了，名字还
+不能白取，必须以 <code>ifconfig &lt;interface&gt;:&lt;number&gt;</code> 这样的形式。如果
+interface是 <code>eth0</code> ，取 <code>hello:0</code> 这样的名字肯定就是不可以的。
+</p>
+
+<p>
+tap就可以理解为一个网卡了，可以使用 <code>ip tuntap</code> 来查询所有的tap。
+tuntap分为tun和tap。tap是二层概念。tun是三层概念。一个使用tap的例子：
+</p>
+
+<p>
+使用kvm拉起的虚拟机，在发送报文前其实已经在协议栈中处理过了。如果再
+给host中的网卡，下去的时候还得走一次协议栈。这是没必要的。可以新建一
+个tap，然后在kvm拉起虚拟机的时候传入这个tap。这样虚拟机发送时，直接
+把做好的报文写入这个tap就可以了。它直接就下送了，不再过协议栈。
+</p>
+
+<p>
+veth是另一种类型的“网络设备”。它总是成对出现的。有点类似于管道。数据
+从一个口进来，一定从另一个口出去。可以看下英文解释：
+</p>
+<pre class="example">
+    Virtual Ethernet interfaces are an interesting construct; they always
+    come in pairs, and they are connected like a tube—whatever comes in
+    one veth interface will come out the other peer veth interface・.
+</pre>
+
+<p>
+就像管道可以用来连接两个进程一样，veth可以用来连接两个
+namespace<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>。对应
+的两个veth，一个放在namespace1一个放在namespace2。然后就可以搞事情啦。
+</p>
+
+<p>
+有时候需要查询与一个veth相对应的那个veth，可以这样先查对应的peer在
+namespace中的index：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25171;&#21360;veth0&#23545;&#24212;&#30340;peer&#22312;&#20854;namespace&#20013;&#30340;`ip link'&#21629;&#20196;&#30340;&#32034;&#24341;</span>
+    ethtool -S veth0
+</pre>
+</div>
+<p>
+然后再到对应的namespace中去 <code>ip link</code> 一下。对应索引号的就是它的peer
+啦 。
+</p>
+
+<p>
+vlan也是一种网络设备，可以这样来增加一个：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ip link add name eth0.110 link eth0 type vlan id 110
+</pre>
+</div>
+<p>
+然后要以查询它的id等内容：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ip -d link show veth.110
+</pre>
+</div>
+
+<p>
+bridge就是一个傻瓜交换机。
+</p>
+
+<ul class="org-ul">
+<li class="on"><code>[X]</code> vlan使用iproute2配好以后怎么使用？</li>
+</ul>
+
+<p>
+使用上面的方法配置好vlan后，需要把设置 <code>up</code> 起来，然后再配一个ip：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ip link set eth0.110 up
+    ip address add 192.168.56.23/24 dev eth0.110
+</pre>
+</div>
+
+<p>
+这样，另一台机器如果也是配置了一个id为110的vlan设备，那么这两个网卡
+之前通信就会走vlan啦。具体的说，A机器的vlan给B机器的vlan发消息时，会
+在数据链路帧的源Mac后加入32位的数据。前16位为 <code>0x8100</code> 。后面12位为
+设置的id。接改方收到后，由内核802.1q模块判断该id。如果是本机的vlan。
+再上送。
+</p>
+</div>
+</div>
+<div id="outline-container-org1c43887" class="outline-2">
+<h2 id="org1c43887"><span class="section-number-2">11</span> openstack float ip&#xa0;&#xa0;&#xa0;<span class="tag"><span class="float_ip">float_ip</span></span></h2>
+<div class="outline-text-2" id="text-11">
+<p>
+<a href="https://www.rdoproject.org/networking/difference-between-floating-ip-and-private-ip/">这里讲得不错</a>
+</p>
+
+<ul class="org-ul">
+<li>float ip：公网上可以使用float ip来访问openstack拉起的instance。这
+中间需要使用到NAT。</li>
+<li>private ip：instance中可以使用 <code>ip a</code> 来查到的ip。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0f4df23" class="outline-2">
+<h2 id="org0f4df23"><span class="section-number-2">12</span> <a href="http://developer.openstack.org/sdks/python/openstacksdk/users/index.html">openstack sdk document api实现先按照这个来</a></h2>
+</div>
+<div id="outline-container-org7363cd2" class="outline-2">
+<h2 id="cloud_init"><a id="org7363cd2"></a><span class="section-number-2">13</span> cloud-init</h2>
+<div class="outline-text-2" id="text-cloud_init">
+<p>
+<code>====================================================================</code>
+一句话总结：cloud-init主要可以在启动的时候执行用户自定义脚本。
+<code>====================================================================</code>
+</p>
+
+<p>
+执行脚本是较方便的方式。其它还有使用它规定云配置的语法等。具体在 <a href="https://help.ubuntu.com/community/CloudInit">这
+里介绍</a> 。
+</p>
+
+
+<p>
+ubuntu中使用cloud-init来执行脚本：
+</p>
+
+<ol class="org-ol">
+<li><p>
+镜像中需要先安装 cloud-init。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       sudo apt-get install cloud-init
+</pre>
+</div></li>
+<li><p>
+拉起机器时使用 <code>--user-data=xxx.sh</code> 来指定需要执行的脚本。
+cloud-init默认就会在launch的时候执行该脚本。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       openstack server create --flavor m1.peng --image cloud-init --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 <span style="color: #ffa500;">\</span>
+                 --security-group default --key-name mykey --user-data /tmp/main.sh ubuntu-test-cloud-init
+</pre>
+</div></li>
+<li><p>
+脚本里面的内容随意。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">!/bin/bash</span>
+
+       <span style="color: #8fbc8f;">OUTFILE</span>=<span style="color: #ffa500;">'/etc/ras/testfile.txt'</span>
+       mkdir /etc/ras
+       <span style="color: #b0c4de;">echo</span> <span style="color: #ffa500;">"userdata running on hostname: $(</span><span style="color: #fa8072;">uname</span><span style="color: #ffa500;"> -n)"</span> &gt; $<span style="color: #8fbc8f;">OUTFILE</span>
+       <span style="color: #b0c4de;">echo</span> <span style="color: #ffa500;">"hostname: xiepeng"</span>  &gt;&gt; $<span style="color: #8fbc8f;">OUTFILE</span>
+       <span style="color: #b0c4de;">echo</span> <span style="color: #ffa500;">"ip : 172.168.222.12"</span>  &gt;&gt; $<span style="color: #8fbc8f;">OUTFILE</span>
+       <span style="color: #b0c4de;">echo</span> <span style="color: #ffa500;">"id : 1703"</span>  &gt;&gt; $<span style="color: #8fbc8f;">OUTFILE</span>
+</pre>
+</div></li>
+</ol>
+
+
+<p>
+<b>cloud-init</b> 执行脚本都是在root权限下执行的。
+</p>
+</div>
+</div>
+<div id="outline-container-orgf255743" class="outline-2">
+<h2 id="orgf255743"><span class="section-number-2">14</span> curl restfull api example</h2>
+<div class="outline-text-2" id="text-14">
+<div class="org-src-container">
+<pre class="src src-sh">    curl -i <span style="color: #ffa500;">\</span>
+      -H <span style="color: #ffa500;">"Content-Type: application/json"</span> <span style="color: #ffa500;">\</span>
+      -d <span style="color: #ffa500;">'</span>
+<span style="color: #ffa500;">    { "auth": {</span>
+<span style="color: #ffa500;">        "identity": {</span>
+<span style="color: #ffa500;">          "methods": ["password"],</span>
+<span style="color: #ffa500;">          "password": {</span>
+<span style="color: #ffa500;">            "user": {</span>
+<span style="color: #ffa500;">              "name": "admin",</span>
+<span style="color: #ffa500;">              "domain": { "id": "default" },</span>
+<span style="color: #ffa500;">              "password": "admin1703"</span>
+<span style="color: #ffa500;">            }</span>
+<span style="color: #ffa500;">          }</span>
+<span style="color: #ffa500;">        }</span>
+<span style="color: #ffa500;">      }</span>
+<span style="color: #ffa500;">    }'</span> <span style="color: #ffa500;">\</span>
+      http://controller:35357/v3/auth/tokens
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9e82b1a" class="outline-2">
+<h2 id="org9e82b1a"><span class="section-number-2">15</span> cinder</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+查询block总量：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    cinder get-pools --detail
+    openstack volume service list
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-sh">    openstack volume create --size 500 big-volume
+    openstack server add volume ubuntu-test-cloud-init big-volume
+    openstack server remove volume ubuntu-test-cloud-init big-volume
+    openstack volume delete big-volume
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org460a971" class="outline-2">
+<h2 id="org460a971"><span class="section-number-2">16</span> openstack python sdk区别</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+<a href="https://wiki.openstack.org/wiki/SDKs#Python">python sdk</a>
+</p>
+
+<p>
+The OpenStackClients are the native Python bindings for the
+OpenStack APIs. They are used to implement the command-line
+interfaces (which ship with the library).
+</p>
+
+<p>
+The SDK-Development/PythonOpenStackSDK project is a proposed
+solution to offering an SDK that provides a single point of entry
+for consumers, and a base from which other tools can be built upon,
+such as command-line interfaces.
+</p>
+
+<p>
+pyrax should work with most OpenStack-based cloud deployments,
+though it specifically targets the Rackspace public cloud.
+</p>
+
+<p>
+Apache libcloud is a standard Python library that abstracts away
+differences among multiple cloud provider APIs.
+</p>
+
+<p>
+OpenStack Shade shade is a simple client library for operating
+OpenStack clouds.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2b1dd53" class="outline-2">
+<h2 id="org2b1dd53"><span class="section-number-2">17</span> 给openstack上的机器根目录扩容</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+很多主机在刚拉起的时候，磁盘的空间都很少，好在一般我们的磁盘一般都是使
+用lvm。可以动态地扩容。
+</p>
+</div>
+
+<div id="outline-container-org04d10b8" class="outline-3">
+<h3 id="org04d10b8"><span class="section-number-3">17.1</span> 新建volume并attach到对应的机器上</h3>
+<div class="outline-text-3" id="text-17-1">
+<div class="org-src-container">
+<pre class="src src-sh">     openstack volume create --size 30 volume_haiyan
+     openstack server add volume Ubuntu_Hailin_2  volume_haiyan
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1c1a666" class="outline-3">
+<h3 id="org1c1a666"><span class="section-number-3">17.2</span> 扩大lvm</h3>
+<div class="outline-text-3" id="text-17-2">
+<p>
+磁盘attach到机器上后，在对应的虚拟机中会增加一个磁盘。这里我们假定是
+<code>/dev/vdd</code> .
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #b0c4de;">cd</span> /dev/
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25226;/dev/vdd&#28155;&#21152;&#21040;ubuntu-vg&#20013;</span>
+     vgextend ubuntu-vg /dev/vdd
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26597;&#30475;</span>
+     vgdisplay
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25226;&#21097;&#20313;&#31354;&#38388;&#37117;&#20998;&#37197;&#32473;ubuntu-vg/root&#65292;&#19968;&#33324;&#36825;&#20010;&#37117;&#26159;&#25346;&#36733;&#30340;&#26681;&#30446;&#24405;</span>
+     lvresize -l +100%FREE ubuntu-vg/root
+     vgdisplay
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#36825;&#19968;&#27493;&#38656;&#35201;&#25191;&#34892;df&#25165;&#20250;&#30495;&#27491;&#29983;&#25928;</span>
+     resize2fs ubuntu-vg/root
+     df -lh
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org32c6d85" class="outline-2">
+<h2 id="org32c6d85"><span class="section-number-2">18</span> 直接使用python来给虚拟机attach其它硬盘</h2>
+<div class="outline-text-2" id="text-18">
+<p>
+需要使用 <code>python-novaclient</code> 这个单独的库，而不是cinder：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">!/usr/local/bin/pytho</span>
+
+    <span style="color: PaleYellow;">from</span> novaclient <span style="color: PaleYellow;">import</span> client
+    <span style="color: PaleYellow;">import</span> logging
+    <span style="color: PaleYellow;">import</span> time
+    <span style="color: PaleYellow;">import</span> pdb
+
+    <span style="color: #8fbc8f;">nova</span> = client.Client(<span style="color: #ffa500;">'2.1'</span>,
+                         <span style="color: #ffa500;">'demo'</span>,
+                         <span style="color: #ffa500;">'demo1703'</span>,
+                         <span style="color: #ffa500;">'demo'</span>,
+                         <span style="color: #ffa500;">'http://172.16.222.10:5000/v2.0'</span>,
+                         region_name = <span style="color: #ffa500;">'RegionOne'</span>,
+                         service_type=<span style="color: #ffa500;">'compute'</span>)
+
+
+    <span style="color: #8fbc8f;">attachment</span> = nova.volumes.create_server_volume(<span style="color: #ffa500;">'ae1ee3aa-8db0-4682-82a8-0cf23689311f'</span>, <span style="color: #ffa500;">'f1a1caae-eb46-47c2-8b3a-b405d093f969'</span>)
+    nova.volumes.delete_server_volume(<span style="color: #ffa500;">'ae1ee3aa-8db0-4682-82a8-0cf23689311f'</span>, <span style="color: #ffa500;">'f1a1caae-eb46-47c2-8b3a-b405d093f969'</span>)
+
+
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">create_server_volume(server_id, volume_id, device)</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Attach a volume identified by the volume ID to the given server ID</span>
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Parameters:   </span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">server_id &#8211; The ID of the server</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">volume_id &#8211; The ID of the volume to attach.</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">device &#8211; The device name</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Return type:  </span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Volume</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">delete(volume)</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Delete a volume.</span>
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Parameters:   volume &#8211; The Volume to delete.</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">delete_server_volume(server_id, attachment_id)</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Detach a volume identified by the attachment ID from the given server</span>
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Parameters:   </span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">server_id &#8211; The ID of the server</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">attachment_id &#8211; The ID of the attachment</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org83cf3fe" class="outline-2">
+<h2 id="org83cf3fe"><span class="section-number-2">19</span> userdata和metadata</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+metadata是拉起机器后openstack默认保存的一些值。比如hostname等。在拉
+起的虚拟机中可以这样查看 <code>meta-data</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    curl http://169.254.169.254/latest/meta-data
+</pre>
+</div>
+
+<p>
+userdata是用户传入的，在 <code>sdk</code> 的 <code>create_server</code> 或者cli的
+<code>--user-data</code> 中传入的。如果传入的是脚本，且镜像中安装了
+<code>cloud-init</code> 。则还会在启动时执行这些脚本。在拉起的虚拟机中可以这样
+查看 <code>user-data</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    curl http://169.254.169.254/latest/user-data/
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4b461c2" class="outline-2">
+<h2 id="org4b461c2"><span class="section-number-2">20</span> openstack region availability<sub>zone</sub></h2>
+<div class="outline-text-2" id="text-20">
+<p>
+<a href="http://www.guruadvisor.net/en/cloud/121-openstack-regions-and-availability-zones">这篇英文文档把四个概念都讲了</a>
+</p>
+
+<p>
+<a href="http://mogu.io/178-178">openstack multi-region管理</a> ：这篇中文博客不错。是一个比较具体的说明。
+<img src="./img/./72917zwf.png" alt="72917zwf.png" />
+</p>
+
+<p>
+<a href="http://docs.openstack.org/arch-design/multi-site-architecture.html">Architecture</a> : openstack 官方对multi-site的架构的解释。
+<img src="./img/./72917A7l.png" alt="72917A7l.png" />
+</p>
+
+<ol class="org-ol">
+<li>regions： openstack中的每个region都包含一个完整的openstack布署。多
+个region之间共享一套dashboard和keystone。</li>
+<li><p>
+avalability zone： 多个compute节点可以在逻辑上形成一个AZ。实际拉
+起vm时，可以选择把vm拉起在哪个AZ里面。甚至可以指定拉起在哪台
+compute节点上。比如我们可以在命令行这样指定拉起机器到compute2节点
+上：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       openstack server create --flavor m1.xie --image webdriver_ubuntu --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --availability-zone nova::compute xiepeng_temp
+</pre>
+</div></li>
+<li>Host Aggregates：&#x2026;</li>
+<li>Cells： &#x2026;</li>
+</ol>
+
+<p>
+默认环境中我们使用的是一个名为 <code>RegionOne</code> 的region。这是在安装
+openstack平台的时候初始化keystone时写入的。 <a href="http://docs.openstack.org/newton/install-guide-ubuntu/keystone-install.html">教程在这里。</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgabfb03d" class="outline-2">
+<h2 id="user_domain_project_role"><a id="orgabfb03d"></a><span class="section-number-2">21</span> domains, user, project, role</h2>
+<div class="outline-text-2" id="text-user_domain_project_role">
+<p>
+这四个概念的解释可以在 <a href="http://docs.openstack.org/liberty/install-guide-obs/keystone-users.html">这里</a> 查看：
+</p>
+<ol class="org-ol">
+<li>domain: An Identity API v3 entity. Represents a collection of
+projects, groups and users that defines administrative boundaries
+for managing OpenStack Identity entities. On the Internet,
+separates a website from other sites. Often, the domain name has
+two or more parts that are separated by dots. For example,
+yahoo.com, usa.gov, harvard.edu, or mail.yahoo.com. Also, a
+domain is an entity or container of all DNS-related information
+containing one or more records.</li>
+<li>project(tenants): Projects represent the base unit of
+“ownership” in OpenStack, in that all resources in OpenStack
+should be owned by a specific project. In OpenStack Identity, a
+project must be owned by a specific domain.</li>
+<li>user: In OpenStack Identity, entities represent individual API
+consumers and are owned by a specific domain. In OpenStack
+Compute, a user can be associated with roles, projects, or both.</li>
+<li>role: A personality that a user assumes to perform a specific set
+of operations. A role includes a set of rights and privileges. A
+user assuming that role inherits those rights and privileges.</li>
+</ol>
+
+<p>
+domain应该还是和域名相关，是多个project的集合。
+</p>
+
+<p>
+project也叫tenant（租户）。它是表示“所有”的基本单位。在
+openstack中，所有资源一定都被某个特定的project拥有。每个project一
+定是在某个domain中。
+</p>
+
+<p>
+user：api的消费者，一定是在某个domain下。一个用户可以和role以及
+project中的一个或者两个相关联。
+</p>
+
+<p>
+role：权限。一个用户和role关联后，只有该role中的权限。
+</p>
+
+<p>
+参考 <a href="http://docs.openstack.org/liberty/install-guide-obs/keystone-users.html">这篇文章</a> ，我自己写了一个在默认 <code>default</code> 域中新建 <code>project,
+  user, role</code> 的测试：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26032;&#24314;&#20004;&#20010;project</span>
+    openstack project create --domain default <span style="color: #ffa500;">\</span>
+    --description <span style="color: #ffa500;">"peng test project"</span> ptproject
+    openstack project create --domain default <span style="color: #ffa500;">\</span>
+    --description <span style="color: #ffa500;">"peng test project2"</span> ptproject2
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26032;&#24314;&#19968;&#20010;user</span>
+    openstack user create --domain default <span style="color: #ffa500;">\</span>
+    --password-prompt ptuser
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26032;&#24314;&#19968;&#20010;role</span>
+    openstack role create ptrole
+    openstack role create ptrole2
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25226;user&#21644;&#36825;&#20004;&#20010;project&#21516;role&#30456;&#20851;&#32852;&#65292;&#36825;&#26679;&#36825;&#20010;user&#30331;&#38470;&#36827;&#26469;&#23601;&#21487;&#20197;&#22312;&#20004;&#20010;</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">project&#20013;&#20999;&#25442;</span>
+    openstack role add --project ptproject --user ptuser ptrole
+    openstack role add --project ptproject2 --user ptuser ptrole2
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;"># # delete all</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">openstack role delete ptrole</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">openstack user delete ptuser</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">openstack project delete ptproject</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">openstack project delete ptproject2</span>
+</pre>
+</div>
+
+<div class="figure">
+<p><img src="./img/./93577t6q.png" alt="93577t6q.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6e28e89" class="outline-2">
+<h2 id="org6e28e89"><span class="section-number-2">22</span> block查询剩余多少空间</h2>
+<div class="outline-text-2" id="text-22">
+<p>
+当前没法通过api直接查询，可以到block节点上查询。
+</p>
+
+<p>
+block上是使用lvm来搞的。使用vgs查询就知道了。
+</p>
+<pre class="example">
+    block@block1:~$ sudo vgs
+    [sudo] password for block:
+      VG             #PV #LV #SN Attr   VSize   VFree
+      block-vg         2   2   0 wz--n-  59.27g    0
+      cinder-volumes   1   5   0 wz--n- 163.81g 3.81g
+      ubuntu-vg        2   2   0 wz-pn-  14.52g    0
+    block@block1:~$
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org73df79c" class="outline-2">
+<h2 id="org73df79c"><span class="section-number-2">23</span> ephemeral disk</h2>
+<div class="outline-text-2" id="text-23">
+<pre class="example">
+    openstack flavor create --vcpus 2 --ephemeral 1 --ram 4096 --disk 0 peng-test-flavor
+</pre>
+
+<p>
+这个 <code>ephemeral</code> 创建后，它就是 <code>/dev/vdb</code> 。这个是临时的，关机了就
+没有了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1b7a56c" class="outline-2">
+<h2 id="org1b7a56c"><span class="section-number-2">24</span> image的size可能小于flavor的disk</h2>
+<div class="outline-text-2" id="text-24">
+<p>
+原来使用的时候，一定要flavor的磁盘大小大于image中的disk。这样大于的
+空间就浪费了。
+</p>
+
+<p>
+可以指定flavor的disk大小为0。这样拉起机器后，就是真实image中的大小。
+这样就可以不浪费了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb5deda6" class="outline-2">
+<h2 id="orgb5deda6"><span class="section-number-2">25</span> compute的安装步骤</h2>
+<div class="outline-text-2" id="text-25">
+<pre class="example">
+    1、用live盘启动新装compute节点。
+    2、执行如下命令将compute－install镜像写入硬盘
+    sudo su
+    ssh openstack@172.16.222.13 "dd if=openstack/newton/compute-install.img" | dd of=/dev/sda
+    reboot
+    3、再用live盘启动，进入界面后运行gparted，将剩余空间开辟一个200000M(200G)的空间，用于扩张compute的根文件系统，
+    并将剩余的空间分成另一个盘，将两个文件格式指定为lvm格式。
+    4、拔掉compute的两根网线，并重启系统（这一步很重要）
+    5、进入系统后修改/etc/hostname，将compute修改为对应的compute14，参见excel表分配，
+    同时，修改/etc/network/interface，将172.16.222.7及192.168.222.7修改为: 172.16.222.63及192.168.222.63。
+    执行如下命令，扩展根文件系统，注意，通过fdisk -l /dev/sda看53000M分区对应的是sdaX，下面以sda3为例：
+    pvcreate /dev/sda3
+    vgextend compute-vg /dev/sda3
+    lvextend -l +100%FREE /dev/compute-vg/root
+    resize2fs /dev/compute-vg/root
+    6、修改my_ip为本机分配的IP地址
+    7、重启系统，插上网线
+</pre>
+</div>
+</div>
+<div id="outline-container-org692e533" class="outline-2">
+<h2 id="org692e533"><span class="section-number-2">26</span> <span class="todo TODO">TODO</span> Question</h2>
+<div class="outline-text-2" id="text-26">
+<ul class="org-ul">
+<li class="on"><code>[X]</code> openstack VM中的tap是不是虚拟网卡？ <code>eth0:0</code> 这种的。如果不是，
+那是什么？ <code>eth0:0</code> 这种东西叫multi-host，使用 <code>ifconfig</code> 命令查出
+来可能会让人有困惑，使用 <code>ip address</code> 和 <code>ip link</code> 查出来就明了了，
+其实它是一个网卡上有多个ip地址。所以这种不是虚拟网卡。</li>
+<li class="on"><code>[X]</code> openstack安全规则，只放对应端口的流进来这些应该在哪里配置，这
+个就是网络安全组，每个拉起的vm可以关联多个安全组。</li>
+<li class="off"><code>[&#xa0;]</code> openstack如何把一个已配置好的vm保存为image，然后从该image拉起
+镜像？</li>
+</ul>
+</div>
+<div id="outline-container-org2dbecf8" class="outline-3">
+<h3 id="org2dbecf8"><span class="section-number-3">26.1</span> <span class="todo TODO">TODO</span> <a href="file:///home/pengpengxp/work/ras-cloud/openstack.html#MissingReference">openstack curl restfull api example</a>  <a href="http://developer.openstack.org/zh_CN/api-guide/quick-start/api-quick-start.html">这个链接可以参考</a></h3>
+<div class="outline-text-3" id="text-26-1">
+<ul class="org-ul">
+<li>State "TODO"       from "待办"       <span class="timestamp-wrapper"><span class="timestamp">[2017-02-09 四 10:45]</span></span></li>
+<li>State "待办"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2017-02-09 四 10:45]</span></span></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd3f6d61" class="outline-3">
+<h3 id="orgd3f6d61"><span class="section-number-3">26.2</span> <span class="todo TODO">TODO</span> openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？</h3>
+<div class="outline-text-3" id="text-26-2">
+<ul class="org-ul">
+<li>State "TODO"       from "待办"       <span class="timestamp-wrapper"><span class="timestamp">[2017-02-09 四 10:45]</span></span></li>
+</ul>
+<p>
+相关的笔记在 <a href="#user_domain_project_role">这里</a> 我个人认为同一个用户在不同的region中是不同的。
+region做了用户隔离的。
+</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">两个namespace之间现在我只知道这种方式来通信。</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2019-03-18 一 16:46</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

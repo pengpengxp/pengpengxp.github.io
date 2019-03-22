@@ -1,0 +1,78 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-07-07-使用lsp-mode写C
+
+
+都说 `lsp-mode' 写C好，我试用了一下。
+
+Microsoft的 `Language Server Protocol' 我理解应该是一套协议，它定义了
+ide或者编辑器与后端server通信的方式。
+
+#+BEGIN_EXAMPLE
+The Language Server Protocol (LSP) defines the protocol used between
+an editor or IDE and a language server that provides language features
+like auto complete, go to definition, find all references etc.
+#+END_EXAMPLE
+
+* server
+  对于 =c/c++= ，[[https://github.com/cquery-project/cquery][cquery]] 是一个符合lsp协议的后端，它是使用的clang来解析
+  的c文件。
+
+  server端没有太多说的，直接下载下来后按照 [[https://github.com/cquery-project/cquery/wiki/Build-%2528CMake%2529][教程]] 编译就可以了。
+  #+BEGIN_EXAMPLE
+  $ mkdir build && cd build
+  $ cmake .. -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+  $ cmake --build . --target install
+  #+END_EXAMPLE
+
+* client
+  我在emacs中使用，需要安装 `lsp-mode' 和 `cquery' 。装好后，emacs端需要
+  这样设置一下：
+  #+BEGIN_SRC emacs-lisp
+(require 'cquery)
+;; 这里指到编译好的cquery可执行文件
+(setq cquery-executable "/home/pengpengxp/github/cquery/build/cquery")
+;; ;; Arch Linux aur/cquery-git aur/cquery
+;; (setq cquery-executable "/usr/bin/cquery")
+
+;; ;; Log file
+(setq cquery-extra-args '("--log-file=/tmp/cq.log"))
+;; ;; Cache directory, both relative and absolute paths are supported
+;; (setq cquery-cache-dir ".cquery_cached_index")
+;; ;; Initialization options
+;; (setq cquery-extra-init-params '(:cacheFormat "msgpack"))
+
+(setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
+(setq cquery-extra-init-params '(:completion (:detailedLabel t)))
+
+;; To enable semantic highlighting:
+(setq cquery-sem-highlight-method 'font-lock)
+;; alternatively, (setq cquery-sem-highlight-method 'overlay)
+;; For rainbow semantic highlighting
+(cquery-use-default-rainbow-sem-highlight)
+
+;; user `ivy' for xref show
+(require 'ivy-xref)
+(setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
+
+(provide 'init-lsp-cquery-mode)
+
+  #+END_SRC
+
+  还需要在c的hook中加入 =(lsp-cquery-enable)= 这一句，这里注意，是打开
+  =lsp-cquery-enable= 而不是 =lsp-mode= ，因为前者会去打开后者：
+  #+BEGIN_SRC emacs-lisp
+(add-hook 'c-mode-hook #'(lambda ()
+                           (interactive)
+                           (lsp-cquery-enable)))
+  #+END_SRC
+
+* 使用
+  + xref-find-definitions
+  + xref-find-references
+  + xref-find-apropos
+  + xref-pop-marker-stack
+  + cquery-call-hierarchy：可以找出所有调用这个函数的地方。
+  + cquery-member-hierarchy：可以找出函数中所有成员定义的地方。

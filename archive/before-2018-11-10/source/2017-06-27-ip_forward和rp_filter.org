@@ -1,0 +1,97 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: =ipforward= 和 =rp_rilter=
+
+
+* ip_forward
+  :PROPERTIES:
+  :CUSTOM_ID: ip_forward
+  :END:
+  #+BEGIN_EXAMPLE
+    IP forwarding should be enabled when you want the system to act as a
+    router, that is transfer IP packets from one network to another.
+
+    In the simplest case, consider a server with two physical ethernet
+    ports which is meant to connect to two different networks (say your
+    internal network and the outside world as provided by a DSL modem). If
+    you just connect and configure those two interfaces, the system can
+    communicate on either network. However, packets from one network
+    cannot travel to the other network, because forwarding is not enabled.
+  #+END_EXAMPLE
+
+  打开 =ip forward= 选项，系统可以像路由器一样工作，它可以把ip包从一个
+  网络传到另一个网络。
+
+  具体例子见下图：
+  #+BEGIN_SRC artist
+                     _           __                                  _
+                    (_)_ __     / _| ___  _ ____      ____ _ _ __ __| |
+                    | | '_ \   | |_ / _ \| '__\ \ /\ / / _` | '__/ _` |
+                    | | |_) |  |  _| (_) | |   \ V  V / (_| | | | (_| |
+                    |_| .__/___|_|  \___/|_|    \_/\_/ \__,_|_|  \__,_|
+                      |_| |_____|
+
+    +----+-----------------+----+              +----+-----------------+----+           +----+-----------------+----+
+    |    |                 |    |              |    |                 |    |           |    |                 |    |
+    |    |   Host 1        |eth0+--------------+eth0|    Host 2       |eth1+-----------+eth0|      Host 3     |    |
+    |    |                 | |  |              |  | |                 |  | |           |  | |                 |    |
+    +----+-----------------+-+--+              +--+-+-----------------+--+-+      o    +--+-+-----------------+----+
+                             |                    |                      |                |
+                             v                    v                      v                v
+                       192.168.56.8          192.168.56.108       192.168.57.108      192.168.57.109
+
+  #+END_SRC
+  Host 2中ip_forward开启后，在Host 1上 =ping 192.168.57.109= 。Host 2的eth0和eth1以及Host 3上的eth0都有icmp包。
+
+  反之，可有Host 2的eth0上才有icmp包。
+  
+  ubuntu下可以这样来临时性地打开 =ip forward= ：
+  #+BEGIN_SRC sh
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+  #+END_SRC
+  
+  永久性地打开可以这样：
+  #+BEGIN_EXAMPLE
+    # 编辑 /etc/sysctl.conf ，找到下面的行
+    #net.ipv4.ip_forward=1
+    # 把这行打开 net.ipv4.ip_forward=1:
+
+    # 或者使用一行命令搞定
+    sudo sysctl -w net.ipv4.ip_forward=1
+  #+END_EXAMPLE
+
+* rp_filter
+  [[http://www.slashroot.in/linux-kernel-rpfilter-settings-reverse-path-filtering][参考的这篇博客]]
+  
+  #+BEGIN_EXAMPLE
+    So in other words, when a machine with reverse path filtering enabled
+    recieves a packet, the machine will first check whether the source of
+    the recived packet is reachable through the interface it came in.
+  #+END_EXAMPLE
+  
+  以 [[#ip_forward][ip_forward]] 中的图为例，Host 2开启ip_forward选项，然后它的eth0网口
+  开启rp_filter的情况下。在Host 1上构造如下的包发送给Host 2:
+  #+BEGIN_EXAMPLE
+                  +-----------------------------------+-------------------------------------+
+    Situation 1:  |  src:192.168.56.100               |         dts:192.168.57.109          |
+                  +-----------------------------------+-------------------------------------+
+
+                  +-----------------------------------+-------------------------------------+
+    Situation 2:  |  src:10.10.10.10                  |         dts:192.168.57.109          |
+                  +-----------------------------------+-------------------------------------+
+  #+END_EXAMPLE
+
+  第一个包Host 2会转发到Host 3。第二个包Host 2会丢弃。 *原因是第二个包
+  的源ip在Host 2的eth0上路由不可达。*
+
+  临时性地打开 =rp_filter= :
+  #+BEGIN_SRC sh
+    for i in /proc/sys/net/ipv4/conf/*/rp_filter ; do echo 1 >  $i;done
+  #+END_SRC
+   
+  还可以这样永久性地打开eth0的 =rp_filter= 选项：
+  #+BEGIN_SRC sh
+    sudo sysctl -w "net.ipv4.conf.eth0.rp_filter=1"
+  #+END_SRC

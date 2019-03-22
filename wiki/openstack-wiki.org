@@ -1,0 +1,1053 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+TITLE: Openstack wiki
+
+
+* metadata service
+  ======================================================================
+  一句话总结：为instance提供配置文件的服务。
+  ======================================================================
+  
+  [[http://docs.openstack.org/newton/install-guide-ubuntu/neutron-controller-install.html][here]] ：
+  #+BEGIN_EXAMPLE
+    The metadata agent provides configuration information such as credentials to instances.
+  #+END_EXAMPLE
+
+  使用cloud_init [[#cloud_init]] 的时候，实例中需要到一个统一的地方去取配
+  置文件和脚本等。
+
+
+  [[http://docs.openstack.org/admin-guide/compute-networking-nova.html#metadata-service][这里]] 介绍：
+  #+BEGIN_EXAMPLE
+    The metadata service is implemented by either the nova-api service or
+    the nova-api-metadata service. Note that the nova-api-metadata service
+    is generally only used when running in multi-host mode, as it
+    retrieves instance-specific metadata. If you are running the nova-api
+    service, you must have metadata as one of the elements listed in the
+    enabled_apis configuration option in /etc/nova/nova.conf. The default
+    enabled_apis configuration setting includes the metadata service, so
+    you do not need to modify it.
+
+    Hosts access the service at 169.254.169.254:80, and this is translated
+    to metadata_host:metadata_port by an iptables rule established by the
+    nova-network service. In multi-host mode, you can set metadata_host to
+    127.0.0.1.
+
+    For instances to reach the metadata service, the nova-network service
+    must configure iptables to NAT port 80 of the 169.254.169.254 address
+    to the IP address specified in metadata_host (this defaults to $my_ip,
+    which is the IP address of the nova-network service) and port
+    specified in metadata_port (which defaults to 8775) in
+    /etc/nova/nova.conf.
+  #+END_EXAMPLE
+  在实例中是固定访问 =169.254.169.254= 这个ip地址。然后通过iptable配置
+  路由来访问真正的server。
+  
+  这里的server我理解就是 metadata service。
+
+  metadata service可以是nova-api或者nova-api-metadata来实现。只不过后
+  者一般只在multi-host mode这种模式下使用。
+  
+  该服务需要配置nova和neutron。nova要在 =nova.conf= 里这样enable：
+  #+BEGIN_EXAMPLE
+    enabled_apis=osapi_compute,metadata
+  #+END_EXAMPLE
+
+  =/etc/neutron/metadata_agent.ini= 文件配置newtron：
+  #+BEGIN_EXAMPLE
+    nova_metadata_ip = controller
+    metadata_proxy_shared_secret = metadata1703
+  #+END_EXAMPLE
+  这里面还可以配置端口号。不配默认是8775。
+
+  需要注意的是，nova和neutron中配置文件里
+  =metadata_proxy_shared_secret= 这个配置项的值必须相同。这个值是自定
+  义的。应该是instance在访问metadata时候加入的这个头，openstack会对它
+  做校验。匹配才能访问。
+  
+  配置好meta-data后，可以直接在拉起的虚拟机中使用 =curl= 来测试：
+  #+BEGIN_EXAMPLE
+    river@ubuntu-test-cloud-init:~$ curl 169.254.169.254
+    1.0
+    2007-01-19
+    2007-03-01
+    2007-08-29
+    2007-10-10
+    2007-12-15
+    2008-02-01
+    2008-09-01
+    2009-04-04
+    latestriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04
+    meta-data/
+    user-datariver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/
+    ami-id
+    ami-launch-index
+    ami-manifest-path
+    block-device-mapping/
+    hostname
+    instance-action
+    instance-id
+    instance-type
+    local-hostname
+    local-ipv4
+    placement/
+    public-hostname
+    public-ipv4
+    public-keys/
+    reservation-id
+    security-groupsriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/hostname
+    ubuntu-test-cloud-init.novalocalriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/ami-launch-index
+    0river@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/reservation-id
+    r-h8qwawfhriver@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/public-ipv4
+    river@ubuntu-test-cloud-init:~$ curl 169.254.169.254/2009-04-04/meta-data/ami-manifest-path
+    FIXMEriver@ubuntu-test-cloud-init:~$
+  #+END_EXAMPLE
+* links
+** [[http://docs.openstack.org/cli-reference/][2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference]] :commandline:
+** [[http://docs.openstack.org/arch-design/network-focus.html][2016-09-28 OpenStack Docs: Network focused]]
+** [[file+sys:~/Downloads/oreilly-openstack-ops-guide.epub][oreilly-openstack-ops-guide.epub]]                                    :book:
+* Networking [[http://docs.openstack.org/mitaka/networking-guide/intro.html][website]]                                                :neutron:
+** arp
+   ARP assumes that all machines that are in the same subnet are on
+   the same local network(Ethernet network).
+** nat
+   + DNAT: OpenStack uses DNAT to route packets from instances to the
+     OpenStack metadata service.
+   + SNAT: OpenStack uses SNAT to enable applications running inside
+     of instances to connect out to the public Internet.
+** nova-network:
+   The Network Controller manages the networking resources on host
+   machines.
+   + Allocating fixed IP addresses
+   + Configuring VLANs for projects
+   + Configuring networks for compute nodes
+
+   #+BEGIN_EXAMPLE
+     Currently, Compute with nova-network only supports Linux bridge
+     networking that allows virtual interfaces to connect to the outside
+     network through the physical interface.
+   #+END_EXAMPLE
+** neutron-network:
+   The OpenStack Networking service provides an API that allows users
+   to set up and define network connectivity and addressing in the
+   cloud.
+
+** difference betweent nova-networking and neutron
+   #+BEGIN_EXAMPLE
+     First there was nova-network
+
+     OpenStack was created by bringing together NASA's Nebula cloud
+     computing project and Rackspace's Swift Object storage project. Nebula
+     was did all the basics - managing networking, compute and (block)
+     storage because for the NASA, it had to. Very quickly, Nebula's core
+     became split into the Nova (compute and networking), Cinder (block
+     storage functions) and Glance (image management functions) projects,
+     all tied together through the API calls that still bind the many
+     projects that comprise OpenStack.  Nova-network remained embedded as a
+     sub-process in the compute-focused Nova project.
+
+     The overall OpenStack development approach is build projects that
+     focus on a single task reduced the complexity involved any one
+     project. It also simplified internal interactions that an integrated
+     project would have required and allowed people with the interest and
+     expertise in a particular aspect of the OpenStack system to focus on
+     that particular functionality. Simpler projects, easier/faster
+     development.
+
+     Then there were two.
+
+     Neutron (originally named Quantum) was the project intended to finally
+     peel networking functionality out of Nova for the development reasons
+     just mentioned.  Neutron has been the focus of extending OpenStack's
+     networking capabilities. Today it provides enhanced networking
+     functionality above and beyond what nova-network was ever intended
+     for; functions like LBaaS, FWaaS, VPNaaS and tunneling protocols. It
+     also enables a range of plugin functions to allow management of
+     third-party networking hardware and software (e.g. switches and
+     routers) as well as a number of advanced SDN systems. Again, something
+     beyond what the creators of Nova's networking function ever planned
+     for.
+
+     Note that there are OpenStack systems still running on older OpenStack
+     releases where the simple networking functionality of nova-network are
+     sufficient and migrating to a more advanced release is considered too
+     much of a bother.  This is likely the only reason to consider getting
+     to know nova-network functionality.  For a new system Neutron is the
+     way to do OpenStack networking.
+   #+END_EXAMPLE
+** [[http://docs.openstack.org/mitaka/config-reference/firewalls-default-ports.html][Firewalls and default ports]]
+** newtron preinstall
+   #+BEGIN_SRC sh
+     apt-get install software-properties-common
+     add-apt-repository cloud-archive:newton
+     add-apt-repository cloud-archive:newton-proposed
+     apt-get update && apt-get dist-upgrade
+     apt-get install python-openstackclient -y
+   #+END_SRC
+* Compute                                                              :nova:
+  #+BEGIN_SRC sh
+    # 查看所有compute节点
+    nova hypervisor-list
+    
+    nova boot --image <uuid> --flavor m1.tiny --key_name test --availability-zone nova:server2
+
+    nova boot --image cirros --flavor m1.nano --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 nova-test
+  #+END_SRC
+
+* Orchestration                                                        :heat:
+  [[https://wiki.openstack.org/wiki/Heat][Openstack wiki]]
+  
+  [[http://docs.openstack.org/developer/heat/template_guide/hot_guide.html][Heat Orchestration Template (HOT) Guide]]
+
+  ======================================================================
+  The mission of the OpenStack Orchestration program is to create a
+  human- and machine-accessible service for managing the entire
+  lifecycle of infrastructure and applications within OpenStack
+  clouds.
+  ======================================================================
+
+  Stack domain users allow the Orchestration service to authorize and
+  start the following operations within booted virtual machines:
+
+  + Provide metadata to agents inside instances. Agents poll for
+    changes and apply the configuration that is expressed in the
+    metadata to the instance.
+  + Detect when an action is complete. Typically, software
+    configuration on a virtual machine after it is booted. Compute
+    moves the VM state to “Active” as soon as it creates it, not when
+    the Orchestration service has fully configured it.
+  + Provide application level status or meters from inside the
+    instance. For example, allow auto-scaling actions to be performed
+    in response to some measure of performance or quality of service.
+
+  + 给实例中的agent提供metadata。agent从metadata中携带的信息中读取并应
+    用配置。
+
+  + 检测操作什么时候结束。一般来说，软件会在一个虚拟机启动后来配置它。
+    Compute节点只要一创建VM，就立即把它的状态置为“Active”，而不是等
+    Orchestration服务完全配置好它。
+
+  + 从实例内部提供应用层面的数据。比如：某种程序上，执行自动伸缩操作来
+    做为对性能和QoS的响应。
+    
+
+  [[http://docs.openstack.org/developer/heat/template_guide/hot_spec.html#hot-spec-template-version][heat version]]
+
+  2016-10-14 | newton
+  
+  下面是一个最简单的模版的例子：
+  #+BEGIN_SRC yaml :tangle Orchestration/hello.yaml
+    heat_template_version: 2015-04-30
+
+    description: >
+      This is my test stack
+
+    resources:
+      my_heat_instance1:
+        type: OS::Nova::Server
+        properties:
+          key_name: mykey
+          image: cirros
+          flavor: m1.nano
+          networks:
+            - network: provider
+      my_heat_instance2:
+        type: OS::Nova::Server
+        properties:
+          key_name: mykey
+          image: cirros
+          flavor: m1.nano
+          networks:
+            - network: private-net1
+      my_heat_instance3:
+        type: OS::Nova::Server
+        properties:
+          key_name: mykey
+          image: cirros
+          flavor: m1.nano
+          networks:
+            - network: provider
+          
+  #+END_SRC
+
+  有了这个例子，可以直接通过这个模版来拉起实例：
+  #+BEGIN_SRC sh :tangle command_example/Orchestration.sh
+    # 以`head'开头的命令都是过时的了，应该使用以`openstack'开头的命令
+    heat stack-list
+
+    # 这里的这个hello.yaml就是前文提到的模版文件
+    openstack stack create -f yaml -t /tmp/hello.yaml teststack
+    openstack stack delete teststack
+    openstack stack list
+  #+END_SRC
+  
+* Object storage                                                      :swift:
+** swift install on object node
+   These operation has been done in the =object-newton.img= :
+   #+BEGIN_SRC sh
+     apt-get install software-properties-common
+     add-apt-repository cloud-archive:newton
+     add-apt-repository cloud-archive:newton-proposed
+     apt-get update && apt-get dist-upgrade
+     apt-get install python-openstackclient -y
+
+     apt-get install xfsprogs rsync -y
+     apt-get install swift swift-account swift-container swift-object -y
+
+     mkdir -p /srv/node/sdb;mkdir -p /srv/node/sdc
+
+     # curl -o /etc/swift/account-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/account-server.conf-sample?h=stable/mitaka
+     # curl -o /etc/swift/container-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/container-server.conf-sample?h=stable/mitaka
+     # curl -o /etc/swift/object-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/object-server.conf-sample?h=stable/mitaka
+
+     sudo curl -o /etc/swift/account-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/account-server.conf-sample?h=stable/newton
+     sudo curl -o /etc/swift/container-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/container-server.conf-sample?h=stable/newton
+     sudo curl -o /etc/swift/object-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/object-server.conf-sample?h=stable/newton
+
+     chown -R swift:swift /srv/node
+     mkdir -p /var/cache/swift
+     chown -R root:swift /var/cache/swift
+     chmod -R 775 /var/cache/swift
+
+   #+END_SRC
+   
+   things need to do after installing the template:
+   + /etc/hostname
+   + /etc/network/interfaces
+   + /etc/rsync.conf
+   + /etc/swift/account-server.conf
+   + /etc/swift/container-server.conf
+   + /etc/swift/object-server.conf
+   + then, create =/dev/sda6= and add it to =/dev/object-vg=
+     #+BEGIN_EXAMPLE
+       fdisk /dev/sda
+       ... 
+       cd /dev
+       vgextend object-vg /dev/sda6 
+       vgdisplay 
+       lvresize -l +100%FREE object-vg/root
+       resize2fs object-vg/root 
+       df -lh
+     #+END_EXAMPLE
+   + create =/dev/sda7= and =/dev/sda8= and make file system
+     #+BEGIN_SRC sh
+       # after config lvm and fdisk /dev/sda
+       mkfs.xfs /dev/sda7
+       mkfs.xfs /dev/sda8
+
+       # after edit /etc/fstab
+       mount /dev/sda7 /srv/node/sdb
+       mount /dev/sda8 /srv/node/sdc
+
+       # start the servers
+       service rsync start
+     #+END_SRC
+
+   edit /etc/fstab for auto-mount:
+   #+BEGIN_EXAMPLE
+     /dev/sda7 /srv/node/sdb xfs noatime,nodiratime,nobarrier,logbufs=8 0 2
+     /dev/sda8 /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8 0 2
+   #+END_EXAMPLE
+** swift install on controller node
+   proxy_conf:
+   #+BEGIN_SRC sh
+     sudo curl -o /etc/swift/proxy-server.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/proxy-server.conf-sample?h=stable/newton
+   #+END_SRC
+
+   #+BEGIN_SRC sh
+     # recreate rings
+     cd /etc/swift
+     sudo rm account.* object.* container.*
+
+     sudo swift-ring-builder account.builder create 10 3 1
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder rebalance
+     sudo swift-ring-builder account.builder 
+
+     sudo swift-ring-builder container.builder create 10 3 1
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder rebalance
+     sudo swift-ring-builder container.builder
+
+     sudo swift-ring-builder object.builder create 10 3 1
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder rebalance
+     sudo swift-ring-builder object.builder
+
+     scp *.gz object@object1:/tmp
+     scp *.gz object@object2:/tmp
+
+   #+END_SRC
+   
+   swift_config file and start:
+   #+BEGIN_SRC sh
+     sudo curl -o /etc/swift/swift.conf https://git.openstack.org/cgit/openstack/swift/plain/etc/swift.conf-sample?h=stable/newton
+     # modified it
+
+     sudo chown -R root:swift /etc/swift;
+   #+END_SRC
+** start service
+   on controller:
+   #+BEGIN_SRC sh
+     sudo service memcached restart;
+     sudo service swift-proxy restart
+   #+END_SRC
+
+   on each object node:
+   #+BEGIN_SRC sh
+     sudo swift-init all start
+   #+END_SRC
+** recreate rings on controller
+   #+BEGIN_SRC sh :tangle command_example/swift_recreate_rings_on_controller.sh
+     # recreate rings
+     cd /etc/swift
+     sudo rm account.* object.* container.*
+     sudo swift-ring-builder account.builder create 10 3 1
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdb --weight 100
+     sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6002 --device sdc --weight 100
+     sudo swift-ring-builder account.builder rebalance
+     sudo swift-ring-builder account.builder 
+
+     sudo swift-ring-builder container.builder create 10 3 1
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdb --weight 100
+     sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6001 --device sdc --weight 100
+     sudo swift-ring-builder container.builder rebalance
+     sudo swift-ring-builder container.builder
+
+     sudo swift-ring-builder object.builder create 10 3 1
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.40 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdb --weight 100
+     sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.222.41 --port 6000 --device sdc --weight 100
+     sudo swift-ring-builder object.builder rebalance
+     sudo swift-ring-builder object.builder
+
+     scp *.gz object@object1:/tmp
+     scp *.gz object@object2:/tmp
+   #+END_SRC
+** recreate endpoint on controller 
+   #+BEGIN_SRC sh :tangle command_example/swift_recreate_endpoint_on_controller.sh
+     # recreate endpoint
+     for i in `openstack endpoint list|grep swift|awk '{print $2}'`;do echo $i;openstack endpoint delete $i;done
+     openstack endpoint list|grep swift
+     openstack endpoint create --region RegionOne object-store public http://controller:8080/v1/AUTH_%\(tenant_id\)s
+     openstack endpoint create --region RegionOne object-store internal http://controller:8080/v1/AUTH_%\(tenant_id\)s
+     openstack endpoint create --region RegionOne object-store admin http://controller:8080/v1
+     openstack endpoint list|grep swift
+   #+END_SRC
+** COMMENT swift config
+   ################################################################
+   #### swift  config
+   ################################################################
+   sudo swift-ring-builder account.builder create 10 3 1
+   sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.28.30 --port 6002 --device sdb --weight 100
+   sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.28.31 --port 6002 --device sdb --weight 100
+   sudo swift-ring-builder account.builder add --region 1 --zone 1 --ip 192.168.28.31 --port 6002 --device sdc --weight 100
+   sudo swift-ring-builder account.builder rebalance
+   sudo swift-ring-builder account.builder 
+
+   sudo swift-ring-builder account.builder set_replicas 1.0
+   sudo swift-ring-builder account.builder rebalance
+   sudo swift-ring-builder account.builder set_replicas 3.0
+   sudo swift-ring-builder account.builder rebalance
+   sudo swift-ring-builder account.builder 
+
+   sudo swift-ring-builder container.builder create 10 3 1
+   sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.28.30 --port 6001 --device sdb --weight 100
+   sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.28.31 --port 6001 --device sdb --weight 100
+   sudo swift-ring-builder container.builder add --region 1 --zone 1 --ip 192.168.28.31 --port 6001 --device sdc --weight 100
+   sudo swift-ring-builder container.builder rebalance
+   sudo swift-ring-builder container.builder
+
+   sudo swift-ring-builder container.builder set_replicas 1.0
+   sudo swift-ring-builder container.builder set_replicas 3.0
+   sudo swift-ring-builder container.builder rebalance
+   sudo swift-ring-builder container.builder
+
+   sudo swift-ring-builder object.builder create 10 3 1
+   sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.28.30 --port 6000 --device sdb --weight 100
+   sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.28.31 --port 6000 --device sdb --weight 100
+   sudo swift-ring-builder object.builder add --region 1 --zone 1 --ip 192.168.28.31 --port 6000 --device sdc --weight 100
+   sudo swift-ring-builder object.builder rebalance
+   sudo swift-ring-builder object.builder
+
+   sudo swift-ring-builder object.builder set_replicas 1.0
+   sudo swift-ring-builder object.builder rebalance
+   sudo swift-ring-builder object.builder set_replicas 3.0
+   sudo swift-ring-builder object.builder rebalance
+   sudo swift-ring-builder object.builder
+
+
+   openstack endpoint create --region RegionOne object-store public http://controller:8080/v1/AUTH_%\(tenant_id\)s
+   openstack endpoint create --region RegionOne object-store internal http://controller:8080/v1/AUTH_%\(tenant_id\)s
+   openstack endpoint create --region RegionOne object-store admin http://controller:8080/v1
+
+   openstack endpoint list
+   openstack endpoint list|grep -i swift
+
+   openstack endpoint delete 8eba0ec182ce4e92b0eceed04b7388ee
+   openstack endpoint delete 9b320203c0b24672adcb836ce2b768ca
+   openstack endpoint delete ffb1a04f0eb24c50a783c51bc0154df3 
+ 
+   scp *.gz openstack@object1:/tmp
+   scp *.gz openstack@object2:/tmp
+* Image service                                                      :glance:
+  glance是不存image的。Object Storage或者filesystem这些存的。
+  
+  Though images are not stored in glance—rather in a back end, which
+  could be Object Storage, a filesystem or any other supported
+  method—the connection is made from the compute node to the Image
+  service and the image is transferred over this connection. The Image
+  service streams the image from the back end to the compute node.
+  
+  分disk-format和container-format：
+  #+BEGIN_EXAMPLE
+    Disk Format
+
+    The disk format of a virtual machine image is the format of the
+    underlying disk image. Virtual appliance vendors have different
+    formats for laying out the information contained in a virtual machine
+    disk image.
+
+    Container Format
+
+    The container format refers to whether the virtual machine image is in
+    a file format that also contains metadata about the actual virtual
+    machine.
+
+    Note that the container format string is not currently used by Glance
+    or other OpenStack components, so it is safe to simply specify bare as
+    the container format if you are unsure.
+
+    You can set your image’s container format to one of the following:
+  #+END_EXAMPLE
+  disk-format是指镜像包实际的格式。container-format现在并没有什么用。
+  
+  指定container-format来上传ova格式才可以：
+  #+BEGIN_SRC sh
+    openstack image create "peng_test" --file peng_test.ova --disk-format raw --container-format ova --public
+  #+END_SRC
+  
+  但是拉不起来。结果像这样了：
+  [[./img/./77826T1y.png]]
+
+  转换image：
+  #+BEGIN_SRC sh
+    qemu-img convert -f ova -O qcow2 image.vmdk image.img
+  #+END_SRC
+  实际使用我参考了 [[http://edoceo.com/notabene/ova-to-vmdk-to-qcow2][这篇博客]] 。其实就是解开ova，然后转换其中的 =vmdk=
+  就可以了。例子：
+  #+BEGIN_EXAMPLE
+    ~ $ tar -xvf Evergreen_trunk_Squeeze.ova
+    Evergreen_trunk_Squeeze.ovf
+    Evergreen_trunk_Squeeze-disk1.vmdk
+
+    ~ $ qemu-img convert -O qcow2 Evergreen_trunk_Squeeze-disk1.vmdk Evergreen_trunk_Squeeze.qcow2
+
+  #+END_EXAMPLE
+  
+  如果是把ova导入到了vmware中，需要使用下面的命令来完成转换：
+  #+BEGIN_SRC sh
+    qemu-img convert -f vmdk -O qcow2 55fd458-disk1.vmdk guoyuting.qcow2
+  #+END_SRC
+  
+  上传image：
+  #+BEGIN_SRC sh :tangle command_example/glance.sh
+    # 命令行上传image
+    # openstack image create --disk-format qcow2 --container-format bare --public --file ./centos63.qcow2 centos63-image
+    openstack image create --disk-format raw --public --file /tmp/win7.img win7-raw
+  #+END_SRC
+
+* launch instance
+  #+BEGIN_SRC sh :tangle command_example/launch_instance.sh
+
+    # 新建一个cirros实例
+    openstack server create --flavor m1.nano --image cirros --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey cirros-ptest1
+
+    # To view the list of valid zones
+    openstack availability zone list
+    # To view the list of valid compute hosts
+    openstack host list
+    # To view the list of valid compute nodes
+    openstack hypervisor list
+
+    # template
+    openstack server create --image IMAGE --flavor m1.tiny --key-name KEY --availability-zone ZONE:HOST:NODE --nic net-id=UUID SERVER
+    # 在compute3上拉一个实例，这个只能admin用户才可以使用，这里把HOST省略了
+    openstack server create --flavor m1.nano --image cirros --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey --availability-zone nova::compute3 cirros-ptest-to-cp3
+
+    openstack server delete  cirros-test-instance1
+    openstack server delete  cirros-test-instance2
+    openstack server delete  cirros-test-instance3
+
+    # 新建一个ubuntu实例 
+    openstack server create --flavor m1.medium --image ubuntu-16.04-server  --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ubuntu-test-instance
+    openstack server create --flavor m1.medium --image ubuntu-16.04-server  --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ubuntu-test-instance2
+
+    # 新建一个10.10.222.0/24网段的instance
+    openstack server create --flavor m1.medium --image ubuntu-16.04-server --nic net-id=cd874f3e-6f51-455e-b063-b9d45fcfbce8 --security-group default --key-name mykey ubuntu-ptest-1010
+
+
+    # 使用iso安装光盘拉实例
+    openstack server create --flavor m1.medium --image demo-image --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey demo-image-ptest
+
+    # 拉起rs的OVA，这个没有成功
+    openstack server create --flavor m1.medium --image peng_test  --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey peng_rs_test
+
+    # launch windows
+    openstack server create --flavor m1.medium --image Windows_Server_2012 --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ws2012
+    openstack server create --flavor m1.medium --image Windows_Server_2012 --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --security-group default --key-name mykey ws2012-2
+    
+    # 上传一个image，把它弄成公有的
+    openstack image create --disk-format qcow2 --public --file ws2012.qcow2 ws2012
+
+
+    # show出来实例的url
+    openstack console url show ubuntu-test-instance
+    openstack console url show ubuntu-test-instance2
+    openstack console url show cirros-ptest-instance1
+    openstack console url show cirros-ptest-instance2
+    openstack console url show demo-image-ptest
+    openstack console url show cirros-test2
+    openstack console url show ubuntun-instance
+    openstack console url show cirros-ptest-instance2
+    openstack console url show
+  #+END_SRC
+
+* 如何查看一对veth中某interface对应的peer
+  #+BEGIN_SRC sh
+    ethtool -S veth0
+  #+END_SRC
+  
+  输出结果：
+  #+BEGIN_EXAMPLE
+    NIC statistics:
+         peer_ifindex: 9
+  #+END_EXAMPLE
+  
+  说明在veth0的peer对应的namespace中使用`ip link'查出来的索引号是9。
+
+* =eth0:0,tap,veth,vlan,bridge= 等
+  #+BEGIN_SRC sh
+    ifconfig eth0:1 192.168.56.2 netmask 255.255.255.0
+  #+END_SRC
+  这样添加的不是虚拟网卡。而是在eth0网卡上多设置了一个ip。现在已经不推
+  荐这样使用啦。使用ifconfig是查不出来的。需要使用 =ip address= 才可以
+  查询出来：
+  #+BEGIN_EXAMPLE
+    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+        link/ether 08:00:27:80:4f:6d brd ff:ff:ff:ff:ff:ff
+        inet 192.168.56.2/24 brd 192.168.56.255 scope global eth0
+           valid_lft forever preferred_lft forever
+        inet 192.168.56.119/24 brd 192.168.56.255 scope global secondary eth0:1
+           valid_lft forever preferred_lft forever
+        inet6 fe80::a00:27ff:fe80:4f6d/64 scope link 
+           valid_lft forever preferred_lft forever
+  #+END_EXAMPLE
+  你看，这是在eth0上整了两个ip。理解了这种方式的原理后就知道了，名字还
+  不能白取，必须以 =ifconfig <interface>:<number>= 这样的形式。如果
+  interface是 =eth0= ，取 =hello:0= 这样的名字肯定就是不可以的。
+
+  tap就可以理解为一个网卡了，可以使用 =ip tuntap= 来查询所有的tap。
+  tuntap分为tun和tap。tap是二层概念。tun是三层概念。一个使用tap的例子：
+  
+  使用kvm拉起的虚拟机，在发送报文前其实已经在协议栈中处理过了。如果再
+  给host中的网卡，下去的时候还得走一次协议栈。这是没必要的。可以新建一
+  个tap，然后在kvm拉起虚拟机的时候传入这个tap。这样虚拟机发送时，直接
+  把做好的报文写入这个tap就可以了。它直接就下送了，不再过协议栈。
+  
+  veth是另一种类型的“网络设备”。它总是成对出现的。有点类似于管道。数据
+  从一个口进来，一定从另一个口出去。可以看下英文解释：
+  #+BEGIN_EXAMPLE
+    Virtual Ethernet interfaces are an interesting construct; they always
+    come in pairs, and they are connected like a tube—whatever comes in
+    one veth interface will come out the other peer veth interface・.
+  #+END_EXAMPLE
+
+  就像管道可以用来连接两个进程一样，veth可以用来连接两个
+  namespace[fn:1:两个namespace之间现在我只知道这种方式来通信。]。对应
+  的两个veth，一个放在namespace1一个放在namespace2。然后就可以搞事情啦。
+  
+  有时候需要查询与一个veth相对应的那个veth，可以这样先查对应的peer在
+  namespace中的index：
+  #+BEGIN_SRC sh
+    # 打印veth0对应的peer在其namespace中的`ip link'命令的索引
+    ethtool -S veth0
+  #+END_SRC
+  然后再到对应的namespace中去 =ip link= 一下。对应索引号的就是它的peer
+  啦 。
+  
+  vlan也是一种网络设备，可以这样来增加一个：
+  #+BEGIN_SRC sh
+    ip link add name eth0.110 link eth0 type vlan id 110
+  #+END_SRC
+  然后要以查询它的id等内容：
+  #+BEGIN_SRC sh
+    ip -d link show veth.110
+  #+END_SRC
+
+  bridge就是一个傻瓜交换机。
+  
+  + [X] vlan使用iproute2配好以后怎么使用？
+  
+  使用上面的方法配置好vlan后，需要把设置 =up= 起来，然后再配一个ip：
+  #+BEGIN_SRC sh
+    ip link set eth0.110 up
+    ip address add 192.168.56.23/24 dev eth0.110
+  #+END_SRC
+
+  这样，另一台机器如果也是配置了一个id为110的vlan设备，那么这两个网卡
+  之前通信就会走vlan啦。具体的说，A机器的vlan给B机器的vlan发消息时，会
+  在数据链路帧的源Mac后加入32位的数据。前16位为 =0x8100= 。后面12位为
+  设置的id。接改方收到后，由内核802.1q模块判断该id。如果是本机的vlan。
+  再上送。
+* openstack float ip                                               :float_ip:
+  [[https://www.rdoproject.org/networking/difference-between-floating-ip-and-private-ip/][这里讲得不错]]
+
+  + float ip：公网上可以使用float ip来访问openstack拉起的instance。这
+    中间需要使用到NAT。
+  + private ip：instance中可以使用 =ip a= 来查到的ip。
+* [[http://developer.openstack.org/sdks/python/openstacksdk/users/index.html][openstack sdk document api实现先按照这个来]]
+* cloud-init
+  :PROPERTIES:
+  :CUSTOM_ID: cloud_init
+  :END:
+
+  ======================================================================
+  一句话总结：cloud-init主要可以在启动的时候执行用户自定义脚本。
+  ======================================================================
+
+  执行脚本是较方便的方式。其它还有使用它规定云配置的语法等。具体在 [[https://help.ubuntu.com/community/CloudInit][这
+  里介绍]] 。
+
+  
+  ubuntu中使用cloud-init来执行脚本：
+
+  1) 镜像中需要先安装 cloud-init。
+     #+BEGIN_SRC sh
+       sudo apt-get install cloud-init
+     #+END_SRC
+  2) 拉起机器时使用 =--user-data=xxx.sh= 来指定需要执行的脚本。
+     cloud-init默认就会在launch的时候执行该脚本。
+     #+BEGIN_SRC sh
+       openstack server create --flavor m1.peng --image cloud-init --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 \
+                 --security-group default --key-name mykey --user-data /tmp/main.sh ubuntu-test-cloud-init
+     #+END_SRC
+  3) 脚本里面的内容随意。
+     #+BEGIN_SRC sh
+       #!/bin/bash
+
+       OUTFILE='/etc/ras/testfile.txt'
+       mkdir /etc/ras
+       echo "userdata running on hostname: $(uname -n)" > $OUTFILE
+       echo "hostname: xiepeng"  >> $OUTFILE
+       echo "ip : 172.168.222.12"  >> $OUTFILE
+       echo "id : 1703"  >> $OUTFILE
+     #+END_SRC
+
+       
+  *cloud-init* 执行脚本都是在root权限下执行的。
+* curl restfull api example
+  #+BEGIN_SRC sh
+    curl -i \
+      -H "Content-Type: application/json" \
+      -d '
+    { "auth": {
+        "identity": {
+          "methods": ["password"],
+          "password": {
+            "user": {
+              "name": "admin",
+              "domain": { "id": "default" },
+              "password": "admin1703"
+            }
+          }
+        }
+      }
+    }' \
+      http://controller:35357/v3/auth/tokens
+  #+END_SRC
+* cinder
+  查询block总量：
+  #+BEGIN_SRC sh
+    cinder get-pools --detail
+    openstack volume service list
+  #+END_SRC
+
+  #+BEGIN_SRC sh
+    openstack volume create --size 500 big-volume
+    openstack server add volume ubuntu-test-cloud-init big-volume
+    openstack server remove volume ubuntu-test-cloud-init big-volume
+    openstack volume delete big-volume
+  #+END_SRC
+* openstack python sdk区别
+  [[https://wiki.openstack.org/wiki/SDKs#Python][python sdk]]
+
+  The OpenStackClients are the native Python bindings for the
+  OpenStack APIs. They are used to implement the command-line
+  interfaces (which ship with the library).
+
+  The SDK-Development/PythonOpenStackSDK project is a proposed
+  solution to offering an SDK that provides a single point of entry
+  for consumers, and a base from which other tools can be built upon,
+  such as command-line interfaces.
+
+  pyrax should work with most OpenStack-based cloud deployments,
+  though it specifically targets the Rackspace public cloud.
+
+  Apache libcloud is a standard Python library that abstracts away
+  differences among multiple cloud provider APIs.
+
+  OpenStack Shade shade is a simple client library for operating
+  OpenStack clouds.
+
+* 给openstack上的机器根目录扩容
+  很多主机在刚拉起的时候，磁盘的空间都很少，好在一般我们的磁盘一般都是使
+  用lvm。可以动态地扩容。
+
+** 新建volume并attach到对应的机器上
+   #+BEGIN_SRC sh
+     openstack volume create --size 30 volume_haiyan
+     openstack server add volume Ubuntu_Hailin_2  volume_haiyan
+   #+END_SRC
+  
+** 扩大lvm
+   磁盘attach到机器上后，在对应的虚拟机中会增加一个磁盘。这里我们假定是
+   =/dev/vdd= .
+
+   #+BEGIN_SRC sh
+     cd /dev/
+     # 把/dev/vdd添加到ubuntu-vg中
+     vgextend ubuntu-vg /dev/vdd
+     # 查看
+     vgdisplay
+     # 把剩余空间都分配给ubuntu-vg/root，一般这个都是挂载的根目录
+     lvresize -l +100%FREE ubuntu-vg/root
+     vgdisplay
+     # 这一步需要执行df才会真正生效
+     resize2fs ubuntu-vg/root
+     df -lh
+   #+END_SRC
+* 直接使用python来给虚拟机attach其它硬盘
+  需要使用 =python-novaclient= 这个单独的库，而不是cinder：
+  #+BEGIN_SRC python
+    #!/usr/local/bin/pytho
+
+    from novaclient import client
+    import logging
+    import time
+    import pdb
+
+    nova = client.Client('2.1',
+                         'demo',
+                         'demo1703',
+                         'demo',
+                         'http://172.16.222.10:5000/v2.0',
+                         region_name = 'RegionOne',
+                         service_type='compute')
+
+
+    attachment = nova.volumes.create_server_volume('ae1ee3aa-8db0-4682-82a8-0cf23689311f', 'f1a1caae-eb46-47c2-8b3a-b405d093f969')
+    nova.volumes.delete_server_volume('ae1ee3aa-8db0-4682-82a8-0cf23689311f', 'f1a1caae-eb46-47c2-8b3a-b405d093f969')
+
+
+
+    # create_server_volume(server_id, volume_id, device)
+    # Attach a volume identified by the volume ID to the given server ID
+
+    # Parameters:   
+    # server_id – The ID of the server
+    # volume_id – The ID of the volume to attach.
+    # device – The device name
+    # Return type:  
+    # Volume
+    # delete(volume)
+    # Delete a volume.
+
+    # Parameters:   volume – The Volume to delete.
+    # delete_server_volume(server_id, attachment_id)
+    # Detach a volume identified by the attachment ID from the given server
+
+    # Parameters:   
+    # server_id – The ID of the server
+    # attachment_id – The ID of the attachment
+  #+END_SRC
+* userdata和metadata
+  metadata是拉起机器后openstack默认保存的一些值。比如hostname等。在拉
+  起的虚拟机中可以这样查看 =meta-data= ：
+  #+BEGIN_SRC sh
+    curl http://169.254.169.254/latest/meta-data
+  #+END_SRC
+
+  userdata是用户传入的，在 =sdk= 的 =create_server= 或者cli的
+  =--user-data= 中传入的。如果传入的是脚本，且镜像中安装了
+  =cloud-init= 。则还会在启动时执行这些脚本。在拉起的虚拟机中可以这样
+  查看 =user-data= ：
+  #+BEGIN_SRC sh
+    curl http://169.254.169.254/latest/user-data/
+  #+END_SRC
+  
+* openstack region availability_zone
+  [[http://www.guruadvisor.net/en/cloud/121-openstack-regions-and-availability-zones][这篇英文文档把四个概念都讲了]]
+  
+  [[http://mogu.io/178-178][openstack multi-region管理]] ：这篇中文博客不错。是一个比较具体的说明。
+  [[./img/./72917zwf.png]]
+  
+  [[http://docs.openstack.org/arch-design/multi-site-architecture.html][Architecture]] : openstack 官方对multi-site的架构的解释。
+  [[./img/./72917A7l.png]]
+  
+  1. regions： openstack中的每个region都包含一个完整的openstack布署。多
+     个region之间共享一套dashboard和keystone。
+  2. avalability zone： 多个compute节点可以在逻辑上形成一个AZ。实际拉
+     起vm时，可以选择把vm拉起在哪个AZ里面。甚至可以指定拉起在哪台
+     compute节点上。比如我们可以在命令行这样指定拉起机器到compute2节点
+     上：
+     #+BEGIN_SRC sh
+       openstack server create --flavor m1.xie --image webdriver_ubuntu --nic net-id=8c600f73-375c-40e9-8f58-40d1ac4bcd65 --availability-zone nova::compute xiepeng_temp
+     #+END_SRC
+  3. Host Aggregates：...
+  4. Cells： ...
+
+  默认环境中我们使用的是一个名为 =RegionOne= 的region。这是在安装
+  openstack平台的时候初始化keystone时写入的。 [[http://docs.openstack.org/newton/install-guide-ubuntu/keystone-install.html][教程在这里。]]
+
+* domains, user, project, role
+  :PROPERTIES:
+  :CUSTOM_ID: user_domain_project_role
+  :END:
+  这四个概念的解释可以在 [[http://docs.openstack.org/liberty/install-guide-obs/keystone-users.html][这里]] 查看：
+  1. domain: An Identity API v3 entity. Represents a collection of
+     projects, groups and users that defines administrative boundaries
+     for managing OpenStack Identity entities. On the Internet,
+     separates a website from other sites. Often, the domain name has
+     two or more parts that are separated by dots. For example,
+     yahoo.com, usa.gov, harvard.edu, or mail.yahoo.com. Also, a
+     domain is an entity or container of all DNS-related information
+     containing one or more records.
+  2. project(tenants): Projects represent the base unit of
+     “ownership” in OpenStack, in that all resources in OpenStack
+     should be owned by a specific project. In OpenStack Identity, a
+     project must be owned by a specific domain.
+  3. user: In OpenStack Identity, entities represent individual API
+     consumers and are owned by a specific domain. In OpenStack
+     Compute, a user can be associated with roles, projects, or both.
+  4. role: A personality that a user assumes to perform a specific set
+     of operations. A role includes a set of rights and privileges. A
+     user assuming that role inherits those rights and privileges.
+
+  domain应该还是和域名相关，是多个project的集合。
+
+  project也叫tenant（租户）。它是表示“所有”的基本单位。在
+  openstack中，所有资源一定都被某个特定的project拥有。每个project一
+  定是在某个domain中。
+
+  user：api的消费者，一定是在某个domain下。一个用户可以和role以及
+  project中的一个或者两个相关联。
+
+  role：权限。一个用户和role关联后，只有该role中的权限。
+
+  参考 [[http://docs.openstack.org/liberty/install-guide-obs/keystone-users.html][这篇文章]] ，我自己写了一个在默认 =default= 域中新建 =project,
+  user, role= 的测试：
+  #+BEGIN_SRC sh
+    # 新建两个project
+    openstack project create --domain default \
+    --description "peng test project" ptproject
+    openstack project create --domain default \
+    --description "peng test project2" ptproject2
+    # 新建一个user
+    openstack user create --domain default \
+    --password-prompt ptuser
+    # 新建一个role
+    openstack role create ptrole
+    openstack role create ptrole2
+    # 把user和这两个project同role相关联，这样这个user登陆进来就可以在两个
+    # project中切换
+    openstack role add --project ptproject --user ptuser ptrole
+    openstack role add --project ptproject2 --user ptuser ptrole2
+
+    # # # delete all
+    # openstack role delete ptrole
+    # openstack user delete ptuser
+    # openstack project delete ptproject
+    # openstack project delete ptproject2
+  #+END_SRC
+  [[./img/./93577t6q.png]]
+
+* block查询剩余多少空间
+  当前没法通过api直接查询，可以到block节点上查询。
+
+  block上是使用lvm来搞的。使用vgs查询就知道了。
+  #+BEGIN_EXAMPLE
+    block@block1:~$ sudo vgs
+    [sudo] password for block:
+      VG             #PV #LV #SN Attr   VSize   VFree
+      block-vg         2   2   0 wz--n-  59.27g    0
+      cinder-volumes   1   5   0 wz--n- 163.81g 3.81g
+      ubuntu-vg        2   2   0 wz-pn-  14.52g    0
+    block@block1:~$
+  #+END_EXAMPLE
+
+* ephemeral disk
+  #+BEGIN_EXAMPLE
+    openstack flavor create --vcpus 2 --ephemeral 1 --ram 4096 --disk 0 peng-test-flavor
+  #+END_EXAMPLE
+
+  这个 =ephemeral= 创建后，它就是 =/dev/vdb= 。这个是临时的，关机了就
+  没有了。
+
+* image的size可能小于flavor的disk
+  原来使用的时候，一定要flavor的磁盘大小大于image中的disk。这样大于的
+  空间就浪费了。
+
+  可以指定flavor的disk大小为0。这样拉起机器后，就是真实image中的大小。
+  这样就可以不浪费了。
+
+* compute的安装步骤
+  #+BEGIN_EXAMPLE
+    1、用live盘启动新装compute节点。
+    2、执行如下命令将compute－install镜像写入硬盘
+    sudo su
+    ssh openstack@172.16.222.13 "dd if=openstack/newton/compute-install.img" | dd of=/dev/sda
+    reboot
+    3、再用live盘启动，进入界面后运行gparted，将剩余空间开辟一个200000M(200G)的空间，用于扩张compute的根文件系统，
+    并将剩余的空间分成另一个盘，将两个文件格式指定为lvm格式。
+    4、拔掉compute的两根网线，并重启系统（这一步很重要）
+    5、进入系统后修改/etc/hostname，将compute修改为对应的compute14，参见excel表分配，
+    同时，修改/etc/network/interface，将172.16.222.7及192.168.222.7修改为: 172.16.222.63及192.168.222.63。
+    执行如下命令，扩展根文件系统，注意，通过fdisk -l /dev/sda看53000M分区对应的是sdaX，下面以sda3为例：
+    pvcreate /dev/sda3
+    vgextend compute-vg /dev/sda3
+    lvextend -l +100%FREE /dev/compute-vg/root
+    resize2fs /dev/compute-vg/root
+    6、修改my_ip为本机分配的IP地址
+    7、重启系统，插上网线
+  #+END_EXAMPLE
+* TODO Question
+  + [X] openstack VM中的tap是不是虚拟网卡？ =eth0:0= 这种的。如果不是，
+    那是什么？ =eth0:0= 这种东西叫multi-host，使用 =ifconfig= 命令查出
+    来可能会让人有困惑，使用 =ip address= 和 =ip link= 查出来就明了了，
+    其实它是一个网卡上有多个ip地址。所以这种不是虚拟网卡。
+  + [X] openstack安全规则，只放对应端口的流进来这些应该在哪里配置，这
+    个就是网络安全组，每个拉起的vm可以关联多个安全组。
+  + [ ] openstack如何把一个已配置好的vm保存为image，然后从该image拉起
+    镜像？
+** TODO [#C] [[file:~/work/ras-cloud/openstack.org::*curl%20restfull%20api%20example][openstack curl restfull api example]]  [[http://developer.openstack.org/zh_CN/api-guide/quick-start/api-quick-start.html][这个链接可以参考]]
+   - State "TODO"       from "待办"       [2017-02-09 Thu 10:45]
+   - State "待办"       from "TODO"       [2017-02-09 Thu 10:45]
+** TODO [#A] openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？
+   - State "TODO"       from "待办"       [2017-02-09 Thu 10:45]
+   相关的笔记在 [[#user_domain_project_role][这里]] 我个人认为同一个用户在不同的region中是不同的。
+   region做了用户隔离的。
+

@@ -1,0 +1,2039 @@
+# -*- coding: utf-8-emacs-unix; word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+SETUPFILE: theme.setup
+#+Title: Emacs and Lisp wiki
+
+* 我的emacs学习笔记 [3/4]
+** 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer :shell:command:
+
+   其实就是没次默认开的都是\verb+*Async Shell Command*+这个buffer-name。
+   我自己这样写，每次生成peng-async-shell-command-output-和一个随机数的
+   buffer。避免每次都问我。见下：
+
+   *不完美的*
+   --------------------------------------------------------------------------------
+   1) 每次使用完后，这些buffer貌似都没有被关闭，还是有可能重复。应该还有
+      其它解决办法的。
+   --------------------------------------------------------------------------------
+   #+BEGIN_SRC elisp
+  (defun peng-async-shell-command (COM)
+    "Run the shell command asynchronize Don't ask me whether to
+  create a new buffer just because the default buffer is used.
+
+  For this reason, I create a random output buffer rather than the
+  default one every time I launch a shell command.
+
+  The COM is what you want to excute. It MUST be a string."
+    (save-window-excursion
+      (save-excursion
+        (let ((RANDOM-NUM (message "%s" (random 10000))))
+        (async-shell-command COM
+                             (get-buffer-create 
+                              (concat "peng-async-shell-command-output-" RANDOM-NUM)))  
+          ))))
+   #+END_SRC
+** DONE 自己把一些emacs文档制作成为mobi格式方便kindle阅读。
+   - State "DONE"       from "TODO"       [2014-10-14 二 09:24] \\
+
+     使用别人写的脚本texi2mobi。调用了makeinfo，dbtoepub,kindlegen.
+
+     参考的这里，https://kanru.info/blog/archives/2010/11/18/convert-texinfo-to-mobi/
+
+     #+BEGIN_VERSE
+     Convert Texinfo to MOBI
+
+     Thu, 18 Nov 2010 18:36:26 +0800
+     GNU software often comes with a large set of documents in texinfo format, which can be typesetted to a real book. For example the Gnus Manual has over 500 pages, full of fun and humor. Having a mobi version on my Kindle would be quite handy.
+
+     Gnus Manual on Kindle This work involves two parts, first is to convert texinfo to docbook, second is to convert docbook to mobi. In fact the second part could be applied on all docbooks.
+
+     Convert Texinfo to DocBook
+
+     Texinfo has native support of converting texi file to docbook format:
+
+     makeinfo --docbook gnus.texi 
+     will output gnus.xml.
+
+     If the texi includes some other texis the the makeinfo command somehow doesn't strip the @setfilename macro from the included file, so cluttered output. Use the following sed script to fix it:
+
+     sed -i -e 's#<para><setfilename>.*</setfilename></para>##' gnus.xml 
+     Convert DocBook to MOBI
+
+     Since DocBook 1.74, they included a ruby script dbtoepub to convert xml file to epub format. Then we can use kindlegen or calibre to convert epub to mobi.
+
+     However the docbook xsl produces nested navPoints and <dl> formated TOC. Both aren't handled very well by Kindle.
+
+     So I created a customized layer above the docbook.xsl for mobi creation. This mobi.xsl will flatten the navPoints and use <ul> formated TOC. The output mobi looked very nice on my Kindle.
+
+     All in one script
+
+     Download the texi2mobi.tar.gz, which contains the script and the style sheet used to create mobi friendly epub.
+
+     To use this script you have to install makeinfo, dbtoepub and kindlegen. I use kindlegen here because it creates better mobi at present.
+
+     apt-get install texinfo  
+     apt-get install dbtoepub 
+     kindlegen could be downloaded form Amazon.
+
+     Untar the tarball then use
+
+     texi2mobi.sh TEXINFO-FILE 
+     Create your mobi version! Have fun ☺
+     #+END_VERSE
+
+     使用an-introduction-to-programming-in-emacs-lisp做实验。安装好之后，刚
+     开始出现一点bug，用makeinfo制作不出来xml。然后我修改了一下texi中的源码
+     的前面设置部分，感觉应该是注释掉其中一些图片起作用了。然后makeinfo步骤
+     就没有问题了。然后直接使用其提供的脚本就能进行转换了。
+
+     流程是：makeinfo转换成xml。dbtoepub转换程epub。kindlegen转换成mobi。
+
+     制作过程中发现，使用makeinfo失败的时候，把texi文件开头的setfilename
+     一行注释掉就行了。makeinfo能成功，则脚本就基本不会出现问题。
+
+     <2014-10-14 二 09:24>
+
+** DONE 对emacs的kill-ring的理解
+   - State "DONE"       from ""           [2014-11-06 四 21:16]
+   就是kill-ring和kill-ring-yank-pointer两个symbol拉。symbol其实就是指针的
+   结构体。有指向函数的指针，有指向变量的指针，还有指向变量名字，变量
+   properties的指针。这两个symbol都是指向变量的指针这在起作用。
+
+   <2014-10-30 四 11:16>
+
+** DONE 使用org-mode来管理GTD                                :blog:org:mode:
+       - State "DONE"       from "TODO"       [2014-09-24 三 11:48]
+         <2014-09-24 三 11:31>
+         昨天一天配置以后，基本实现了用org-mode来管理GTD的想法。使用
+         org-capture随时抓取想法。用org-agenda查看所有想法和代办事项。
+
+         配合org-capture使用，可以随时记录我的想法，待做的项目了。把\C-c c
+         绑定到org-capture上。定义一些org-capture-template。可以快速抓取我
+         自己的想法到指定的文件中。
+
+         #+BEGIN_SRC lisp
+          (define-key global-map (kbd "C-c c") 'org-capture)
+          (setq org-capture-templates 
+                '(("n" "News" entry (file+datetree (concat GTD "inbox.org"))
+                   "*  TODO  %?\n %T")
+
+                  ("t" "Tasks" entry (file+datetree (concat GTD "task.org"))
+                   "*  TODO  %?\n %T")
+
+                  ("r" "Notes" entry (file+datetree (concat GTD "note.org"))
+                   "*  TODO  %?\n %T")
+
+                  ("p" "Project" entry (file+headline (concat GTD "project.org") "Projects")
+                   "*  %?\n")
+
+                  ("a" "Account" table-line (file+headline (concat GTD "account.org.gpg") "Web accounts")
+                   "|")
+
+                  ("k" "test" entry (file+datetree "/tmp/test.org" "Tasks")
+                   "* TODO  %?  \n %T")
+                  ))
+         #+END_SRC
+
+         使用org-agenda来管理我GTD目录下所有的文档。设置变量
+         org-agenda-files为GTD目录。可以使得该目录下所有的org文档对
+         org-agenda都可见。把org-refile-targets也设置为这个目录。就可以该目
+         录下自由refile。非常方便。
+
+         #+BEGIN_SRC lisp
+          (setq org-agenda-files '("~/gtd/"))  
+          (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                           (org-agenda-files :maxlevel . 9))))
+         #+END_SRC
+
+         在设置这些变量的时候，绑定到org-mode-hook有时候不起作用。我认为是
+         在emacs刚启动没有打开org文件的时候。这个hook没有被调用。如果绑定在
+         这个hook上。变量没有被设置。这时候org-agenda就没用了。最后测试出来。
+         我把这些变量设置绑定到了org-load-hook上面了。同时设置了
+         org-todo-keywords这个变量。可以自定义事件不同的状态。
+         #+BEGIN_SRC lisp
+          (defun peng-org-load ()
+            (setq org-directory "~/gtd/")
+            (setq org-agenda-files '("~/gtd/"))  
+            (setq org-todo-keywords '((sequence "TODO(t!)" 
+                                                "NEXT(n)"
+                                                "WAITTING(w)"
+                                                "SOMEDAY(s)"
+                                                "|"
+                                                "DONE(d@/!)"
+                                                "ABORT(a@/!)")))
+            )
+          (add-hook 'org-load-hook 'peng-org-load)
+         #+END_SRC
+
+** emacs下关的一些学习资料
+   看tuhdo的emacs mini manual，里面有写 关于gtags+semantic ， 目前最快的方法
+
+   国外的先不算   什么 planet emacs blog 等去处确实不错
+
+   个人总结学习 emacs 的去处, google 这种通用搜索的就不说了. 大家还有不错的欢迎分享.
+
+   国内的质量确实不高, 不过对英文水平要求低:
+
+   1. emacs@smth  虽然更新不多, 这里出现过不少国内 emacs 圈里厉害的角色, 包括 yas 和 ace-jump 作者等
+   2. 以前有个 emacser.com , 有蛮久没更新了, 个人看老的文章质量也一般般, 不过比百度随便搜出来的好点.
+
+   国外(或者准确的说英文圈)
+
+   1. emacswiki
+   2. planet emacsen:  emacs blog 3. reddit 的 emacs tag 
+
+   个别单枪匹马但是至少最近更新还多的; 通常也会出现在上面的 2 和 3 里, 
+
+   . 台湾的李杀(人家主要用英文) http://ergoemacs.org/emacs/
+   . endlessparentheses http://www.endlessparentheses.com
+   . Sacha Chua 貌似是东南亚的小美女  http://sachachua.com/blog
+
+
+   <2015-01-14 三 22:27>
+** emacs中判断系统的版本
+   #+BEGIN_SRC emacs-lisp
+     ;; check OS type
+     (cond
+      ((string-equal system-type "windows-nt") ; Microsoft Windows
+       (progn
+         (message "Microsoft Windows") )
+       )
+      ((string-equal system-type "darwin")   ; Mac OS X
+       (progn
+         (message "Mac OS X")
+         )
+       )
+      ((string-equal system-type "gnu/linux") ; linux
+       (progn
+         (message "Linux") )
+       )
+      )
+   #+END_SRC
+** eshell	[0/1] 						     :eshell: 
+   :PROPERTIES:
+   :CUSTOM_ID: eshell
+   :END:
+*** 进入之前进入过的文件夹
+    `cd ='可以查看历史文件夹。
+
+    然后使用`cd -number'就能进入对应的目录。
+
+    使用`cd =REGEXP'可以使用正则表达式。
+*** 不使用eshell中用lisp编译的命令
+    使用lisp编译的版本效率实在太低。在info中看到可以使用*ls来调用系统原始的合令。其它也一样。 [[info:eshell#Built-ins]]
+*** 使用jobs控制eemacs中的子进程
+    使用jobs可以查看emacs中的所有子进程。kill可以子进程。kill不仅可以接进程id，还可以接`project object'。
+
+    其中的`project object'可以通过`C-c M-i'查看然后返回。调用的是`eshell-insert-process'函数。我就是使用这个方法干掉了一个tramp的子进程。
+*** 一些有用的快捷键
+    |------------+---------------------------------------------------------|
+    | keybinding | description                                             |
+    |------------+---------------------------------------------------------|
+    | C-c M-b    | 插入buffer名称                                          |
+    | C-c M-i    | 插入子进程名称                                          |
+    | C-c M-v    | 插入环境变量名                                          |
+    | C-c M-v    | 若一些程序不能正确处理带缓冲的输入,则按这个键序列切换？ |
+    |------------+---------------------------------------------------------|
+*** 在eshell中使用 =**= 代替 =*=
+    eshell在只使用一个 =*= 的时候会触发自动补全。最后发现使用 =**= 可以达到原来一个 =*= 的效果。
+
+    *最后发现不是这个原因* ：可能是company-mode的原因。
+*** Eshell中执行bash脚本 
+    
+    比如执行下面的代码：
+    #+BEGIN_SRC sh
+      for i in `ls`;do echo $i;done
+    #+END_SRC
+    
+    现在我的解决办法是使用`multi-term'开一个`term'在里面执行。
+
+    需要了解一下`eshell'中的变量这些才可以。
+*** TODO 一些期待改进的功能 [0/7]
+    - [ ] grep可以显示颜色
+    - [ ] =*= 不再自动触发补全。这个是因为`company-mode'
+    - [ ] 循环还不是很会
+      #+BEGIN_EXAMPLE
+        $ for file in *.org {
+          echo "Upcasing: $file"
+          mv $file $file(:U)
+        }
+        I told you the modifiers from the previous section would come in handy.
+
+        I find it interesting to note that *.org gives this for loop a list to iterate over, but if there is more than one argument, a list is created, as in:
+
+        $ for i in 1 2 3 4 {echo $i}
+        Passing more than one list flattens them into one list, so the following works as you expect:
+
+        $ for file in emacs* zsh* { ... }
+
+      #+END_EXAMPLE
+    - [ ] eshell中的`predicate'和`modifier'这些比较有用。可以看下
+    - [ ] company-mode有时有用，有时又没有
+    - [ ] 命令补全<TAB>不是很好。不想直接因输入目录名就进入目录。不想补全目录。
+    - [ ] 使用`helm-esh-pcomplete'还有一点问题：在`~'下`ls'然后`TAB'后直接输入是不行的。必须先输入前几个字母才行。还希望大小写不敏感。
+
+** C/C++ IDE							    :ide:C:C:
+*** 使用ecb
+    可以更加方便地浏览代码。在`init.el'中将(require 'init-ecb)打开就可以使用。我使用过的函数大概是`ecb-expand-method-nodes'和`ecb-expand-directory-*'和`ecb-toggle-layout'这些。还没有对其进行仔细地配置，以后用到再说。
+*** TODO cedet
+    emacs24中应该是已经集成了。还没有使用到。
+** 闹钟 							      :alarm:
+   :PROPERTIES:
+   :wish:     可以和org-mode中的agenda结合起来提醒。可以更加智能地提醒。
+   :END:
+   在mac中，使用的是`terminal-notifier'做为输出。
+
+   我修改了一下`alarm.el'，如下：
+   #+BEGIN_SRC elisp
+     ;;; alarm.el --- 
+     ;; 
+     ;; Filename: alarm.el
+     ;; 
+     ;; Description: 从网上下载的。我修改了一下。在mac上需要安装`terminal-notifier'来产生alarm
+     ;; 
+     ;; Author: pengpengxp
+     ;; Email: pengpengxppri@gmail.com
+     ;; Created: 二  3 17 20:43:28 2015 (+0800)
+     ;; Version: 
+     ;; Last-Updated: 
+     ;; 
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;; 
+     ;;; Code:
+
+
+     (defvar peng-alarm-clock-timer nil
+       "Keep timer so that the user can cancel the alarm.")
+
+     (defun peng-alarm-clock-message (text)
+       "The actual alarm action.
+     Argument TEXT alarm message."
+       (shell-command (format "terminal-notifier -sound default -message \"%s\" " text)))
+
+     ;; (defun peng-alarm-clock ()
+     ;;   "Set an alarm.
+     ;; The time format is the same accepted by `run-at-time'.  For
+     ;; example \"11:30am\"."
+     ;;   (interactive)
+     ;;   (let ((time (read-string "Time(example, 11:30am): "))
+     ;;         (text (read-string "Message: ")))
+     ;;     (setq peng-alarm-clock-timer (run-at-time time nil 'peng-alarm-clock-message text))))
+
+     (defun peng-alarm-clock ()
+       "Set an alarm.
+     The time format is the same accepted by `run-at-time'.  For
+     example \"11:30am\"."
+       (interactive)
+       (let ((time (read-from-minibuffer "Time(example, 11:30am): "
+                           (time-stamp-string "%02H:%02M%#p")))
+             (text (read-string "Message: ")))
+         (setq peng-alarm-clock-timer (run-at-time time nil 'peng-alarm-clock-message text))))
+
+     (defun peng-alarm-clock-cancel ()
+       "Cancel the alarm clock."
+       (interactive)
+       (cancel-timer peng-alarm-clock-timer))
+
+     (provide 'alarm)
+
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;;; alarm.el ends here
+
+
+   #+END_SRC
+   
+   只是做了最简单的功能。先凑合着使用吧。
+** 使用过tramp编辑远程文件后eshell的问题
+   使用过tramp编辑远程文件以后，eshell每次切换目录时候都自动登陆，然后就一直等待或是手动`C-g'。其实可以在`~/.emacs.d/eshell/lastdir'中将以`/ssh'和`/scp'这些开头的目录删掉就可以了。这些都是默认被记录下来了。
+
+   还有没有更好一点的办法？
+** 重新安装helm							       :helm:
+   需要在helm-master中使用make来编译一下才行。这里需要用到`cask'。到现在不知道是干什么的。
+
+   中途在`cl-lib'的错。没弄懂。
+** 在emacs中使用zsh
+   可以通过使用`sudo chsh -u pengpengxp -s /bin/zsh'设置默认shell为zsh。
+
+   在emacs中可以通过multi-term来使用zsh。
+
+   但是在emacs中zsh的提示符会默认有`4m'这些乱七八糟的字符。可以这样解决：
+
+   #+BEGIN_EXAMPLE
+     (setq system-uses-terminfo nil)
+   #+END_EXAMPLE
+   
+   然后进入Emacs.app中的`/Contents/Resources/etc/e/'目录。按照里面的`README'执行`tic -o ../ ./xterm-color.ti'。
+   
+   就OK啦。
+** company-mode自动补全
+*** 基本内容
+    company-mode可以有许多的backends。可以查看`company-backends'。
+   
+    backends可以单独调用，比如可以在输入了`/'后调用`company-files'就可以进行补全文件名了。
+   
+    `company-backends'是按照顺序调用的。原始的值为：
+    #+BEGIN_EXAMPLE
+     (company-bbdb company-nxml company-semantic company-clang company-xcode company-cmake
+                   (company-dabbrev-code company-gtags company-etags company-keywords)
+                   company-oddmuse company-files company-eclim company-dabbrev
+    #+END_EXAMPLE
+   
+    补全不合适时，可以使用`company-other-backend'来调用下一个`backend'。
+   
+    backend可以分组。上面原始的就有一个分组，中间的那个：
+    #+BEGIN_EXAMPLE
+     (company-dabbrev-code company-gtags company-etags company-keywords)
+    #+END_EXAMPLE
+   
+    可以自己定义分组来用。
+*** TODO 不同的mode使用不同的backend
+** emacsclient
+   默认是开启GUI，使用`-nw'参数就可以在当前的tty下访问了。
+   
+   mac下的emacsclient是系统默认的emacs22的。我的emacs24不能使用。不过从源码安装emacs后，会在Emacs.app中的`Contents/MacOS/bin'下生成对应的emacsclient。拷贝出来使用它就行啦 :-)
+** cua-mode
+   cua-mode下可以用以下命令进行列操作：
+
+   |--------------+---------------------------------------------------------------------|
+   | 直接输入字符 | 在每行前(或后)都插入这个字符                                        |
+   | [M-a]        | 将rect中的文字左对齐                                                |
+   | [M-b]        | 用空格(tabs或者spaces)替换所有rect中的字符                          |
+   | [M-c]        | 去掉所有行左侧的空格                                                |
+   | [M-f]        | 用单个字符替换所有rect中的字符(提示输入一个字符)                    |
+   | [M-i]        | 对每行中第一个找到的数字进行加1操作(自动把0x开头的当作十六进制数字) |
+   | [M-k]        | 剪切rect                                                            |
+   | [M-l]        | 把rect中的内容全部转换为小写                                        |
+   | [M-m]        | 拷贝rect                                                            |
+   | [M-n]        | 用一串自增的数字替换rect中的每一行(这个功能可以用来给每行编号)      |
+   | [M-o]        | rect的内容右移，选中的rect用空格填充                                |
+   | [M-r]        | 用字符串替换符满足正则表达式的字符串                                |
+   | [M-R]        | 上下反转                                                            |
+   | [M-s]        | 把rect中的每一行替换为一个字符串(提示输入)                          |
+   | [M-t]        | 把rect整个替换为一个字符串(提示输入)                                |
+   | [M-u]        | 把rect中的内容全部转换为大写                                        |
+   | [M-\vert{}]  | 对rect执行一个shell命令                                             |
+   |--------------+---------------------------------------------------------------------|
+** TODO cscope							     :cscope:
+   cscope是一个独立的程序，也可以在emacs中使用。安装过程不说了。下载放入加载就行了。
+   
+   emacs中加入对应的.el文件后，有一个cscope-indexer的程序需要从源文件中取出来放到`PATH'中并设置为可执行。这是为cscope制做index用的。
+
+   说下怎么使用：
+   
+   #+BEGIN_EXAMPLE
+     默认是的快捷键都是绑定到 C-c s 的前缀上面，如果嫌麻烦的话可以自己更改 快捷键绑定。这是默认的用于查找的键绑定：
+
+     C-c s s         Find symbol.
+     C-c s d         Find global definition.
+     C-c s g         Find global definition (alternate binding).
+     C-c s G         Find global definition without prompting.
+     C-c s c         Find functions calling a function.
+     C-c s C         Find called functions (list functions called
+                     from a function).
+     C-c s t         Find text string.
+     C-c s e         Find egrep pattern.
+     C-c s f         Find a file.
+     C-c s i         Find files #including a file.
+     下面是在搜索到的结果之间切换用的快捷键：
+
+     C-c s b         Display *cscope* buffer.
+     C-c s B         Auto display *cscope* buffer toggle.
+     C-c s n         Next symbol.
+     C-c s N         Next file.
+     C-c s p         Previous symbol.
+     C-c s P         Previous file.
+     C-c s u         Pop mark.
+     更详细的使用说明请参见 xcscope.el 文件头部的注释。  
+   #+END_EXAMPLE
+
+   如果只在一个目录下用，貌似可以直接使用，如果不行，使用`C-c s I'重新做下索引。这时就会调用`cscope-indexer'这个脚本。之前需要配置好。
+   
+   一般就"C-c s s"就行了。然后`C-c s B'可以设置每次查询的时候调出`cscope-buffer'不。如果不调出。就自动跳转到查询到的第一个中去。如果些时没有到位，可以使用`C-c s n'查看下一个。最后查到了以后使用`C-c s u'可以跳转到之前的位置。
+   
+   现在只是配置了C语言的cscope。怎么设置elisp这些呢？
+   
+   可以在shell中这样使用：
+   
+   首先使用下面的命令做一个`cscope.files'文件出来：
+   #+BEGIN_SRC sh
+     find -type f -name "*.el" > cscope.files
+   #+END_SRC
+   
+   然后使用`cscope -b'更新一下数据库就行了。
+
+   emacs中还没有找到方法。
+
+* 我的lisp学习笔记
+** DONE scheme中的define                                            :scheme:
+   - State "DONE"       from "TODO"       [2014-11-15 六 10:30] \\
+     #+begin_src scheme
+       (define peng
+         (lambda (amount)
+           ...))
+     #+end_src
+     这是定义了一个symbol，其中的函数指针指向了lambda构造的那个函数的开头。
+
+     #+begin_src scheme
+       (define (peng)
+         (...))
+     #+end_src
+     这是定义了一个无参函数。
+
+     这两个是有区别的。
+     <2014-11-15 六 10:30>
+
+   # 
+   # 我的lisp学习笔记.org ends here
+
+   # 
+   # 我的emacs和lisp学习笔记.org ends here
+** 写一个自动转换org到pdf的脚本。[[http://stackoverflow.com/questions/22072773/batch-export-of-org-mode-files-from-the-command-line][这里]] 可以看看。我是想批量转换我的org文件。 :notperfect:
+
+   emacs的batch-mode可以看看。
+
+   想把需要同步的文档自动转换为pdf。可以直接在emacs中实现罗。查看elisp。用elisp来写一个。
+
+   最后得到了一个这样的函数，可以暂时在emacs中使用着：
+   #+BEGIN_SRC emacs-lisp
+  (defun peng-dired-org-to-pdf ()
+    "convert the marked org files to pdf in dired-mode.
+  otherwise,you need to input a directory name. this function will
+  try to convert all of the org files in the directory you just
+  type to pdf automatically"
+    (interactive)
+    (let ((files
+           (if (eq major-mode 'dired-mode)
+               (dired-get-marked-files)
+             (let ((default-directory (read-directory-name "dir: ")))
+               (mapcar #'expand-file-name 
+                       (file-expand-wildcards "*.org"))))))
+      ;; (message "%s" files)
+      (mapc
+       (lambda (f)
+         (with-current-buffer
+             (find-file-noselect f)
+           (org-latex-export-to-pdf)))
+       files)
+      ))
+
+   #+END_SRC
+ 
+   <2015-01-12 一 10:34>
+** copy-keymap
+   想要保存一个keymap不能简单的使用setq：
+   #+BEGIN_SRC elisp
+     (setq save-map some-map)
+   #+END_SRC
+   这样只能是一个symbol，类似于C中的指针，some-map改变了，save-map也会
+   变。应该使用copy-keymap：
+   #+BEGIN_SRC elisp
+     (setq save-map (copy-keymap some-map))
+   #+END_SRC
+** 其它笔记
+   据说lisp的宏在本质上是一个由编译器自动为你动行的代码生成器。
+   
+   一个简单的common lisp宏的例子：
+   #+BEGIN_SRC lisp
+  (defmacro backwards (argu)
+    (reverse argu))
+  (backwards ("xiepeng" t format))
+   #+END_SRC
+   这样就定义了反过来的format了。
+
+* 我的emacs习惯
+** 插件
+   |--------------------+--------+-------------------------------------|
+   | 名称               | 状态   | 备注                                |
+   |--------------------+--------+-------------------------------------|
+   | 2048-game          | 已安装 |                                     |
+   | ace-jump-buffer    | 已安装 |                                     |
+   | ace-jump-helm-line | 已安装 |                                     |
+   | ace-jump-mode      | 已安装 |                                     |
+   | ace-jump-zap       | 已安装 |                                     |
+   | ace-pinyin         | 已安装 |                                     |
+   | ace-window         | 已安装 |                                     |
+   | alert              | 已安装 |                                     |
+   | applescript-mode   | 已安装 |                                     |
+   | async              | 已安装 |                                     |
+   | bibtex-utils       | 已安装 |                                     |
+   | command-log-mode   | 已安装 |                                     |
+   | darkroom           | 已安装 |                                     |
+   | dash               | 已安装 |                                     |
+   | f                  | 已安装 |                                     |
+   | flx                | 已安装 |                                     |
+   | gntp               | 已安装 |                                     |
+   | helm               | 已安装 |                                     |
+   | helm-ag            | 已安装 |                                     |
+   | helm-bibtex        | 已安装 |                                     |
+   | helm-bibtexkey     | 已安装 |                                     |
+   | helm-c-yasnippet   | 已安装 |                                     |
+   | helm-swoop         | 已安装 |                                     |
+   | icicles            | 已安装 |                                     |
+   | ido-better-flex    | 已安装 |                                     |
+   | ido-ubiquitous     | 已安装 |                                     |
+   | ido-vertical-mode  | 已安装 |                                     |
+   | idomenu            | 已安装 |                                     |
+   | list-utils         | 已安装 |                                     |
+   | log4e              | 已安装 |                                     |
+   | makey              | 已安装 |                                     |
+   | mark-tools         | 已安装 |                                     |
+   | markdown-mode      | 已安装 |                                     |
+   | markdown-mode+     | 已安装 |                                     |
+   | noflet             | 已安装 |                                     |
+   | org                | 已安装 |                                     |
+   | org-mac-iCal       | 已安装 |                                     |
+   | org-mac-link       | 已安装 |                                     |
+   | org-pomodoro       | 已安装 |                                     |
+   | org-screenshot     | 已安装 |                                     |
+   | org-tree-slide     | 已安装 |                                     |
+   | ox-html5slide      | 已安装 |                                     |
+   | ox-ioslide         | 已安装 |                                     |
+   | parsebib           | 已安装 |                                     |
+   | pcache             | 已安装 |                                     |
+   | persistent-soft    | 已安装 |                                     |
+   | rw-ispell          | 已安装 |                                     |
+   | s                  | 已安装 |                                     |
+   | shadchen           | 已安装 |                                     |
+   | showkey            | 已安装 |                                     |
+   | smex               | 已安装 |                                     |
+   | swiper             | 已安装 |                                     |
+   | swiper-helm        | 已安装 |                                     |
+   | yasnippet          | 已安装 |                                     |
+   |--------------------+--------+-------------------------------------|
+   | ebib               | 待安装 | 据说是一个emacs中的参考文献管理器   |
+   | eyebrowse          | 待安装 | 可以控制windows，等我换了大屏以后吧 |
+   | workgroup2         | 待安装 | 和eyebrowse可能差不多。             |
+   |--------------------+--------+-------------------------------------|
+
+* config irony-mode
+  1) down source code;
+  2) put it into your load-path
+  3) (require 'irony)
+  4) M-x irony-install-server.[fn:1:Maybe it will fail. You can copy
+     the command to the terminal and run it by yourself.]
+     #+BEGIN_SRC sh
+       cmake -DCMAKE_INSTALL_PREFIX\=/Users/pengpengxp/.emacs.d/irony/ /Users/pengpengxp/.emacs.d/site-lisp/irony-mode-master/server && cmake --build . --use-stderr --config Release --target install
+     #+END_SRC
+  5) manual run will make a bin/irony-server at ~/.emacs.d/site-lisp/,
+     make a directory ~/.emacs.d/irony and then move the bin directory
+     in it so that irony can user it:
+     #+BEGIN_SRC sh
+       mkdir ~/.emacs.d/irony/
+       mv ~/.emacs.d/site-lisp/bin ~/.emacs.d/irony/
+     #+END_SRC
+  6) wirte a .clang_complete file at the root path of your
+     project. These are all argument compiler use when compiling the
+     projectExample .clang_complete file:
+     #+BEGIN_EXAMPLE
+       -DDEBUG
+       -include ../config.h
+       -I../common
+       -I/usr/include/c++/4.5.3/
+       -I/usr/include/c++/4.5.3/x86_64-slackware-linux/
+     #+END_EXAMPLE
+  7) And then, it work.
+
+* config ycmd
+  1) git clone XXX
+  2) git submodule update --init --recursive
+  3) ./build.py --all
+  4) download emacs-ycmd and load it.
+  5) configure it:
+     #+BEGIN_SRC lisp
+       (set-variable 'ycmd-server-command '("python" "/Users/pengpengxp/github/ycmd/ycmd"))
+       (set-variable 'ycmd-global-config "/Users/pengpengxp/github/ycmd/ycmd/completers/cpp/clang_completer.py")
+       (require 'company-ycmd)
+       (company-ycmd-setup)
+     #+END_SRC
+** config ycm for my own project:
+   + need to write .ycm_extra_conf.py files to tell ycm where the
+     include file and compile flags.
+   + use [[https://github.com/rdnetto/YCM-Generator][ycm-generator]] is a easy way to generate the
+     .ycm_extra_conf.py file.
+     #+BEGIN_SRC sh
+       ./config_gen.py -x c++ ~/src/ASP-Engine/core/src
+     #+END_SRC
+
+   + and then, Ycm can see the include files.
+
+   + set `ycmd-global-config' for a global config
+     #+BEGIN_SRC sh
+       (set-variable 'ycmd-global-config "/Users/pengpengxp/src/ASP-Engine/.ycm_extra_conf.py")
+     #+END_SRC
+** 编译ycmd时可能出错
+   第一次编译时，需要更新到最新，然后把git子模块也更新到最新。
+   #+BEGIN_SRC sh
+     git pull
+     git submodule update --init --recusive
+   #+END_SRC
+   
+   然后直接执行 =./build.py --all= 就可以了。这个过程中，编译脚本需要
+   去下载最新版本的clang。需要等一段时间。
+   
+   后面发现，如果第二次编译，可能失败，出现错误：
+   #+BEGIN_EXAMPLE
+     Error: could not load cache
+   #+END_EXAMPLE
+   
+   这种情况下，需要把 =cpp= 目录中的 =CMakeCache.txt= 文件删掉。这时再
+   重试就可以了。
+   
+   最后就是漫长的等待。
+
+   =./build.py --clang-completer= 会下载clang编译器到 =clang_archives=
+   目录。同时编译 =C-family= 的补全。
+
+   不过下载clang编译器真的时太慢啦。我是去云主机上使用wget下载的。
+   #+BEGIN_EXAMPLE
+     wget http://releases.llvm.org/4.0.1/clang+llvm-4.0.1-x86_64-apple-darwin.tar.xz
+   #+END_EXAMPLE
+   
+   下载好后，直接放到ycmd的 =clang_archives= 目录下。然后直接
+   =./build.py --clang-completer= 就可以编出来对 =c-family= 语言的补全。
+** ycmd介绍
+   它本来是vim上的插件 =YouCompleteMe= 。现在整成了一个通用的。
+
+   可以补全很多语言： =C,C++,C#,python,js,go= 等。
+
+   它可以是基于语义的和不基于语言的。根据不同的语言，把两种的结果都汇
+   总后一起返回。 =C-family= 的基于语言补全功能需要 =libclang= ，它是
+   编译器clang的libary，一般也叫llvm。
+
+   使用libclang的时候，它需要知道编译时提供的编译参数。这样libclang才
+   能分析代码，ycmd才能提供 =c-family= 基于语言的补全。有两种方式可以
+   得到编译选项：
+   1. 编译数据库（compilation database）：这是最简单的一个方式，有些编
+      译系统如cmake，它在编译时会自动生成编译数据库。以下几种方式都可以：
+      1. If using CMake, add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON when
+         configuring (or add set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+         to CMakeLists.txt) and copy or symlink the generated database
+         to the root of your project.
+      2. If using Ninja, check out the compdb tool (-t compdb) in its
+         docs.
+      3. If using GNU make, check out Bear.
+      4. For other build systems, check out .ycm_extra_conf.py
+         below.这后面还有这样一段：
+         #+BEGIN_EXAMPLE
+           If no .ycm_extra_conf.py is found, and no ycm_global_ycm_extra_conf
+           is configured, YouCompleteMe automatically tries to load a
+           compilation database if one is found.
+
+           YCM looks for a file named compile_commands.json in the directory of
+           the opened file or in any directory above it in the hierarchy
+           (recursively); when the file is found, it is loaded. YouCompleteMe
+           performs the following lookups when extracting flags for a particular
+           file:
+
+             ,* If the database contains an entry for the file, the flags for
+               that file are used.
+             ,* If the file is a header file and a source file with the same root
+               exists in the database, the flags for the source file are used.
+               For example, if the file is /home/Test/project/src/lib/
+               something.h and the database contains an entry for /home/Test/
+               project/src/lib/something.cc, then the flags for /home/Test/
+               project/src/lib/something.cc are used.
+             ,* Otherwise, if any flags have been returned from the directory
+               containing the requested file, those flags are used. This
+               heuristic is intended to provide potentially working flags for
+               newly created files.
+
+           Finally, YCM converts any relative paths in the extracted flags to
+           absolute paths. This ensures that compilation can be performed from
+           any Vim working directory.
+         #+END_EXAMPLE
+   2. 手动提供编译选项
+** build.py选项
+   使用 =./build.py --help= 查看一下：
+   #+BEGIN_EXAMPLE
+     (python3)  ~/github/ycmd/ [master] ./build.py --help
+     usage: build.py [-h] [--clang-completer] [--system-libclang]
+                     [--omnisharp-completer] [--gocode-completer]
+                     [--racer-completer] [--system-boost] [--msvc {12,14,15}]
+                     [--tern-completer] [--all] [--enable-coverage]
+                     [--enable-debug] [--build-dir BUILD_DIR]
+
+     optional arguments:
+       -h, --help            show this help message and exit
+       --clang-completer     Build C-family semantic completion engine.
+       --system-libclang     Use system libclang instead of downloading one from
+                             llvm.org. NOT RECOMMENDED OR SUPPORTED!
+       --omnisharp-completer
+                             Build C# semantic completion engine.
+       --gocode-completer    Build Go semantic completion engine.
+       --racer-completer     Build rust semantic completion engine.
+       --system-boost        Use the system boost instead of bundled one. NOT
+                             RECOMMENDED OR SUPPORTED!
+       --msvc {12,14,15}     Choose the Microsoft Visual Studio version (default:
+                             15).
+       --tern-completer      Enable tern javascript completer
+       --all                 Enable all supported completers
+       --enable-coverage     For developers: Enable gcov coverage for the c++
+                             module
+       --enable-debug        For developers: build ycm_core library with debug
+                             symbols
+       --build-dir BUILD_DIR
+                             For developers: perform the build in the specified
+                             directory, and do not delete the build output. This is
+                             useful for incremental builds, and required for
+                             coverage data
+   #+END_EXAMPLE
+   + =--clang-completer= 可以编译 =c-family= 语言的补全。它会下载它需
+     要的libclang到 =clang_archives= 目录。如果你学得下载速度太慢，也
+     可自己下载放进去
+   + =--omnisharp-completer= 对 =C#= 
+   + =--gocode-completer= 对 =go= 
+   + ...
+** emacs-ycmd
+   在emacs中使用，可以直接使用 =emacs-ycmd= 这个插件。
+
+* elpy for python
+  直接使用官网教程，先使用pip把需要的第三方工具安装好，然后使用package
+  来安装就OK了。
+
+  我的个人配置如下：
+  #+BEGIN_SRC lisp
+    (setq peng-python-map (make-sparse-keymap))
+    (define-key peng-python-map (kbd  "RET") 'elpy-shell-send-current-statement)
+    (define-key peng-python-map (kbd  "s") 'elpy-rgrep-symbol)
+    (define-key peng-python-map (kbd  "d") 'elpy-goto-definition)
+    (define-key peng-python-map (kbd  "a") 'elpy-set-project-root)
+    (define-key peng-python-map (kbd  "f") 'elpy-find-file)
+    (define-key peng-python-map (kbd  "t") 'pop-tag-mark)
+
+    (defun peng-python-mode ()
+      (define-key evil-normal-state-local-map (kbd "SPC z") 'peng-run-current-script)
+      (autopair-on)
+      (smart-tab-mode-off)
+      (peng-local-set-key (kbd "C-c C-v") 'peng-run-current-script)
+      ;; (company-mode)
+      (elpy-enable)
+      (define-key evil-normal-state-local-map (kbd "SPC c") peng-python-map)
+      (define-key evil-normal-state-local-map (kbd "SPC m") peng-python-map)
+      (peng-local-set-key (kbd "<C-right>") 'elpy-nav-forward-indent)
+      (peng-local-set-key (kbd "<C-left>") 'elpy-nav-backward-indent)
+      (peng-local-set-key (kbd "<C-down>") 'elpy-nav-forward-block)
+      (peng-local-set-key (kbd "<C-up>") 'elpy-nav-backward-block))
+
+    (add-hook 'python-mode-hook 'peng-python-mode)
+    ;; (setq elpy-project-ignored-directories '(".bzr" "CVS" ".git" ".hg" ".svn" ".tox" "build" "dist" ".cask"))
+
+    (provide 'init-python)
+  #+END_SRC
+
+* 使用emacs加密文件
+  
+  修改好文件后，使用 `epa-encrypt-file'就可以加密。默认加密完成后，会
+  生成.gpg结尾的加密文件。原始文件还是非加密状态。如果文件本身就是
+  以.gpg结尾，则不会再新建文件，本文件已被加密。
+
+  还可以加密一个区域，现在不太需要。
+* use of markdown-mode
+  markdown #1 ### 使用 ###
+
+  现在用 Emacs 写博文真是一种享受。会 Emacs 的人会发现，下面提到的多数
+  快捷键和 Emacs 的基础快捷键相关，我只列出常用的：
+
+  在 Emacs 中预览结果 C-c C-c. 使用该功能的前提是系统中有将 Markdown
+  文本转化为 HTML 的 Markdown 命令。如何配置？请看这篇博文。
+
+  + C-c C-c m 转化为 HTML，在另一个 buffer 中预览 HTML 文件，个人觉得
+    没太大意义
+  + C-c C-c p 转化为 HTML，在浏览器中预览
+  + C-c C-c e 转化为 HTML，保存为文件
+  + C-c C-c v 转化为 HTML，保存为文件，并在浏览器中预览
+
+  超链接 Hyperlinks C-c C-a
+
+  + C-c C-a l 插入[]()形式的链接，C-c C-a L 插入 [LinkText][Label] 形
+    式的链接。在这种形式下，如果光标附近有文字或是 Active Region，会自
+    动被选择当作 LinkText。后一种形式会提示你在 Minibuffer 中输入
+    LinkText，LinkLabel 和可选的 LinkTitle。 图片 Images C-a C-i
+
+  C-c C-i i 和 C-c C-i I，两者的区别和超链接的类似。
+
+  样式 Styles C-a C-s
+
+  C-c C-s e 插入斜体字（e 表示 emphasis）
+  C-c C-s s 插入粗体字（s 表示 strong）
+  C-c C-s c 插入代码，比如开头的快捷键框框就是它的效果
+
+  标题 Headings C-c C-t
+
+  我最常用的 C-c C-t n ，n 从 1 - 6， 表示各级标题。比如 C-c C-t 3 得到 ### Heading ###
+
+  + C-c C-t h 根据前面的标题自动选择标题级别。C-c C-t H 类似，不同的是
+    它尝试得到带下划线的标题 一些零散的快捷键
+
+  + C-c - 插入水平线
+  + C-c C-o 如果该点是一个链接(Hyperlink)，就会在浏览器中打开它的 URL，
+    如果该点是维基百科链接(wikilink)，就会在另一个 Buffer 中打开
+  + C-c C-j 如果该点坐在的位置是一个 Hyperlink，按下此快捷键就会在
+    Link Text 和 Link URL 之间跳转。同样也适用于脚注(footnote)等其它类
+    似目标
+  + C-c C-- 和 C-c C-= Promotion 和 Demotion（抱歉，想不到合适的中文翻
+    译）。例如，在 ### ### 附近按下 C-c C-- 会使它变成 ## ##，按下 C-c
+    C-= 会使它变成 #### ####。前者让 Heading 升级，后者让 Heading 降级
+  + C-c C-k 将该点的目标 kill 掉，并将其内容送到 kill ring 中，适用于
+    以下的目标：inline code, headings, horizonal rules, links, images,
+    email address 等
+
+  C-c C-n,C-c C-p,C-c C-f,C-c C-b,C-c C-u 在 Heading 之间移动，自己去试试吧
+  M-{,M-},C-M-a,C-M-e,C-M-h 快速跳转，和 Emacs 基础快捷键操作一样
+  结束
+* ssh-terminal in emacs
+  It turns out, there is what you want:
+  #+BEGIN_SRC lisp
+    (setq rlogin-program "ssh")
+    (setq rlogin-process-connection-type t)
+  #+END_SRC
+  and then M-x rlogin RET <myhost> RET will do that.
+
+  *But* I think this is useless.
+* hex-mode
+  `hexl-insert-hex-char'可以按照16进制来修改文件。输入37就对应修改为了
+  =7= 。
+* tramp
+** tramp multi-hop 在远程通过sudo编辑文件
+   #+BEGIN_SRC emacs-lisp
+     ;;; 使tramp可以使用`/sudo:root@host:/etc'这样的形式来在远程使用`sudo'
+     ;;; 编辑文件，甚至可以使用`cd'直接进去。场景是不能通过root用户远程登陆，
+     ;;; 但是又需要使用root的权限来编辑文件。
+     (add-to-list 'tramp-default-proxies-alist
+                  '(nil "\\`root\\'" "/ssh:%h:"))
+     (add-to-list 'tramp-default-proxies-alist
+                  '((regexp-quote (system-name)) nil nil))
+
+     ;;; 本机中使用`localhost'这个HOST来使用sudo，设置在本机时的user和proxy
+     ;;; 都是默认值nil
+     (add-to-list 'tramp-default-proxies-alist
+                  '((regexp-quote "localhost") nil nil))
+   #+END_SRC
+  
+   (HOST USER PROXY)
+** host down后emacs可能会 =waiting for prompts from remote shell=
+
+   删除 =~/.emacs.d/tramp= 文件就可以了。这个文件应该是cache的一些认证
+   信息。remote host down后，这个信息如果还在，可能还会尝试连接。这时
+   关闭emacs都不行。使用`tramp-cleanup-all-buffers'也不行。
+   
+   另外，我还接照网上的说法，这样设置了一下：
+   #+BEGIN_SRC elisp
+     (setq tramp-shell-prompt-pattern "\\(?:^\\|\\)[^]#$%>\n]*#?[]#$%>].* *\\(\\[[0-9;]*[a-zA-Z] *\\)*")
+   #+END_SRC
+* find and grep
+  + in file or buffer: helm-occur, swiper
+  + dir in local:helm-do-ag, rgrep, find-grep-dired, find-grep
+  + dir in remote:rgrep, find-grep-dired, find-grep
+* DONE lexical and dynamic scoping  [[https://yoo2080.wordpress.com/2011/12/31/lexical-scoping-and-dynamic-scoping-in-emacs-lisp/][box's blog]] 词法作用域和动态作用域
+  - State "DONE"       from "PLAN"       [2016-10-12 Wed 09:40]
+  
+  动态作用域：
+  #+BEGIN_SRC emacs-lisp :result output :tangle /tmp/dynamic.el
+    (setq b 17)
+    (defun my-print-b ()
+      (print b))
+    (setq b 1717)
+    (let ((b 8))
+      (my-print-b))
+  #+END_SRC
+
+  词法作用域：
+  #+BEGIN_SRC emacs-lisp :tangle /tmp/lexical.el
+    ;; -*- lexical-binding: t -*-
+
+    (setq a 17)
+    (defun my-print-a ()
+      (print a))
+    (setq a 1717)
+    (let ((a 8))
+      (my-print-a))
+  #+END_SRC
+
+  Notice that the value of a is not specified within my-print-a,
+  making it what some call a “free variable” (also known as nonlocal
+  variables as in “a is nonlocal to my-print-a”). What will be the
+  result of running the code above? Will it print 1717? Or is it going
+  to be 8? With dynamic scoping, it prints 8. With lexical scoping, it
+  prints 1717. With dynamic scoping, what the name a in my-print-a
+  refers to is determined by *when* my-print-a is *called*. With
+  lexical scoping, it is determined by *where* my-print-a is
+  *defined*.
+  
+  词法作用域：函数在什么地方被定义是关键。
+  动态作用域：函数在什么时候被调用是关键。
+  
+  词法闭包就是闭包。Emacs 23及以前都是动态作用的。Emacs 24及以后的版本
+  才加入了词法作用域。
+* org tangle
+  org可以文学编程，使用 =:tangle= 来导出src块。org-mode中这样写，然后
+  调用`org-babel-tangle'就可以在本地生成一个名为main.sh的文件，里面的
+  内容即为块中的代码：
+  #+BEGIN_SRC org
+    ,#+BEGIN_SRC sh :tangle main.sh
+    date
+    ,#+END_SRC
+  #+END_SRC
+  
+  使用`org-babel-tangle'导出时，对应的目录可能不存在。需要新建，可以这
+  样来导出：
+  
+  #+BEGIN_SRC org
+    ,#+BEGIN_SRC sh :tangle (prog1 "/tmp/temp/dd.sh" (make-directory "temp" "/tmp"))
+      date
+    ,#+END_SRC
+  #+END_SRC
+* org exec code block
+  默认result中不会有脚本向STDOUT输出的内容。加入 =:result output=
+  [[info:org#Results%20of%20evaluation][info:org#Results of evaluation]]
+
+  #+BEGIN_SRC org
+    ,#+BEGIN_SRC python :results output
+    print('test output')
+    ,#+END_SRC
+  #+END_SRC
+* org exports
+  下面这样，生成html的时候才会把结果导出出来。
+  #+BEGIN_SRC python :results output :exports both
+    print 'xiepeng'
+  #+END_SRC
+
+  #+RESULTS:
+  : xiepeng
+
+* theme
+  [[https://emacsthemes.com/][这里有很多emacs的theme]]
+* elisp check if string is empty
+  #+BEGIN_SRC elisp
+    (= 0 (length ""))
+  #+END_SRC
+
+  #+RESULTS:
+  : t
+* emacs python parser
+  =orgnode.py= 源码在这里：
+  #+BEGIN_SRC python
+    # Copyright (c) 2010 Charles Cave
+    # 
+    #  Permission  is  hereby  granted,  free  of charge,  to  any  person
+    #  obtaining  a copy  of  this software  and associated  documentation
+    #  files   (the  "Software"),   to  deal   in  the   Software  without
+    #  restriction, including without limitation  the rights to use, copy,
+    #  modify, merge, publish,  distribute, sublicense, and/or sell copies
+    #  of  the Software, and  to permit  persons to  whom the  Software is
+    #  furnished to do so, subject to the following conditions:
+    # 
+    #  The above copyright notice and this permission notice shall be
+    #  included in all copies or substantial portions of the Software.
+    # 
+    #  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    #  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    #  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    #  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+    #  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+    #  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+    #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    #  SOFTWARE.
+
+    # Program written by Charles Cave   (charlesweb@optusnet.com.au)
+    # February - March 2009
+    # Version 2 - June 2009
+    #   Added support for all tags, TODO priority and checking existence of a tag
+    # More information at
+    #    http://members.optusnet.com.au/~charles57/GTD
+
+    """
+    The Orgnode module consists of the Orgnode class for representing a
+    headline and associated text from an org-mode file, and routines for
+    constructing data structures of these classes.
+    """
+
+    import re, sys
+    import datetime
+
+    def makelist(filename):
+       """
+       Read an org-mode file and return a list of Orgnode objects
+       created from this file.
+       """
+       ctr = 0
+
+       try:
+          f = open(filename, 'r')
+       except IOError:
+          print "Unable to open file [%s] " % filename
+          print "Program terminating."
+          sys.exit(1)
+
+       todos         = dict()  # populated from #+SEQ_TODO line
+       todos['TODO'] = ''   # default values
+       todos['DONE'] = ''   # default values
+       level         = 0
+       heading       = ""
+       bodytext      = ""
+       tag1          = ""      # The first tag enclosed in ::
+       alltags       = []      # list of all tags in headline
+       sched_date    = ''
+       deadline_date = ''
+       nodelist      = []
+       propdict      = dict()
+   
+       for line in f:
+           ctr += 1     
+           hdng = re.search('^(\*+)\s(.*?)\s*$', line)
+           if hdng:
+              if heading:  # we are processing a heading line
+                 thisNode = Orgnode(level, heading, bodytext, tag1, alltags)
+                 if sched_date:
+                    thisNode.setScheduled(sched_date)
+                    sched_date = ""
+                 if deadline_date:
+                    thisNode.setDeadline(deadline_date)
+                    deadline_date = ''
+                 thisNode.setProperties(propdict)
+                 nodelist.append( thisNode )
+                 propdict = dict()
+              level = hdng.group(1)
+              heading =  hdng.group(2)
+              bodytext = ""
+              tag1 = ""
+              alltags = []       # list of all tags in headline
+              tagsrch = re.search('(.*?)\s*:(.*?):(.*?)$',heading)
+              if tagsrch:
+                  heading = tagsrch.group(1)
+                  tag1 = tagsrch.group(2)
+                  alltags.append(tag1)
+                  tag2 = tagsrch.group(3)
+                  if tag2:
+                     for t in tag2.split(':'):
+                        if t != '': alltags.append(t)
+           else:      # we are processing a non-heading line
+               if line[:10] == '#+SEQ_TODO':
+                  kwlist = re.findall('([A-Z]+)\(', line)
+                  for kw in kwlist: todos[kw] = ""
+
+               if line[:1] != '#':
+                   bodytext = bodytext + line
+
+               if re.search(':PROPERTIES:', line): continue
+               if re.search(':END:', line): continue
+               prop_srch = re.search('^\s*:(.*?):\s*(.*?)\s*$', line)
+               if prop_srch:
+                  propdict[prop_srch.group(1)] = prop_srch.group(2)
+                  continue
+               sd_re = re.search('SCHEDULED:\s+<([0-9]+)\-([0-9]+)\-([0-9]+)', line)
+               if sd_re:
+                  sched_date = datetime.date(int(sd_re.group(1)),
+                                             int(sd_re.group(2)),
+                                             int(sd_re.group(3)) )
+               dd_re = re.search('DEADLINE:\s*<(\d+)\-(\d+)\-(\d+)', line)
+               if dd_re:
+                  deadline_date = datetime.date(int(dd_re.group(1)),
+                                                int(dd_re.group(2)),
+                                                int(dd_re.group(3)) )
+
+       # write out last node              
+       thisNode = Orgnode(level, heading, bodytext, tag1, alltags)
+       thisNode.setProperties(propdict)   
+       if sched_date:
+          thisNode.setScheduled(sched_date)
+       if deadline_date:
+          thisNode.setDeadline(deadline_date)
+       nodelist.append( thisNode )
+              
+       # using the list of TODO keywords found in the file
+       # process the headings searching for TODO keywords
+       for n in nodelist:
+           h = n.Heading()
+           todoSrch = re.search('([A-Z]+)\s(.*?)$', h)
+           if todoSrch:
+               if todos.has_key( todoSrch.group(1) ):
+                   n.setHeading( todoSrch.group(2) )
+                   n.setTodo ( todoSrch.group(1) )
+           prtysrch = re.search('^\[\#(A|B|C)\] (.*?)$', n.Heading())
+           if prtysrch:
+              n.setPriority(prtysrch.group(1))
+              n.setHeading(prtysrch.group(2))
+                            
+       return nodelist
+
+    ######################
+    class Orgnode(object):
+        """
+        Orgnode class represents a headline, tags and text associated
+        with the headline.
+        """
+        def __init__(self, level, headline, body, tag, alltags):
+            """
+            Create an Orgnode object given the parameters of level (as the
+            raw asterisks), headline text (including the TODO tag), and
+            first tag. The makelist routine postprocesses the list to
+            identify TODO tags and updates headline and todo fields.
+            """
+            self.level = len(level)
+            self.headline = headline
+            self.body = body
+            self.tag = tag            # The first tag in the list
+            self.tags = dict()        # All tags in the headline
+            self.todo = ""
+            self.prty = ""            # empty of A, B or C
+            self.scheduled = ""       # Scheduled date
+            self.deadline = ""        # Deadline date
+            self.properties = dict()
+            for t in alltags:
+               self.tags[t] = ''
+
+            # Look for priority in headline and transfer to prty field
+        
+        def Heading(self):
+            """
+            Return the Heading text of the node without the TODO tag
+            """
+            return self.headline
+
+        def setHeading(self, newhdng):
+            """
+            Change the heading to the supplied string
+            """
+            self.headline = newhdng
+
+        def Body(self):
+            """
+            Returns all lines of text of the body of this node except the
+            Property Drawer
+            """
+            return self.body
+
+        def Level(self):
+            """
+            Returns an integer corresponding to the level of the node.
+            Top level (one asterisk) has a level of 1.
+            """
+            return self.level
+
+        def Priority(self):
+            """
+            Returns the priority of this headline: 'A', 'B', 'C' or empty
+            string if priority has not been set.
+            """
+            return self.prty
+
+        def setPriority(self, newprty):
+            """
+            Change the value of the priority of this headline.
+            Values values are '', 'A', 'B', 'C'
+            """
+            self.prty = newprty
+    
+        def Tag(self):
+            """
+            Returns the value of the first tag.
+            For example, :HOME:COMPUTER: would return HOME
+            """
+            return self.tag
+
+        def Tags(self):
+            """
+            Returns a list of all tags 
+            For example, :HOME:COMPUTER: would return ['HOME', 'COMPUTER']
+            """
+            return self.tags.keys()
+
+        def hasTag(self, srch):
+            """
+            Returns True if the supplied tag is present in this headline
+            For example, hasTag('COMPUTER') on headling containing
+            :HOME:COMPUTER: would return True.
+            """
+            return self.tags.has_key(srch)
+        
+        def setTag(self, newtag):
+            """
+            Change the value of the first tag to the supplied string
+            """
+            self.tag = newtag
+
+        def setTags(self, taglist):
+            """
+            Store all the tags found in the headline. The first tag will
+            also be stored as if the setTag method was called.
+            """
+            for t in taglist:
+               self.tags[t] = ''
+        
+        def Todo(self):
+            """
+            Return the value of the TODO tag
+            """
+            return self.todo
+
+        def setTodo(self, value):
+            """
+            Set the value of the TODO tag to the supplied string
+            """
+            self.todo = value
+
+        def setProperties(self, dictval):
+            """
+            Sets all properties using the supplied dictionary of
+            name/value pairs
+            """
+            self.properties = dictval
+
+        def Property(self, keyval):
+            """
+            Returns the value of the requested property or null if the
+            property does not exist.
+            """
+            return self.properties.get(keyval, "")
+    
+        def setScheduled(self, dateval):
+            """
+            Set the scheduled date using the supplied date object
+            """
+            self.scheduled = dateval
+
+        def Scheduled(self):
+            """
+            Return the scheduled date object or null if nonexistent
+            """
+            return self.scheduled
+    
+        def setDeadline(self, dateval):
+            """
+            Set the deadline (due) date using the supplied date object
+            """
+            self.deadline = dateval
+
+        def Deadline(self):
+            """
+            Return the deadline date object or null if nonexistent
+            """
+            return self.deadline
+
+        def __repr__(self):
+            """
+            Print the level, heading text and tag of a node and the body
+            text as used to construct the node.
+            """
+            # This method is not completed yet.
+            n = ''
+            for i in range(0, self.level):
+               n = n + '*'
+            n = n + ' ' + self.todo + ' '
+            if self.prty:
+               n = n +  '[#' + self.prty + '] '
+            n = n + self.headline
+            n = "%-60s " % n     # hack - tags will start in column 62
+            closecolon = ''
+            for t in self.tags.keys():
+               n = n + ':' + t
+               closecolon = ':'   
+            n = n + closecolon
+    # Need to output Scheduled Date, Deadline Date, property tags The
+    # following will output the text used to construct the object
+            n = n + "\n" + self.body
+        
+            return n
+
+
+    
+
+  #+END_SRC
+
+  下面这个例子把test.org中的所有headline弄出来。
+  #+BEGIN_SRC python
+    #!/usr/local/bin/python
+    from orgnode import *
+
+    import sys
+    nodelist = makelist('/tmp/test.org')
+
+    print "\n--------- PROJECT LIST ----------------"
+    for node in nodelist:
+        s = node
+        print '*'*node.level,' ', node.headline
+  #+END_SRC
+* 使用workgroup来完善我的工作流
+  1. 使用workgroup2,每一个workgroup就干一件事情。它比bookmark的优势在
+     于：
+     1. 可以记忆windows的布局。
+     2. 可以记录多个文件，就像它的名字，完全就是不同的工作流。
+  2. 每个workgroup中随便整。每次打开关闭都会记当前已打开的buffer。重启
+     后也会都打开。
+  3. 有一个随便跳的workgroup: main。如果有时因打的workgroup太多导致打
+     开文件太多，可以切换到这个workgroup，清除所有文件buffer。然后再切
+     换到对应的workgroup就只有该wg相关的buffer存在了。还有一个专门的函
+     数来跳到 =main= 这个workgroup。 =peng-switch-to-main-workgroup= 。
+     #+BEGIN_SRC elisp
+       (defun peng-switch-to-main-workgroup ()
+         (interactive)
+           (wg-switch-to-workgroup (aref (wg-find-workgroup-by :name "main") 2)))
+     #+END_SRC
+* 使用ditaa
+  在Mac上使用brew来安装ditaa：
+  #+BEGIN_SRC sh
+    brew install ditaa
+  #+END_SRC
+  
+  下面是一个例子：
+  #+BEGIN_SRC org
+    ,#+begin_src ditaa :file /tmp/some_filename.png :cmdline -r -s 0.8 -e utf-8
+              up1   up2   up3   up4                     Input Traffic
+               ^     ^     ^     ^                            |
+               |     |     |     |                            |
+               |     |     |     |                            |
+               v     v     v     v                            v
+        +-----+--+--+--+--+--+--+--+-------------------------+--+------------------+
+        |     |  |  |  |  |  |  |  | 1G/s                    |  | 10G/s            |
+        |     ++-+  ++-+  ++-+  ++-+ eth[0~3]                ++-+ eth6             |
+        |      ^     ^     ^     ^                            |                    |
+        |      |     |     |     |                            |                    |
+        |      |     |     |     |            +---------------+---------------+    |
+        |      |     |     |     |            |                               |    |
+        |      |     |     |     +----------->+                               |    |
+        |      |     |     |                  |        你好       你好        |    |
+        |      |     |     +----------------->+                               |    |
+        |      |     |                        |           bridge-eth6         |    |
+        |      |     +----------------------->+                               |    |
+        |      |                              |                               |    |
+        |      +----------------------------->+                               |    |
+        |                                     +-+-------+-------+-------+-----+    |
+        |                                       |       |       |       |          |
+        |                                      ++-+    ++-+    ++-+    ++-+        |
+        |                                      |  |    |  |    |  |    |  |  ...   |
+        |                                      +--+    +--+    +--+    +--+        |
+        |                                      vm1     vm2     vm3     vm5         |
+        +--------------------------------------------------------------------------+
+    ,#+end_src
+  #+END_SRC
+* emacs对齐
+  1. [ ]  [[http://ergoemacs.org/emacs/emacs_align_and_sort.html][英文讲得比较清楚，推荐，还讲了如何sort]]
+     #+BEGIN_EXAMPLE
+Emacs: Align Text
+
+By Xah Lee. Date: 2011-11-02. Last updated: 2017-11-05.
+
+Alt+x align-regexp to align text.
+
+For example, suppose you have:
+
+tom = 5
+jenny = 8
+mary = 7
+
+and you want to align them by the equal sign. Just select the text,
+then Alt+x align-regexp then give “=”. Then you get:
+
+tom   = 5
+jenny = 8
+mary  = 7
+
+The following is more advanced use of align and sort commands.
+
+Problem
+
+You have this list:
+
+California 423,970 km²
+Taiwan 36,008 km²
+Japan 377,944 km²
+Germany 357,021 km²
+Iraq 438,317 km²
+Iran 1,648,195 km²
+Korea (North+South) 219,140 km²
+Mexico 1,964,375 km²
+
+change it to this form:
+
+Taiwan                 36,008 km²
+Korea (North+South)   219,140 km²
+Japan                 377,944 km²
+Germany               357,021 km²
+California            423,970 km²
+Iraq                  438,317 km²
+Iran                1,648,195 km²
+Mexico              1,964,375 km²
+
+Solution
+
+Jon Snader and “jm”, provided the following solution.
+
+align-regexp
+
+First, we align the text. Select the text first, then press 【Ctrl+u
+】 then call align-regexp, with the regexp .* \([0-9,]+\).* then
+choose -1 for group, 1 for spacing, and n for repeat.
+
+Here's what it means. align-regexp lets you align a region by a regex
+in complex ways.
+
+  ,* The regex .* \([0-9,]+\).* matches a whole line (you can add ^ at
+    the beginning and $ at end if you like, but is not necessary).
+    The pattern \([0-9,]+\) captures our numbers part.
+  ,* The prompt “Parenthesis group to modify (justify if negative):”,
+    we answer “-1”, because we want the first matched pattern to be
+    used for alignment, and we want it to be justified to the right
+    (meaning, align to the right of text captured by our pattern).
+  ,* The query “Amount of spacing (or column if negative): ”, we use
+    1.
+  ,* In “Repeat throughout line?” we answer “n”.
+  ,* 【Ctrl+u】 is necessary for “align-regex” to promp you for
+    various parameters (though, “align-regex”'s doc string does not
+    mention it).
+
+The result is this:
+
+California             423,970 km²
+Taiwan                  36,008 km²
+Japan                  377,944 km²
+Germany                357,021 km²
+Iraq                   438,317 km²
+Iran                 1,648,195 km²
+Korea (North+South)    219,140 km²
+Mexico               1,964,375 km²
+
+sort-regexp-fields, sort-columns
+
+To sort it, there are 2 methods. One is using sort-regexp-fields,
+with this regex ^.*\([0-9 ,]\{9\}\) km²$.
+
+Another method is simply use sort-columns. This command sort lines by
+using a vertical column of text as sort key. The column is specified
+by the position of mark and cursor. So, place the cursor at the upper
+right, mark it, then move to lower left of our number, like this:
+
+California             423,970 km²▮
+Taiwan                  36,008 km²
+Japan                  377,944 km²
+Germany                357,021 km²
+Iraq                   438,317 km²
+Iran                 1,648,195 km²
+Korea (North+South)    219,140 km²
+Mexico              ▮1,964,375 km²
+
+Then call sort-columns. We got our desired result:
+
+Taiwan                  36,008 km²
+Korea (North+South)    219,140 km²
+Japan                  377,944 km²
+Germany                357,021 km²
+California             423,970 km²
+Iraq                   438,317 km²
+Iran                 1,648,195 km²
+Mexico               1,964,375 km²
+
+All these commands: {align-regexp, sort-regexp-fields, sort-columns}
+will be quite useful when you need it. (Big thanks to Jon Snader and
+“jm” for the excellent solutions.)
+     #+END_EXAMPLE
+  2. [[http://www.hickwu.com/%25E5%2588%259D%25E6%25AD%25A5%25E5%25AD%25A6%25E4%25BC%259Aemacs%25E4%25B8%25AD%25E7%259A%2584align-regexp%25E7%259A%2584%25E7%2594%25A8%25E6%25B3%2595][这里有一篇中文的]]
+
+  
+  #+BEGIN_EXAMPLE
+    _f_:    ls-git    _F_: ido-fasd-find-file                _r_: edit-current-file-as-root
+    _g_:    grep      _o_: swiper _O_: swiper-all
+    _j_:    git-grep  _i_: ivy-imenu-anywhere _S_: evil-write-all
+    _s_: lusty-sudo-explorer _q_: hydra-zoom/body
+  #+END_EXAMPLE
+  
+  可以这样来对齐：
+  =C-u align-regex \(\s-*\)...: 1 10 y=
+
+  对齐后效果如下：
+  #+BEGIN_EXAMPLE
+    _f_:    ls-git                    _F_: ido-fasd-find-file          _r_: edit-current-file-as-root
+    _g_:    grep                      _o_: swiper                      _O_: swiper-all
+    _j_:    git-grep                  _i_: ivy-imenu-anywhere          _S_: evil-write-all
+    _s_: lusty-sudo-explorer          _q_: hydra-zoom/body
+  #+END_EXAMPLE
+  
+  一般就是找到匹配的正则，然后第一个选 =-1= ，然后第二个选 =1= 我感觉
+  是一个tab。重不重看情况就好了。
+
+* 正则表达式
+  emacs中的正则和其它我觉得没有太大区别。唯一不同是 =\= 在emacs的
+  string中有特殊的含义。所以使用string来表示emacs中的正则时，在需要使
+  用 =\= 来转义的地方，要使用两个。比如string中的这样： =\\$= 才是转义
+  了 =$= 。这就导致emacs的正则看起来是充满了 =\= 。
+* 使用emacs来查看python代码
+** elpy
+   优先使用elpy，感觉它可以“理解”python代码。也很精确。
+** 基于tag
+   使用ctags等工具制做好tags后来使用。tag相对来说要精确一些。
+   
+   ctags指定文件列表制做tag：
+   #+BEGIN_SRC sh
+     find -type f -name "*.py" > tags.files
+     ctags -e -L tags.files
+
+     # 下面这个可以不要test目录
+     gfind  -type f -name "*.py" -not -path "./tests/*"
+   #+END_SRC
+** cscope
+   cscope可以后于tag来使用。它的搜索范围要大些。
+
+   cscope指定文件列表制做database：
+   #+BEGIN_SRC sh
+     find -type f -name "*.py" > cscope.files
+     cscope -b -k
+   #+END_SRC
+   
+** ag
+   `projectile-ag'来全局搜，效果很不错。
+
+* replace-regexp中输入换行newline
+  需要使用 =C-q C-j= 。
+  #+BEGIN_EXAMPLE
+    C-q for quoted-insert,
+    C-j is a newline.
+  #+END_EXAMPLE
+
+* 结合helm-ag来进行multi-edit
+  先使用helm-ag搜出来东西。然后 `C-c C-e' 进入helm-edit-mode。把需要的
+  修改改好后，使用 `C-c C-c' 确定提交。
+
+  *Keymap*
+
+  `helm-ag-map' and `helm-do-ag-map' are inherited by helm-map
+  |--------------+----------------------------------------------------------------------------|
+  | Key          | Action                                                                     |
+  |--------------+----------------------------------------------------------------------------|
+  | C-c o        | Open other window                                                          |
+  | C-l          | Search in parent directory                                                 |
+  | C-c C-e      | Switch to edit mode                                                        |
+  | C-x C-s      | Save ag results to buffer(Ask save buffer name if prefix key is specified) |
+  | C-c C-f      | Enable helm-follow-mode                                                    |
+  | C-c >, right | Move to next file                                                          |
+  | C-c <, left  | Move to previous file                                                      |
+  | C-c ?        | Show help message                                                          |
+  |--------------+----------------------------------------------------------------------------|
+  
+  *Edit mode keymap*
+
+  |---------+------------------|
+  | Key     | Action           |
+  |---------+------------------|
+  | C-c C-c | Commit changes   |
+  | C-c C-k | Abort            |
+  | C-c C-d | Mark delete line |
+  | C-c C-u | Unmark           |
+  |---------+------------------|
+
+* ibuffer
+  ibuffer可以这样设置来分组：
+  #+BEGIN_SRC elisp
+    ;;; set ibuffer display as group
+    (setq ibuffer-saved-filter-groups
+          (quote (("default"
+                   ("dired" (mode . dired-mode))
+                   ;; ("perl" (mode . cperl-mode))
+                   ("python" (mode . python-mode))
+                   ;; ("erc" (mode . erc-mode))
+                   ("emacs" (or
+                             (name . "^\\*scratch\\*$")
+                             (name . "^\\*Messages\\*$")
+                             (mode . emacs-lisp-mode)
+                             ))
+                   ("w3m" (or
+                             (mode . w3m-mode)
+                             ))
+                   ("planner" (or
+                               (name . "^Calendar$")
+                               (name . "^diary$")
+                               (name . "^inbox.org$")
+                               (name . "^Tips.org$")
+                               (name . "^note.org$")
+                               (name . "^daily.org$")
+                               (name . "^test.org$")
+                               (mode . muse-mode)
+                               ))
+                   ("org" (mode . org-mode))
+                   ;; ("gnus" (or
+                   ;;          (mode . message-mode)
+                   ;;          (mode . bbdb-mode)
+                   ;;          (mode . mail-mode)
+                   ;;          (mode . gnus-group-mode)
+                   ;;          (mode . gnus-summary-mode)
+                   ;;          (mode . gnus-article-mode)
+                   ;;          (name . "^\\.bbdb$")
+                   ;;          (name . "^\\.newsrc-dribble")))
+                   ))))
+    (add-hook 'ibuffer-mode-hook
+              (lambda ()
+                (ibuffer-switch-to-saved-filter-groups "default")))
+  #+END_SRC
+
+  设置显示大小为human readable：
+  #+BEGIN_SRC elisp
+    ;; Use human readable Size column instead of original one
+    (define-ibuffer-column size-h
+      (:name "Size" :inline t)
+      (cond
+       ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+       ((> (buffer-size) 100000) (format "%7.0fk" (/ (buffer-size) 1000.0)))
+       ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+       (t (format "%8d" (buffer-size)))))
+
+    ;; Modify the default ibuffer-formats
+      (setq ibuffer-formats
+            '((mark modified read-only " "
+                    (name 18 18 :left :elide)
+                    " "
+                    (size-h 9 -1 :right)
+                    " "
+                    (mode 16 16 :left :elide)
+                    " "
+                    filename-and-process)))
+  #+END_SRC
+
+* 写一个判断是否有 =universal-argument= 的函数
+  #+BEGIN_SRC elisp
+    (defun my-test (x)
+      "print argument received"
+      (interactive "P")
+      (message "%s" x)
+      ;; value of x is from universal argument, or nil if universal-argument isn't called
+    )
+  #+END_SRC
+
+* 读写文件
+  #+BEGIN_SRC elisp
+    ;;; Read File Content into a String
+    (defun get-string-from-file (filePath)
+      "Return filePath's file content."
+      (with-temp-buffer
+        (insert-file-contents filePath)
+        (buffer-string)))
+    ;; thanks to “Pascal J Bourguignon” and “TheFlyingDutchman 〔zzbba…@aol.com〕”. 2010-09-02
+
+    ;;; Read File Content as List of Lines
+    (defun read-lines (filePath)
+      "Return a list of lines of a file at filePath."
+      (with-temp-buffer
+        (insert-file-contents filePath)
+        (split-string (buffer-string) "\n" t)))
+
+
+    ;;; save variable `ivy-views' to file, it will overide the file
+    (with-temp-file "/tmp/elisp.el"
+      (insert (format "%s" ivy-views)))
+
+  #+END_SRC
+
+* convert string to list object
+  使用`read'可以完成，它可以从buffer、string等很多中读取出list object：
+  #+BEGIN_EXAMPLE
+    Read one Lisp expression as text from STREAM, return as Lisp object.
+    If STREAM is nil, use the value of `standard-input' (which see).
+    STREAM or the value of `standard-input' may be:
+     a buffer (read from point and advance it)
+     a marker (read from where it points and advance it)
+     a function (call it with no arguments for each character,
+         call it with a char as argument to push a char back)
+     a string (takes text from string, starting at the beginning)
+     t (read text line using minibuffer and use it, or read from
+        standard input in batch mode).
+  #+END_EXAMPLE
+
+  #+BEGIN_SRC elisp
+    ;;; read from string
+    (read "(xie peng ni hoa)")
+
+    ;;; read from file
+    (with-temp-buffer 
+      (insert-file-contents "/tmp/elisp.el")
+      (goto-char (point-min))
+      (read (current-buffer)))
+  #+END_SRC
+
+* artist mode
+  使用 =artist-select-op-text-see-thru= 可以来画assicc字体。 =M-x= 调
+  用后，还需要按下回车。然后输入字母吧。
+
+* org-mode代码块
+  按键绑定
+  #+BEGIN_EXAMPLE
+    `C-c C-v p'   or   `C-c C-v C-p'     `org-babel-previous-src-block'
+    `C-c C-v n'   or   `C-c C-v C-n'     `org-babel-next-src-block'
+    `C-c C-v e'   or   `C-c C-v C-e'     `org-babel-execute-maybe'
+    `C-c C-v o'   or   `C-c C-v C-o'     `org-babel-open-src-block-result'
+    `C-c C-v v'   or   `C-c C-v C-v'     `org-babel-expand-src-block'
+    `C-c C-v u'   or   `C-c C-v C-u'     `org-babel-goto-src-block-head'
+    `C-c C-v g'   or   `C-c C-v C-g'     `org-babel-goto-named-src-block'
+    `C-c C-v r'   or   `C-c C-v C-r'     `org-babel-goto-named-result'
+    `C-c C-v b'   or   `C-c C-v C-b'     `org-babel-execute-buffer'
+    `C-c C-v s'   or   `C-c C-v C-s'     `org-babel-execute-subtree'
+    `C-c C-v d'   or   `C-c C-v C-d'     `org-babel-demarcate-block'
+    `C-c C-v t'   or   `C-c C-v C-t'     `org-babel-tangle'
+    `C-c C-v f'   or   `C-c C-v C-f'     `org-babel-tangle-file'
+    `C-c C-v c'   or   `C-c C-v C-c'     `org-babel-check-src-block'
+    `C-c C-v j'   or   `C-c C-v C-j'     `org-babel-insert-header-arg'
+    `C-c C-v l'   or   `C-c C-v C-l'     `org-babel-load-in-session'
+    `C-c C-v i'   or   `C-c C-v C-i'     `org-babel-lob-ingest'
+    `C-c C-v I'   or   `C-c C-v C-I'     `org-babel-view-src-block-info'
+    `C-c C-v z'   or   `C-c C-v C-z'     `org-babel-switch-to-session-with-code'
+    `C-c C-v a'   or   `C-c C-v C-a'     `org-babel-sha1-hash'
+    `C-c C-v h'   or   `C-c C-v C-h'     `org-babel-describe-bindings'
+    `C-c C-v x'   or   `C-c C-v C-x'     `org-babel-do-key-sequence-in-edit-buffer'
+
+  #+END_EXAMPLE
+  1. =org-babel-goto-named-src-block= 可以跳到一个nameed的block，下面
+     这样写，直接输入 =xiepeng= 就可以跳过去：
+     #+BEGIN_SRC org
+       ,#+NAME: xiepeng
+       ,#+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+       print 'xiepeng'
+       ,#+END_SRC
+     #+END_SRC
+  2. =org-babel-insert-header-arg= 这个来添加 =:results= 这种选项（开
+     关）很方便
+  3. =org-babel-view-src-block-info= 可以查看当前block的开关信息。
+
+* ivy和helm的写法
+  #+BEGIN_SRC elisp
+    (ivy-read "Pick:" (mapcar #'number-to-string (number-sequence 1 10)))
+  #+END_SRC
+
+  对应helm的代码：
+  #+BEGIN_SRC elisp
+    (helm
+     :sources
+     (helm-build-sync-source "one-to-ten"
+                             :candidates
+                             (mapcar #'number-to-string (number-sequence 1 10))
+                             :fuzzy-match t)
+     :buffer
+     "*helm one-to-ten*")
+  #+END_SRC
+  或者这样：
+  #+BEGIN_SRC elisp
+    (helm-comp-read "Pick:" (mapcar #'number-to-string (number-sequence 1 10)))
+  #+END_SRC
+
+* emacs把行号添加到文件中
+  选中后使用 =C-x r N(rectangle-number-lines))= 就可以啦。
+
+* org-mode publish时太慢的解决办法
+  [[http://bastibe.de/2014-05-07-speeding-up-org-publishing.html][参考是这个博客]]
+
+  我的静态blog是使用org的publish功能直接导出的。当文件较多的时候，完成
+  导出一次需要消耗太多时间。有时甚至都不能导出了。这个blog上，先查看下
+  导出的时候什么操作在占cpu：
+  #+BEGIN_SRC elisp
+    (progn (profiler-start 'cpu) (org-publish "blog") (profiler-report))
+  #+END_SRC
+  然后发现，大多数时间花在版本控制上了：
+  #+BEGIN_EXAMPLE
+    Turns out, most of its total run time was spent in functions relating
+    to version control (starting with vc-).
+
+    Some package in my configuration set up vc-find-file-hook as part of
+    find-file-hook. This means that every time org-publish opens a file,
+    Emacs will look for the containing git repository and query its
+    status. This takes forever! Worse yet, I don't even use vc-git at
+    all. All my git interaction is done through magit.
+  #+END_EXAMPLE
+  结果是在 =find-file-hook= 中有 =vc-find-file-hook= 这个钩子，每次打
+  开文件都要使用去查一下git库的status。而这个作者和我都没有使用
+  =vc-git= ，而是使用 =magit= 来完成和git的交互。所以直接把这个钩子从
+  =find-file-hook= 中删掉。
+  #+BEGIN_SRC elisp
+    (remove-hook 'find-file-hooks 'vc-find-file-hook)
+  #+END_SRC
+  
+* bookmark plus
+  这个玩意可以把w3m的页面也当成bookmark。但是它还是做不到给w3m的书签分
+  类。
+
+* elisp函数根据有没有按 =C-u= 来走不同的流程
+  #+BEGIN_SRC elisp
+    (defun peng-test (arg)
+      (interactive "P")
+      (if arg
+          (message "yes")
+        (message "no")))
+  #+END_SRC
+
+* 启动加速
+  编译所有 =site-lisp= 目录下的 =.el= ：
+  #+BEGIN_EXAMPLE
+    C-u 0 M-x byte-recompile-directory
+
+    will compile all the .el files in the directory and in all subdirectories below.
+
+    The C-u 0 part is to make it not ask about every .el file that does not have a .elc counterpart.
+  #+END_EXAMPLE
+
+* 我的 =cc-mode= 
+  +查看代码主要使用 =counsel-gtags, cscope, counsel-rg= 。+
+
+  现在换成了 =cquery(server)= 和 =lsp-mode(client)= 的组合啦。
+
+* use exwm
+  #+BEGIN_EXAMPLE
+    1. Add following lines to your .emacs:
+  
+       (require 'exwm)
+       (require 'exwm-config)
+       (exwm-config-default)
+   
+    2. Link or copy xinitrc (from exwm source directory) to ~/.xinitrc.
+  
+    3. Start EXWM from a console (e.g. tty1) with
+  
+       xinit -- vt01
+  #+END_EXAMPLE
+
+  =Ctrl + Alt + F1=
+
+  stop X server:
+  #+BEGIN_SRC sh
+    sudo service lightdm stop
+    sudo killall /usr/bin/X
+  #+END_SRC
+  
+  start exwm:
+  #+BEGIN_SRC sh
+    xinit -- -vt01
+  #+END_SRC
+* 在elisp函数中使用 =C-u=
+  下面这段代码可以就和使用 =C-u= 来调用 =counsel-gtags-update-tags= 实
+  现同样的功能：
+  #+BEGIN_SRC elisp
+    (defun peng-test ()
+      (interactive)
+      (let (current-prefix-arg)
+        (setq current-prefix-arg '(4))
+        (call-interactively 'counsel-gtags-update-tags)
+        ))
+  #+END_SRC
+* cscope和gtags不包括某些目录
+  cscope和gtags都支持指定文件。选项不同而已。先用find找出来。然后指定
+  就可以了。
+  #+BEGIN_SRC sh
+find -name '*.[hc]'|grep -v '^./hal'|grep -v '^./third_party'|grep -v '^./linux/' > cscope.files
+cscope -b -q -i cscope.files
+cat cscope.files|gtags -f -
+  #+END_SRC
+* 为org-mode自动添加目录
+  [[https://github.com/snosov1/toc-org][readme在这里]]
+  
+  使用 =toc-org= 这个库，安装好后，加入下面的配置就可以了：
+  #+BEGIN_SRC elisp
+(if (require 'toc-org nil t)
+    (add-hook 'org-mode-hook 'toc-org-enable)
+  (warn "toc-org not found"))
+  #+END_SRC
+
+  这样，打上 =:TOC:= 标签的head每次保存的时候都会自动生成份目录了，也可以手动调用 =toc-org-insert-toc= 。所
+  以在需要添加目录的地方，可以搞一个这样的head：
+  #+BEGIN_SRC org
+,* 目录                                                                  :TOC:
+  #+END_SRC
+
+  默认情况下是生成的和 =github= 兼容的目录，类似于这样：
+  #+BEGIN_EXAMPLE
+[[#heading-name]]
+
+  #+END_EXAMPLE
+  这时在org-mode中直接跳，如果没有对应的 =custom_id= 的属性是跳不过去的。
+
+  =toc_2_org= ：可以设置为org中可以跳过去的link，2表示只生成前两级目录。
+  生成的link类似这样：
+  #+BEGIN_EXAMPLE
+[[*heading-name]]
+  #+END_EXAMPLE
+* org-mode tangle整个head
+  可以加一个 =header-args= ，值就是对应写 =tangle=的值： =:tangle
+  xxx.c :mkdirp yes :main no= ：
+  #+BEGIN_SRC org :tangle /tmp/test.org
+,* test
+  :PROPERTIES:
+  :header-args: :tangle /tmp/nihaotangle/main.c :mkdirp yes :main no
+  :END:
+
+  ,#+BEGIN_SRC C
+ printf("xieng"); 
+  ,#+END_SRC
+
+  ,#+BEGIN_SRC C
+ printf("hi"); 
+  ,#+END_SRC
+  #+END_SRC
+* 直接查看info文件
+  =C-u M-x info= 就可以了。
+* 在elisp中模拟按键的输入
+  #+BEGIN_SRC emacs-lisp
+(call-interactively 'compile)
+  #+END_SRC
+* emacs中的长table导出pdf的问题
+  如果一个table太宽了，导出成pdf时会超出页面。把它搞成longtable就可以
+  解决了。这样可以设置每一列的长度。
+  
+  #+ATTR_LATEX: :environment longtable :align |p{5cm}|p{5cm}|p{5cm}|
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 功能                                            | 命令                                             | 说明                                      |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 进入config mode                                 | configure terminal                               |                                           |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 进入interface mode                              | interface <interface-number>                     |                                           |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 配置端口的链路类型为Hybrid类型                  | switchport mode hybrid                           | 缺省情况下，端口的链路类型为Access类型    |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 允许指定的VLAN通过当前Hybrid端口                | switchport add vlan <vid> [tag \vert untaged]    | 缺省情况下，所有Hybrid端口只允许VLAN1通过 |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 不允许指定的VLAN通过当前Hybrid端口              | switchport remove vlan <vid> [tag \vert untaged] |                                           |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 把Hybrid端口加入default VLAN并设置pvid为输入vid | switchport default-vlan <vid>                    | 缺省情况下，Hybrid端口的缺省VLAN为VLAN 1  |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+  | 把Hybrid端口从default VLAN中移除并设置pvid为1   | no switchport default-vlan                       | 缺省情况下，Hybrid端口的缺省VLAN为VLAN 1  |
+  |-------------------------------------------------+--------------------------------------------------+-------------------------------------------|
+   
+* org-mode中以root用户执行命令
+  直接在org-mode中可以执行block中的命令，然而有些时候我需要使用root用
+  来执行，可以这样写：
+
+  #+BEGIN_SRC org
+  ,#+BEGIN_SRC sh :dir /sudo::
+apt-get update 
+  ,#+END_SRC
+
+  
+  #+END_SRC
+
+* eshell中定义alias
+  直接写入 =eshell-aliases-file= 文件就可以了，比如当前我的是这些：
+  #+BEGIN_EXAMPLE
+alias ll ls -al
+alias gbr git branch
+alias gst git status
+alias gck git checkout
+  #+END_EXAMPLE
+  
+* 在emacs中执行shell脚本
+  [[http://ergoemacs.org/emacs/elisp_call_shell_command.html][xah的blog]]
+  
+  #+BEGIN_EXAMPLE
+Elisp: Call Shell Command
+
+By Xah Lee. Date: 2018-09-04. Last updated: 2018-09-05.
+
+  ,* shell-command → call a shell command, wait for it to finish.
+  ,* shell-command-to-string → call a shell command and get its output
+
+; call a shell command
+(shell-command "touch new.txt")
+
+; call a shell command and get its output
+(shell-command-to-string "ls")
+
+Call a shell command, but don't wait for it to finish before
+continuing, use start-process or start-process-shell-command
+
+;; open files in Linux desktop
+(mapc
+ (lambda (x)
+   (let ((process-connection-type nil))
+     (start-process "" nil "xdg-open" x)) )
+ filePathList)
+  #+END_EXAMPLE

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+
+    <title>安装GNU构建系统</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div> 
+      </div>
+
+      <div class="article">
+
+        <h2 id="install_gnu_build_system">安装GNU构建系统</h2>
+        <p>
+          如果你用的Unix系统没有GNU构建系统，请不要奇怪。一些Unix的系统管理员可能都没听说过它。
+          如果你确实安装好，请检查一下是否使用的最新版本：
+        </p>
+
+        <pre class="bash">
+autoconf --version
+automake --version
+libtool --version</pre>
+
+        <p>
+          本文档使用的是Autoconf 2.57,Automake 1.6.3,Libtool 1.4.3。
+        </p>
+
+        <p>如果没有上面任何一个软件包，你需要找到一个安装包把它们装上。
+        上述GNU构建工具的发布名字为：</p>
+
+<pre class="code">
+autoconf-2.57.tar.gz
+automake-1.6.3.tar.gz
+libtool-1.4.3.tar.gz
+autotoolset-0.11.6.tar.gz
+</pre>
+
+        <p>安装上述软件前，你还需要先从FSF上下载并安装下面这些软件：</p>
+<pre class="code">
+make-*.tar.gz
+m4-*.tar.gz
+texinfo-4.3.tar.gz
+tar-*.shar.gz
+</pre>
+        <p>版本号中的*表示这些软件的版本不是那么地重要。</p>
+
+        <p>你需要GNU版本的make、m4和tar，即使你的系统中有与之对应的原生的软件。
+        检查你是否确实有GNU版本的这些软件，只需要看看它们是否支持 --version 这个参数。
+        如果你有专有的版本的make和m4，把它们重新命名然后安装GNU的版本。
+        你还需要安装Perl、GNU C编译器和Tex typesetting系统。
+        这些软件在传统的 Debian GNU/Linux 系统中都已经安装好了。</p>
+
+        <p>值得注意的是，最终用户只需要一个过得去的shell和一个有效的make来构建源代码分发。
+        开发人员却需要收集所有这些工具来创建这些分发。</p>
+
+        <p>你得到的所有所有这些工具 *.tar.gz，它们的安装过程都很直接：</p>
+<pre class="bash">
+./configure
+make
+make check
+make install
+</pre>
+
+        <p>它们大都包含了文档，可以这样编译文档：</p>
+        <pre class="bash">
+make dvi
+        </pre>
+
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html> 

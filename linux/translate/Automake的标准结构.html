@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>Automake的标准结构</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+
+      <div class="article">
+        <h2>Automake的标准结构</h2>
+
+        <p>
+          现在我们深入了解软件组织的细节。我会告诉您一种组织的方法。这只是建议，而不是强制必须这样做。
+          这只是一种常见的能正常工作的方式，特别适用于 Autoconf 和 Automake 。
+        </p>
+
+        <p>
+          第一个原则就是保持库包和应用程序包的分离。
+
+          这不是必须的规则。在软件工程中，当你有一个清晰地规范时，硬要把这两者分开可能没有任何意义。
+          以我的经验来说，把两者分开在研究上可能更有意义。
+          无论如何，这两个包都必须有一个顶级的目录，在这个顶级目录下包括了他们所有的内容。
+          那么，它们里面有什么内容呢、
+        </p>
+
+        <p>首先，您应该有在第一章我们提到的传统的信息文件集合：</p>
+        <pre class="code">README, AUTHORS, NEWS, ChangeLog, INSTALL, COPYING</pre>
+
+        <p>您还应该有下面的子目录：</p>
+
+        <p><b>‘m4’</b><br />
+          在这个目录里面，您可以给您的软件包安装您想安装的新的'm4'文件。
+          这些文件定义了新的'autoconf'命令。这些命令都是您希望提供给其它使用您软件包的开发都使用的。
+        </p>
+
+        <p><b>‘doc’</b><br />
+          这里放置您代码相关的文档。您可以自由地以任何方式展式您的文档。
+
+          但是，建议的方式是使用Texinfo来提供文档。
+          Texinfo的好处是，可以从相同的源码中提供在线帮助，也可以提供漂亮的打印书籍。
+          我们将在后面一点讨论Texinfo。
+        </p>
+
+        <p><b>‘src’</b><br />
+          这里面放置源代码。你完全可以像很多其它开发都一样直接把它们放置到顶层目录，但是我发现，把它们放到一个单独的子目录更方便一些。
+          Automake 使用递归调用'make'变得很简单，所以，没理由不利用它这一优势来让文件更具组织性。
+        </p>
+
+        <p><b>‘include’</b><br />
+          这个目录对于一个使用了很多库的分发来说，是可选的。
+          您可以让configure脚本把在src目录的所有子目录中公共头文件都链接到这一目录中来。
+          这样，当您想在分发中访问其它库的头文件时，您可以只给测试套件传递一个-I参数。
+          这点我们会在后面点讨论。
+        </p>
+
+        <p><b>‘lib’</b><br />
+          这也是一个可选目录，您可以放置一些与可移植性相关的源代码在其中。
+          这主要是对一些在有些系统中没有的系统调用的实现。
+
+          这里也可以放置一些您在多个不同的软件包中常用到的工具。
+          这些工具太简单了，也没有必要在每个软件包中单独为它们创建库。
+          建议地做法是把这些工具放置到一个中心位置。我们稍后会讨论这个问题。
+        </p>
+
+        <p>
+          有上述这些子目录后，您还需要放置Makefile.am和configure.ac文件。
+          一个建议是，您还可以再放置一个shell脚本，在脚本中您可以调用reconf，这个脚本可能包括下面这些东西：
+        </p>
+        <pre class="code">#!/bin/sh
+rm -f config.cache
+aclocal -I m4
+autoconf
+autoheader
+automake -a
+exit</pre>
+
+        <p>
+          脚本可以生成configure和Makefile.in文件。
+          在改变了Makefile.am或者configure.ac文件以及您修改了'm4'目录下的任何东西的时候，您需要执行一下脚本。
+          它还会调用‘autoheader’来生成config.h.in文件。
+        </p>
+
+        <p>
+          在顶层目录，你需要放置一个Makefile.am文件。它会告诉电脑所有的源代码都在src目录下。
+          在Makefile.am中放入下面几行就可以达到这种效果：
+        <pre class="code">EXTRA_DIST = reconf
+SUBDIRS = m4 doc src</pre>
+
+        <ul>
+          <li>第一行告诉automake，reconf脚本是本分发的一部分，在执行make dist时必须把它包含进去。</li>
+          <li>
+            第二行告诉automake，分发剩下的部分在m4,doc和src子目录中。
+
+            它指示make在这些子目录中递归地调用它自己。在这里包括m4和doc目录是很重要的。
+            只有这样，最后在make dist时，才会把这两个目录放入分发的包中。
+          </li>
+        </ul>
+        </p>
+
+        <p>如果你使用了lib目录，它应该先于src目录被编译：</p>
+        <pre class="code">EXTRA_DIST = reconf
+SUBDIRS = m4 doc lib src</pre>
+
+        <p>lib子目录应该以静态链接的方式链进您src目录中的可执行文件中。没有必要去安装这些库。</p>
+
+        <p>在顶层目录中，你还需要放入conrigure.ac文件。它可以是这样的：</p>
+        <pre class="code">AC_INIT(packagename,versionnumber)
+AM_INIT_AUTOMAKE
+[...put your tests here...]
+AC_CONFIG_FILES([Makefile
+          doc/Makefile
+          m4/Makefile
+          src/Makefile
+          src/dir1/Makefile
+          src/dir2/Makefile
+          src/dir3/Makefile
+          ............
+          src/dir1/foo1/Makefile])
+AC_OUTPUT</pre>
+
+        <p>
+          您只需要一个configure.ac文件。但是，在每个您的树形结构的目录中，您都需要一个Makefile.am文件。
+          在您在顶层目录中用automake的时候它会在configure.ac文件中找'AC_CONFIG_FILES'宏。
+          然后根据它的来决定还有哪些目录有Makefile.am文件需要解析。
+          正如上面看到的，在doc和m4目录也需要Makefile.am文件。至于如何设置它们则取决于您。
+          如果您没有编译任何东西，只有文件和目录，您必须在Makefile.am中声明这些文件和目录：
+        </p>
+        <pre class="code">SUBDIRS = dir1 dir2 dir3
+EXTRA_DIST = file1 file2 file3</pre>
+
+        <p>这样才能让make dist把这些文件和目录都包含到最后的分发中。</p>
+
+        <p>每次您在创建软件包时都需要做这些繁琐的工作。
+          如果您创建了足够多的软件包后，厌倦了这些操作。
+        您也许会想看下和'Autotoolset'一起分发的'acmkdir'实用程序。
+        我们会在下一章讨论它。</p>
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

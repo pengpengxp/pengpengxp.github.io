@@ -1,0 +1,35 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: emacs使用本地package来安装软件
+
+我从2012年开始使用emacs，而我的只是最近半年才开始使用package。原因就是
+网络问题。经常就抽风访问不到了。
+
+半年前，我了解到 [[http://elpa.emacs-china.org/][emacs-china]] 中有同步一个镜像源。访问速度还不错。初步
+使用后感觉不错。就像常期挨饿的人总喜欢在家存点余粮一样，我总是担心有一
+天这个源也不能访问。所以我准备把这个源下载到本地，然后配置package直接
+使用本地源。
+
+同步源到本地很简单，我新建了一个 =~/emacs-packages= 目录。里面有这样一
+个脚本用于同步。
+#+BEGIN_SRC sh
+  #!/bin/bash
+  rsync -avz rsync://elpa.emacs-china.org/elpa/ .
+#+END_SRC
+大概1.5G左右。
+
+然后配置emacs的package：
+#+BEGIN_SRC elisp
+  (require 'package)
+  (setq package-archives '(
+                           ("gnu" . "/Users/pengpengxp/emacs-packages/gnu")
+                           ("marmalade" . "/Users/pengpengxp/emacs-packages/marmalade")
+                           ("melpa" . "/Users/pengpengxp/emacs-packages/melpa")
+                           ))
+  (package-initialize)
+#+END_SRC
+然后试下 =package-list-packages= 函数。哈哈，速度飞起了。
+
+现在需要做的就是定期运行脚本同步packages就可以了。

@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>我的Bookmarks</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">我的Bookmarks</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org5b00cb5">1. 2016-09-27 等额本息还贷和等额本金还贷有什么区别?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="fangdai">fangdai</span></span></a></li>
+<li><a href="#org15e0e5c">2. 2016-09-27 Programer Workflow Efficiency&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs_workflow">emacs_workflow</span></span></a></li>
+<li><a href="#org6c95a96">3. 2016-09-27 Emacs Daemon MacOSX Workflow&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs_workflow">emacs_workflow</span></span></a></li>
+<li><a href="#org17fa020">4. 2016-09-27 org mode - How to maintain an emacs-based knowledge base? - Stack Overflow&#xa0;&#xa0;&#xa0;<span class="tag"><span class="knowledgemanagement">knowledgemanagement</span></span></a></li>
+<li><a href="#org7a01045">5. 2016-09-27 Use Emacs's Org-mode to Effectively Manage Small Projects - Emacs &amp; Emacsist&#xa0;&#xa0;&#xa0;<span class="tag"><span class="knowledgemanagement">knowledgemanagement</span></span></a></li>
+<li><a href="#org2e138ae">6. 2016-09-28 ExcelHome - 全球领先的Excel门户,Office视频教程培训中心&#xa0;&#xa0;&#xa0;<span class="tag"><span class="excel">excel</span></span></a></li>
+<li><a href="#org82f21ef">7. 2016-09-28 (1 条消息) 等额本息与等额本金，从财务管理的角度充分考虑货币时间价值，哪个对于购房人来说更划算？ - 知乎&#xa0;&#xa0;&#xa0;<span class="tag"><span class="fangdai">fangdai</span></span></a></li>
+<li><a href="#orgae9be17">8. 2016-09-29 Mac下iPython－notebook搭建及使用 - whiterbear的专栏 - 博客频道 - CSDN.NET&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ipython">ipython</span>&#xa0;<span class="notebook">notebook</span></span></a></li>
+<li><a href="#org9a66ac5">9. 2016-09-29 IPython Notebook: 交互计算新时代 | Mind on Mind&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notebook">notebook</span></span></a></li>
+<li><a href="#org5dcf992">10. 2016-09-29 Index of /NewComer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="reversecurity">reversecurity</span></span></a></li>
+<li><a href="#org6557031">11. 2016-09-30 使用org-mode撰写jekyll博客&#xa0;&#xa0;&#xa0;<span class="tag"><span class="jekyll">jekyll</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span>&#xa0;<span class="emacs">emacs</span></span></a></li>
+<li><a href="#orgfb299e4">12. 2016-10-01 Gems | RubyGems.org | Ruby 社区 Gem 托管&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ruby">ruby</span>&#xa0;<span class="gemsource">gemsource</span></span></a></li>
+<li><a href="#org462910a">13. <span class="todo __">未读</span> 2016-10-06 GFW翻墙小结 | HelloDog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="gfw">gfw</span></span></a></li>
+<li><a href="#orgc3e5063">14. <span class="todo __">未读</span> 2016-10-08 SSH Gymnastics and Tunneling with ProxyChains&#xa0;&#xa0;&#xa0;<span class="tag"><span class="gfw">gfw</span>&#xa0;<span class="ssh">ssh</span></span></a></li>
+<li><a href="#orgc827f8b">15. 2016-10-08 四川人事考试网 — 新闻 市洲公招&#xa0;&#xa0;&#xa0;<span class="tag"><span class="liuqing">liuqing</span>&#xa0;<span class="gongzhao">gongzhao</span>&#xa0;<span class="gongwuyuan">gongwuyuan</span></span></a></li>
+<li><a href="#org974afa6">16. 2016-10-08 一个客户端设置多个github账号 - tmyam's blog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="github">github</span>&#xa0;<span class="multiuser">multiuser</span></span></a></li>
+<li><a href="#org6268084">17. 2016-10-09 深度开源 - Java开源大全，开源信息发掘、分享、交流&#xa0;&#xa0;&#xa0;<span class="tag"><span class="opensource">opensource</span>&#xa0;<span class="doc">doc</span></span></a></li>
+<li><a href="#orgd52f0b7">18. 2016-10-09 FOG Project&#xa0;&#xa0;&#xa0;<span class="tag"><span class="fog">fog</span></span></a></li>
+<li><a href="#org26eb386">19. 2016-10-09 NMAP 基础教程 - he1renyagao&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nmap">nmap</span></span></a></li>
+<li><a href="#org6947efc">20. 2016-10-11 LVM (简体中文) - ArchWiki&#xa0;&#xa0;&#xa0;<span class="tag"><span class="lvm">lvm</span></span></a></li>
+<li><a href="#orgd056b37">21. 2016-10-11 IEEE 802.1Q - 维基百科，自由的百科全书&#xa0;&#xa0;&#xa0;<span class="tag"><span class="vlan">vlan</span></span></a></li>
+<li><a href="#org2a0b529">22. 2016-10-12 lexical scoping and dynamic scoping in Emacs Lisp | Yoo Box&#xa0;&#xa0;&#xa0;<span class="tag"><span class="_____">词法作用域</span>&#xa0;<span class="_____">动态作用域</span></span></a></li>
+<li><a href="#orgf6a36f8">23. 2016-10-12 入门 | Elasticsearch权威指南（中文版）&#xa0;&#xa0;&#xa0;<span class="tag"><span class="es">es</span>&#xa0;<span class="Elasticsearch">Elasticsearch</span></span></a></li>
+<li><a href="#org664d9aa">24. 2016-10-19 iproute2&#xa0;&#xa0;&#xa0;<span class="tag"><span class="iproute2">iproute2</span></span></a></li>
+<li><a href="#org204e698">25. 2016-10-10 Introducing Linux Network Namespaces&#xa0;&#xa0;&#xa0;<span class="tag"><span class="network">network</span>&#xa0;<span class="namespace">namespace</span>&#xa0;<span class="virtual">virtual</span>&#xa0;<span class="ethernet">ethernet</span></span></a></li>
+<li><a href="#orge0b86fd">26. 2016-10-20 Linux Switching – Interconnecting Namespaces – Open Cloud Blog&#xa0;&#xa0;&#xa0;<span class="tag"><span class="namespace">namespace</span>&#xa0;<span class="tap">tap</span>&#xa0;<span class="veth">veth</span></span></a></li>
+<li><a href="#orge8838bc">27. 2016-10-21 Replace OS X Command+Tab with Witch – Raam Dev&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></a></li>
+<li><a href="#org8f7e260">28. 2016-10-25 Ethernet frame - Wikipedia&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ethernet">ethernet</span></span></a></li>
+<li><a href="#org7a9b814">29. 2016-10-25 Queue: Safari&#xa0;&#xa0;&#xa0;<span class="tag"><span class="safaribook">safaribook</span></span></a></li>
+<li><a href="#orgf066cb6">30. 2016-10-28 学习编程道路上的入门书籍之Python篇 - 学习编程 - 知乎专栏&#xa0;&#xa0;&#xa0;<span class="tag"><span class="python_book">python_book</span></span></a></li>
+<li><a href="#org1ad97e8">31. 2016-11-16 Tips for Using Mutt | W. Caleb McDaniel&#xa0;&#xa0;&#xa0;<span class="tag"><span class="mutt">mutt</span>&#xa0;<span class="macos">macos</span>&#xa0;<span class="attachment">attachment</span></span></a></li>
+<li><a href="#org8f68bb6">32. 2016-11-22 字符编码笔记：ASCII，Unicode和UTF-8 - 阮一峰的网络日志&#xa0;&#xa0;&#xa0;<span class="tag"><span class="uft">uft</span>&#xa0;<span class="8">8</span>&#xa0;<span class="encodeing">encodeing</span></span></a></li>
+<li><a href="#org6a7bdd2">33. 2016-11-22 The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!) - Joel on Software&#xa0;&#xa0;&#xa0;<span class="tag"><span class="encodeing">encodeing</span>&#xa0;<span class="__">编码</span></span></a></li>
+<li><a href="#org829b5ed">34. 2017-04-05 "apple script"</a></li>
+<li><a href="#org3dc9f55">35. 2017-05-02 "Python 线程与协程 - Yusheng's Tech Blog"</a></li>
+<li><a href="#org6c0340b">36. 2017-05-05 "有哪些命令行的软件堪称神器？ - 知乎"&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tools">tools</span></span></a></li>
+<li><a href="#org6537b57">37. 2017-05-05 "Kombu Documentation — Kombu 3.0.37 documentation"</a></li>
+<li><a href="#orgee628d3">38. 2017-05-18 "Google 开源项目风格指南 (中文版) — Google 开源项目风格指南"&#xa0;&#xa0;&#xa0;<span class="tag"><span class="____">编程规范</span></span></a></li>
+<li><a href="#org2d81cd9">39. <span class="todo __">未读</span> 2017-06-03 "Emacs: Align Text"&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs_sort_or_align">emacs_sort_or_align</span></span></a></li>
+<li><a href="#org8785dc6">40. 2017-06-07 "hashlib - 廖雪峰的官方网站"</a></li>
+<li><a href="#org42c5f70">41. 2017-06-13 "tigrc(5)" tig manual</a></li>
+<li><a href="#org1667bd8">42. 2017-06-19 "lists.gnu.org"</a></li>
+<li><a href="#org74c4e16">43. 2017-06-21 "(or emacs · irrelevant)" ivy作者的blog abo-abo</a></li>
+<li><a href="#org4ba3ff3">44. 2017-06-21 "Don't just code: Career advice from the programming masters | InfoWorld"</a></li>
+<li><a href="#org7513634">45. 2017-07-10 "浅显理解 Python 闭包 - I'm SErHo"</a></li>
+<li><a href="#org8838886">46. 2017-07-10 "进程与线程的一个简单解释 - 阮一峰的网络日志"</a></li>
+<li><a href="#org392e93f">47. 2017-07-18 "选择一个解释器 — The Hitchhiker's Guide to Python"</a></li>
+<li><a href="#orgc869de9">48. 2017-07-31 "Gmail的OfflineIMAP XOAUTH2认证 | MaskRay"</a></li>
+<li><a href="#org513a624">49. 2017-08-01 "EmacsWiki: Sending Mail"</a></li>
+<li><a href="#org04d0f70">50. 2017-08-03 "Systemd 入门教程：命令篇 - 阮一峰的网络日志"</a></li>
+<li><a href="#org3c1a0b5">51. 2017-08-03 "Linux 的启动流程 - 阮一峰的网络日志"</a></li>
+<li><a href="#orgfaafcad">52. 2017-08-03 "计算机是如何启动的？ - 阮一峰的网络日志"</a></li>
+<li><a href="#orgc77021d">53. 2017-09-13 如何制作网线</a></li>
+<li><a href="#org49a489b">54. Using GNU Global with C++ and Git&#xa0;&#xa0;&#xa0;<span class="tag"><span class="gtags">gtags</span></span></a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org5b00cb5" class="outline-2">
+<h2 id="org5b00cb5"><span class="section-number-2">1</span> <a href="http://zhidao.baidu.com/question/32098049.html">2016-09-27 等额本息还贷和等额本金还贷有什么区别?</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="fangdai">fangdai</span></span></h2>
+</div>
+<div id="outline-container-org15e0e5c" class="outline-2">
+<h2 id="org15e0e5c"><span class="section-number-2">2</span> <a href="http://ergoemacs.org/misc/programer_workflow_efficiency.html">2016-09-27 Programer Workflow Efficiency</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs_workflow">emacs_workflow</span></span></h2>
+</div>
+<div id="outline-container-org6c95a96" class="outline-2">
+<h2 id="org6c95a96"><span class="section-number-2">3</span> <a href="https://coderwall.com/p/vbndzq/emacs-daemon-macosx-workflow">2016-09-27 Emacs Daemon MacOSX Workflow</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs_workflow">emacs_workflow</span></span></h2>
+</div>
+<div id="outline-container-org17fa020" class="outline-2">
+<h2 id="org17fa020"><span class="section-number-2">4</span> <a href="http://stackoverflow.com/questions/2014636/how-to-maintain-an-emacs-based-knowledge-base">2016-09-27 org mode - How to maintain an emacs-based knowledge base? - Stack Overflow</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="knowledgemanagement">knowledgemanagement</span></span></h2>
+</div>
+<div id="outline-container-org7a01045" class="outline-2">
+<h2 id="org7a01045"><span class="section-number-2">5</span> <a href="http://emacsist.com/10284">2016-09-27 Use Emacs's Org-mode to Effectively Manage Small Projects - Emacs &amp; Emacsist</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="knowledgemanagement">knowledgemanagement</span></span></h2>
+</div>
+<div id="outline-container-org2e138ae" class="outline-2">
+<h2 id="org2e138ae"><span class="section-number-2">6</span> <a href="http://www.excelhome.net/">2016-09-28 ExcelHome - 全球领先的Excel门户,Office视频教程培训中心</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="excel">excel</span></span></h2>
+</div>
+<div id="outline-container-org82f21ef" class="outline-2">
+<h2 id="org82f21ef"><span class="section-number-2">7</span> <a href="https://www.zhihu.com/question/21745865">2016-09-28 (1 条消息) 等额本息与等额本金，从财务管理的角度充分考虑货币时间价值，哪个对于购房人来说更划算？ - 知乎</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="fangdai">fangdai</span></span></h2>
+</div>
+<div id="outline-container-orgae9be17" class="outline-2">
+<h2 id="orgae9be17"><span class="section-number-2">8</span> <a href="http://blog.csdn.net/whiterbear/article/details/49356815">2016-09-29 Mac下iPython－notebook搭建及使用 - whiterbear的专栏 - 博客频道 - CSDN.NET</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ipython">ipython</span>&#xa0;<span class="notebook">notebook</span></span></h2>
+</div>
+<div id="outline-container-org9a66ac5" class="outline-2">
+<h2 id="org9a66ac5"><span class="section-number-2">9</span> <a href="http://mindonmind.github.io/2013/02/08/ipython-notebook-interactive-computing-new-era/">2016-09-29 IPython Notebook: 交互计算新时代 | Mind on Mind</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notebook">notebook</span></span></h2>
+</div>
+<div id="outline-container-org5dcf992" class="outline-2">
+<h2 id="org5dcf992"><span class="section-number-2">10</span> <a href="http://172.16.2.250/NewComer/">2016-09-29 Index of /NewComer</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="reversecurity">reversecurity</span></span></h2>
+</div>
+<div id="outline-container-org6557031" class="outline-2">
+<h2 id="org6557031"><span class="section-number-2">11</span> <a href="https://jsuper.github.io/emacs/using-org-mode-to-write-jekyll-post.html">2016-09-30 使用org-mode撰写jekyll博客</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="jekyll">jekyll</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span>&#xa0;<span class="emacs">emacs</span></span></h2>
+</div>
+<div id="outline-container-orgfb299e4" class="outline-2">
+<h2 id="orgfb299e4"><span class="section-number-2">12</span> <a href="https://rubygems.org/gems">2016-10-01 Gems | RubyGems.org | Ruby 社区 Gem 托管</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ruby">ruby</span>&#xa0;<span class="gemsource">gemsource</span></span></h2>
+</div>
+<div id="outline-container-org462910a" class="outline-2">
+<h2 id="org462910a"><span class="section-number-2">13</span> <span class="todo __">未读</span> <a href="https://wsgzao.github.io/post/fq/">2016-10-06 GFW翻墙小结 | HelloDog</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="gfw">gfw</span></span></h2>
+</div>
+<div id="outline-container-orgc3e5063" class="outline-2">
+<h2 id="orgc3e5063"><span class="section-number-2">14</span> <span class="todo __">未读</span> <a href="http://magikh0e.ihtb.org/pubPapers/ssh_gymnastics_tunneling.html">2016-10-08 SSH Gymnastics and Tunneling with ProxyChains</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="gfw">gfw</span>&#xa0;<span class="ssh">ssh</span></span></h2>
+</div>
+<div id="outline-container-orgc827f8b" class="outline-2">
+<h2 id="orgc827f8b"><span class="section-number-2">15</span> <a href="http://www.scpta.gov.cn/news/morenews.aspx?Id=50">2016-10-08 四川人事考试网 — 新闻 市洲公招</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="liuqing">liuqing</span>&#xa0;<span class="gongzhao">gongzhao</span>&#xa0;<span class="gongwuyuan">gongwuyuan</span></span></h2>
+</div>
+<div id="outline-container-org974afa6" class="outline-2">
+<h2 id="org974afa6"><span class="section-number-2">16</span> <a href="http://tmyam.github.io/blog/2014/05/07/duo-githubzhang-hu-she-zhi/">2016-10-08 一个客户端设置多个github账号 - tmyam's blog</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="github">github</span>&#xa0;<span class="multiuser">multiuser</span></span></h2>
+</div>
+<div id="outline-container-org6268084" class="outline-2">
+<h2 id="org6268084"><span class="section-number-2">17</span> <a href="http://www.open-open.com/">2016-10-09 深度开源 - Java开源大全，开源信息发掘、分享、交流</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="opensource">opensource</span>&#xa0;<span class="doc">doc</span></span></h2>
+</div>
+<div id="outline-container-orgd52f0b7" class="outline-2">
+<h2 id="orgd52f0b7"><span class="section-number-2">18</span> <a href="https://fogproject.org/">2016-10-09 FOG Project</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="fog">fog</span></span></h2>
+</div>
+<div id="outline-container-org26eb386" class="outline-2">
+<h2 id="org26eb386"><span class="section-number-2">19</span> <a href="https://jiji262.github.io/wooyun_articles/drops/NMAP%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B.html">2016-10-09 NMAP 基础教程 - he1renyagao</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nmap">nmap</span></span></h2>
+</div>
+<div id="outline-container-org6947efc" class="outline-2">
+<h2 id="org6947efc"><span class="section-number-2">20</span> <a href="https://wiki.archlinux.org/index.php/LVM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E4.BD.BF.E7.94.A8lvresize.E5.A2.9E.E5.8A.A0.E6.88.96.E7.BC.A9.E5.B0.8F.E5.AE.B9.E9.87.8F">2016-10-11 LVM (简体中文) - ArchWiki</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="lvm">lvm</span></span></h2>
+</div>
+<div id="outline-container-orgd056b37" class="outline-2">
+<h2 id="orgd056b37"><span class="section-number-2">21</span> <a href="https://zh.wikipedia.org/wiki/IEEE_802.1Q">2016-10-11 IEEE 802.1Q - 维基百科，自由的百科全书</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="vlan">vlan</span></span></h2>
+</div>
+<div id="outline-container-org2a0b529" class="outline-2">
+<h2 id="org2a0b529"><span class="section-number-2">22</span> <a href="https://yoo2080.wordpress.com/2011/12/31/lexical-scoping-and-dynamic-scoping-in-emacs-lisp/">2016-10-12 lexical scoping and dynamic scoping in Emacs Lisp | Yoo Box</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="_____">词法作用域</span>&#xa0;<span class="_____">动态作用域</span></span></h2>
+</div>
+<div id="outline-container-orgf6a36f8" class="outline-2">
+<h2 id="orgf6a36f8"><span class="section-number-2">23</span> <a href="http://es.xiaoleilu.com/010_Intro/00_README.html">2016-10-12 入门 | Elasticsearch权威指南（中文版）</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="es">es</span>&#xa0;<span class="Elasticsearch">Elasticsearch</span></span></h2>
+</div>
+<div id="outline-container-org664d9aa" class="outline-2">
+<h2 id="org664d9aa"><span class="section-number-2">24</span> <a href="file:///Users/pengpengxp/Documents/iproute2.html">2016-10-19 iproute2</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="iproute2">iproute2</span></span></h2>
+</div>
+<div id="outline-container-org204e698" class="outline-2">
+<h2 id="org204e698"><span class="section-number-2">25</span> <a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/">2016-10-10 Introducing Linux Network Namespaces</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="network">network</span>&#xa0;<span class="namespace">namespace</span>&#xa0;<span class="virtual">virtual</span>&#xa0;<span class="ethernet">ethernet</span></span></h2>
+</div>
+<div id="outline-container-orge0b86fd" class="outline-2">
+<h2 id="orge0b86fd"><span class="section-number-2">26</span> <a href="http://www.opencloudblog.com/?p=66">2016-10-20 Linux Switching – Interconnecting Namespaces – Open Cloud Blog</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="namespace">namespace</span>&#xa0;<span class="tap">tap</span>&#xa0;<span class="veth">veth</span></span></h2>
+</div>
+<div id="outline-container-orge8838bc" class="outline-2">
+<h2 id="orge8838bc"><span class="section-number-2">27</span> <a href="https://raamdev.com/2007/replace-os-x-commandtab-with-witch/">2016-10-21 Replace OS X Command+Tab with Witch – Raam Dev</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs">emacs</span></span></h2>
+</div>
+<div id="outline-container-org8f7e260" class="outline-2">
+<h2 id="org8f7e260"><span class="section-number-2">28</span> <a href="https://en.wikipedia.org/wiki/Ethernet_frame">2016-10-25 Ethernet frame - Wikipedia</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ethernet">ethernet</span></span></h2>
+</div>
+<div id="outline-container-org7a9b814" class="outline-2">
+<h2 id="org7a9b814"><span class="section-number-2">29</span> <a href="https://www.safaribooksonline.com/s/?q=*&amp;filter=Python&amp;limit=30">2016-10-25 Queue: Safari</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="safaribook">safaribook</span></span></h2>
+</div>
+<div id="outline-container-orgf066cb6" class="outline-2">
+<h2 id="orgf066cb6"><span class="section-number-2">30</span> <a href="https://zhuanlan.zhihu.com/p/22983834">2016-10-28 学习编程道路上的入门书籍之Python篇 - 学习编程 - 知乎专栏</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="python_book">python_book</span></span></h2>
+</div>
+<div id="outline-container-org1ad97e8" class="outline-2">
+<h2 id="org1ad97e8"><span class="section-number-2">31</span> <a href="http://wcm1.web.rice.edu/mutt-tips.html">2016-11-16 Tips for Using Mutt | W. Caleb McDaniel</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="mutt">mutt</span>&#xa0;<span class="macos">macos</span>&#xa0;<span class="attachment">attachment</span></span></h2>
+</div>
+<div id="outline-container-org8f68bb6" class="outline-2">
+<h2 id="org8f68bb6"><span class="section-number-2">32</span> <a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">2016-11-22 字符编码笔记：ASCII，Unicode和UTF-8 - 阮一峰的网络日志</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="uft">uft</span>&#xa0;<span class="8">8</span>&#xa0;<span class="encodeing">encodeing</span></span></h2>
+</div>
+<div id="outline-container-org6a7bdd2" class="outline-2">
+<h2 id="org6a7bdd2"><span class="section-number-2">33</span> <a href="http://www.joelonsoftware.com/articles/Unicode.html">2016-11-22 The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!) - Joel on Software</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="encodeing">encodeing</span>&#xa0;<span class="__">编码</span></span></h2>
+</div>
+<div id="outline-container-org829b5ed" class="outline-2">
+<h2 id="org829b5ed"><span class="section-number-2">34</span> <a href="http://books.gigatux.nl/mirror/applescript/0596008503/toc.html">2017-04-05 "apple script"</a></h2>
+</div>
+<div id="outline-container-org3dc9f55" class="outline-2">
+<h2 id="org3dc9f55"><span class="section-number-2">35</span> <a href="http://blog.rainy.im/2016/04/07/python-thread-and-coroutine/">2017-05-02 "Python 线程与协程 - Yusheng's Tech Blog"</a></h2>
+</div>
+<div id="outline-container-org6c0340b" class="outline-2">
+<h2 id="org6c0340b"><span class="section-number-2">36</span> <a href="https://www.zhihu.com/question/59227720/answer/163594782?utm_medium=social&amp;utm_source=wechat_session">2017-05-05 "有哪些命令行的软件堪称神器？ - 知乎"</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tools">tools</span></span></h2>
+</div>
+<div id="outline-container-org6537b57" class="outline-2">
+<h2 id="org6537b57"><span class="section-number-2">37</span> <a href="https://kombu.readthedocs.io/en/latest/">2017-05-05 "Kombu Documentation — Kombu 3.0.37 documentation"</a></h2>
+</div>
+<div id="outline-container-orgee628d3" class="outline-2">
+<h2 id="orgee628d3"><span class="section-number-2">38</span> <a href="http://zh-google-styleguide.readthedocs.io/en/latest/">2017-05-18 "Google 开源项目风格指南 (中文版) — Google 开源项目风格指南"</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="____">编程规范</span></span></h2>
+</div>
+<div id="outline-container-org2d81cd9" class="outline-2">
+<h2 id="org2d81cd9"><span class="section-number-2">39</span> <span class="todo __">未读</span> <a href="http://ergoemacs.org/emacs/emacs_align_and_sort.html">2017-06-03 "Emacs: Align Text"</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="emacs_sort_or_align">emacs_sort_or_align</span></span></h2>
+</div>
+<div id="outline-container-org8785dc6" class="outline-2">
+<h2 id="org8785dc6"><span class="section-number-2">40</span> <a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868328251266d86585fc9514536a638f06b41908d44000">2017-06-07 "hashlib - 廖雪峰的官方网站"</a></h2>
+</div>
+<div id="outline-container-org42c5f70" class="outline-2">
+<h2 id="org42c5f70"><span class="section-number-2">41</span> <a href="http://jonas.nitro.dk/tig/tigrc.5.html">2017-06-13 "tigrc(5)" tig manual</a></h2>
+</div>
+<div id="outline-container-org1667bd8" class="outline-2">
+<h2 id="org1667bd8"><span class="section-number-2">42</span> <a href="http://lists.gnu.org/">2017-06-19 "lists.gnu.org"</a></h2>
+</div>
+<div id="outline-container-org74c4e16" class="outline-2">
+<h2 id="org74c4e16"><span class="section-number-2">43</span> <a href="https://oremacs.com/">2017-06-21 "(or emacs · irrelevant)" ivy作者的blog abo-abo</a></h2>
+</div>
+<div id="outline-container-org4ba3ff3" class="outline-2">
+<h2 id="org4ba3ff3"><span class="section-number-2">44</span> <a href="http://www.infoworld.com/article/3085150/application-development/dont-just-code-career-advice-from-the-programming-masters.html">2017-06-21 "Don't just code: Career advice from the programming masters | InfoWorld"</a></h2>
+</div>
+<div id="outline-container-org7513634" class="outline-2">
+<h2 id="org7513634"><span class="section-number-2">45</span> <a href="https://serholiu.com/python-closures">2017-07-10 "浅显理解 Python 闭包 - I'm SErHo"</a></h2>
+</div>
+<div id="outline-container-org8838886" class="outline-2">
+<h2 id="org8838886"><span class="section-number-2">46</span> <a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html">2017-07-10 "进程与线程的一个简单解释 - 阮一峰的网络日志"</a></h2>
+</div>
+<div id="outline-container-org392e93f" class="outline-2">
+<h2 id="org392e93f"><span class="section-number-2">47</span> <a href="http://pythonguidecn.readthedocs.io/zh/latest/starting/which-python.html">2017-07-18 "选择一个解释器 — The Hitchhiker's Guide to Python"</a></h2>
+</div>
+<div id="outline-container-orgc869de9" class="outline-2">
+<h2 id="orgc869de9"><span class="section-number-2">48</span> <a href="https://maskray.me/blog/2016-02-12-gmail-offlineimap-xoauth2">2017-07-31 "Gmail的OfflineIMAP XOAUTH2认证 | MaskRay"</a></h2>
+</div>
+<div id="outline-container-org513a624" class="outline-2">
+<h2 id="org513a624"><span class="section-number-2">49</span> <a href="https://www.emacswiki.org/emacs/SendingMail">2017-08-01 "EmacsWiki: Sending Mail"</a></h2>
+</div>
+<div id="outline-container-org04d0f70" class="outline-2">
+<h2 id="org04d0f70"><span class="section-number-2">50</span> <a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">2017-08-03 "Systemd 入门教程：命令篇 - 阮一峰的网络日志"</a></h2>
+</div>
+<div id="outline-container-org3c1a0b5" class="outline-2">
+<h2 id="org3c1a0b5"><span class="section-number-2">51</span> <a href="http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html">2017-08-03 "Linux 的启动流程 - 阮一峰的网络日志"</a></h2>
+</div>
+<div id="outline-container-orgfaafcad" class="outline-2">
+<h2 id="orgfaafcad"><span class="section-number-2">52</span> <a href="http://www.ruanyifeng.com/blog/2013/02/booting.html">2017-08-03 "计算机是如何启动的？ - 阮一峰的网络日志"</a></h2>
+</div>
+<div id="outline-container-orgc77021d" class="outline-2">
+<h2 id="orgc77021d"><span class="section-number-2">53</span> <a href="http://zh.wikihow.com/%E5%88%B6%E4%BD%9C%E7%BD%91%E7%BA%BF">2017-09-13 如何制作网线</a></h2>
+</div>
+<div id="outline-container-org49a489b" class="outline-2">
+<h2 id="org49a489b"><span class="section-number-2">54</span> <a href="https://csl.name/post/gtags/">Using GNU Global with C++ and Git</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="gtags">gtags</span></span></h2>
+<div class="outline-text-2" id="text-54">
+<p>
+可以使用 <code>git</code> 的hook来更新gtags。好像还可以添加一个 <code>git gtags</code> 的
+命令。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

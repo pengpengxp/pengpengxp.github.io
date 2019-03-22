@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-18 一 16:51 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>snmp wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">snmp wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org5ed5175">1. snmp中的oid和instance</a></li>
+<li><a href="#org862c2e5">2. snmp的scalar和table的区别</a></li>
+<li><a href="#orgc4dec7c">3. mib table中的index含义</a></li>
+<li><a href="#org5a0cc8b">4. 如何根据mib文件生成对应的C代码</a></li>
+<li><a href="#orgdcdecca">5. 如何添加一个临时的mib文件</a></li>
+<li><a href="#orgc58a7c7">6. 如何把mib文件添加到系统</a></li>
+<li><a href="#org2f19223">7. ubuntu中配置snmpd</a></li>
+<li><a href="#org79f522e">8. mib中admin string, display string和octet sring的区别</a></li>
+<li><a href="#org9f13f18">9. integer和integer32的区别</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5ed5175" class="outline-2">
+<h2 id="org5ed5175"><span class="section-number-2">1</span> snmp中的oid和instance</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+oid是指对象id，instance是指对象实例。
+</p>
+
+<p>
+我们在获取时，都是获取的对象实例。
+</p>
+
+<p>
+scalar的实例都是 <code>oid.0</code> 。table的实例都是 <code>oid.index</code> ，如果table有
+多个索引，则其实例类似这样 <code>oid.index1.index2</code> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org862c2e5" class="outline-2">
+<h2 id="org862c2e5"><span class="section-number-2">2</span> snmp的scalar和table的区别</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+参考 <a href="https://www.webnms.com/cagent/help/technology_used/c_snmp_overview.html">snmp overview</a> 。
+</p>
+
+<p>
+要从管理者中获得对象的值，必须指定对象中的实例。对象的实例可以通过
+在对象的oid后添加实例的索引来指定。索引就比如下面例子中最后的0就是
+实例的索引：
+</p>
+<pre class="example">
+.iso.3.dod.1.mgmt.mib.1.sysUpTime.0
+</pre>
+<p>
+第一个实例是从0开始索引的。1代表第二个实例，以此类推。由于sysUpTime
+是一个scalar对象，它只有一个实例。因此，如果想要获得一个scalar对象
+的值，总需要在最后使用0来作为索引。索引超过0的情况只会发生在
+columnar对象（table）中，这类对象中可以有多个实例。
+</p>
+
+<p>
+总的来说，只有一个实例的管理对象叫作scalar对象。而tabular对象中可以
+有多个实例，就好像表中有多行一样。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc4dec7c" class="outline-2">
+<h2 id="orgc4dec7c"><span class="section-number-2">3</span> mib table中的index含义</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+参考 <a href="https://www.webnms.com/snmp/help/snmpapi/snmpv3/table_handling/snmptables_basics.html">SNMP Table Basics</a> 。
+</p>
+
+<p>
+一个table中必须要有索引。用户使用索引才能找到对应的实例的值。
+</p>
+
+<p>
+以vlanTable为例，它是以 <code>vlanId</code> 为index的：
+</p>
+<div class="org-src-container">
+<pre class="src src-snmpv2"><span style="color: #8fbc8f;">fhosVlanTable</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: PaleYellow;">SYNTAX</span>      SEQUENCE OF FhosVlanEntry
+    MAX-<span style="color: PaleYellow;">ACCESS</span>  not-accessible
+    <span style="color: PaleYellow;">STATUS</span>      current
+    <span style="color: PaleYellow;">DESCRIPTION</span>
+        <span style="color: #ffa500;">"A table of vlan names and characteristics"</span>
+    ::= { <span style="color: #7fffd4;">fhosVlan </span><span style="color: #8fbc8f;">1</span> }
+
+<span style="color: #8fbc8f;">fhosVlanEntry</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: PaleYellow;">SYNTAX</span>      FhosVlanEntry
+    MAX-<span style="color: PaleYellow;">ACCESS</span>  not-accessible
+    <span style="color: PaleYellow;">STATUS</span>      current
+    <span style="color: PaleYellow;">DESCRIPTION</span>
+        <span style="color: #ffa500;">""</span>
+    <span style="color: PaleYellow;">INDEX</span> { fhosVlanId }
+    ::= { <span style="color: #7fffd4;">fhosVlanTable </span><span style="color: #8fbc8f;">1</span> }
+
+<span style="color: #7fffd4;">FhosVlanEntry</span> ::= <span style="color: PaleYellow;">SEQUENCE</span> {
+        fhosVlanId   Integer32,
+        fhosVlanName DisplayString
+}
+
+<span style="color: #8fbc8f;">fhosVlanId</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: PaleYellow;">SYNTAX</span>      Integer32(1..4094)
+    MAX-<span style="color: PaleYellow;">ACCESS</span>  read-only
+    <span style="color: PaleYellow;">STATUS</span>      current
+    <span style="color: PaleYellow;">DESCRIPTION</span>
+        <span style="color: #ffa500;">"This is the internal ID of the device to reference its VLAN."</span>
+    ::= { <span style="color: #7fffd4;">fhosVlanEntry </span><span style="color: #8fbc8f;">1</span> }
+
+<span style="color: #8fbc8f;">fhosVlanName</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: PaleYellow;">SYNTAX</span>      DisplayString (SIZE (1..255))
+    MAX-<span style="color: PaleYellow;">ACCESS</span>  read-only
+    <span style="color: PaleYellow;">STATUS</span>      current
+    <span style="color: PaleYellow;">DESCRIPTION</span>
+        <span style="color: #ffa500;">"This is the VLAN name"</span>
+    ::= { <span style="color: #7fffd4;">fhosVlanEntry </span><span style="color: #8fbc8f;">2</span> }
+
+<span style="color: #8fbc8f;">fhosVlanType</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: PaleYellow;">SYNTAX</span>      INTEGER {
+        static (1),
+        dynamic(2)
+}
+    MAX-<span style="color: PaleYellow;">ACCESS</span>  read-only
+    <span style="color: PaleYellow;">STATUS</span>      current
+    <span style="color: PaleYellow;">DESCRIPTION</span>
+        <span style="color: #ffa500;">"The VLAN type can be</span>
+<span style="color: #ffa500;">        static(1)</span>
+<span style="color: #ffa500;">        dynamic(2)"</span>
+    ::= { <span style="color: #7fffd4;">fhosVlanEntry </span><span style="color: #8fbc8f;">3</span> }
+</pre>
+</div>
+
+<p>
+要取到vlan1的vid：
+</p>
+<pre class="example">
+snmpget host vlanTable.vlanEntry.1.0
+</pre>
+
+<p>
+要取到vlan1的name：
+</p>
+<pre class="example">
+snmpget host vlanTable.vlanEntry.2.0
+</pre>
+
+<p>
+要取到vlan2的name：
+</p>
+<pre class="example">
+snmpget host vlanTable.vlanEntry.2.1
+</pre>
+
+<p>
+索引可以有多个，如本节参考文档中的tcpConnTable就有多个index：
+</p>
+<div class="org-src-container">
+<pre class="src src-snmpv2"><span style="color: #8fbc8f;">tcpConnTable</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    ::= { <span style="color: #7fffd4;">tcp </span><span style="color: #8fbc8f;">13</span> }
+
+<span style="color: #8fbc8f;">tcpConnEntry</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    <span style="color: PaleYellow;">INDEX</span>   { tcpConnLocalAddress,
+              tcpConnLocalPort,
+              tcpConnRemAddress,
+              tcpConnRemPort }
+    ::= { <span style="color: #7fffd4;">tcpConnTable </span><span style="color: #8fbc8f;">1</span> }
+
+TcpConnEntry ::=
+    SEQUENCE {
+        tcpConnState
+            INTEGER,
+        tcpConnLocalAddress
+            IpAddress,
+        tcpConnLocalPort
+            INTEGER (0..65535),
+        tcpConnRemAddress
+            IpAddress,
+        tcpConnRemPort
+            INTEGER (0..65535)
+    }
+
+<span style="color: #8fbc8f;">tcpConnState</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    ::= { <span style="color: #7fffd4;">tcpConnEntry </span><span style="color: #8fbc8f;">1</span> }
+
+<span style="color: #8fbc8f;">tcpConnLocalAddress</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    ::= { <span style="color: #7fffd4;">tcpConnEntry </span><span style="color: #8fbc8f;">2</span> }
+
+<span style="color: #8fbc8f;">tcpConnLocalPort</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    ::= { <span style="color: #7fffd4;">tcpConnEntry </span><span style="color: #8fbc8f;">3</span> }
+
+<span style="color: #8fbc8f;">tcpConnRemAddress</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    ::= { <span style="color: #7fffd4;">tcpConnEntry </span><span style="color: #8fbc8f;">4</span> }
+
+<span style="color: #8fbc8f;">tcpConnRemPort</span> <span style="color: PaleYellow;">OBJECT-TYPE</span>
+    <span style="color: #cd5c5c;">-- </span><span style="color: #cd5c5c;">...</span>
+    ::= { <span style="color: #7fffd4;">tcpConnEntry </span><span style="color: #8fbc8f;">5</span> }
+</pre>
+</div>
+
+<p>
+如果有这样一个表：
+</p>
+<pre class="example">
++----------------------------------------------------------------------------------------------------------------------------+
+|      tcpConnState      |  tcpConnLocalAddress   |    tcpConnLocaPort     |   tcpConnRemAddress    |     tcpConnRemPort     |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |21                      |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |23                      |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |3306                    |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |6000                    |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|established(5)          |127.0.0.1               |1042                    |127.0.0.1               |6000                    |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|established(5)          |127.0.0.1               |6000                    |127.0.0.1               |1042                    |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|closeWait(8)            |192.168.1.78            |1156                    |192.168.4.144           |80                      |
++----------------------------------------------------------------------------------------------------------------------------+
+</pre>
+
+<p>
+要取到最后一行的tcpConnState：
+</p>
+<pre class="example">
+ snmpget host tcpConnTable.tcpConnEntry.tcpConnState.192.168.1.78.1156.192.168.4.144.80
+等价于：
+ snmpget host tcpConnTable.tcpConnEntry.1.192.168.1.78.1156.192.168.4.144.80
+</pre>
+
+<p>
+要取到最后一行的tcpConnLocalAddress：
+</p>
+<pre class="example">
+ snmpget host tcpConnTable.tcpConnEntry.tcpConnLocalAddress.192.168.1.78.1156.192.168.4.144.80
+等价于：
+ snmpget host tcpConnTable.tcpConnEntry.2.192.168.1.78.1156.192.168.4.144.80
+</pre>
+
+<p>
+注意看两者的区别。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5a0cc8b" class="outline-2">
+<h2 id="org5a0cc8b"><span class="section-number-2">4</span> 如何根据mib文件生成对应的C代码</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+以命令为例：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">env <span style="color: #8fbc8f;">MIBS</span>=<span style="color: #ffa500;">"+/path/to/your/mib/fhos-vlan.mib"</span> mib2c fhosVlanTable
+</pre>
+</div>
+
+<p>
+修改为对应的路径和table的名字就可以了。
+</p>
+
+<p>
+使用mib2c时会要求选择code style：
+</p>
+<pre class="example">
+  1) ucd-snmp style code
+  2) Net-SNMP style code
+</pre>
+
+<p>
+由于当前frr中的snmp实现都是使用原来的ucd-snmp，所以这里我们也都选择1。
+</p>
+
+<p>
+这两种格式的区别可以在 <a href="https://sourceforge.net/p/net-snmp/mailman/message/17348065/">Mail List</a> 里面找到。
+</p>
+<pre class="example">
+&gt; Dear:
+&gt;     I am developting the snmp agent using ..... net-snmp 5.2.3.
+&gt; When using the tool of mib2c generate the .c file,Can I
+&gt; choose the UCD-SNMP style Code choice?
+
+Yes.
+
+&gt; That is can I developt the agent in UCD-SNMP style with
+&gt; the pakage of NET-SNMP5.2.3?
+
+Yes.
+Many of the current MIB implementations still use the older
+UCD style.
+
+&gt;  Are there some faults?
+
+The main disadvantages of the UCD style over the newer
+handler-based APIs are:
+
+   a)  It's slightly less efficient
+              (though probably not enough to worry about)
+   b)  It doesn't handle as much automatically.
+
+With the newer v5 API, particularly when implementing MIB
+tables, the helpers will take care of much of the donkey work
+(interpreting indexes, etc).   With the UCD style of MIB, this
+was all left to the MIB programmer.
+   But if you're happier working with the UCD approach, that's
+fine - it should work OK.
+
+One word of warning about the mib2c interface though.
+The code generated is not always as accurate as we might
+like - particularly when run on anything more than just a
+single table.   So do check the OIDs that it's trying to register
+carefully.
+
+Dave
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgdcdecca" class="outline-2">
+<h2 id="orgdcdecca"><span class="section-number-2">5</span> 如何添加一个临时的mib文件</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+参考 <a href="http://net-snmp.sourceforge.net/wiki/index.php/TUT:Using_and_loading_MIBS">TUT:Using and loading MIBS</a> 。
+</p>
+
+<p>
+linux中如果安装好snmp后默认会安装一些标准的mib。snmp相关的程序都是
+在指定的路径中搜索mib文件。默认在这两个目录：
+</p>
+<pre class="example">
+ 1. $HOME/.snmp/mibs
+ 2. /usr/local/share/snmp/mibs
+</pre>
+<p>
+也可以使用下面的命令来查一下：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">net-snmp-config --default-mibdirs
+</pre>
+</div>
+
+<p>
+当然，可以直接在命令中指定对应的mib文件，比如我把我们cisco交换机对应
+的mib文件都下载下来，放到 <code>~/.snmp/mibs/</code> 目录下。可以这样来玩：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"> snmptranslate -m +/home/pengpengxp/.snmp/mibs/CISCOSBvlan.mib -IR -On vlanNameTable
+ snmpwalk -m +/home/pengpengxp/.snmp/mibs/CISCOSBvlan.mib -u xiepeng -l NoauthNoPriv 10.0.0.2 vlan
+ snmpwalk -m +/home/pengpengxp/.snmp/mibs/CISCOSBvlan.mib -u xiepeng -l NoauthNoPriv 10.0.0.2 vlanNameTable
+</pre>
+</div>
+<p>
+其中 <code>-m</code> 选项就是指定对应的mib文件。就可以直接使用名字，而不是oid来
+使用命令了。 <code>xiepeng</code> 这个用户是我新建的测试用户。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc58a7c7" class="outline-2">
+<h2 id="orgc58a7c7"><span class="section-number-2">6</span> 如何把mib文件添加到系统</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+参考 <a href="http://net-snmp.sourceforge.net/wiki/index.php/TUT:Using_and_loading_MIBS">TUT:Using and loading MIBS</a> 。
+</p>
+
+<p>
+我把自定义的一些mib文件都放到 <code>~/.snmp/mibs</code> 目录。原则上放在在
+<code>net-snmp-config --default-mibdirs</code> 中都可以。
+</p>
+
+<p>
+需要注意的是，文件名和文件内的第一行“模块名”应该是相同的。比如
+<code>FHOS-VLAN</code> 文件中的第一行如下：
+</p>
+<pre class="example">
+FHOS-VLAN DEFINITIONS ::= BEGIN
+</pre>
+
+<p>
+mib文件放入目录后，对应的 <code>snmp*</code> 的命令还是找不到的。需要在全局的配
+置文件 <code>/etc/snmp/snmp.conf</code> 中加入对应的文件才行，比如我把当前fhos
+的mib文件都放入目录后，加入下面几行就可以了：
+</p>
+<pre class="example">
+mibs +FHOS-VLAN
+mibs +FHOS-PORT
+mibs +FHOS-TRUNK
+mibs +FHOS-STATS
+</pre>
+
+<p>
+这样 <code>snmptranslate,mib2c</code> 这些命令都可以直接使用这些mib了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2f19223" class="outline-2">
+<h2 id="org2f19223"><span class="section-number-2">7</span> ubuntu中配置snmpd</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+参考的 <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an-snmp-daemon-and-client-on-ubuntu-14-04">How To Install and Configure an SNMP Daemon and Client on
+Ubuntu 14.04</a> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org79f522e" class="outline-2">
+<h2 id="org79f522e"><span class="section-number-2">8</span> mib中admin string, display string和octet sring的区别</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+参考 <a href="https://sourceforge.net/p/net-snmp/mailman/message/29558225/">这里</a> 。
+</p>
+<pre class="example">
+Re: Difference between admin string, display string and octet sring.
+
+From: Dave Shield &lt;D.T.Shield@li...&gt; - 2012-07-18 13:05:22
+On 18 July 2012 13:35, Benix Vincent &lt;benixvincent@...&gt; wrote:
+&gt; When and how Display string, octet string and snmp admin sting should be
+&gt; used in data type?
+
+Octet String is the underlying base type.
+Defining a MIB object using this type doesn't say anything about what
+sort of value the object should contain (other than that it will be a
+sequence of octet values).
+    In particular, there is no implication that the value will necessarily
+be a printable string.
+
+Both DisplayString and SnmpAdminString *are* intended for printable
+string values.   The difference between them is whether the string is
+purely ASCII text (DisplayString), or can potentially contain other
+characters (such as accented or non-roman characters).
+
+&gt; For a product model name, what is the correct object type to be used?
+
+If you are working from a pre-existing MIB file, then you should follow
+what is defined there.
+If you are defining a new MIB file, then it's probably sensible to use
+SnmpAdminString.  That leaves the way open to support international
+values in the future - even if you don't expect to need this at the moment.
+
+Dave
+
+</pre>
+
+<p>
+Octet String是基本类型，使用这个类型的mib对象不会指定它将包含的类型。
+DisplayingString和SnmpAdminString才是真正指定 <b>可打印</b> 字符的类型。区
+别在于DisplayingString只是指ascii码的文本。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9f13f18" class="outline-2">
+<h2 id="org9f13f18"><span class="section-number-2">9</span> integer和integer32的区别</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+参考 <a href="https://tools.ietf.org/html/rfc2578#section-7.1.1">这里</a> 。
+</p>
+<pre class="example">
+7.1.1.  Integer32 and INTEGER
+
+The Integer32 type represents integer-valued information between -2^31
+and 2^31-1 inclusive (-2147483648 to 2147483647 decimal).  This type
+is indistinguishable from the INTEGER type.  Both the INTEGER and
+Integer32 types may be sub-typed to be more constrained than the
+Integer32 type.
+
+The INTEGER type (but not the Integer32 type) may also be used to
+represent integer-valued information as named-number enumerations.  In
+this case, only those named-numbers so enumerated may be present as a
+value.  Note that although it is recommended that enumerated values
+start at 1 and be numbered contiguously, any valid value for Integer32
+is allowed for an enumerated value and, further, enumerated values
+needn't be contiguously assigned.
+
+Finally, a label for a named-number enumeration must consist of one or
+more letters or digits, up to a maximum of 64 characters, and the
+initial character must be a lower-case letter.  (However, labels
+longer than 32 characters are not recommended.)  Note that hyphens are
+not allowed by this specification (except for use by information
+modules converted from SMIv1 which did allow hyphens).
+</pre>
+
+<p>
+总的来说没有太大区别，INTEGER可能被用于表示枚举类型。所以我觉得如果
+是用来做数字使用integer32,如果需要用枚举的就使用INTEGER。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2019-03-18 一 16:51</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

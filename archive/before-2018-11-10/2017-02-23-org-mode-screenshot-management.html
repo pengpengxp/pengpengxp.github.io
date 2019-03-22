@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>解决org-mode中的截图问题，可以方便地插入、删除截图</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">解决org-mode中的截图问题，可以方便地插入、删除截图</h1>
+<p>
+平时使用org-mode的时候有截图需求，之前在网上copy了一个函数。
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">  <span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">&#22312;org-mode&#20013;&#26041;&#20415;&#22320;&#25130;&#22270;&#24182;&#26174;&#31034;</span>
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-org-screenshot</span> ()
+    <span style="color: #ff4b4b;">"Take a screenshot into a unique-named file in the current buffer file</span>
+<span style="color: #ff4b4b;">      directory and insert a link to this file."</span>
+    (<span style="color: #a1db00;">interactive</span>)
+    (<span style="color: #a1db00;">setq</span> filename
+          (concat (make-temp-name <span style="color: #ff4ea3;">"./"</span>) <span style="color: #ff4ea3;">".png"</span>))
+    (<span style="color: #a1db00;">setq</span> fullfilename
+          (concat (file-name-directory (buffer-file-name)) <span style="color: #ff4ea3;">"img/"</span> filename))
+    (<span style="color: #a1db00;">if</span> (file-accessible-directory-p (concat (file-name-directory
+                                              (buffer-file-name)) <span style="color: #ff4ea3;">"img/"</span>))
+        nil
+      (make-directory <span style="color: #ff4ea3;">"img/"</span> t))
+    (call-process-shell-command <span style="color: #ff4ea3;">"screencapture"</span> nil nil nil nil <span style="color: #ff4ea3;">"-i"</span> (concat
+                                                                      <span style="color: #ff4ea3;">"\""</span> fullfilename <span style="color: #ff4ea3;">"\""</span> ))
+    (insert (concat <span style="color: #ff4ea3;">"[[./img/"</span> filename <span style="color: #ff4ea3;">"]]"</span>))
+    (org-display-inline-images)
+    )
+</pre>
+</div>
+
+<p>
+它可以实现 使用 <code>screencapture</code> 来抓图，以一个临时生成的名字来做为抓取
+图片的文件 名，最后把图片文件存到当前目录中的 <code>img</code> 目录中。然后通过
+<code>insert</code> 函 数把链接插入到org文件中。但是这个函数有几个方面还达不到我
+的要求：
+</p>
+
+<ol class="org-ol">
+<li>删除麻烦。每次想删先得手动到 <code>img</code> 目录中把对应文件删除，然后再到
+org中删链接。</li>
+<li>如果一次抓图失误，重新抓图又要重新生成一个新的文件，之前的文件就成
+了垃圾放到了 <code>img</code> 目录中。删除又得重复一次1的动作。</li>
+<li>图片名字全是临时文件的名字，完全没有自解释性。</li>
+</ol>
+
+<p>
+为了解决上述几个问题，自己动手搞了一下。首先图片名字不能再上临时的了，
+每次抓图时需要手动输入。我结合ivy-read，把当前目录中的 <code>img</code> 目录中的
+图片做为候选，这样可以方便地更新某次错误抓图，而且新建图片也很方便。
+于是把函数改成这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">  (<span style="color: #a1db00;">defcustom</span> <span style="color: #ff8700;">peng-org-screenshot-dir-name</span>  <span style="color: #ff4ea3;">"img"</span>
+    <span style="color: #ff4b4b;">"default image directory name for org screenshot"</span>
+    <span style="color: #d18aff;">:type</span> 'string
+    )
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-org-screenshot</span> ()
+    (<span style="color: #a1db00;">interactive</span>)
+    <span style="color: #ff4ea3;">"Take a screenshot into a user specified file in the current</span>
+<span style="color: #ff4ea3;">       buffer file directory and insert a link to this file."</span>
+    (<span style="color: #a1db00;">let*</span> ((img-dir peng-org-screenshot-dir-name))
+      (<span style="color: #a1db00;">progn</span>
+        (<span style="color: #a1db00;">if</span> (file-exists-p img-dir)
+            (print <span style="color: #ff4ea3;">"yes"</span>)
+          (mkdir img-dir))
+        (<span style="color: #a1db00;">let</span> ((temp-name (ivy-read <span style="color: #ff4ea3;">"please selete a image name"</span>
+                                   (delete <span style="color: #ff4ea3;">".."</span> (delete <span style="color: #ff4ea3;">"."</span> (directory-files img-dir))))))
+          (<span style="color: #a1db00;">setq</span> filename (concat img-dir <span style="color: #ff4ea3;">"/"</span> (file-name-base temp-name) <span style="color: #ff4ea3;">".png"</span>))
+          (call-process-shell-command <span style="color: #ff4ea3;">"screencapture"</span> nil nil nil nil <span style="color: #ff4ea3;">"-i"</span> (concat
+                                                                            <span style="color: #ff4ea3;">"\""</span> filename <span style="color: #ff4ea3;">"\""</span> ))
+          (insert (concat <span style="color: #ff4ea3;">"[[./"</span> filename <span style="color: #ff4ea3;">"]]"</span>))))))
+</pre>
+</div>
+
+<p>
+这样搞定了创造截图。重点是删除了。删除需要考虑两方面，一个是删除存在于
+<code>img</code> 目录的图片文件，一个是存在于org文件中的图片链接。删除文件其实很
+简单。直接使用 <code>ivy-read</code> 读出 <code>img</code> 目录中的所有图片文件，然后调用
+<code>delete-file</code> 函数删除就好了。
+</p>
+
+<p>
+删除org文件中的图片链接就有点麻烦了。我是这样想的：
+</p>
+
+<ol class="org-ol">
+<li>首先我需要先找到org文件中的所有 <code>link</code> 。</li>
+<li>过滤出我想删除的图片的链接。</li>
+<li>干掉它。</li>
+</ol>
+
+<p>
+关于第一点我找到这样一段elisp代码：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">  (org-element-map (org-element-parse-buffer) 'link
+                     (<span style="color: #a1db00;">lambda</span> (link)
+                       (<span style="color: #a1db00;">when</span> (string= (org-element-property <span style="color: #d18aff;">:type</span> link) <span style="color: #ff4ea3;">"file"</span>)
+                         (list (org-element-property <span style="color: #d18aff;">:path</span> link)
+                               (org-element-property <span style="color: #d18aff;">:begin</span> link)
+                               (org-element-property <span style="color: #d18aff;">:end</span> link)))))
+</pre>
+</div>
+<p>
+这段代码可以找到本文件按照刚才的方式插入的图片链接。返回的一个类似于这
+样的列表：
+</p>
+<pre class="example">
+  (("./img/test.png" 363 373))
+</pre>
+<p>
+可以看到，这是一个大列表A，大列表中的每个元素B由三个元素组成，它们分别
+的含义是：图片文件的地址、链接在文件中的的起始位置、结束位置。有了这些
+数据，就可以直接通过 <code>goto-char</code> 到链接开始，然后使用 <code>delete-char</code> 把
+链接干掉。
+</p>
+
+<p>
+全部的代码如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">  (<span style="color: #a1db00;">defcustom</span> <span style="color: #ff8700;">peng-org-screenshot-dir-name</span>  <span style="color: #ff4ea3;">"img"</span>
+    <span style="color: #ff4b4b;">"default image directory name for org screenshot"</span>
+    <span style="color: #d18aff;">:type</span> 'string
+    )
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-org-screenshot</span> ()
+    (<span style="color: #a1db00;">interactive</span>)
+    <span style="color: #ff4ea3;">"Take a screenshot into a user specified file in the current</span>
+<span style="color: #ff4ea3;">       buffer file directory and insert a link to this file."</span>
+    (<span style="color: #a1db00;">let*</span> ((img-dir peng-org-screenshot-dir-name))
+      (<span style="color: #a1db00;">progn</span>
+        (<span style="color: #a1db00;">if</span> (file-exists-p img-dir)
+            (print <span style="color: #ff4ea3;">"yes"</span>)
+          (mkdir img-dir))
+        (<span style="color: #a1db00;">let</span> ((temp-name (ivy-read <span style="color: #ff4ea3;">"please selete a image name"</span>
+                                   (delete <span style="color: #ff4ea3;">".."</span> (delete <span style="color: #ff4ea3;">"."</span> (directory-files img-dir))))))
+          (<span style="color: #a1db00;">setq</span> filename (concat img-dir <span style="color: #ff4ea3;">"/"</span> (file-name-base temp-name) <span style="color: #ff4ea3;">".png"</span>))
+          (call-process-shell-command <span style="color: #ff4ea3;">"screencapture"</span> nil nil nil nil <span style="color: #ff4ea3;">"-i"</span> (concat
+                                                                            <span style="color: #ff4ea3;">"\""</span> filename <span style="color: #ff4ea3;">"\""</span> ))
+          (insert (concat <span style="color: #ff4ea3;">"[[./"</span> filename <span style="color: #ff4ea3;">"]]"</span>))))))
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-find-org-link-begin-and-end</span> (plist string)
+    <span style="color: #ff4b4b;">"find link from plist whose link is equal to string, return a</span>
+<span style="color: #ff4b4b;">  list just like `((name begin-position end-position))'"</span>
+    (<span style="color: #a1db00;">let</span> ((return-list '()))
+      (<span style="color: #a1db00;">progn</span>
+        (<span style="color: #a1db00;">while</span> plist
+          (<span style="color: #a1db00;">progn</span>
+            (<span style="color: #a1db00;">if</span> (string-equal (car (car plist))
+                              string)
+                (add-to-list 'return-list (cdr (car plist))))
+            (<span style="color: #a1db00;">setq</span> plist (cdr plist))))
+        return-list)))
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-do-delete-link-function</span> (be-list)
+    <span style="color: #ff4b4b;">"goto the begining of link and delete it, be-list is a list</span>
+<span style="color: #ff4b4b;">  just like `((name begin-position end-position))'"</span>
+    (<span style="color: #a1db00;">while</span> be-list
+      (<span style="color: #a1db00;">progn</span>
+        (goto-char (car (car be-list)))
+        (delete-char (- (car (cdr (car be-list)))
+                        (car (car be-list))))
+        (<span style="color: #a1db00;">setq</span> be-list (cdr be-list)))))
+
+  (<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">peng-delete-org-screenshot-image-file-and-link</span> ()
+    (<span style="color: #a1db00;">interactive</span>)
+    (<span style="color: #a1db00;">let*</span> ((link-list (org-element-map (org-element-parse-buffer) 'link
+                        (<span style="color: #a1db00;">lambda</span> (link)
+                          (<span style="color: #a1db00;">when</span> (string= (org-element-property <span style="color: #d18aff;">:type</span> link) <span style="color: #ff4ea3;">"file"</span>)
+                            (list (org-element-property <span style="color: #d18aff;">:path</span> link)
+                                  (org-element-property <span style="color: #d18aff;">:begin</span> link)
+                                  (org-element-property <span style="color: #d18aff;">:end</span> link))))))
+           (img-dir peng-org-screenshot-dir-name)
+           (temp-name (concat <span style="color: #ff4ea3;">"./"</span> img-dir <span style="color: #ff4ea3;">"/"</span>
+                                   (ivy-read <span style="color: #ff4ea3;">"please selete a image name you want to delete"</span>
+                                             (delete <span style="color: #ff4ea3;">".."</span> (delete <span style="color: #ff4ea3;">"."</span> (directory-files img-dir))))))
+           (begin-end-list (peng-find-org-link-begin-and-end link-list temp-name)))
+      (<span style="color: #a1db00;">progn</span>
+        (<span style="color: #a1db00;">if</span> (yes-or-no-p <span style="color: #ff4ea3;">"Do you really want to delete the image file? This can't be revert!!"</span>)
+            (delete-file temp-name))
+        (<span style="color: #a1db00;">if</span> (yes-or-no-p <span style="color: #ff4ea3;">"Do you also want to delete the image links?"</span>)
+            (peng-do-delete-link-function begin-end-list)))))
+</pre>
+</div>
+
+<p>
+使用 <code>peng-org-screenshot</code> 函数来截图，需要输入截图名字，如果需要更新
+原有图片，直接在 <code>ivy-read</code> 中过滤出原来的文件，选中即可。如果需要新建，
+输入其名字就是啦。
+</p>
+
+<p>
+使用 <code>peng-delete-org-screenshot-image-file-and-link</code> 函数来删除文件或
+link。选中想删除的文件，然后回答yes或者no就是了。
+</p>
+
+<p>
+函数写得很dirty，但是至少现在它是可以工作了。
+</p>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,3786 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-18 一 16:23 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emacs and Lisp wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Emacs and Lisp wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org4aa14c3">1. 我的emacs学习笔记 <code>[3/4]</code></a>
+<ul>
+<li><a href="#org865375c">1.1. 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="shell">shell</span>&#xa0;<span class="command">command</span></span></a></li>
+<li><a href="#org3ed11d2">1.2. <span class="done DONE">DONE</span> 自己把一些emacs文档制作成为mobi格式方便kindle阅读。</a></li>
+<li><a href="#org87b1c1b">1.3. <span class="done DONE">DONE</span> 对emacs的kill-ring的理解</a></li>
+<li><a href="#org7e2745e">1.4. <span class="done DONE">DONE</span> 使用org-mode来管理GTD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="blog">blog</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span></span></a></li>
+<li><a href="#org1c73b32">1.5. emacs下关的一些学习资料</a></li>
+<li><a href="#orgb2f503c">1.6. emacs中判断系统的版本</a></li>
+<li><a href="#eshell">1.7. eshell	<code>[0/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="eshell">eshell</span></span></a>
+<ul>
+<li><a href="#org3b288bf">1.7.1. 进入之前进入过的文件夹</a></li>
+<li><a href="#org81ad00a">1.7.2. 不使用eshell中用lisp编译的命令</a></li>
+<li><a href="#org1361ae7">1.7.3. 使用jobs控制eemacs中的子进程</a></li>
+<li><a href="#org0144597">1.7.4. 一些有用的快捷键</a></li>
+<li><a href="#orga5f40e9">1.7.5. 在eshell中使用 <code>**</code> 代替 <code>*</code></a></li>
+<li><a href="#orgee14d36">1.7.6. Eshell中执行bash脚本</a></li>
+<li><a href="#orgb05b432">1.7.7. <span class="todo TODO">TODO</span> 一些期待改进的功能 <code>[0/7]</code></a></li>
+</ul>
+</li>
+<li><a href="#orgaaaf31b">1.8. C/C++ IDE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ide">ide</span>&#xa0;<span class="C">C</span>&#xa0;<span class="C">C</span></span></a>
+<ul>
+<li><a href="#orgcd51b7b">1.8.1. 使用ecb</a></li>
+<li><a href="#orgcf17272">1.8.2. <span class="todo TODO">TODO</span> cedet</a></li>
+</ul>
+</li>
+<li><a href="#org9b01ac6">1.9. 闹钟&#xa0;&#xa0;&#xa0;<span class="tag"><span class="alarm">alarm</span></span></a></li>
+<li><a href="#org8908710">1.10. 使用过tramp编辑远程文件后eshell的问题</a></li>
+<li><a href="#org8f9d0c3">1.11. 重新安装helm&#xa0;&#xa0;&#xa0;<span class="tag"><span class="helm">helm</span></span></a></li>
+<li><a href="#org83c954f">1.12. 在emacs中使用zsh</a></li>
+<li><a href="#org408112b">1.13. company-mode自动补全</a>
+<ul>
+<li><a href="#orge8962e6">1.13.1. 基本内容</a></li>
+<li><a href="#orgd3030fc">1.13.2. <span class="todo TODO">TODO</span> 不同的mode使用不同的backend</a></li>
+</ul>
+</li>
+<li><a href="#orgc143125">1.14. emacsclient</a></li>
+<li><a href="#org8d4e9ba">1.15. cua-mode</a></li>
+<li><a href="#org1dbfe22">1.16. <span class="todo TODO">TODO</span> cscope&#xa0;&#xa0;&#xa0;<span class="tag"><span class="cscope">cscope</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org16f4c1c">2. 我的lisp学习笔记</a>
+<ul>
+<li><a href="#org4f626f9">2.1. <span class="done DONE">DONE</span> scheme中的define&#xa0;&#xa0;&#xa0;<span class="tag"><span class="scheme">scheme</span></span></a></li>
+<li><a href="#orgb61f979">2.2. 写一个自动转换org到pdf的脚本。这里 可以看看。我是想批量转换我的org文件。&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notperfect">notperfect</span></span></a></li>
+<li><a href="#org395a808">2.3. copy-keymap</a></li>
+<li><a href="#orged54490">2.4. 其它笔记</a></li>
+</ul>
+</li>
+<li><a href="#org57b4559">3. 我的emacs习惯</a>
+<ul>
+<li><a href="#orgdbb6e5d">3.1. 插件</a></li>
+</ul>
+</li>
+<li><a href="#org2fec577">4. config irony-mode</a></li>
+<li><a href="#orgb791861">5. config ycmd</a>
+<ul>
+<li><a href="#org44fc986">5.1. config ycm for my own project:</a></li>
+<li><a href="#org6b551ba">5.2. 编译ycmd时可能出错</a></li>
+<li><a href="#org7f6fa32">5.3. ycmd介绍</a></li>
+<li><a href="#org5894795">5.4. build.py选项</a></li>
+<li><a href="#orgbd19502">5.5. emacs-ycmd</a></li>
+</ul>
+</li>
+<li><a href="#org8874c33">6. elpy for python</a></li>
+<li><a href="#org2081b7a">7. 使用emacs加密文件</a></li>
+<li><a href="#org0b47ecb">8. use of markdown-mode</a></li>
+<li><a href="#orgf38e6bb">9. ssh-terminal in emacs</a></li>
+<li><a href="#org4ba9b91">10. hex-mode</a></li>
+<li><a href="#orgac8b8b9">11. tramp</a>
+<ul>
+<li><a href="#orgea0bbc3">11.1. tramp multi-hop 在远程通过sudo编辑文件</a></li>
+<li><a href="#org0210c8c">11.2. host down后emacs可能会 <code>waiting for prompts from remote shell</code></a></li>
+</ul>
+</li>
+<li><a href="#orga2fb45b">12. find and grep</a></li>
+<li><a href="#org2f23672">13. <span class="done DONE">DONE</span> lexical and dynamic scoping  box's blog 词法作用域和动态作用域</a></li>
+<li><a href="#orgbbe20bf">14. org tangle</a></li>
+<li><a href="#orge5f704c">15. org exec code block</a></li>
+<li><a href="#org151e0ea">16. org exports</a></li>
+<li><a href="#orgf3e655f">17. theme</a></li>
+<li><a href="#orga98f6f4">18. elisp check if string is empty</a></li>
+<li><a href="#orgc3d340c">19. emacs python parser</a></li>
+<li><a href="#org26683d6">20. 使用workgroup来完善我的工作流</a></li>
+<li><a href="#org717e877">21. 使用ditaa</a></li>
+<li><a href="#org13bea52">22. emacs对齐</a></li>
+<li><a href="#org7c02dcf">23. 正则表达式</a></li>
+<li><a href="#org9276699">24. 使用emacs来查看python代码</a>
+<ul>
+<li><a href="#org5cad753">24.1. elpy</a></li>
+<li><a href="#orgda1951b">24.2. 基于tag</a></li>
+<li><a href="#org79a21e0">24.3. cscope</a></li>
+<li><a href="#org035636d">24.4. ag</a></li>
+</ul>
+</li>
+<li><a href="#orge0a97b3">25. replace-regexp中输入换行newline</a></li>
+<li><a href="#org0ce9b51">26. 结合helm-ag来进行multi-edit</a></li>
+<li><a href="#orgcab2b60">27. ibuffer</a></li>
+<li><a href="#org73d2d8e">28. 写一个判断是否有 <code>universal-argument</code> 的函数</a></li>
+<li><a href="#org806c981">29. 读写文件</a></li>
+<li><a href="#org35174fe">30. convert string to list object</a></li>
+<li><a href="#org49f8ee1">31. artist mode</a></li>
+<li><a href="#org2450cd5">32. org-mode代码块</a></li>
+<li><a href="#orgab60da4">33. ivy和helm的写法</a></li>
+<li><a href="#org5a738a0">34. emacs把行号添加到文件中</a></li>
+<li><a href="#org472362b">35. org-mode publish时太慢的解决办法</a></li>
+<li><a href="#org193b4c8">36. bookmark plus</a></li>
+<li><a href="#orgd7380c3">37. elisp函数根据有没有按 <code>C-u</code> 来走不同的流程</a></li>
+<li><a href="#org8c88852">38. 启动加速</a></li>
+<li><a href="#orgbc6e8e5">39. 我的 <code>cc-mode</code></a></li>
+<li><a href="#orgf98e802">40. use exwm</a></li>
+<li><a href="#org12716d7">41. 在elisp函数中使用 <code>C-u</code></a></li>
+<li><a href="#org9ae6dc2">42. cscope和gtags不包括某些目录</a></li>
+<li><a href="#orgbd363b9">43. 为org-mode自动添加目录</a></li>
+<li><a href="#org9ad9c76">44. org-mode tangle整个head</a></li>
+<li><a href="#org6a1e83d">45. 直接查看info文件</a></li>
+<li><a href="#org7a8209c">46. 在elisp中模拟按键的输入</a></li>
+<li><a href="#org0d83d49">47. emacs中的长table导出pdf的问题</a></li>
+<li><a href="#org2f2dc76">48. org-mode中以root用户执行命令</a></li>
+<li><a href="#org1e9b1ed">49. eshell中定义alias</a></li>
+<li><a href="#org0c4006b">50. 在emacs中执行shell脚本</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4aa14c3" class="outline-2">
+<h2 id="org4aa14c3"><span class="section-number-2">1</span> 我的emacs学习笔记 <code>[3/4]</code></h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org865375c" class="outline-3">
+<h3 id="org865375c"><span class="section-number-3">1.1</span> 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="shell">shell</span>&#xa0;<span class="command">command</span></span></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+其实就是没次默认开的都是\verb+*Async Shell Command*+这个buffer-name。
+我自己这样写，每次生成peng-async-shell-command-output-和一个随机数的
+buffer。避免每次都问我。见下：
+</p>
+
+<p>
+<b>不完美的</b>
+</p>
+<hr />
+<ol class="org-ol">
+<li>每次使用完后，这些buffer貌似都没有被关闭，还是有可能重复。应该还有
+其它解决办法的。</li>
+</ol>
+<hr />
+<div class="org-src-container">
+<pre class="src src-elisp">  (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-async-shell-command</span> (COM)
+    <span style="color: #ffa500;">"Run the shell command asynchronize Don't ask me whether to</span>
+<span style="color: #ffa500;">  create a new buffer just because the default buffer is used.</span>
+
+<span style="color: #ffa500;">  For this reason, I create a random output buffer rather than the</span>
+<span style="color: #ffa500;">  default one every time I launch a shell command.</span>
+
+<span style="color: #ffa500;">  The COM is what you want to excute. It MUST be a string."</span>
+    (<span style="color: PaleYellow;">save-window-excursion</span>
+      (<span style="color: PaleYellow;">save-excursion</span>
+        (<span style="color: PaleYellow;">let</span> ((RANDOM-NUM (message <span style="color: #ffa500;">"%s"</span> (random 10000))))
+        (async-shell-command COM
+                             (get-buffer-create 
+                              (concat <span style="color: #ffa500;">"peng-async-shell-command-output-"</span> RANDOM-NUM)))  
+          ))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3ed11d2" class="outline-3">
+<h3 id="org3ed11d2"><span class="section-number-3">1.2</span> <span class="done DONE">DONE</span> 自己把一些emacs文档制作成为mobi格式方便kindle阅读。</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li><p>
+State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2014-10-14 二 09:24] </span></span> <br />
+</p>
+
+<p>
+使用别人写的脚本texi2mobi。调用了makeinfo，dbtoepub,kindlegen.
+</p>
+
+<p>
+参考的这里，<a href="https://kanru.info/blog/archives/2010/11/18/convert-texinfo-to-mobi/">https://kanru.info/blog/archives/2010/11/18/convert-texinfo-to-mobi/</a>
+</p>
+
+<p class="verse">
+Convert Texinfo to MOBI<br />
+<br />
+Thu, 18 Nov 2010 18:36:26 +0800<br />
+GNU software often comes with a large set of documents in texinfo format, which can be typesetted to a real book. For example the Gnus Manual has over 500 pages, full of fun and humor. Having a mobi version on my Kindle would be quite handy.<br />
+<br />
+Gnus Manual on Kindle This work involves two parts, first is to convert texinfo to docbook, second is to convert docbook to mobi. In fact the second part could be applied on all docbooks.<br />
+<br />
+Convert Texinfo to DocBook<br />
+<br />
+Texinfo has native support of converting texi file to docbook format:<br />
+<br />
+makeinfo &#x2013;docbook gnus.texi<br />
+will output gnus.xml.<br />
+<br />
+If the texi includes some other texis the the makeinfo command somehow doesn't strip the @setfilename macro from the included file, so cluttered output. Use the following sed script to fix it:<br />
+<br />
+sed -i -e 's#&lt;para&gt;&lt;setfilename&gt;.*&lt;/setfilename&gt;&lt;/para&gt;##' gnus.xml<br />
+Convert DocBook to MOBI<br />
+<br />
+Since DocBook 1.74, they included a ruby script dbtoepub to convert xml file to epub format. Then we can use kindlegen or calibre to convert epub to mobi.<br />
+<br />
+However the docbook xsl produces nested navPoints and &lt;dl&gt; formated TOC. Both aren't handled very well by Kindle.<br />
+<br />
+So I created a customized layer above the docbook.xsl for mobi creation. This mobi.xsl will flatten the navPoints and use &lt;ul&gt; formated TOC. The output mobi looked very nice on my Kindle.<br />
+<br />
+All in one script<br />
+<br />
+Download the texi2mobi.tar.gz, which contains the script and the style sheet used to create mobi friendly epub.<br />
+<br />
+To use this script you have to install makeinfo, dbtoepub and kindlegen. I use kindlegen here because it creates better mobi at present.<br />
+<br />
+apt-get install texinfo<br />
+apt-get install dbtoepub<br />
+kindlegen could be downloaded form Amazon.<br />
+<br />
+Untar the tarball then use<br />
+<br />
+texi2mobi.sh TEXINFO-FILE<br />
+Create your mobi version! Have fun ☺<br />
+</p>
+
+<p>
+使用an-introduction-to-programming-in-emacs-lisp做实验。安装好之后，刚
+开始出现一点bug，用makeinfo制作不出来xml。然后我修改了一下texi中的源码
+的前面设置部分，感觉应该是注释掉其中一些图片起作用了。然后makeinfo步骤
+就没有问题了。然后直接使用其提供的脚本就能进行转换了。
+</p>
+
+<p>
+流程是：makeinfo转换成xml。dbtoepub转换程epub。kindlegen转换成mobi。
+</p>
+
+<p>
+制作过程中发现，使用makeinfo失败的时候，把texi文件开头的setfilename
+一行注释掉就行了。makeinfo能成功，则脚本就基本不会出现问题。
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2014-10-14 二 09:24&gt;</span></span>
+</p></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org87b1c1b" class="outline-3">
+<h3 id="org87b1c1b"><span class="section-number-3">1.3</span> <span class="done DONE">DONE</span> 对emacs的kill-ring的理解</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>State "DONE"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2014-11-06 四 21:16]</span></span></li>
+</ul>
+<p>
+就是kill-ring和kill-ring-yank-pointer两个symbol拉。symbol其实就是指针的
+结构体。有指向函数的指针，有指向变量的指针，还有指向变量名字，变量
+properties的指针。这两个symbol都是指向变量的指针这在起作用。
+</p>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2014-10-30 四 11:16&gt;</span></span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7e2745e" class="outline-3">
+<h3 id="org7e2745e"><span class="section-number-3">1.4</span> <span class="done DONE">DONE</span> 使用org-mode来管理GTD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="blog">blog</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span></span></h3>
+<div class="outline-text-3" id="text-1-4">
+<ul class="org-ul">
+<li><p>
+State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2014-09-24 三 11:48]</span></span>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2014-09-24 三 11:31&gt;</span></span>
+昨天一天配置以后，基本实现了用org-mode来管理GTD的想法。使用
+org-capture随时抓取想法。用org-agenda查看所有想法和代办事项。
+</p>
+
+<p>
+配合org-capture使用，可以随时记录我的想法，待做的项目了。把\C-c c
+绑定到org-capture上。定义一些org-capture-template。可以快速抓取我
+自己的想法到指定的文件中。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">          (define-key global-map (kbd <span style="color: #ffa500;">"C-c c"</span>) 'org-capture)
+          (setq org-capture-templates 
+                '((<span style="color: #ffa500;">"n"</span> <span style="color: #ffa500;">"News"</span> entry (file+datetree (concat GTD <span style="color: #ffa500;">"inbox.org"</span>))
+                   <span style="color: #ffa500;">"*  TODO  %?\n %T"</span>)
+
+                  (<span style="color: #ffa500;">"t"</span> <span style="color: #ffa500;">"Tasks"</span> entry (file+datetree (concat GTD <span style="color: #ffa500;">"task.org"</span>))
+                   <span style="color: #ffa500;">"*  TODO  %?\n %T"</span>)
+
+                  (<span style="color: #ffa500;">"r"</span> <span style="color: #ffa500;">"Notes"</span> entry (file+datetree (concat GTD <span style="color: #ffa500;">"note.org"</span>))
+                   <span style="color: #ffa500;">"*  TODO  %?\n %T"</span>)
+
+                  (<span style="color: #ffa500;">"p"</span> <span style="color: #ffa500;">"Project"</span> entry (file+headline (concat GTD <span style="color: #ffa500;">"project.org"</span>) <span style="color: #ffa500;">"Projects"</span>)
+                   <span style="color: #ffa500;">"*  %?\n"</span>)
+
+                  (<span style="color: #ffa500;">"a"</span> <span style="color: #ffa500;">"Account"</span> table-line (file+headline (concat GTD <span style="color: #ffa500;">"account.org.gpg"</span>) <span style="color: #ffa500;">"Web accounts"</span>)
+                   <span style="color: #ffa500;">"|"</span>)
+
+                  (<span style="color: #ffa500;">"k"</span> <span style="color: #ffa500;">"test"</span> entry (file+datetree <span style="color: #ffa500;">"/tmp/test.org"</span> <span style="color: #ffa500;">"Tasks"</span>)
+                   <span style="color: #ffa500;">"* TODO  %?  \n %T"</span>)
+                  ))
+</pre>
+</div>
+
+<p>
+使用org-agenda来管理我GTD目录下所有的文档。设置变量
+org-agenda-files为GTD目录。可以使得该目录下所有的org文档对
+org-agenda都可见。把org-refile-targets也设置为这个目录。就可以该目
+录下自由refile。非常方便。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">          (setq org-agenda-files '(<span style="color: #ffa500;">"~/gtd/"</span>))  
+          (setq org-refile-targets (quote ((nil <span style="color: #b0c4de;">:maxlevel</span> . 9)
+                                           (org-agenda-files <span style="color: #b0c4de;">:maxlevel</span> . 9))))
+</pre>
+</div>
+
+<p>
+在设置这些变量的时候，绑定到org-mode-hook有时候不起作用。我认为是
+在emacs刚启动没有打开org文件的时候。这个hook没有被调用。如果绑定在
+这个hook上。变量没有被设置。这时候org-agenda就没用了。最后测试出来。
+我把这些变量设置绑定到了org-load-hook上面了。同时设置了
+org-todo-keywords这个变量。可以自定义事件不同的状态。
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">          (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-org-load</span> ()
+            (setq org-directory <span style="color: #ffa500;">"~/gtd/"</span>)
+            (setq org-agenda-files '(<span style="color: #ffa500;">"~/gtd/"</span>))  
+            (setq org-todo-keywords '((sequence <span style="color: #ffa500;">"TODO(t!)"</span> 
+                                                <span style="color: #ffa500;">"NEXT(n)"</span>
+                                                <span style="color: #ffa500;">"WAITTING(w)"</span>
+                                                <span style="color: #ffa500;">"SOMEDAY(s)"</span>
+                                                <span style="color: #ffa500;">"|"</span>
+                                                <span style="color: #ffa500;">"DONE(d@/!)"</span>
+                                                <span style="color: #ffa500;">"ABORT(a@/!)"</span>)))
+            )
+          (add-hook 'org-load-hook 'peng-org-load)
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1c73b32" class="outline-3">
+<h3 id="org1c73b32"><span class="section-number-3">1.5</span> emacs下关的一些学习资料</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+看tuhdo的emacs mini manual，里面有写 关于gtags+semantic ， 目前最快的方法
+</p>
+
+<p>
+国外的先不算   什么 planet emacs blog 等去处确实不错
+</p>
+
+<p>
+个人总结学习 emacs 的去处, google 这种通用搜索的就不说了. 大家还有不错的欢迎分享.
+</p>
+
+<p>
+国内的质量确实不高, 不过对英文水平要求低:
+</p>
+
+<ol class="org-ol">
+<li>emacs@smth  虽然更新不多, 这里出现过不少国内 emacs 圈里厉害的角色, 包括 yas 和 ace-jump 作者等</li>
+<li>以前有个 emacser.com , 有蛮久没更新了, 个人看老的文章质量也一般般, 不过比百度随便搜出来的好点.</li>
+</ol>
+
+<p>
+国外(或者准确的说英文圈)
+</p>
+
+<ol class="org-ol">
+<li>emacswiki</li>
+<li>planet emacsen:  emacs blog 3. reddit 的 emacs tag</li>
+</ol>
+
+<p>
+个别单枪匹马但是至少最近更新还多的; 通常也会出现在上面的 2 和 3 里, 
+</p>
+
+<p>
+. 台湾的李杀(人家主要用英文) <a href="http://ergoemacs.org/emacs/">http://ergoemacs.org/emacs/</a>
+. endlessparentheses <a href="http://www.endlessparentheses.com">http://www.endlessparentheses.com</a>
+. Sacha Chua 貌似是东南亚的小美女  <a href="http://sachachua.com/blog">http://sachachua.com/blog</a>
+</p>
+
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2015-01-14 三 22:27&gt;</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-orgb2f503c" class="outline-3">
+<h3 id="orgb2f503c"><span class="section-number-3">1.6</span> emacs中判断系统的版本</h3>
+<div class="outline-text-3" id="text-1-6">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">check OS type</span>
+     (<span style="color: PaleYellow;">cond</span>
+      ((string-equal system-type <span style="color: #ffa500;">"windows-nt"</span>) <span style="color: #cd5c5c;">; </span><span style="color: #cd5c5c;">Microsoft Windows</span>
+       (<span style="color: PaleYellow;">progn</span>
+         (message <span style="color: #ffa500;">"Microsoft Windows"</span>) )
+       )
+      ((string-equal system-type <span style="color: #ffa500;">"darwin"</span>)   <span style="color: #cd5c5c;">; </span><span style="color: #cd5c5c;">Mac OS X</span>
+       (<span style="color: PaleYellow;">progn</span>
+         (message <span style="color: #ffa500;">"Mac OS X"</span>)
+         )
+       )
+      ((string-equal system-type <span style="color: #ffa500;">"gnu/linux"</span>) <span style="color: #cd5c5c;">; </span><span style="color: #cd5c5c;">linux</span>
+       (<span style="color: PaleYellow;">progn</span>
+         (message <span style="color: #ffa500;">"Linux"</span>) )
+       )
+      )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org293641b" class="outline-3">
+<h3 id="eshell"><a id="org293641b"></a><span class="section-number-3">1.7</span> eshell	<code>[0/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="eshell">eshell</span></span></h3>
+<div class="outline-text-3" id="text-eshell">
+</div>
+<div id="outline-container-org3b288bf" class="outline-4">
+<h4 id="org3b288bf"><span class="section-number-4">1.7.1</span> 进入之前进入过的文件夹</h4>
+<div class="outline-text-4" id="text-1-7-1">
+<p>
+`cd ='可以查看历史文件夹。
+</p>
+
+<p>
+然后使用`cd -number'就能进入对应的目录。
+</p>
+
+<p>
+使用`cd =REGEXP'可以使用正则表达式。
+</p>
+</div>
+</div>
+<div id="outline-container-org81ad00a" class="outline-4">
+<h4 id="org81ad00a"><span class="section-number-4">1.7.2</span> 不使用eshell中用lisp编译的命令</h4>
+<div class="outline-text-4" id="text-1-7-2">
+<p>
+使用lisp编译的版本效率实在太低。在info中看到可以使用*ls来调用系统原始的合令。其它也一样。 <a href="https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Built_002dins">eshell#Built-ins</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org1361ae7" class="outline-4">
+<h4 id="org1361ae7"><span class="section-number-4">1.7.3</span> 使用jobs控制eemacs中的子进程</h4>
+<div class="outline-text-4" id="text-1-7-3">
+<p>
+使用jobs可以查看emacs中的所有子进程。kill可以子进程。kill不仅可以接进程id，还可以接`project object'。
+</p>
+
+<p>
+其中的`project object'可以通过`C-c M-i'查看然后返回。调用的是`eshell-insert-process'函数。我就是使用这个方法干掉了一个tramp的子进程。
+</p>
+</div>
+</div>
+<div id="outline-container-org0144597" class="outline-4">
+<h4 id="org0144597"><span class="section-number-4">1.7.4</span> 一些有用的快捷键</h4>
+<div class="outline-text-4" id="text-1-7-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">keybinding</th>
+<th scope="col" class="org-left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">C-c M-b</td>
+<td class="org-left">插入buffer名称</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c M-i</td>
+<td class="org-left">插入子进程名称</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c M-v</td>
+<td class="org-left">插入环境变量名</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c M-v</td>
+<td class="org-left">若一些程序不能正确处理带缓冲的输入,则按这个键序列切换？</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-orga5f40e9" class="outline-4">
+<h4 id="orga5f40e9"><span class="section-number-4">1.7.5</span> 在eshell中使用 <code>**</code> 代替 <code>*</code></h4>
+<div class="outline-text-4" id="text-1-7-5">
+<p>
+eshell在只使用一个 <code>*</code> 的时候会触发自动补全。最后发现使用 <code>**</code> 可以达到原来一个 <code>*</code> 的效果。
+</p>
+
+<p>
+<b>最后发现不是这个原因</b> ：可能是company-mode的原因。
+</p>
+</div>
+</div>
+<div id="outline-container-orgee14d36" class="outline-4">
+<h4 id="orgee14d36"><span class="section-number-4">1.7.6</span> Eshell中执行bash脚本</h4>
+<div class="outline-text-4" id="text-1-7-6">
+<p>
+比如执行下面的代码：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      <span style="color: PaleYellow;">for</span> i<span style="color: PaleYellow;"> in</span> <span style="color: #fa8072;">`ls`</span>;<span style="color: PaleYellow;">do </span><span style="color: #b0c4de;">echo</span> $<span style="color: #8fbc8f;">i</span>;<span style="color: PaleYellow;">done</span>
+</pre>
+</div>
+
+<p>
+现在我的解决办法是使用`multi-term'开一个`term'在里面执行。
+</p>
+
+<p>
+需要了解一下`eshell'中的变量这些才可以。
+</p>
+</div>
+</div>
+<div id="outline-container-orgb05b432" class="outline-4">
+<h4 id="orgb05b432"><span class="section-number-4">1.7.7</span> <span class="todo TODO">TODO</span> 一些期待改进的功能 <code>[0/7]</code></h4>
+<div class="outline-text-4" id="text-1-7-7">
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> grep可以显示颜色</li>
+<li class="off"><code>[&#xa0;]</code> <code>*</code> 不再自动触发补全。这个是因为`company-mode'</li>
+<li class="off"><code>[&#xa0;]</code> <p>
+循环还不是很会
+</p>
+<pre class="example">
+        $ for file in *.org {
+          echo "Upcasing: $file"
+          mv $file $file(:U)
+        }
+        I told you the modifiers from the previous section would come in handy.
+
+        I find it interesting to note that *.org gives this for loop a list to iterate over, but if there is more than one argument, a list is created, as in:
+
+        $ for i in 1 2 3 4 {echo $i}
+        Passing more than one list flattens them into one list, so the following works as you expect:
+
+        $ for file in emacs* zsh* { ... }
+
+</pre></li>
+<li class="off"><code>[&#xa0;]</code> eshell中的`predicate'和`modifier'这些比较有用。可以看下</li>
+<li class="off"><code>[&#xa0;]</code> company-mode有时有用，有时又没有</li>
+<li class="off"><code>[&#xa0;]</code> 命令补全&lt;TAB&gt;不是很好。不想直接因输入目录名就进入目录。不想补全目录。</li>
+<li class="off"><code>[&#xa0;]</code> 使用`helm-esh-pcomplete'还有一点问题：在`~'下`ls'然后`TAB'后直接输入是不行的。必须先输入前几个字母才行。还希望大小写不敏感。</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgaaaf31b" class="outline-3">
+<h3 id="orgaaaf31b"><span class="section-number-3">1.8</span> C/C++ IDE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ide">ide</span>&#xa0;<span class="C">C</span>&#xa0;<span class="C">C</span></span></h3>
+<div class="outline-text-3" id="text-1-8">
+</div>
+<div id="outline-container-orgcd51b7b" class="outline-4">
+<h4 id="orgcd51b7b"><span class="section-number-4">1.8.1</span> 使用ecb</h4>
+<div class="outline-text-4" id="text-1-8-1">
+<p>
+可以更加方便地浏览代码。在`init.el'中将(require 'init-ecb)打开就可以使用。我使用过的函数大概是`ecb-expand-method-nodes'和`ecb-expand-directory-*'和`ecb-toggle-layout'这些。还没有对其进行仔细地配置，以后用到再说。
+</p>
+</div>
+</div>
+<div id="outline-container-orgcf17272" class="outline-4">
+<h4 id="orgcf17272"><span class="section-number-4">1.8.2</span> <span class="todo TODO">TODO</span> cedet</h4>
+<div class="outline-text-4" id="text-1-8-2">
+<p>
+emacs24中应该是已经集成了。还没有使用到。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org9b01ac6" class="outline-3">
+<h3 id="org9b01ac6"><span class="section-number-3">1.9</span> 闹钟&#xa0;&#xa0;&#xa0;<span class="tag"><span class="alarm">alarm</span></span></h3>
+<div class="outline-text-3" id="text-1-9">
+<p>
+在mac中，使用的是`terminal-notifier'做为输出。
+</p>
+
+<p>
+我修改了一下`alarm.el'，如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">alarm.el --- </span>
+     <span style="color: #cd5c5c;">;; </span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Filename: alarm.el</span>
+     <span style="color: #cd5c5c;">;; </span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Description: &#20174;&#32593;&#19978;&#19979;&#36733;&#30340;&#12290;&#25105;&#20462;&#25913;&#20102;&#19968;&#19979;&#12290;&#22312;mac&#19978;&#38656;&#35201;&#23433;&#35013;`</span><span style="color: #7fffd4;">terminal-notifier</span><span style="color: #cd5c5c;">'&#26469;&#20135;&#29983;alarm</span>
+     <span style="color: #cd5c5c;">;; </span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Author: pengpengxp</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Email: pengpengxppri@gmail.com</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Created: &#20108;  3 17 20:43:28 2015 (+0800)</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Version: </span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Last-Updated: </span>
+     <span style="color: #cd5c5c;">;; </span>
+     <span style="color: #cd5c5c;">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+     <span style="color: #cd5c5c;">;; </span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">Code:</span>
+
+
+     (<span style="color: PaleYellow;">defvar</span> <span style="color: #8fbc8f;">peng-alarm-clock-timer</span> nil
+       <span style="color: #ffa500;">"Keep timer so that the user can cancel the alarm."</span>)
+
+     (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-alarm-clock-message</span> (text)
+       <span style="color: #ffa500;">"The actual alarm action.</span>
+<span style="color: #ffa500;">     Argument TEXT alarm message."</span>
+       (shell-command (format <span style="color: #ffa500;">"terminal-notifier -sound default -message \"%s\" "</span> text)))
+
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">(defun peng-alarm-clock ()</span>
+     <span style="color: #cd5c5c;">;;   </span><span style="color: #cd5c5c;">"Set an alarm.</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">The time format is the same accepted by `</span><span style="color: #7fffd4;">run-at-time</span><span style="color: #cd5c5c;">'.  For</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">example \"11:30am\"."</span>
+     <span style="color: #cd5c5c;">;;   </span><span style="color: #cd5c5c;">(interactive)</span>
+     <span style="color: #cd5c5c;">;;   </span><span style="color: #cd5c5c;">(let ((time (read-string "Time(example, 11:30am): "))</span>
+     <span style="color: #cd5c5c;">;;         </span><span style="color: #cd5c5c;">(text (read-string "Message: ")))</span>
+     <span style="color: #cd5c5c;">;;     </span><span style="color: #cd5c5c;">(setq peng-alarm-clock-timer (run-at-time time nil 'peng-alarm-clock-message text))))</span>
+
+     (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-alarm-clock</span> ()
+       <span style="color: #ffa500;">"Set an alarm.</span>
+<span style="color: #ffa500;">     The time format is the same accepted by `</span><span style="color: #7fffd4;">run-at-time</span><span style="color: #ffa500;">'.  For</span>
+<span style="color: #ffa500;">     example \"11:30am\"."</span>
+       (<span style="color: PaleYellow;">interactive</span>)
+       (<span style="color: PaleYellow;">let</span> ((time (read-from-minibuffer <span style="color: #ffa500;">"Time(example, 11:30am): "</span>
+                           (time-stamp-string <span style="color: #ffa500;">"%02H:%02M%#p"</span>)))
+             (text (read-string <span style="color: #ffa500;">"Message: "</span>)))
+         (<span style="color: PaleYellow;">setq</span> peng-alarm-clock-timer (run-at-time time nil 'peng-alarm-clock-message text))))
+
+     (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-alarm-clock-cancel</span> ()
+       <span style="color: #ffa500;">"Cancel the alarm clock."</span>
+       (<span style="color: PaleYellow;">interactive</span>)
+       (cancel-timer peng-alarm-clock-timer))
+
+     (<span style="color: PaleYellow;">provide</span> '<span style="color: #7fffd4;">alarm</span>)
+
+     <span style="color: #cd5c5c;">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">alarm.el ends here</span>
+
+
+</pre>
+</div>
+
+<p>
+只是做了最简单的功能。先凑合着使用吧。
+</p>
+</div>
+</div>
+<div id="outline-container-org8908710" class="outline-3">
+<h3 id="org8908710"><span class="section-number-3">1.10</span> 使用过tramp编辑远程文件后eshell的问题</h3>
+<div class="outline-text-3" id="text-1-10">
+<p>
+使用过tramp编辑远程文件以后，eshell每次切换目录时候都自动登陆，然后就一直等待或是手动`C-g'。其实可以在`~/.emacs.d/eshell/lastdir'中将以`/ssh'和`/scp'这些开头的目录删掉就可以了。这些都是默认被记录下来了。
+</p>
+
+<p>
+还有没有更好一点的办法？
+</p>
+</div>
+</div>
+<div id="outline-container-org8f9d0c3" class="outline-3">
+<h3 id="org8f9d0c3"><span class="section-number-3">1.11</span> 重新安装helm&#xa0;&#xa0;&#xa0;<span class="tag"><span class="helm">helm</span></span></h3>
+<div class="outline-text-3" id="text-1-11">
+<p>
+需要在helm-master中使用make来编译一下才行。这里需要用到`cask'。到现在不知道是干什么的。
+</p>
+
+<p>
+中途在`cl-lib'的错。没弄懂。
+</p>
+</div>
+</div>
+<div id="outline-container-org83c954f" class="outline-3">
+<h3 id="org83c954f"><span class="section-number-3">1.12</span> 在emacs中使用zsh</h3>
+<div class="outline-text-3" id="text-1-12">
+<p>
+可以通过使用`sudo chsh -u pengpengxp -s /bin/zsh'设置默认shell为zsh。
+</p>
+
+<p>
+在emacs中可以通过multi-term来使用zsh。
+</p>
+
+<p>
+但是在emacs中zsh的提示符会默认有`4m'这些乱七八糟的字符。可以这样解决：
+</p>
+
+<pre class="example">
+     (setq system-uses-terminfo nil)
+</pre>
+
+<p>
+然后进入Emacs.app中的`/Contents/Resources/etc/e/'目录。按照里面的`README'执行`tic -o ../ ./xterm-color.ti'。
+</p>
+
+<p>
+就OK啦。
+</p>
+</div>
+</div>
+<div id="outline-container-org408112b" class="outline-3">
+<h3 id="org408112b"><span class="section-number-3">1.13</span> company-mode自动补全</h3>
+<div class="outline-text-3" id="text-1-13">
+</div>
+<div id="outline-container-orge8962e6" class="outline-4">
+<h4 id="orge8962e6"><span class="section-number-4">1.13.1</span> 基本内容</h4>
+<div class="outline-text-4" id="text-1-13-1">
+<p>
+company-mode可以有许多的backends。可以查看`company-backends'。
+</p>
+
+<p>
+backends可以单独调用，比如可以在输入了`/'后调用`company-files'就可以进行补全文件名了。
+</p>
+
+<p>
+`company-backends'是按照顺序调用的。原始的值为：
+</p>
+<pre class="example">
+     (company-bbdb company-nxml company-semantic company-clang company-xcode company-cmake
+                   (company-dabbrev-code company-gtags company-etags company-keywords)
+                   company-oddmuse company-files company-eclim company-dabbrev
+</pre>
+
+<p>
+补全不合适时，可以使用`company-other-backend'来调用下一个`backend'。
+</p>
+
+<p>
+backend可以分组。上面原始的就有一个分组，中间的那个：
+</p>
+<pre class="example">
+     (company-dabbrev-code company-gtags company-etags company-keywords)
+</pre>
+
+<p>
+可以自己定义分组来用。
+</p>
+</div>
+</div>
+<div id="outline-container-orgd3030fc" class="outline-4">
+<h4 id="orgd3030fc"><span class="section-number-4">1.13.2</span> <span class="todo TODO">TODO</span> 不同的mode使用不同的backend</h4>
+</div>
+</div>
+<div id="outline-container-orgc143125" class="outline-3">
+<h3 id="orgc143125"><span class="section-number-3">1.14</span> emacsclient</h3>
+<div class="outline-text-3" id="text-1-14">
+<p>
+默认是开启GUI，使用`-nw'参数就可以在当前的tty下访问了。
+</p>
+
+<p>
+mac下的emacsclient是系统默认的emacs22的。我的emacs24不能使用。不过从源码安装emacs后，会在Emacs.app中的`Contents/MacOS/bin'下生成对应的emacsclient。拷贝出来使用它就行啦 :-)
+</p>
+</div>
+</div>
+<div id="outline-container-org8d4e9ba" class="outline-3">
+<h3 id="org8d4e9ba"><span class="section-number-3">1.15</span> cua-mode</h3>
+<div class="outline-text-3" id="text-1-15">
+<p>
+cua-mode下可以用以下命令进行列操作：
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">直接输入字符</td>
+<td class="org-left">在每行前(或后)都插入这个字符</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-a]</td>
+<td class="org-left">将rect中的文字左对齐</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-b]</td>
+<td class="org-left">用空格(tabs或者spaces)替换所有rect中的字符</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-c]</td>
+<td class="org-left">去掉所有行左侧的空格</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-f]</td>
+<td class="org-left">用单个字符替换所有rect中的字符(提示输入一个字符)</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-i]</td>
+<td class="org-left">对每行中第一个找到的数字进行加1操作(自动把0x开头的当作十六进制数字)</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-k]</td>
+<td class="org-left">剪切rect</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-l]</td>
+<td class="org-left">把rect中的内容全部转换为小写</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-m]</td>
+<td class="org-left">拷贝rect</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-n]</td>
+<td class="org-left">用一串自增的数字替换rect中的每一行(这个功能可以用来给每行编号)</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-o]</td>
+<td class="org-left">rect的内容右移，选中的rect用空格填充</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-r]</td>
+<td class="org-left">用字符串替换符满足正则表达式的字符串</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-R]</td>
+<td class="org-left">上下反转</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-s]</td>
+<td class="org-left">把rect中的每一行替换为一个字符串(提示输入)</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-t]</td>
+<td class="org-left">把rect整个替换为一个字符串(提示输入)</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-u]</td>
+<td class="org-left">把rect中的内容全部转换为大写</td>
+</tr>
+
+<tr>
+<td class="org-left">[M-&vert;]</td>
+<td class="org-left">对rect执行一个shell命令</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org1dbfe22" class="outline-3">
+<h3 id="org1dbfe22"><span class="section-number-3">1.16</span> <span class="todo TODO">TODO</span> cscope&#xa0;&#xa0;&#xa0;<span class="tag"><span class="cscope">cscope</span></span></h3>
+<div class="outline-text-3" id="text-1-16">
+<p>
+cscope是一个独立的程序，也可以在emacs中使用。安装过程不说了。下载放入加载就行了。
+</p>
+
+<p>
+emacs中加入对应的.el文件后，有一个cscope-indexer的程序需要从源文件中取出来放到`PATH'中并设置为可执行。这是为cscope制做index用的。
+</p>
+
+<p>
+说下怎么使用：
+</p>
+
+<pre class="example">
+     默认是的快捷键都是绑定到 C-c s 的前缀上面，如果嫌麻烦的话可以自己更改 快捷键绑定。这是默认的用于查找的键绑定：
+
+     C-c s s         Find symbol.
+     C-c s d         Find global definition.
+     C-c s g         Find global definition (alternate binding).
+     C-c s G         Find global definition without prompting.
+     C-c s c         Find functions calling a function.
+     C-c s C         Find called functions (list functions called
+                     from a function).
+     C-c s t         Find text string.
+     C-c s e         Find egrep pattern.
+     C-c s f         Find a file.
+     C-c s i         Find files #including a file.
+     下面是在搜索到的结果之间切换用的快捷键：
+
+     C-c s b         Display *cscope* buffer.
+     C-c s B         Auto display *cscope* buffer toggle.
+     C-c s n         Next symbol.
+     C-c s N         Next file.
+     C-c s p         Previous symbol.
+     C-c s P         Previous file.
+     C-c s u         Pop mark.
+     更详细的使用说明请参见 xcscope.el 文件头部的注释。  
+</pre>
+
+<p>
+如果只在一个目录下用，貌似可以直接使用，如果不行，使用`C-c s I'重新做下索引。这时就会调用`cscope-indexer'这个脚本。之前需要配置好。
+</p>
+
+<p>
+一般就"C-c s s"就行了。然后`C-c s B'可以设置每次查询的时候调出`cscope-buffer'不。如果不调出。就自动跳转到查询到的第一个中去。如果些时没有到位，可以使用`C-c s n'查看下一个。最后查到了以后使用`C-c s u'可以跳转到之前的位置。
+</p>
+
+<p>
+现在只是配置了C语言的cscope。怎么设置elisp这些呢？
+</p>
+
+<p>
+可以在shell中这样使用：
+</p>
+
+<p>
+首先使用下面的命令做一个`cscope.files'文件出来：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     find -type f -name <span style="color: #ffa500;">"*.el"</span> &gt; cscope.files
+</pre>
+</div>
+
+<p>
+然后使用`cscope -b'更新一下数据库就行了。
+</p>
+
+<p>
+emacs中还没有找到方法。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org16f4c1c" class="outline-2">
+<h2 id="org16f4c1c"><span class="section-number-2">2</span> 我的lisp学习笔记</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org4f626f9" class="outline-3">
+<h3 id="org4f626f9"><span class="section-number-3">2.1</span> <span class="done DONE">DONE</span> scheme中的define&#xa0;&#xa0;&#xa0;<span class="tag"><span class="scheme">scheme</span></span></h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li><p>
+State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2014-11-15 六 10:30] </span></span> <br />
+</p>
+<div class="org-src-container">
+<pre class="src src-scheme">       (<span style="color: PaleYellow;">define</span> <span style="color: #9acd32;">peng</span>
+         (<span style="color: PaleYellow;">lambda</span> (amount)
+           ...))
+</pre>
+</div>
+<p>
+这是定义了一个symbol，其中的函数指针指向了lambda构造的那个函数的开头。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-scheme">       (<span style="color: PaleYellow;">define</span> (<span style="color: #9acd32;">peng</span>)
+         (...))
+</pre>
+</div>
+<p>
+这是定义了一个无参函数。
+</p>
+
+<p>
+这两个是有区别的。
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2014-11-15 六 10:30&gt;</span></span>
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb61f979" class="outline-3">
+<h3 id="orgb61f979"><span class="section-number-3">2.2</span> 写一个自动转换org到pdf的脚本。<a href="http://stackoverflow.com/questions/22072773/batch-export-of-org-mode-files-from-the-command-line">这里</a> 可以看看。我是想批量转换我的org文件。&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notperfect">notperfect</span></span></h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+emacs的batch-mode可以看看。
+</p>
+
+<p>
+想把需要同步的文档自动转换为pdf。可以直接在emacs中实现罗。查看elisp。用elisp来写一个。
+</p>
+
+<p>
+最后得到了一个这样的函数，可以暂时在emacs中使用着：
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-dired-org-to-pdf</span> ()
+    <span style="color: #ffa500;">"convert the marked org files to pdf in dired-mode.</span>
+<span style="color: #ffa500;">  otherwise,you need to input a directory name. this function will</span>
+<span style="color: #ffa500;">  try to convert all of the org files in the directory you just</span>
+<span style="color: #ffa500;">  type to pdf automatically"</span>
+    (<span style="color: PaleYellow;">interactive</span>)
+    (<span style="color: PaleYellow;">let</span> ((files
+           (<span style="color: PaleYellow;">if</span> (eq major-mode 'dired-mode)
+               (dired-get-marked-files)
+             (<span style="color: PaleYellow;">let</span> ((default-directory (read-directory-name <span style="color: #ffa500;">"dir: "</span>)))
+               (mapcar #'expand-file-name 
+                       (file-expand-wildcards <span style="color: #ffa500;">"*.org"</span>))))))
+      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">(message "%s" files)</span>
+      (mapc
+       (<span style="color: PaleYellow;">lambda</span> (f)
+         (<span style="color: PaleYellow;">with-current-buffer</span>
+             (find-file-noselect f)
+           (org-latex-export-to-pdf)))
+       files)
+      ))
+
+</pre>
+</div>
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2015-01-12 一 10:34&gt;</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-org395a808" class="outline-3">
+<h3 id="org395a808"><span class="section-number-3">2.3</span> copy-keymap</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+想要保存一个keymap不能简单的使用setq：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">     (<span style="color: PaleYellow;">setq</span> save-map some-map)
+</pre>
+</div>
+<p>
+这样只能是一个symbol，类似于C中的指针，some-map改变了，save-map也会
+变。应该使用copy-keymap：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">     (<span style="color: PaleYellow;">setq</span> save-map (copy-keymap some-map))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orged54490" class="outline-3">
+<h3 id="orged54490"><span class="section-number-3">2.4</span> 其它笔记</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+据说lisp的宏在本质上是一个由编译器自动为你动行的代码生成器。
+</p>
+
+<p>
+一个简单的common lisp宏的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">  (<span style="color: PaleYellow;">defmacro</span> <span style="color: #9acd32;">backwards</span> (argu)
+    (reverse argu))
+  (backwards (<span style="color: #ffa500;">"xiepeng"</span> t format))
+</pre>
+</div>
+<p>
+这样就定义了反过来的format了。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org57b4559" class="outline-2">
+<h2 id="org57b4559"><span class="section-number-2">3</span> 我的emacs习惯</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgdbb6e5d" class="outline-3">
+<h3 id="orgdbb6e5d"><span class="section-number-3">3.1</span> 插件</h3>
+<div class="outline-text-3" id="text-3-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">名称</th>
+<th scope="col" class="org-left">状态</th>
+<th scope="col" class="org-left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">2048-game</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ace-jump-buffer</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ace-jump-helm-line</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ace-jump-mode</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ace-jump-zap</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ace-pinyin</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ace-window</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">alert</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">applescript-mode</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">async</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">bibtex-utils</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">command-log-mode</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">darkroom</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">dash</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">f</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">flx</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">gntp</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">helm</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">helm-ag</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">helm-bibtex</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">helm-bibtexkey</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">helm-c-yasnippet</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">helm-swoop</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">icicles</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ido-better-flex</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ido-ubiquitous</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ido-vertical-mode</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">idomenu</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">list-utils</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">log4e</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">makey</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">mark-tools</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">markdown-mode</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">markdown-mode+</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">noflet</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">org</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">org-mac-iCal</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">org-mac-link</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">org-pomodoro</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">org-screenshot</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">org-tree-slide</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ox-html5slide</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ox-ioslide</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">parsebib</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">pcache</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">persistent-soft</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">rw-ispell</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">shadchen</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">showkey</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">smex</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">swiper</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">swiper-helm</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">yasnippet</td>
+<td class="org-left">已安装</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">ebib</td>
+<td class="org-left">待安装</td>
+<td class="org-left">据说是一个emacs中的参考文献管理器</td>
+</tr>
+
+<tr>
+<td class="org-left">eyebrowse</td>
+<td class="org-left">待安装</td>
+<td class="org-left">可以控制windows，等我换了大屏以后吧</td>
+</tr>
+
+<tr>
+<td class="org-left">workgroup2</td>
+<td class="org-left">待安装</td>
+<td class="org-left">和eyebrowse可能差不多。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2fec577" class="outline-2">
+<h2 id="org2fec577"><span class="section-number-2">4</span> config irony-mode</h2>
+<div class="outline-text-2" id="text-4">
+<ol class="org-ol">
+<li>down source code;</li>
+<li>put it into your load-path</li>
+<li>(require 'irony)</li>
+<li><p>
+M-x irony-install-server.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       cmake -DCMAKE_INSTALL_PREFIX<span style="color: #ffa500;">\=</span>/Users/pengpengxp/.emacs.d/irony/ /Users/pengpengxp/.emacs.d/site-lisp/irony-mode-master/server &amp;&amp; cmake --build . --use-stderr --config Release --target install
+</pre>
+</div></li>
+<li><p>
+manual run will make a bin/irony-server at ~/.emacs.d/site-lisp/,
+make a directory ~/.emacs.d/irony and then move the bin directory
+in it so that irony can user it:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       mkdir ~/.emacs.d/irony/
+       mv ~/.emacs.d/site-lisp/bin ~/.emacs.d/irony/
+</pre>
+</div></li>
+<li><p>
+wirte a .clang<sub>complete</sub> file at the root path of your
+project. These are all argument compiler use when compiling the
+projectExample .clang<sub>complete</sub> file:
+</p>
+<pre class="example">
+       -DDEBUG
+       -include ../config.h
+       -I../common
+       -I/usr/include/c++/4.5.3/
+       -I/usr/include/c++/4.5.3/x86_64-slackware-linux/
+</pre></li>
+<li>And then, it work.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgb791861" class="outline-2">
+<h2 id="orgb791861"><span class="section-number-2">5</span> config ycmd</h2>
+<div class="outline-text-2" id="text-5">
+<ol class="org-ol">
+<li>git clone XXX</li>
+<li>git submodule update &#x2013;init &#x2013;recursive</li>
+<li>./build.py &#x2013;all</li>
+<li>download emacs-ycmd and load it.</li>
+<li><p>
+configure it:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">       (set-variable 'ycmd-server-command '(<span style="color: #ffa500;">"python"</span> <span style="color: #ffa500;">"/Users/pengpengxp/github/ycmd/ycmd"</span>))
+       (set-variable 'ycmd-global-config <span style="color: #ffa500;">"/Users/pengpengxp/github/ycmd/ycmd/completers/cpp/clang_completer.py"</span>)
+       (<span style="color: PaleYellow;">require</span> '<span style="color: #7fffd4;">company-ycmd</span>)
+       (company-ycmd-setup)
+</pre>
+</div></li>
+</ol>
+</div>
+<div id="outline-container-org44fc986" class="outline-3">
+<h3 id="org44fc986"><span class="section-number-3">5.1</span> config ycm for my own project:</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li>need to write .ycm<sub>extra</sub><sub>conf.py</sub> files to tell ycm where the
+include file and compile flags.</li>
+<li><p>
+use <a href="https://github.com/rdnetto/YCM-Generator">ycm-generator</a> is a easy way to generate the
+.ycm<sub>extra</sub><sub>conf.py</sub> file.
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       ./config_gen.py -x c++ ~/src/ASP-Engine/core/src
+</pre>
+</div></li>
+
+<li>and then, Ycm can see the include files.</li>
+
+<li><p>
+set `ycmd-global-config' for a global config
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       (set-variable <span style="color: #ffa500;">'ycmd-global-config "/Users/pengpengxp/src/ASP-Engine/.ycm_extra_conf.py")</span>
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6b551ba" class="outline-3">
+<h3 id="org6b551ba"><span class="section-number-3">5.2</span> 编译ycmd时可能出错</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+第一次编译时，需要更新到最新，然后把git子模块也更新到最新。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     git pull
+     git submodule update --init --recusive
+</pre>
+</div>
+
+<p>
+然后直接执行 <code>./build.py --all</code> 就可以了。这个过程中，编译脚本需要
+去下载最新版本的clang。需要等一段时间。
+</p>
+
+<p>
+后面发现，如果第二次编译，可能失败，出现错误：
+</p>
+<pre class="example">
+     Error: could not load cache
+</pre>
+
+<p>
+这种情况下，需要把 <code>cpp</code> 目录中的 <code>CMakeCache.txt</code> 文件删掉。这时再
+重试就可以了。
+</p>
+
+<p>
+最后就是漫长的等待。
+</p>
+
+<p>
+<code>./build.py --clang-completer</code> 会下载clang编译器到 <code>clang_archives</code>
+目录。同时编译 <code>C-family</code> 的补全。
+</p>
+
+<p>
+不过下载clang编译器真的时太慢啦。我是去云主机上使用wget下载的。
+</p>
+<pre class="example">
+     wget http://releases.llvm.org/4.0.1/clang+llvm-4.0.1-x86_64-apple-darwin.tar.xz
+</pre>
+
+<p>
+下载好后，直接放到ycmd的 <code>clang_archives</code> 目录下。然后直接
+<code>./build.py --clang-completer</code> 就可以编出来对 <code>c-family</code> 语言的补全。
+</p>
+</div>
+</div>
+<div id="outline-container-org7f6fa32" class="outline-3">
+<h3 id="org7f6fa32"><span class="section-number-3">5.3</span> ycmd介绍</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+它本来是vim上的插件 <code>YouCompleteMe</code> 。现在整成了一个通用的。
+</p>
+
+<p>
+可以补全很多语言： <code>C,C++,C#,python,js,go</code> 等。
+</p>
+
+<p>
+它可以是基于语义的和不基于语言的。根据不同的语言，把两种的结果都汇
+总后一起返回。 <code>C-family</code> 的基于语言补全功能需要 <code>libclang</code> ，它是
+编译器clang的libary，一般也叫llvm。
+</p>
+
+<p>
+使用libclang的时候，它需要知道编译时提供的编译参数。这样libclang才
+能分析代码，ycmd才能提供 <code>c-family</code> 基于语言的补全。有两种方式可以
+得到编译选项：
+</p>
+<ol class="org-ol">
+<li>编译数据库（compilation database）：这是最简单的一个方式，有些编
+译系统如cmake，它在编译时会自动生成编译数据库。以下几种方式都可以：
+<ol class="org-ol">
+<li>If using CMake, add -DCMAKE<sub>EXPORT</sub><sub>COMPILE</sub><sub>COMMANDS</sub>=ON when
+configuring (or add set( CMAKE<sub>EXPORT</sub><sub>COMPILE</sub><sub>COMMANDS</sub> ON )
+to CMakeLists.txt) and copy or symlink the generated database
+to the root of your project.</li>
+<li>If using Ninja, check out the compdb tool (-t compdb) in its
+docs.</li>
+<li>If using GNU make, check out Bear.</li>
+<li><p>
+For other build systems, check out .ycm<sub>extra</sub><sub>conf.py</sub>
+below.这后面还有这样一段：
+</p>
+<pre class="example">
+           If no .ycm_extra_conf.py is found, and no ycm_global_ycm_extra_conf
+           is configured, YouCompleteMe automatically tries to load a
+           compilation database if one is found.
+
+           YCM looks for a file named compile_commands.json in the directory of
+           the opened file or in any directory above it in the hierarchy
+           (recursively); when the file is found, it is loaded. YouCompleteMe
+           performs the following lookups when extracting flags for a particular
+           file:
+
+             * If the database contains an entry for the file, the flags for
+               that file are used.
+             * If the file is a header file and a source file with the same root
+               exists in the database, the flags for the source file are used.
+               For example, if the file is /home/Test/project/src/lib/
+               something.h and the database contains an entry for /home/Test/
+               project/src/lib/something.cc, then the flags for /home/Test/
+               project/src/lib/something.cc are used.
+             * Otherwise, if any flags have been returned from the directory
+               containing the requested file, those flags are used. This
+               heuristic is intended to provide potentially working flags for
+               newly created files.
+
+           Finally, YCM converts any relative paths in the extracted flags to
+           absolute paths. This ensures that compilation can be performed from
+           any Vim working directory.
+</pre></li>
+</ol></li>
+<li>手动提供编译选项</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org5894795" class="outline-3">
+<h3 id="org5894795"><span class="section-number-3">5.4</span> build.py选项</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+使用 <code>./build.py --help</code> 查看一下：
+</p>
+<pre class="example">
+     (python3)  ~/github/ycmd/ [master] ./build.py --help
+     usage: build.py [-h] [--clang-completer] [--system-libclang]
+                     [--omnisharp-completer] [--gocode-completer]
+                     [--racer-completer] [--system-boost] [--msvc {12,14,15}]
+                     [--tern-completer] [--all] [--enable-coverage]
+                     [--enable-debug] [--build-dir BUILD_DIR]
+
+     optional arguments:
+       -h, --help            show this help message and exit
+       --clang-completer     Build C-family semantic completion engine.
+       --system-libclang     Use system libclang instead of downloading one from
+                             llvm.org. NOT RECOMMENDED OR SUPPORTED!
+       --omnisharp-completer
+                             Build C# semantic completion engine.
+       --gocode-completer    Build Go semantic completion engine.
+       --racer-completer     Build rust semantic completion engine.
+       --system-boost        Use the system boost instead of bundled one. NOT
+                             RECOMMENDED OR SUPPORTED!
+       --msvc {12,14,15}     Choose the Microsoft Visual Studio version (default:
+                             15).
+       --tern-completer      Enable tern javascript completer
+       --all                 Enable all supported completers
+       --enable-coverage     For developers: Enable gcov coverage for the c++
+                             module
+       --enable-debug        For developers: build ycm_core library with debug
+                             symbols
+       --build-dir BUILD_DIR
+                             For developers: perform the build in the specified
+                             directory, and do not delete the build output. This is
+                             useful for incremental builds, and required for
+                             coverage data
+</pre>
+<ul class="org-ul">
+<li><code>--clang-completer</code> 可以编译 <code>c-family</code> 语言的补全。它会下载它需
+要的libclang到 <code>clang_archives</code> 目录。如果你学得下载速度太慢，也
+可自己下载放进去</li>
+<li><code>--omnisharp-completer</code> 对 <code>C#</code></li>
+<li><code>--gocode-completer</code> 对 <code>go</code></li>
+<li>&#x2026;</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgbd19502" class="outline-3">
+<h3 id="orgbd19502"><span class="section-number-3">5.5</span> emacs-ycmd</h3>
+<div class="outline-text-3" id="text-5-5">
+<p>
+在emacs中使用，可以直接使用 <code>emacs-ycmd</code> 这个插件。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8874c33" class="outline-2">
+<h2 id="org8874c33"><span class="section-number-2">6</span> elpy for python</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+直接使用官网教程，先使用pip把需要的第三方工具安装好，然后使用package
+来安装就OK了。
+</p>
+
+<p>
+我的个人配置如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">    (setq peng-python-map (make-sparse-keymap))
+    (define-key peng-python-map (kbd  <span style="color: #ffa500;">"RET"</span>) 'elpy-shell-send-current-statement)
+    (define-key peng-python-map (kbd  <span style="color: #ffa500;">"s"</span>) 'elpy-rgrep-symbol)
+    (define-key peng-python-map (kbd  <span style="color: #ffa500;">"d"</span>) 'elpy-goto-definition)
+    (define-key peng-python-map (kbd  <span style="color: #ffa500;">"a"</span>) 'elpy-set-project-root)
+    (define-key peng-python-map (kbd  <span style="color: #ffa500;">"f"</span>) 'elpy-find-file)
+    (define-key peng-python-map (kbd  <span style="color: #ffa500;">"t"</span>) 'pop-tag-mark)
+
+    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-python-mode</span> ()
+      (define-key evil-normal-state-local-map (kbd <span style="color: #ffa500;">"SPC z"</span>) 'peng-run-current-script)
+      (autopair-on)
+      (smart-tab-mode-off)
+      (peng-local-set-key (kbd <span style="color: #ffa500;">"C-c C-v"</span>) 'peng-run-current-script)
+      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">(company-mode)</span>
+      (elpy-enable)
+      (define-key evil-normal-state-local-map (kbd <span style="color: #ffa500;">"SPC c"</span>) peng-python-map)
+      (define-key evil-normal-state-local-map (kbd <span style="color: #ffa500;">"SPC m"</span>) peng-python-map)
+      (peng-local-set-key (kbd <span style="color: #ffa500;">"&lt;C-right&gt;"</span>) 'elpy-nav-forward-indent)
+      (peng-local-set-key (kbd <span style="color: #ffa500;">"&lt;C-left&gt;"</span>) 'elpy-nav-backward-indent)
+      (peng-local-set-key (kbd <span style="color: #ffa500;">"&lt;C-down&gt;"</span>) 'elpy-nav-forward-block)
+      (peng-local-set-key (kbd <span style="color: #ffa500;">"&lt;C-up&gt;"</span>) 'elpy-nav-backward-block))
+
+    (add-hook 'python-mode-hook 'peng-python-mode)
+    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">(setq elpy-project-ignored-directories '(".bzr" "CVS" ".git" ".hg" ".svn" ".tox" "build" "dist" ".cask"))</span>
+
+    (<span style="color: PaleYellow;">provide</span> '<span style="color: #7fffd4;">init-python</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2081b7a" class="outline-2">
+<h2 id="org2081b7a"><span class="section-number-2">7</span> 使用emacs加密文件</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+修改好文件后，使用 `epa-encrypt-file'就可以加密。默认加密完成后，会
+生成.gpg结尾的加密文件。原始文件还是非加密状态。如果文件本身就是
+以.gpg结尾，则不会再新建文件，本文件已被加密。
+</p>
+
+<p>
+还可以加密一个区域，现在不太需要。
+</p>
+</div>
+</div>
+<div id="outline-container-org0b47ecb" class="outline-2">
+<h2 id="org0b47ecb"><span class="section-number-2">8</span> use of markdown-mode</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+markdown #1 ### 使用 ###
+</p>
+
+<p>
+现在用 Emacs 写博文真是一种享受。会 Emacs 的人会发现，下面提到的多数
+快捷键和 Emacs 的基础快捷键相关，我只列出常用的：
+</p>
+
+<p>
+在 Emacs 中预览结果 C-c C-c. 使用该功能的前提是系统中有将 Markdown
+文本转化为 HTML 的 Markdown 命令。如何配置？请看这篇博文。
+</p>
+
+<ul class="org-ul">
+<li>C-c C-c m 转化为 HTML，在另一个 buffer 中预览 HTML 文件，个人觉得
+没太大意义</li>
+<li>C-c C-c p 转化为 HTML，在浏览器中预览</li>
+<li>C-c C-c e 转化为 HTML，保存为文件</li>
+<li>C-c C-c v 转化为 HTML，保存为文件，并在浏览器中预览</li>
+</ul>
+
+<p>
+超链接 Hyperlinks C-c C-a
+</p>
+
+<ul class="org-ul">
+<li>C-c C-a l 插入[]()形式的链接，C-c C-a L 插入 [LinkText][Label] 形
+式的链接。在这种形式下，如果光标附近有文字或是 Active Region，会自
+动被选择当作 LinkText。后一种形式会提示你在 Minibuffer 中输入
+LinkText，LinkLabel 和可选的 LinkTitle。 图片 Images C-a C-i</li>
+</ul>
+
+<p>
+C-c C-i i 和 C-c C-i I，两者的区别和超链接的类似。
+</p>
+
+<p>
+样式 Styles C-a C-s
+</p>
+
+<p>
+C-c C-s e 插入斜体字（e 表示 emphasis）
+C-c C-s s 插入粗体字（s 表示 strong）
+C-c C-s c 插入代码，比如开头的快捷键框框就是它的效果
+</p>
+
+<p>
+标题 Headings C-c C-t
+</p>
+
+<p>
+我最常用的 C-c C-t n ，n 从 1 - 6， 表示各级标题。比如 C-c C-t 3 得到 ### Heading ###
+</p>
+
+<ul class="org-ul">
+<li>C-c C-t h 根据前面的标题自动选择标题级别。C-c C-t H 类似，不同的是
+它尝试得到带下划线的标题 一些零散的快捷键</li>
+
+<li>C-c - 插入水平线</li>
+<li>C-c C-o 如果该点是一个链接(Hyperlink)，就会在浏览器中打开它的 URL，
+如果该点是维基百科链接(wikilink)，就会在另一个 Buffer 中打开</li>
+<li>C-c C-j 如果该点坐在的位置是一个 Hyperlink，按下此快捷键就会在
+Link Text 和 Link URL 之间跳转。同样也适用于脚注(footnote)等其它类
+似目标</li>
+<li>C-c C&#x2013; 和 C-c C-= Promotion 和 Demotion（抱歉，想不到合适的中文翻
+译）。例如，在 ### ### 附近按下 C-c C&#x2013; 会使它变成 ## ##，按下 C-c
+C-= 会使它变成 #### ####。前者让 Heading 升级，后者让 Heading 降级</li>
+<li>C-c C-k 将该点的目标 kill 掉，并将其内容送到 kill ring 中，适用于
+以下的目标：inline code, headings, horizonal rules, links, images,
+email address 等</li>
+</ul>
+
+<p>
+C-c C-n,C-c C-p,C-c C-f,C-c C-b,C-c C-u 在 Heading 之间移动，自己去试试吧
+M-{,M-},C-M-a,C-M-e,C-M-h 快速跳转，和 Emacs 基础快捷键操作一样
+结束
+</p>
+</div>
+</div>
+<div id="outline-container-orgf38e6bb" class="outline-2">
+<h2 id="orgf38e6bb"><span class="section-number-2">9</span> ssh-terminal in emacs</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+It turns out, there is what you want:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">    (setq rlogin-program <span style="color: #ffa500;">"ssh"</span>)
+    (setq rlogin-process-connection-type t)
+</pre>
+</div>
+<p>
+and then M-x rlogin RET &lt;myhost&gt; RET will do that.
+</p>
+
+<p>
+<b>But</b> I think this is useless.
+</p>
+</div>
+</div>
+<div id="outline-container-org4ba9b91" class="outline-2">
+<h2 id="org4ba9b91"><span class="section-number-2">10</span> hex-mode</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+`hexl-insert-hex-char'可以按照16进制来修改文件。输入37就对应修改为了
+<code>7</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-orgac8b8b9" class="outline-2">
+<h2 id="orgac8b8b9"><span class="section-number-2">11</span> tramp</h2>
+<div class="outline-text-2" id="text-11">
+</div>
+<div id="outline-container-orgea0bbc3" class="outline-3">
+<h3 id="orgea0bbc3"><span class="section-number-3">11.1</span> tramp multi-hop 在远程通过sudo编辑文件</h3>
+<div class="outline-text-3" id="text-11-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#20351;tramp&#21487;&#20197;&#20351;&#29992;`</span><span style="color: #7fffd4;">/sudo:root@host:/etc</span><span style="color: #cd5c5c;">'&#36825;&#26679;&#30340;&#24418;&#24335;&#26469;&#22312;&#36828;&#31243;&#20351;&#29992;`</span><span style="color: #7fffd4;">sudo</span><span style="color: #cd5c5c;">'</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#32534;&#36753;&#25991;&#20214;&#65292;&#29978;&#33267;&#21487;&#20197;&#20351;&#29992;`</span><span style="color: #7fffd4;">cd</span><span style="color: #cd5c5c;">'&#30452;&#25509;&#36827;&#21435;&#12290;&#22330;&#26223;&#26159;&#19981;&#33021;&#36890;&#36807;root&#29992;&#25143;&#36828;&#31243;&#30331;&#38470;&#65292;</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#20294;&#26159;&#21448;&#38656;&#35201;&#20351;&#29992;root&#30340;&#26435;&#38480;&#26469;&#32534;&#36753;&#25991;&#20214;&#12290;</span>
+     (add-to-list 'tramp-default-proxies-alist
+                  '(nil <span style="color: #ffa500;">"\\`</span><span style="color: #7fffd4;">root\\</span><span style="color: #ffa500;">'"</span> <span style="color: #ffa500;">"/ssh:%h:"</span>))
+     (add-to-list 'tramp-default-proxies-alist
+                  '((regexp-quote (system-name)) nil nil))
+
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#26412;&#26426;&#20013;&#20351;&#29992;`</span><span style="color: #7fffd4;">localhost</span><span style="color: #cd5c5c;">'&#36825;&#20010;HOST&#26469;&#20351;&#29992;sudo&#65292;&#35774;&#32622;&#22312;&#26412;&#26426;&#26102;&#30340;user&#21644;proxy</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#37117;&#26159;&#40664;&#35748;&#20540;nil</span>
+     (add-to-list 'tramp-default-proxies-alist
+                  '((regexp-quote <span style="color: #ffa500;">"localhost"</span>) nil nil))
+</pre>
+</div>
+
+<p>
+(HOST USER PROXY)
+</p>
+</div>
+</div>
+<div id="outline-container-org0210c8c" class="outline-3">
+<h3 id="org0210c8c"><span class="section-number-3">11.2</span> host down后emacs可能会 <code>waiting for prompts from remote shell</code></h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+删除 <code>~/.emacs.d/tramp</code> 文件就可以了。这个文件应该是cache的一些认证
+信息。remote host down后，这个信息如果还在，可能还会尝试连接。这时
+关闭emacs都不行。使用`tramp-cleanup-all-buffers'也不行。
+</p>
+
+<p>
+另外，我还接照网上的说法，这样设置了一下：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">     (<span style="color: PaleYellow;">setq</span> tramp-shell-prompt-pattern <span style="color: #ffa500;">"</span><span style="color: #ffa500; font-weight: bold;">\\</span><span style="color: #ffa500; font-weight: bold;">(?:</span><span style="color: #ffa500;">^</span><span style="color: #ffa500; font-weight: bold;">\\</span><span style="color: #ffa500; font-weight: bold;">|</span><span style="color: #ffa500;"></span><span style="color: #ffa500; font-weight: bold;">\\</span><span style="color: #ffa500; font-weight: bold;">)</span><span style="color: #ffa500;">[</span><span style="color: #ffa500;">^</span><span style="color: #ffa500;">]#$%&gt;\n]*#?[]#$%&gt;].* *</span><span style="color: #ffa500; font-weight: bold;">\\</span><span style="color: #ffa500; font-weight: bold;">(</span><span style="color: #ffa500;">&#27;\\[[0-9;]*[a-zA-Z] *</span><span style="color: #ffa500; font-weight: bold;">\\</span><span style="color: #ffa500; font-weight: bold;">)</span><span style="color: #ffa500;">*"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orga2fb45b" class="outline-2">
+<h2 id="orga2fb45b"><span class="section-number-2">12</span> find and grep</h2>
+<div class="outline-text-2" id="text-12">
+<ul class="org-ul">
+<li>in file or buffer: helm-occur, swiper</li>
+<li>dir in local:helm-do-ag, rgrep, find-grep-dired, find-grep</li>
+<li>dir in remote:rgrep, find-grep-dired, find-grep</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2f23672" class="outline-2">
+<h2 id="org2f23672"><span class="section-number-2">13</span> <span class="done DONE">DONE</span> lexical and dynamic scoping  <a href="https://yoo2080.wordpress.com/2011/12/31/lexical-scoping-and-dynamic-scoping-in-emacs-lisp/">box's blog</a> 词法作用域和动态作用域</h2>
+<div class="outline-text-2" id="text-13">
+<ul class="org-ul">
+<li>State "DONE"       from "PLAN"       <span class="timestamp-wrapper"><span class="timestamp">[2016-10-12 三 09:40]</span></span></li>
+</ul>
+
+<p>
+动态作用域：
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">    (<span style="color: PaleYellow;">setq</span> b 17)
+    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">my-print-b</span> ()
+      (print b))
+    (<span style="color: PaleYellow;">setq</span> b 1717)
+    (<span style="color: PaleYellow;">let</span> ((b 8))
+      (my-print-b))
+</pre>
+</div>
+
+<p>
+词法作用域：
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">-*- lexical-binding: t -*-</span>
+
+    (<span style="color: PaleYellow;">setq</span> a 17)
+    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">my-print-a</span> ()
+      (print a))
+    (<span style="color: PaleYellow;">setq</span> a 1717)
+    (<span style="color: PaleYellow;">let</span> ((a 8))
+      (my-print-a))
+</pre>
+</div>
+
+<p>
+Notice that the value of a is not specified within my-print-a,
+making it what some call a “free variable” (also known as nonlocal
+variables as in “a is nonlocal to my-print-a”). What will be the
+result of running the code above? Will it print 1717? Or is it going
+to be 8? With dynamic scoping, it prints 8. With lexical scoping, it
+prints 1717. With dynamic scoping, what the name a in my-print-a
+refers to is determined by <b>when</b> my-print-a is <b>called</b>. With
+lexical scoping, it is determined by <b>where</b> my-print-a is
+<b>defined</b>.
+</p>
+
+<p>
+词法作用域：函数在什么地方被定义是关键。
+动态作用域：函数在什么时候被调用是关键。
+</p>
+
+<p>
+词法闭包就是闭包。Emacs 23及以前都是动态作用的。Emacs 24及以后的版本
+才加入了词法作用域。
+</p>
+</div>
+</div>
+<div id="outline-container-orgbbe20bf" class="outline-2">
+<h2 id="orgbbe20bf"><span class="section-number-2">14</span> org tangle</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode中这样写，然后
+调用`org-babel-tangle'就可以在本地生成一个名为main.sh的文件，里面的
+内容即为块中的代码：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #cd5c5c;">    #+BEGIN_SRC sh :tangle main.sh</span>
+<span style="color: #b3b3b3;">    date</span>
+<span style="color: #cd5c5c;">    #+END_SRC</span>
+</pre>
+</div>
+
+<p>
+使用`org-babel-tangle'导出时，对应的目录可能不存在。需要新建，可以这
+样来导出：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #cd5c5c;">    #+BEGIN_SRC sh :tangle (prog1 "/tmp/temp/dd.sh" (make-directory "temp" "/tmp"))</span>
+<span style="color: #b3b3b3;">      date</span>
+<span style="color: #cd5c5c;">    #+END_SRC</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge5f704c" class="outline-2">
+<h2 id="orge5f704c"><span class="section-number-2">15</span> org exec code block</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+默认result中不会有脚本向STDOUT输出的内容。加入 <code>:result output</code>
+<a href="https://www.gnu.org/software/emacs/manual/html_mono/org.html#Results-of-evaluation">info:org#Results of evaluation</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #cd5c5c;">    #+BEGIN_SRC python :results output</span>
+<span style="color: #b3b3b3;">    </span><span style="color: PaleYellow;">print</span><span style="color: #b3b3b3;">(</span><span style="color: #ffa500;">'test output'</span><span style="color: #b3b3b3;">)</span>
+<span style="color: #cd5c5c;">    #+END_SRC</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org151e0ea" class="outline-2">
+<h2 id="org151e0ea"><span class="section-number-2">16</span> org exports</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+下面这样，生成html的时候才会把结果导出出来。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'xiepeng'</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf3e655f" class="outline-2">
+<h2 id="orgf3e655f"><span class="section-number-2">17</span> theme</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+<a href="https://emacsthemes.com/">这里有很多emacs的theme</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orga98f6f4" class="outline-2">
+<h2 id="orga98f6f4"><span class="section-number-2">18</span> elisp check if string is empty</h2>
+<div class="outline-text-2" id="text-18">
+<div class="org-src-container">
+<pre class="src src-elisp">    (= 0 (length <span style="color: #ffa500;">""</span>))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc3d340c" class="outline-2">
+<h2 id="orgc3d340c"><span class="section-number-2">19</span> emacs python parser</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+<code>orgnode.py</code> 源码在这里：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Copyright (c) 2010 Charles Cave</span>
+    <span style="color: #cd5c5c;"># </span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">Permission  is  hereby  granted,  free  of charge,  to  any  person</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">obtaining  a copy  of  this software  and associated  documentation</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">files   (the  "Software"),   to  deal   in  the   Software  without</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">restriction, including without limitation  the rights to use, copy,</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">modify, merge, publish,  distribute, sublicense, and/or sell copies</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">of  the Software, and  to permit  persons to  whom the  Software is</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">furnished to do so, subject to the following conditions:</span>
+    <span style="color: #cd5c5c;"># </span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">The above copyright notice and this permission notice shall be</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">included in all copies or substantial portions of the Software.</span>
+    <span style="color: #cd5c5c;"># </span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+    <span style="color: #cd5c5c;">#  </span><span style="color: #cd5c5c;">SOFTWARE.</span>
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Program written by Charles Cave   (charlesweb@optusnet.com.au)</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">February - March 2009</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Version 2 - June 2009</span>
+    <span style="color: #cd5c5c;">#   </span><span style="color: #cd5c5c;">Added support for all tags, TODO priority and checking existence of a tag</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">More information at</span>
+    <span style="color: #cd5c5c;">#    </span><span style="color: #cd5c5c;">http://members.optusnet.com.au/~charles57/GTD</span>
+
+    <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">    The Orgnode module consists of the Orgnode class for representing a</span>
+<span style="color: #ffa500;">    headline and associated text from an org-mode file, and routines for</span>
+<span style="color: #ffa500;">    constructing data structures of these classes.</span>
+<span style="color: #ffa500;">    """</span>
+
+    <span style="color: PaleYellow;">import</span> re, sys
+    <span style="color: PaleYellow;">import</span> datetime
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">makelist</span>(filename):
+       <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">       Read an org-mode file and return a list of Orgnode objects</span>
+<span style="color: #ffa500;">       created from this file.</span>
+<span style="color: #ffa500;">       """</span>
+       <span style="color: #8fbc8f;">ctr</span> = 0
+
+       <span style="color: PaleYellow;">try</span>:
+          <span style="color: #8fbc8f;">f</span> = <span style="color: #b0c4de;">open</span>(filename, <span style="color: #ffa500;">'r'</span>)
+       <span style="color: PaleYellow;">except</span> <span style="color: #00ff00;">IOError</span>:
+          <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">"Unable to open file [%s] "</span> % filename
+          <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">"Program terminating."</span>
+          sys.<span style="color: #7fffd4;">exit</span>(1)
+
+       <span style="color: #8fbc8f;">todos</span>         = <span style="color: #b0c4de;">dict</span>()  <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">populated from #+SEQ_TODO line</span>
+       <span style="color: #8fbc8f;">todos</span>[<span style="color: #ffa500;">'TODO'</span>] = <span style="color: #ffa500;">''</span>   <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">default values</span>
+       <span style="color: #8fbc8f;">todos</span>[<span style="color: #ffa500;">'DONE'</span>] = <span style="color: #ffa500;">''</span>   <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">default values</span>
+       <span style="color: #8fbc8f;">level</span>         = 0
+       <span style="color: #8fbc8f;">heading</span>       = <span style="color: #ffa500;">""</span>
+       <span style="color: #8fbc8f;">bodytext</span>      = <span style="color: #ffa500;">""</span>
+       <span style="color: #8fbc8f;">tag1</span>          = <span style="color: #ffa500;">""</span>      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">The first tag enclosed in ::</span>
+       <span style="color: #8fbc8f;">alltags</span>       = []      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">list of all tags in headline</span>
+       <span style="color: #8fbc8f;">sched_date</span>    = <span style="color: #ffa500;">''</span>
+       <span style="color: #8fbc8f;">deadline_date</span> = <span style="color: #ffa500;">''</span>
+       <span style="color: #8fbc8f;">nodelist</span>      = []
+       <span style="color: #8fbc8f;">propdict</span>      = <span style="color: #b0c4de;">dict</span>()
+   
+       <span style="color: PaleYellow;">for</span> line <span style="color: PaleYellow;">in</span> f:
+           <span style="color: #8fbc8f;">ctr</span> += 1     
+           <span style="color: #8fbc8f;">hdng</span> = re.search(<span style="color: #ffa500;">'^(\*+)\s(.*?)\s*$'</span>, line)
+           <span style="color: PaleYellow;">if</span> hdng:
+              <span style="color: PaleYellow;">if</span> heading:  <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">we are processing a heading line</span>
+                 <span style="color: #8fbc8f;">thisNode</span> = Orgnode(level, heading, bodytext, tag1, alltags)
+                 <span style="color: PaleYellow;">if</span> sched_date:
+                    thisNode.setScheduled(sched_date)
+                    <span style="color: #8fbc8f;">sched_date</span> = <span style="color: #ffa500;">""</span>
+                 <span style="color: PaleYellow;">if</span> deadline_date:
+                    thisNode.setDeadline(deadline_date)
+                    <span style="color: #8fbc8f;">deadline_date</span> = <span style="color: #ffa500;">''</span>
+                 thisNode.setProperties(propdict)
+                 nodelist.append( thisNode )
+                 <span style="color: #8fbc8f;">propdict</span> = <span style="color: #b0c4de;">dict</span>()
+              <span style="color: #8fbc8f;">level</span> = hdng.group(1)
+              <span style="color: #8fbc8f;">heading</span> =  hdng.group(2)
+              <span style="color: #8fbc8f;">bodytext</span> = <span style="color: #ffa500;">""</span>
+              <span style="color: #8fbc8f;">tag1</span> = <span style="color: #ffa500;">""</span>
+              <span style="color: #8fbc8f;">alltags</span> = []       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">list of all tags in headline</span>
+              <span style="color: #8fbc8f;">tagsrch</span> = re.search(<span style="color: #ffa500;">'(.*?)\s*:(.*?):(.*?)$'</span>,heading)
+              <span style="color: PaleYellow;">if</span> tagsrch:
+                  <span style="color: #8fbc8f;">heading</span> = tagsrch.group(1)
+                  <span style="color: #8fbc8f;">tag1</span> = tagsrch.group(2)
+                  alltags.append(tag1)
+                  <span style="color: #8fbc8f;">tag2</span> = tagsrch.group(3)
+                  <span style="color: PaleYellow;">if</span> tag2:
+                     <span style="color: PaleYellow;">for</span> t <span style="color: PaleYellow;">in</span> tag2.split(<span style="color: #ffa500;">':'</span>):
+                        <span style="color: PaleYellow;">if</span> t != <span style="color: #ffa500;">''</span>: alltags.append(t)
+           <span style="color: PaleYellow;">else</span>:      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">we are processing a non-heading line</span>
+               <span style="color: PaleYellow;">if</span> line[:10] == <span style="color: #ffa500;">'#+SEQ_TODO'</span>:
+                  <span style="color: #8fbc8f;">kwlist</span> = re.findall(<span style="color: #ffa500;">'([A-Z]+)\('</span>, line)
+                  <span style="color: PaleYellow;">for</span> kw <span style="color: PaleYellow;">in</span> kwlist: <span style="color: #8fbc8f;">todos</span>[kw] = <span style="color: #ffa500;">""</span>
+
+               <span style="color: PaleYellow;">if</span> line[:1] != <span style="color: #ffa500;">'#'</span>:
+                   <span style="color: #8fbc8f;">bodytext</span> = bodytext + line
+
+               <span style="color: PaleYellow;">if</span> re.search(<span style="color: #ffa500;">':PROPERTIES:'</span>, line): <span style="color: PaleYellow;">continue</span>
+               <span style="color: PaleYellow;">if</span> re.search(<span style="color: #ffa500;">':END:'</span>, line): <span style="color: PaleYellow;">continue</span>
+               <span style="color: #8fbc8f;">prop_srch</span> = re.search(<span style="color: #ffa500;">'^\s*:(.*?):\s*(.*?)\s*$'</span>, line)
+               <span style="color: PaleYellow;">if</span> prop_srch:
+                  <span style="color: #8fbc8f;">propdict</span>[prop_srch.group(1)] = prop_srch.group(2)
+                  <span style="color: PaleYellow;">continue</span>
+               <span style="color: #8fbc8f;">sd_re</span> = re.search(<span style="color: #ffa500;">'SCHEDULED:\s+&lt;([0-9]+)\-([0-9]+)\-([0-9]+)'</span>, line)
+               <span style="color: PaleYellow;">if</span> sd_re:
+                  <span style="color: #8fbc8f;">sched_date</span> = datetime.date(<span style="color: #b0c4de;">int</span>(sd_re.group(1)),
+                                             <span style="color: #b0c4de;">int</span>(sd_re.group(2)),
+                                             <span style="color: #b0c4de;">int</span>(sd_re.group(3)) )
+               <span style="color: #8fbc8f;">dd_re</span> = re.search(<span style="color: #ffa500;">'DEADLINE:\s*&lt;(\d+)\-(\d+)\-(\d+)'</span>, line)
+               <span style="color: PaleYellow;">if</span> dd_re:
+                  <span style="color: #8fbc8f;">deadline_date</span> = datetime.date(<span style="color: #b0c4de;">int</span>(dd_re.group(1)),
+                                                <span style="color: #b0c4de;">int</span>(dd_re.group(2)),
+                                                <span style="color: #b0c4de;">int</span>(dd_re.group(3)) )
+
+       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">write out last node              </span>
+       <span style="color: #8fbc8f;">thisNode</span> = Orgnode(level, heading, bodytext, tag1, alltags)
+       thisNode.setProperties(propdict)   
+       <span style="color: PaleYellow;">if</span> sched_date:
+          thisNode.setScheduled(sched_date)
+       <span style="color: PaleYellow;">if</span> deadline_date:
+          thisNode.setDeadline(deadline_date)
+       nodelist.append( thisNode )
+              
+       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">using the list of TODO keywords found in the file</span>
+       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">process the headings searching for TODO keywords</span>
+       <span style="color: PaleYellow;">for</span> n <span style="color: PaleYellow;">in</span> nodelist:
+           <span style="color: #8fbc8f;">h</span> = n.Heading()
+           <span style="color: #8fbc8f;">todoSrch</span> = re.search(<span style="color: #ffa500;">'([A-Z]+)\s(.*?)$'</span>, h)
+           <span style="color: PaleYellow;">if</span> todoSrch:
+               <span style="color: PaleYellow;">if</span> todos.has_key( todoSrch.group(1) ):
+                   n.setHeading( todoSrch.group(2) )
+                   n.setTodo ( todoSrch.group(1) )
+           <span style="color: #8fbc8f;">prtysrch</span> = re.search(<span style="color: #ffa500;">'^\[\#(A|B|C)\] (.*?)$'</span>, n.Heading())
+           <span style="color: PaleYellow;">if</span> prtysrch:
+              n.setPriority(prtysrch.group(1))
+              n.setHeading(prtysrch.group(2))
+                            
+       <span style="color: PaleYellow;">return</span> nodelist
+
+    <span style="color: #cd5c5c;">######################</span>
+    <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">Orgnode</span>(<span style="color: #b0c4de;">object</span>):
+        <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">        Orgnode class represents a headline, tags and text associated</span>
+<span style="color: #ffa500;">        with the headline.</span>
+<span style="color: #ffa500;">        """</span>
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, level, headline, body, tag, alltags):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Create an Orgnode object given the parameters of level (as the</span>
+<span style="color: #ffa500;">            raw asterisks), headline text (including the TODO tag), and</span>
+<span style="color: #ffa500;">            first tag. The makelist routine postprocesses the list to</span>
+<span style="color: #ffa500;">            identify TODO tags and updates headline and todo fields.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.level = <span style="color: #b0c4de;">len</span>(level)
+            <span style="color: PaleYellow;">self</span>.headline = headline
+            <span style="color: PaleYellow;">self</span>.body = body
+            <span style="color: PaleYellow;">self</span>.tag = tag            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">The first tag in the list</span>
+            <span style="color: PaleYellow;">self</span>.tags = <span style="color: #b0c4de;">dict</span>()        <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">All tags in the headline</span>
+            <span style="color: PaleYellow;">self</span>.todo = <span style="color: #ffa500;">""</span>
+            <span style="color: PaleYellow;">self</span>.prty = <span style="color: #ffa500;">""</span>            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">empty of A, B or C</span>
+            <span style="color: PaleYellow;">self</span>.scheduled = <span style="color: #ffa500;">""</span>       <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Scheduled date</span>
+            <span style="color: PaleYellow;">self</span>.deadline = <span style="color: #ffa500;">""</span>        <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Deadline date</span>
+            <span style="color: PaleYellow;">self</span>.properties = <span style="color: #b0c4de;">dict</span>()
+            <span style="color: PaleYellow;">for</span> t <span style="color: PaleYellow;">in</span> alltags:
+               <span style="color: PaleYellow;">self</span>.tags[t] = <span style="color: #ffa500;">''</span>
+
+            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Look for priority in headline and transfer to prty field</span>
+        
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Heading</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Return the Heading text of the node without the TODO tag</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.headline
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setHeading</span>(<span style="color: PaleYellow;">self</span>, newhdng):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Change the heading to the supplied string</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.headline = newhdng
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Body</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns all lines of text of the body of this node except the</span>
+<span style="color: #ffa500;">            Property Drawer</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.body
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Level</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns an integer corresponding to the level of the node.</span>
+<span style="color: #ffa500;">            Top level (one asterisk) has a level of 1.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.level
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Priority</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns the priority of this headline: 'A', 'B', 'C' or empty</span>
+<span style="color: #ffa500;">            string if priority has not been set.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.prty
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setPriority</span>(<span style="color: PaleYellow;">self</span>, newprty):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Change the value of the priority of this headline.</span>
+<span style="color: #ffa500;">            Values values are '', 'A', 'B', 'C'</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.prty = newprty
+    
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Tag</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns the value of the first tag.</span>
+<span style="color: #ffa500;">            For example, :HOME:COMPUTER: would return HOME</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.tag
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Tags</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns a list of all tags </span>
+<span style="color: #ffa500;">            For example, :HOME:COMPUTER: would return ['HOME', 'COMPUTER']</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.tags.keys()
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">hasTag</span>(<span style="color: PaleYellow;">self</span>, srch):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns True if the supplied tag is present in this headline</span>
+<span style="color: #ffa500;">            For example, hasTag('COMPUTER') on headling containing</span>
+<span style="color: #ffa500;">            :HOME:COMPUTER: would return True.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.tags.has_key(srch)
+        
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setTag</span>(<span style="color: PaleYellow;">self</span>, newtag):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Change the value of the first tag to the supplied string</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.tag = newtag
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setTags</span>(<span style="color: PaleYellow;">self</span>, taglist):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Store all the tags found in the headline. The first tag will</span>
+<span style="color: #ffa500;">            also be stored as if the setTag method was called.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">for</span> t <span style="color: PaleYellow;">in</span> taglist:
+               <span style="color: PaleYellow;">self</span>.tags[t] = <span style="color: #ffa500;">''</span>
+        
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Todo</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Return the value of the TODO tag</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.todo
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setTodo</span>(<span style="color: PaleYellow;">self</span>, value):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Set the value of the TODO tag to the supplied string</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.todo = value
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setProperties</span>(<span style="color: PaleYellow;">self</span>, dictval):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Sets all properties using the supplied dictionary of</span>
+<span style="color: #ffa500;">            name/value pairs</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.properties = dictval
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Property</span>(<span style="color: PaleYellow;">self</span>, keyval):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Returns the value of the requested property or null if the</span>
+<span style="color: #ffa500;">            property does not exist.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.properties.get(keyval, <span style="color: #ffa500;">""</span>)
+    
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setScheduled</span>(<span style="color: PaleYellow;">self</span>, dateval):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Set the scheduled date using the supplied date object</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.scheduled = dateval
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Scheduled</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Return the scheduled date object or null if nonexistent</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.scheduled
+    
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">setDeadline</span>(<span style="color: PaleYellow;">self</span>, dateval):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Set the deadline (due) date using the supplied date object</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">self</span>.deadline = dateval
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">Deadline</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Return the deadline date object or null if nonexistent</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.deadline
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__repr__</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: #ffa500;">"""</span>
+<span style="color: #ffa500;">            Print the level, heading text and tag of a node and the body</span>
+<span style="color: #ffa500;">            text as used to construct the node.</span>
+<span style="color: #ffa500;">            """</span>
+            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">This method is not completed yet.</span>
+            <span style="color: #8fbc8f;">n</span> = <span style="color: #ffa500;">''</span>
+            <span style="color: PaleYellow;">for</span> i <span style="color: PaleYellow;">in</span> <span style="color: #b0c4de;">range</span>(0, <span style="color: PaleYellow;">self</span>.level):
+               <span style="color: #8fbc8f;">n</span> = n + <span style="color: #ffa500;">'*'</span>
+            <span style="color: #8fbc8f;">n</span> = n + <span style="color: #ffa500;">' '</span> + <span style="color: PaleYellow;">self</span>.todo + <span style="color: #ffa500;">' '</span>
+            <span style="color: PaleYellow;">if</span> <span style="color: PaleYellow;">self</span>.prty:
+               <span style="color: #8fbc8f;">n</span> = n +  <span style="color: #ffa500;">'[#'</span> + <span style="color: PaleYellow;">self</span>.prty + <span style="color: #ffa500;">'] '</span>
+            <span style="color: #8fbc8f;">n</span> = n + <span style="color: PaleYellow;">self</span>.headline
+            <span style="color: #8fbc8f;">n</span> = <span style="color: #ffa500;">"%-60s "</span> % n     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">hack - tags will start in column 62</span>
+            <span style="color: #8fbc8f;">closecolon</span> = <span style="color: #ffa500;">''</span>
+            <span style="color: PaleYellow;">for</span> t <span style="color: PaleYellow;">in</span> <span style="color: PaleYellow;">self</span>.tags.keys():
+               <span style="color: #8fbc8f;">n</span> = n + <span style="color: #ffa500;">':'</span> + t
+               <span style="color: #8fbc8f;">closecolon</span> = <span style="color: #ffa500;">':'</span>   
+            <span style="color: #8fbc8f;">n</span> = n + closecolon
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Need to output Scheduled Date, Deadline Date, property tags The</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">following will output the text used to construct the object</span>
+            <span style="color: #8fbc8f;">n</span> = n + <span style="color: #ffa500;">"\n"</span> + <span style="color: PaleYellow;">self</span>.body
+        
+            <span style="color: PaleYellow;">return</span> n
+
+
+    
+
+</pre>
+</div>
+
+<p>
+下面这个例子把test.org中的所有headline弄出来。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">!/usr/local/bin/python</span>
+    <span style="color: PaleYellow;">from</span> orgnode <span style="color: PaleYellow;">import</span> *
+
+    <span style="color: PaleYellow;">import</span> sys
+    <span style="color: #8fbc8f;">nodelist</span> = makelist(<span style="color: #ffa500;">'/tmp/test.org'</span>)
+
+    <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">"\n--------- PROJECT LIST ----------------"</span>
+    <span style="color: PaleYellow;">for</span> node <span style="color: PaleYellow;">in</span> nodelist:
+        <span style="color: #8fbc8f;">s</span> = node
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'*'</span>*node.level,<span style="color: #ffa500;">' '</span>, node.headline
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org26683d6" class="outline-2">
+<h2 id="org26683d6"><span class="section-number-2">20</span> 使用workgroup来完善我的工作流</h2>
+<div class="outline-text-2" id="text-20">
+<ol class="org-ol">
+<li>使用workgroup2,每一个workgroup就干一件事情。它比bookmark的优势在
+于：
+<ol class="org-ol">
+<li>可以记忆windows的布局。</li>
+<li>可以记录多个文件，就像它的名字，完全就是不同的工作流。</li>
+</ol></li>
+<li>每个workgroup中随便整。每次打开关闭都会记当前已打开的buffer。重启
+后也会都打开。</li>
+<li><p>
+有一个随便跳的workgroup: main。如果有时因打的workgroup太多导致打
+开文件太多，可以切换到这个workgroup，清除所有文件buffer。然后再切
+换到对应的workgroup就只有该wg相关的buffer存在了。还有一个专门的函
+数来跳到 <code>main</code> 这个workgroup。 <code>peng-switch-to-main-workgroup</code> 。
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">       (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-switch-to-main-workgroup</span> ()
+         (<span style="color: PaleYellow;">interactive</span>)
+           (wg-switch-to-workgroup (aref (wg-find-workgroup-by <span style="color: #b0c4de;">:name</span> <span style="color: #ffa500;">"main"</span>) 2)))
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org717e877" class="outline-2">
+<h2 id="org717e877"><span class="section-number-2">21</span> 使用ditaa</h2>
+<div class="outline-text-2" id="text-21">
+<p>
+在Mac上使用brew来安装ditaa：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    brew install ditaa
+</pre>
+</div>
+
+<p>
+下面是一个例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #cd5c5c;">    #+begin_src ditaa :file /tmp/some_filename.png :cmdline -r -s 0.8 -e utf-8</span>
+<span style="color: #b3b3b3;">              up1   up2   up3   up4                     Input Traffic</span>
+<span style="color: #b3b3b3;">               ^     ^     ^     ^                            |</span>
+<span style="color: #b3b3b3;">               |     |     |     |                            |</span>
+<span style="color: #b3b3b3;">               |     |     |     |                            |</span>
+<span style="color: #b3b3b3;">               v     v     v     v                            v</span>
+<span style="color: #b3b3b3;">        +-----+--+--+--+--+--+--+--+-------------------------+--+------------------+</span>
+<span style="color: #b3b3b3;">        |     |  |  |  |  |  |  |  | 1G/s                    |  | 10G/s            |</span>
+<span style="color: #b3b3b3;">        |     ++-+  ++-+  ++-+  ++-+ eth[0~3]                ++-+ eth6             |</span>
+<span style="color: #b3b3b3;">        |      ^     ^     ^     ^                            |                    |</span>
+<span style="color: #b3b3b3;">        |      |     |     |     |                            |                    |</span>
+<span style="color: #b3b3b3;">        |      |     |     |     |            +---------------+---------------+    |</span>
+<span style="color: #b3b3b3;">        |      |     |     |     |            |                               |    |</span>
+<span style="color: #b3b3b3;">        |      |     |     |     +-----------&gt;+                               |    |</span>
+<span style="color: #b3b3b3;">        |      |     |     |                  |        &#20320;&#22909;       &#20320;&#22909;        |    |</span>
+<span style="color: #b3b3b3;">        |      |     |     +-----------------&gt;+                               |    |</span>
+<span style="color: #b3b3b3;">        |      |     |                        |           bridge-eth6         |    |</span>
+<span style="color: #b3b3b3;">        |      |     +-----------------------&gt;+                               |    |</span>
+<span style="color: #b3b3b3;">        |      |                              |                               |    |</span>
+<span style="color: #b3b3b3;">        |      +-----------------------------&gt;+                               |    |</span>
+<span style="color: #b3b3b3;">        |                                     +-+-------+-------+-------+-----+    |</span>
+<span style="color: #b3b3b3;">        |                                       |       |       |       |          |</span>
+<span style="color: #b3b3b3;">        |                                      ++-+    ++-+    ++-+    ++-+        |</span>
+<span style="color: #b3b3b3;">        |                                      |  |    |  |    |  |    |  |  ...   |</span>
+<span style="color: #b3b3b3;">        |                                      +--+    +--+    +--+    +--+        |</span>
+<span style="color: #b3b3b3;">        |                                      vm1     vm2     vm3     vm5         |</span>
+<span style="color: #b3b3b3;">        +--------------------------------------------------------------------------+</span>
+<span style="color: #cd5c5c;">    #+end_src</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org13bea52" class="outline-2">
+<h2 id="org13bea52"><span class="section-number-2">22</span> emacs对齐</h2>
+<div class="outline-text-2" id="text-22">
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> <p>
+<a href="http://ergoemacs.org/emacs/emacs_align_and_sort.html">英文讲得比较清楚，推荐，还讲了如何sort</a>
+</p>
+<pre class="example">
+Emacs: Align Text
+
+By Xah Lee. Date: 2011-11-02. Last updated: 2017-11-05.
+
+Alt+x align-regexp to align text.
+
+For example, suppose you have:
+
+tom = 5
+jenny = 8
+mary = 7
+
+and you want to align them by the equal sign. Just select the text,
+then Alt+x align-regexp then give “=”. Then you get:
+
+tom   = 5
+jenny = 8
+mary  = 7
+
+The following is more advanced use of align and sort commands.
+
+Problem
+
+You have this list:
+
+California 423,970 km²
+Taiwan 36,008 km²
+Japan 377,944 km²
+Germany 357,021 km²
+Iraq 438,317 km²
+Iran 1,648,195 km²
+Korea (North+South) 219,140 km²
+Mexico 1,964,375 km²
+
+change it to this form:
+
+Taiwan                 36,008 km²
+Korea (North+South)   219,140 km²
+Japan                 377,944 km²
+Germany               357,021 km²
+California            423,970 km²
+Iraq                  438,317 km²
+Iran                1,648,195 km²
+Mexico              1,964,375 km²
+
+Solution
+
+Jon Snader and “jm”, provided the following solution.
+
+align-regexp
+
+First, we align the text. Select the text first, then press 【Ctrl+u
+】 then call align-regexp, with the regexp .* \([0-9,]+\).* then
+choose -1 for group, 1 for spacing, and n for repeat.
+
+Here's what it means. align-regexp lets you align a region by a regex
+in complex ways.
+
+  * The regex .* \([0-9,]+\).* matches a whole line (you can add ^ at
+    the beginning and $ at end if you like, but is not necessary).
+    The pattern \([0-9,]+\) captures our numbers part.
+  * The prompt “Parenthesis group to modify (justify if negative):”,
+    we answer “-1”, because we want the first matched pattern to be
+    used for alignment, and we want it to be justified to the right
+    (meaning, align to the right of text captured by our pattern).
+  * The query “Amount of spacing (or column if negative): ”, we use
+    1.
+  * In “Repeat throughout line?” we answer “n”.
+  * 【Ctrl+u】 is necessary for “align-regex” to promp you for
+    various parameters (though, “align-regex”'s doc string does not
+    mention it).
+
+The result is this:
+
+California             423,970 km²
+Taiwan                  36,008 km²
+Japan                  377,944 km²
+Germany                357,021 km²
+Iraq                   438,317 km²
+Iran                 1,648,195 km²
+Korea (North+South)    219,140 km²
+Mexico               1,964,375 km²
+
+sort-regexp-fields, sort-columns
+
+To sort it, there are 2 methods. One is using sort-regexp-fields,
+with this regex ^.*\([0-9 ,]\{9\}\) km²$.
+
+Another method is simply use sort-columns. This command sort lines by
+using a vertical column of text as sort key. The column is specified
+by the position of mark and cursor. So, place the cursor at the upper
+right, mark it, then move to lower left of our number, like this:
+
+California             423,970 km²▮
+Taiwan                  36,008 km²
+Japan                  377,944 km²
+Germany                357,021 km²
+Iraq                   438,317 km²
+Iran                 1,648,195 km²
+Korea (North+South)    219,140 km²
+Mexico              ▮1,964,375 km²
+
+Then call sort-columns. We got our desired result:
+
+Taiwan                  36,008 km²
+Korea (North+South)    219,140 km²
+Japan                  377,944 km²
+Germany                357,021 km²
+California             423,970 km²
+Iraq                   438,317 km²
+Iran                 1,648,195 km²
+Mexico               1,964,375 km²
+
+All these commands: {align-regexp, sort-regexp-fields, sort-columns}
+will be quite useful when you need it. (Big thanks to Jon Snader and
+“jm” for the excellent solutions.)
+</pre></li>
+<li><a href="http://www.hickwu.com/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%BC%9Aemacs%E4%B8%AD%E7%9A%84align-regexp%E7%9A%84%E7%94%A8%E6%B3%95">这里有一篇中文的</a></li>
+</ol>
+
+
+<pre class="example">
+    _f_:    ls-git    _F_: ido-fasd-find-file                _r_: edit-current-file-as-root
+    _g_:    grep      _o_: swiper _O_: swiper-all
+    _j_:    git-grep  _i_: ivy-imenu-anywhere _S_: evil-write-all
+    _s_: lusty-sudo-explorer _q_: hydra-zoom/body
+</pre>
+
+<p>
+可以这样来对齐：
+<code>C-u align-regex \(\s-*\)...: 1 10 y</code>
+</p>
+
+<p>
+对齐后效果如下：
+</p>
+<pre class="example">
+    _f_:    ls-git                    _F_: ido-fasd-find-file          _r_: edit-current-file-as-root
+    _g_:    grep                      _o_: swiper                      _O_: swiper-all
+    _j_:    git-grep                  _i_: ivy-imenu-anywhere          _S_: evil-write-all
+    _s_: lusty-sudo-explorer          _q_: hydra-zoom/body
+</pre>
+
+<p>
+一般就是找到匹配的正则，然后第一个选 <code>-1</code> ，然后第二个选 <code>1</code> 我感觉
+是一个tab。重不重看情况就好了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7c02dcf" class="outline-2">
+<h2 id="org7c02dcf"><span class="section-number-2">23</span> 正则表达式</h2>
+<div class="outline-text-2" id="text-23">
+<p>
+emacs中的正则和其它我觉得没有太大区别。唯一不同是 <code>\</code> 在emacs的
+string中有特殊的含义。所以使用string来表示emacs中的正则时，在需要使
+用 <code>\</code> 来转义的地方，要使用两个。比如string中的这样： <code>\\$</code> 才是转义
+了 <code>$</code> 。这就导致emacs的正则看起来是充满了 <code>\</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-org9276699" class="outline-2">
+<h2 id="org9276699"><span class="section-number-2">24</span> 使用emacs来查看python代码</h2>
+<div class="outline-text-2" id="text-24">
+</div>
+<div id="outline-container-org5cad753" class="outline-3">
+<h3 id="org5cad753"><span class="section-number-3">24.1</span> elpy</h3>
+<div class="outline-text-3" id="text-24-1">
+<p>
+优先使用elpy，感觉它可以“理解”python代码。也很精确。
+</p>
+</div>
+</div>
+<div id="outline-container-orgda1951b" class="outline-3">
+<h3 id="orgda1951b"><span class="section-number-3">24.2</span> 基于tag</h3>
+<div class="outline-text-3" id="text-24-2">
+<p>
+使用ctags等工具制做好tags后来使用。tag相对来说要精确一些。
+</p>
+
+<p>
+ctags指定文件列表制做tag：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     find -type f -name <span style="color: #ffa500;">"*.py"</span> &gt; tags.files
+     ctags -e -L tags.files
+
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#19979;&#38754;&#36825;&#20010;&#21487;&#20197;&#19981;&#35201;test&#30446;&#24405;</span>
+     gfind  -type f -name <span style="color: #ffa500;">"*.py"</span> -not -path <span style="color: #ffa500;">"./tests/*"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org79a21e0" class="outline-3">
+<h3 id="org79a21e0"><span class="section-number-3">24.3</span> cscope</h3>
+<div class="outline-text-3" id="text-24-3">
+<p>
+cscope可以后于tag来使用。它的搜索范围要大些。
+</p>
+
+<p>
+cscope指定文件列表制做database：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     find -type f -name <span style="color: #ffa500;">"*.py"</span> &gt; cscope.files
+     cscope -b -k
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org035636d" class="outline-3">
+<h3 id="org035636d"><span class="section-number-3">24.4</span> ag</h3>
+<div class="outline-text-3" id="text-24-4">
+<p>
+`projectile-ag'来全局搜，效果很不错。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge0a97b3" class="outline-2">
+<h2 id="orge0a97b3"><span class="section-number-2">25</span> replace-regexp中输入换行newline</h2>
+<div class="outline-text-2" id="text-25">
+<p>
+需要使用 <code>C-q C-j</code> 。
+</p>
+<pre class="example">
+    C-q for quoted-insert,
+    C-j is a newline.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0ce9b51" class="outline-2">
+<h2 id="org0ce9b51"><span class="section-number-2">26</span> 结合helm-ag来进行multi-edit</h2>
+<div class="outline-text-2" id="text-26">
+<p>
+先使用helm-ag搜出来东西。然后 `C-c C-e' 进入helm-edit-mode。把需要的
+修改改好后，使用 `C-c C-c' 确定提交。
+</p>
+
+<p>
+<b>Keymap</b>
+</p>
+
+<p>
+`helm-ag-map' and `helm-do-ag-map' are inherited by helm-map
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key</th>
+<th scope="col" class="org-left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">C-c o</td>
+<td class="org-left">Open other window</td>
+</tr>
+
+<tr>
+<td class="org-left">C-l</td>
+<td class="org-left">Search in parent directory</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c C-e</td>
+<td class="org-left">Switch to edit mode</td>
+</tr>
+
+<tr>
+<td class="org-left">C-x C-s</td>
+<td class="org-left">Save ag results to buffer(Ask save buffer name if prefix key is specified)</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c C-f</td>
+<td class="org-left">Enable helm-follow-mode</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c &gt;, right</td>
+<td class="org-left">Move to next file</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c &lt;, left</td>
+<td class="org-left">Move to previous file</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c ?</td>
+<td class="org-left">Show help message</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<b>Edit mode keymap</b>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key</th>
+<th scope="col" class="org-left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">C-c C-c</td>
+<td class="org-left">Commit changes</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c C-k</td>
+<td class="org-left">Abort</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c C-d</td>
+<td class="org-left">Mark delete line</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c C-u</td>
+<td class="org-left">Unmark</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgcab2b60" class="outline-2">
+<h2 id="orgcab2b60"><span class="section-number-2">27</span> ibuffer</h2>
+<div class="outline-text-2" id="text-27">
+<p>
+ibuffer可以这样设置来分组：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">set ibuffer display as group</span>
+    (<span style="color: PaleYellow;">setq</span> ibuffer-saved-filter-groups
+          (<span style="color: PaleYellow;">quote</span> ((<span style="color: #ffa500;">"default"</span>
+                   (<span style="color: #ffa500;">"dired"</span> (mode . dired-mode))
+                   <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">("perl" (mode . cperl-mode))</span>
+                   (<span style="color: #ffa500;">"python"</span> (mode . python-mode))
+                   <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">("erc" (mode . erc-mode))</span>
+                   (<span style="color: #ffa500;">"emacs"</span> (<span style="color: PaleYellow;">or</span>
+                             (name . <span style="color: #ffa500;">"^\\*scratch\\*$"</span>)
+                             (name . <span style="color: #ffa500;">"^\\*Messages\\*$"</span>)
+                             (mode . emacs-lisp-mode)
+                             ))
+                   (<span style="color: #ffa500;">"w3m"</span> (<span style="color: PaleYellow;">or</span>
+                             (mode . w3m-mode)
+                             ))
+                   (<span style="color: #ffa500;">"planner"</span> (<span style="color: PaleYellow;">or</span>
+                               (name . <span style="color: #ffa500;">"^Calendar$"</span>)
+                               (name . <span style="color: #ffa500;">"^diary$"</span>)
+                               (name . <span style="color: #ffa500;">"^inbox.org$"</span>)
+                               (name . <span style="color: #ffa500;">"^Tips.org$"</span>)
+                               (name . <span style="color: #ffa500;">"^note.org$"</span>)
+                               (name . <span style="color: #ffa500;">"^daily.org$"</span>)
+                               (name . <span style="color: #ffa500;">"^test.org$"</span>)
+                               (mode . muse-mode)
+                               ))
+                   (<span style="color: #ffa500;">"org"</span> (mode . org-mode))
+                   <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">("gnus" (or</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(mode . message-mode)</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(mode . bbdb-mode)</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(mode . mail-mode)</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(mode . gnus-group-mode)</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(mode . gnus-summary-mode)</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(mode . gnus-article-mode)</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(name . "^\\.bbdb$")</span>
+                   <span style="color: #cd5c5c;">;;          </span><span style="color: #cd5c5c;">(name . "^\\.newsrc-dribble")))</span>
+                   ))))
+    (add-hook 'ibuffer-mode-hook
+              (<span style="color: PaleYellow;">lambda</span> ()
+                (ibuffer-switch-to-saved-filter-groups <span style="color: #ffa500;">"default"</span>)))
+</pre>
+</div>
+
+<p>
+设置显示大小为human readable：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Use human readable Size column instead of original one</span>
+    (<span style="color: PaleYellow;">define-ibuffer-column</span> size-h
+      (<span style="color: #b0c4de;">:name</span> <span style="color: #ffa500;">"Size"</span> <span style="color: #b0c4de;">:inline</span> t)
+      (<span style="color: PaleYellow;">cond</span>
+       ((&gt; (buffer-size) 1000000) (format <span style="color: #ffa500;">"%7.1fM"</span> (/ (buffer-size) 1000000.0)))
+       ((&gt; (buffer-size) 100000) (format <span style="color: #ffa500;">"%7.0fk"</span> (/ (buffer-size) 1000.0)))
+       ((&gt; (buffer-size) 1000) (format <span style="color: #ffa500;">"%7.1fk"</span> (/ (buffer-size) 1000.0)))
+       (t (format <span style="color: #ffa500;">"%8d"</span> (buffer-size)))))
+
+    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Modify the default ibuffer-formats</span>
+      (<span style="color: PaleYellow;">setq</span> ibuffer-formats
+            '((mark modified read-only <span style="color: #ffa500;">" "</span>
+                    (name 18 18 <span style="color: #b0c4de;">:left</span> <span style="color: #b0c4de;">:elide</span>)
+                    <span style="color: #ffa500;">" "</span>
+                    (size-h 9 -1 <span style="color: #b0c4de;">:right</span>)
+                    <span style="color: #ffa500;">" "</span>
+                    (mode 16 16 <span style="color: #b0c4de;">:left</span> <span style="color: #b0c4de;">:elide</span>)
+                    <span style="color: #ffa500;">" "</span>
+                    filename-and-process)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org73d2d8e" class="outline-2">
+<h2 id="org73d2d8e"><span class="section-number-2">28</span> 写一个判断是否有 <code>universal-argument</code> 的函数</h2>
+<div class="outline-text-2" id="text-28">
+<div class="org-src-container">
+<pre class="src src-elisp">    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">my-test</span> (x)
+      <span style="color: #ffa500;">"print argument received"</span>
+      (<span style="color: PaleYellow;">interactive</span> <span style="color: #ffa500;">"P"</span>)
+      (message <span style="color: #ffa500;">"%s"</span> x)
+      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">value of x is from universal argument, or nil if universal-argument isn't called</span>
+    )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org806c981" class="outline-2">
+<h2 id="org806c981"><span class="section-number-2">29</span> 读写文件</h2>
+<div class="outline-text-2" id="text-29">
+<div class="org-src-container">
+<pre class="src src-elisp">    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">Read File Content into a String</span>
+    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">get-string-from-file</span> (filePath)
+      <span style="color: #ffa500;">"Return filePath's file content."</span>
+      (<span style="color: PaleYellow;">with-temp-buffer</span>
+        (insert-file-contents filePath)
+        (buffer-string)))
+    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">thanks to &#8220;Pascal J Bourguignon&#8221; and &#8220;TheFlyingDutchman &#12308;zzbba&#8230;@aol.com&#12309;&#8221;. 2010-09-02</span>
+
+    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">Read File Content as List of Lines</span>
+    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">read-lines</span> (filePath)
+      <span style="color: #ffa500;">"Return a list of lines of a file at filePath."</span>
+      (<span style="color: PaleYellow;">with-temp-buffer</span>
+        (insert-file-contents filePath)
+        (split-string (buffer-string) <span style="color: #ffa500;">"\n"</span> t)))
+
+
+    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">save variable `</span><span style="color: #7fffd4;">ivy-views</span><span style="color: #cd5c5c;">' to file, it will overide the file</span>
+    (<span style="color: PaleYellow;">with-temp-file</span> <span style="color: #ffa500;">"/tmp/elisp.el"</span>
+      (insert (format <span style="color: #ffa500;">"%s"</span> ivy-views)))
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org35174fe" class="outline-2">
+<h2 id="org35174fe"><span class="section-number-2">30</span> convert string to list object</h2>
+<div class="outline-text-2" id="text-30">
+<p>
+使用`read'可以完成，它可以从buffer、string等很多中读取出list object：
+</p>
+<pre class="example">
+    Read one Lisp expression as text from STREAM, return as Lisp object.
+    If STREAM is nil, use the value of `standard-input' (which see).
+    STREAM or the value of `standard-input' may be:
+     a buffer (read from point and advance it)
+     a marker (read from where it points and advance it)
+     a function (call it with no arguments for each character,
+         call it with a char as argument to push a char back)
+     a string (takes text from string, starting at the beginning)
+     t (read text line using minibuffer and use it, or read from
+        standard input in batch mode).
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-elisp">    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">read from string</span>
+    (read <span style="color: #ffa500;">"(xie peng ni hoa)"</span>)
+
+    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">read from file</span>
+    (<span style="color: PaleYellow;">with-temp-buffer</span> 
+      (insert-file-contents <span style="color: #ffa500;">"/tmp/elisp.el"</span>)
+      (goto-char (point-min))
+      (read (current-buffer)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org49f8ee1" class="outline-2">
+<h2 id="org49f8ee1"><span class="section-number-2">31</span> artist mode</h2>
+<div class="outline-text-2" id="text-31">
+<p>
+使用 <code>artist-select-op-text-see-thru</code> 可以来画assicc字体。 <code>M-x</code> 调
+用后，还需要按下回车。然后输入字母吧。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2450cd5" class="outline-2">
+<h2 id="org2450cd5"><span class="section-number-2">32</span> org-mode代码块</h2>
+<div class="outline-text-2" id="text-32">
+<p>
+按键绑定
+</p>
+<pre class="example">
+    `C-c C-v p'   or   `C-c C-v C-p'     `org-babel-previous-src-block'
+    `C-c C-v n'   or   `C-c C-v C-n'     `org-babel-next-src-block'
+    `C-c C-v e'   or   `C-c C-v C-e'     `org-babel-execute-maybe'
+    `C-c C-v o'   or   `C-c C-v C-o'     `org-babel-open-src-block-result'
+    `C-c C-v v'   or   `C-c C-v C-v'     `org-babel-expand-src-block'
+    `C-c C-v u'   or   `C-c C-v C-u'     `org-babel-goto-src-block-head'
+    `C-c C-v g'   or   `C-c C-v C-g'     `org-babel-goto-named-src-block'
+    `C-c C-v r'   or   `C-c C-v C-r'     `org-babel-goto-named-result'
+    `C-c C-v b'   or   `C-c C-v C-b'     `org-babel-execute-buffer'
+    `C-c C-v s'   or   `C-c C-v C-s'     `org-babel-execute-subtree'
+    `C-c C-v d'   or   `C-c C-v C-d'     `org-babel-demarcate-block'
+    `C-c C-v t'   or   `C-c C-v C-t'     `org-babel-tangle'
+    `C-c C-v f'   or   `C-c C-v C-f'     `org-babel-tangle-file'
+    `C-c C-v c'   or   `C-c C-v C-c'     `org-babel-check-src-block'
+    `C-c C-v j'   or   `C-c C-v C-j'     `org-babel-insert-header-arg'
+    `C-c C-v l'   or   `C-c C-v C-l'     `org-babel-load-in-session'
+    `C-c C-v i'   or   `C-c C-v C-i'     `org-babel-lob-ingest'
+    `C-c C-v I'   or   `C-c C-v C-I'     `org-babel-view-src-block-info'
+    `C-c C-v z'   or   `C-c C-v C-z'     `org-babel-switch-to-session-with-code'
+    `C-c C-v a'   or   `C-c C-v C-a'     `org-babel-sha1-hash'
+    `C-c C-v h'   or   `C-c C-v C-h'     `org-babel-describe-bindings'
+    `C-c C-v x'   or   `C-c C-v C-x'     `org-babel-do-key-sequence-in-edit-buffer'
+
+</pre>
+<ol class="org-ol">
+<li><p>
+<code>org-babel-goto-named-src-block</code> 可以跳到一个nameed的block，下面
+这样写，直接输入 <code>xiepeng</code> 就可以跳过去：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #cd5c5c;">       #+NAME: xiepeng</span>
+<span style="color: #cd5c5c;">       #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py</span>
+<span style="color: #b3b3b3;">       </span><span style="color: PaleYellow;">print</span><span style="color: #b3b3b3;"> </span><span style="color: #ffa500;">'xiepeng'</span>
+<span style="color: #cd5c5c;">       #+END_SRC</span>
+</pre>
+</div></li>
+<li><code>org-babel-insert-header-arg</code> 这个来添加 <code>:results</code> 这种选项（开
+关）很方便</li>
+<li><code>org-babel-view-src-block-info</code> 可以查看当前block的开关信息。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgab60da4" class="outline-2">
+<h2 id="orgab60da4"><span class="section-number-2">33</span> ivy和helm的写法</h2>
+<div class="outline-text-2" id="text-33">
+<div class="org-src-container">
+<pre class="src src-elisp">    (ivy-read <span style="color: #ffa500;">"Pick:"</span> (mapcar #'number-to-string (number-sequence 1 10)))
+</pre>
+</div>
+
+<p>
+对应helm的代码：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (helm
+     <span style="color: #b0c4de;">:sources</span>
+     (<span style="color: PaleYellow;">helm-build-sync-source</span> <span style="color: #ffa500;">"one-to-ten"</span>
+                             <span style="color: #b0c4de;">:candidates</span>
+                             (mapcar #'number-to-string (number-sequence 1 10))
+                             <span style="color: #b0c4de;">:fuzzy-match</span> t)
+     <span style="color: #b0c4de;">:buffer</span>
+     <span style="color: #ffa500;">"*helm one-to-ten*"</span>)
+</pre>
+</div>
+<p>
+或者这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (helm-comp-read <span style="color: #ffa500;">"Pick:"</span> (mapcar #'number-to-string (number-sequence 1 10)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5a738a0" class="outline-2">
+<h2 id="org5a738a0"><span class="section-number-2">34</span> emacs把行号添加到文件中</h2>
+<div class="outline-text-2" id="text-34">
+<p>
+选中后使用 <code>C-x r N(rectangle-number-lines))</code> 就可以啦。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org472362b" class="outline-2">
+<h2 id="org472362b"><span class="section-number-2">35</span> org-mode publish时太慢的解决办法</h2>
+<div class="outline-text-2" id="text-35">
+<p>
+<a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">参考是这个博客</a>
+</p>
+
+<p>
+我的静态blog是使用org的publish功能直接导出的。当文件较多的时候，完成
+导出一次需要消耗太多时间。有时甚至都不能导出了。这个blog上，先查看下
+导出的时候什么操作在占cpu：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (<span style="color: PaleYellow;">progn</span> (profiler-start 'cpu) (org-publish <span style="color: #ffa500;">"blog"</span>) (profiler-report))
+</pre>
+</div>
+<p>
+然后发现，大多数时间花在版本控制上了：
+</p>
+<pre class="example">
+    Turns out, most of its total run time was spent in functions relating
+    to version control (starting with vc-).
+
+    Some package in my configuration set up vc-find-file-hook as part of
+    find-file-hook. This means that every time org-publish opens a file,
+    Emacs will look for the containing git repository and query its
+    status. This takes forever! Worse yet, I don't even use vc-git at
+    all. All my git interaction is done through magit.
+</pre>
+<p>
+结果是在 <code>find-file-hook</code> 中有 <code>vc-find-file-hook</code> 这个钩子，每次打
+开文件都要使用去查一下git库的status。而这个作者和我都没有使用
+<code>vc-git</code> ，而是使用 <code>magit</code> 来完成和git的交互。所以直接把这个钩子从
+<code>find-file-hook</code> 中删掉。
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (remove-hook 'find-file-hooks 'vc-find-file-hook)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org193b4c8" class="outline-2">
+<h2 id="org193b4c8"><span class="section-number-2">36</span> bookmark plus</h2>
+<div class="outline-text-2" id="text-36">
+<p>
+这个玩意可以把w3m的页面也当成bookmark。但是它还是做不到给w3m的书签分
+类。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd7380c3" class="outline-2">
+<h2 id="orgd7380c3"><span class="section-number-2">37</span> elisp函数根据有没有按 <code>C-u</code> 来走不同的流程</h2>
+<div class="outline-text-2" id="text-37">
+<div class="org-src-container">
+<pre class="src src-elisp">    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-test</span> (arg)
+      (<span style="color: PaleYellow;">interactive</span> <span style="color: #ffa500;">"P"</span>)
+      (<span style="color: PaleYellow;">if</span> arg
+          (message <span style="color: #ffa500;">"yes"</span>)
+        (message <span style="color: #ffa500;">"no"</span>)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8c88852" class="outline-2">
+<h2 id="org8c88852"><span class="section-number-2">38</span> 启动加速</h2>
+<div class="outline-text-2" id="text-38">
+<p>
+编译所有 <code>site-lisp</code> 目录下的 <code>.el</code> ：
+</p>
+<pre class="example">
+    C-u 0 M-x byte-recompile-directory
+
+    will compile all the .el files in the directory and in all subdirectories below.
+
+    The C-u 0 part is to make it not ask about every .el file that does not have a .elc counterpart.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgbc6e8e5" class="outline-2">
+<h2 id="orgbc6e8e5"><span class="section-number-2">39</span> 我的 <code>cc-mode</code></h2>
+<div class="outline-text-2" id="text-39">
+<p>
+<del>查看代码主要使用 <code>counsel-gtags, cscope, counsel-rg</code> 。</del>
+</p>
+
+<p>
+现在换成了 <code>cquery(server)</code> 和 <code>lsp-mode(client)</code> 的组合啦。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf98e802" class="outline-2">
+<h2 id="orgf98e802"><span class="section-number-2">40</span> use exwm</h2>
+<div class="outline-text-2" id="text-40">
+<pre class="example">
+    1. Add following lines to your .emacs:
+  
+       (require 'exwm)
+       (require 'exwm-config)
+       (exwm-config-default)
+   
+    2. Link or copy xinitrc (from exwm source directory) to ~/.xinitrc.
+  
+    3. Start EXWM from a console (e.g. tty1) with
+  
+       xinit -- vt01
+</pre>
+
+<p>
+<code>Ctrl + Alt + F1</code>
+</p>
+
+<p>
+stop X server:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo service lightdm stop
+    sudo killall /usr/bin/X
+</pre>
+</div>
+
+<p>
+start exwm:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    xinit -- -vt01
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org12716d7" class="outline-2">
+<h2 id="org12716d7"><span class="section-number-2">41</span> 在elisp函数中使用 <code>C-u</code></h2>
+<div class="outline-text-2" id="text-41">
+<p>
+下面这段代码可以就和使用 <code>C-u</code> 来调用 <code>counsel-gtags-update-tags</code> 实
+现同样的功能：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-test</span> ()
+      (<span style="color: PaleYellow;">interactive</span>)
+      (<span style="color: PaleYellow;">let</span> (current-prefix-arg)
+        (<span style="color: PaleYellow;">setq</span> current-prefix-arg '(4))
+        (call-interactively 'counsel-gtags-update-tags)
+        ))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9ae6dc2" class="outline-2">
+<h2 id="org9ae6dc2"><span class="section-number-2">42</span> cscope和gtags不包括某些目录</h2>
+<div class="outline-text-2" id="text-42">
+<p>
+cscope和gtags都支持指定文件。选项不同而已。先用find找出来。然后指定
+就可以了。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">find -name <span style="color: #ffa500;">'*.[hc]'</span>|grep -v <span style="color: #ffa500;">'^./hal'</span>|grep -v <span style="color: #ffa500;">'^./third_party'</span>|grep -v <span style="color: #ffa500;">'^./linux/'</span> &gt; cscope.files
+cscope -b -q -i cscope.files
+cat cscope.files|gtags -f -
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbd363b9" class="outline-2">
+<h2 id="orgbd363b9"><span class="section-number-2">43</span> 为org-mode自动添加目录</h2>
+<div class="outline-text-2" id="text-43">
+<p>
+<a href="https://github.com/snosov1/toc-org">readme在这里</a>
+</p>
+
+<p>
+使用 <code>toc-org</code> 这个库，安装好后，加入下面的配置就可以了：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: PaleYellow;">if</span> (<span style="color: PaleYellow;">require</span> '<span style="color: #7fffd4;">toc-org</span> nil t)
+    (add-hook 'org-mode-hook 'toc-org-enable)
+  (<span style="color: #ffc0cb; font-weight: bold;">warn</span> <span style="color: #ffa500;">"toc-org not found"</span>))
+</pre>
+</div>
+
+<p>
+这样，打上 <code>:TOC:</code> 标签的head每次保存的时候都会自动生成份目录了，也可以手动调用 <code>toc-org-insert-toc</code> 。所
+以在需要添加目录的地方，可以搞一个这样的head：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #9acd32;">* &#30446;&#24405;                                                                  </span><span style="color: #9acd32; font-weight: bold;">:TOC:</span>
+</pre>
+</div>
+
+<p>
+默认情况下是生成的和 <code>github</code> 兼容的目录，类似于这样：
+</p>
+<pre class="example">
+[[#heading-name]]
+
+</pre>
+<p>
+这时在org-mode中直接跳，如果没有对应的 <code>custom_id</code> 的属性是跳不过去的。
+</p>
+
+<p>
+<code>toc_2_org</code> ：可以设置为org中可以跳过去的link，2表示只生成前两级目录。
+生成的link类似这样：
+</p>
+<pre class="example">
+[[*heading-name]]
+</pre>
+</div>
+</div>
+<div id="outline-container-org9ad9c76" class="outline-2">
+<h2 id="org9ad9c76"><span class="section-number-2">44</span> org-mode tangle整个head</h2>
+<div class="outline-text-2" id="text-44">
+<p>
+可以加一个 <code>header-args</code> ，值就是对应写 <code>tangle=的值： =:tangle
+  xxx.c :mkdirp yes :main no</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #9acd32;">* test</span>
+<span style="color: PaleYellow;">  :PROPERTIES:</span>
+  <span style="color: PaleYellow;">:header-args:</span> :tangle /tmp/nihaotangle/main.c :mkdirp yes :main no
+<span style="color: PaleYellow;">  :END:</span>
+
+<span style="color: #cd5c5c;">  #+BEGIN_SRC C</span>
+<span style="color: #b3b3b3;"> printf(</span><span style="color: #ffa500;">"xieng"</span><span style="color: #b3b3b3;">); </span>
+<span style="color: #cd5c5c;">  #+END_SRC</span>
+
+<span style="color: #cd5c5c;">  #+BEGIN_SRC C</span>
+<span style="color: #b3b3b3;"> printf(</span><span style="color: #ffa500;">"hi"</span><span style="color: #b3b3b3;">); </span>
+<span style="color: #cd5c5c;">  #+END_SRC</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6a1e83d" class="outline-2">
+<h2 id="org6a1e83d"><span class="section-number-2">45</span> 直接查看info文件</h2>
+<div class="outline-text-2" id="text-45">
+<p>
+<code>C-u M-x info</code> 就可以了。
+</p>
+</div>
+</div>
+<div id="outline-container-org7a8209c" class="outline-2">
+<h2 id="org7a8209c"><span class="section-number-2">46</span> 在elisp中模拟按键的输入</h2>
+<div class="outline-text-2" id="text-46">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(call-interactively 'compile)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0d83d49" class="outline-2">
+<h2 id="org0d83d49"><span class="section-number-2">47</span> emacs中的长table导出pdf的问题</h2>
+<div class="outline-text-2" id="text-47">
+<p>
+如果一个table太宽了，导出成pdf时会超出页面。把它搞成longtable就可以
+解决了。这样可以设置每一列的长度。
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">功能</th>
+<th scope="col" class="org-left">命令</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">进入config mode</td>
+<td class="org-left">configure terminal</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">进入interface mode</td>
+<td class="org-left">interface &lt;interface-number&gt;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">配置端口的链路类型为Hybrid类型</td>
+<td class="org-left">switchport mode hybrid</td>
+<td class="org-left">缺省情况下，端口的链路类型为Access类型</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">允许指定的VLAN通过当前Hybrid端口</td>
+<td class="org-left">switchport add vlan &lt;vid&gt; [tag &vert; untaged]</td>
+<td class="org-left">缺省情况下，所有Hybrid端口只允许VLAN1通过</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">不允许指定的VLAN通过当前Hybrid端口</td>
+<td class="org-left">switchport remove vlan &lt;vid&gt; [tag &vert; untaged]</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">把Hybrid端口加入default VLAN并设置pvid为输入vid</td>
+<td class="org-left">switchport default-vlan &lt;vid&gt;</td>
+<td class="org-left">缺省情况下，Hybrid端口的缺省VLAN为VLAN 1</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">把Hybrid端口从default VLAN中移除并设置pvid为1</td>
+<td class="org-left">no switchport default-vlan</td>
+<td class="org-left">缺省情况下，Hybrid端口的缺省VLAN为VLAN 1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org2f2dc76" class="outline-2">
+<h2 id="org2f2dc76"><span class="section-number-2">48</span> org-mode中以root用户执行命令</h2>
+<div class="outline-text-2" id="text-48">
+<p>
+直接在org-mode中可以执行block中的命令，然而有些时候我需要使用root用
+来执行，可以这样写：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #cd5c5c;">  #+BEGIN_SRC sh :dir /sudo::</span>
+<span style="color: #b3b3b3;">apt-get update </span>
+<span style="color: #cd5c5c;">  #+END_SRC</span>
+
+  
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1e9b1ed" class="outline-2">
+<h2 id="org1e9b1ed"><span class="section-number-2">49</span> eshell中定义alias</h2>
+<div class="outline-text-2" id="text-49">
+<p>
+直接写入 <code>eshell-aliases-file</code> 文件就可以了，比如当前我的是这些：
+</p>
+<pre class="example">
+alias ll ls -al
+alias gbr git branch
+alias gst git status
+alias gck git checkout
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0c4006b" class="outline-2">
+<h2 id="org0c4006b"><span class="section-number-2">50</span> 在emacs中执行shell脚本</h2>
+<div class="outline-text-2" id="text-50">
+<p>
+<a href="http://ergoemacs.org/emacs/elisp_call_shell_command.html">xah的blog</a>
+</p>
+
+<pre class="example">
+Elisp: Call Shell Command
+
+By Xah Lee. Date: 2018-09-04. Last updated: 2018-09-05.
+
+  * shell-command → call a shell command, wait for it to finish.
+  * shell-command-to-string → call a shell command and get its output
+
+; call a shell command
+(shell-command "touch new.txt")
+
+; call a shell command and get its output
+(shell-command-to-string "ls")
+
+Call a shell command, but don't wait for it to finish before
+continuing, use start-process or start-process-shell-command
+
+;; open files in Linux desktop
+(mapc
+ (lambda (x)
+   (let ((process-connection-type nil))
+     (start-process "" nil "xdg-open" x)) )
+ filePathList)
+</pre>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">Maybe it will fail. You can copy
+the command to the terminal and run it by yourself.</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2019-03-18 一 16:23</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

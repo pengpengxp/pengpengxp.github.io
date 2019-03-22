@@ -1,0 +1,1824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Azure wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Azure wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge262761">1. Azure-cli</a></li>
+<li><a href="#org52f939a">2. command line</a>
+<ul>
+<li><a href="#org8d1e65d">2.1. asm</a></li>
+<li><a href="#org57b1b9b">2.2. arm</a></li>
+</ul>
+</li>
+<li><a href="#orga67e40f">3. from mail microsoft cloud</a></li>
+<li><a href="#org1e8e40f">4. 出现常见错误的解决办法</a></li>
+<li><a href="#orgf4018a5">5. 使用storage的container时需要认证</a></li>
+<li><a href="#orge1d17ec">6. <span class="todo TODO">TODO</span> Questions</a>
+<ul>
+<li><a href="#org9378d37">6.1. azure 多网卡vm</a></li>
+</ul>
+</li>
+<li><a href="#org975518b">7. <span class="done DONE">DONE</span> 为毛在command-line创建的vm在web端看不到？</a></li>
+<li><a href="#org222de01">8. 中国区登陆</a></li>
+<li><a href="#orgc8ad770">9. python sdk for azure</a></li>
+<li><a href="#org63bd81b">10. cloud init</a></li>
+<li><a href="#org36307ad">11. capture vm 捕获虚拟机</a></li>
+<li><a href="#org1261d67">12. 从捕获的虚拟机中拉起vm</a></li>
+<li><a href="#org9981bf8">13. 拉起ubuntu 14.04的机器</a></li>
+<li><a href="#org357499e">14. cloud-init</a></li>
+<li><a href="#orga2755db">15. azure存储</a></li>
+<li><a href="#orgcfbdac0">16. azure-cli有两个版本，一个是普通的azure-cli，一个是new azure-cli 2.0 here</a></li>
+<li><a href="#org5feed4c">17. az参考文档</a></li>
+<li><a href="#org6edcb8a">18. azure参考文档</a></li>
+<li><a href="#org42cbe15">19. azure配置静态内网ip</a></li>
+<li><a href="#orgff465f1">20. <code>[17/21]</code> Link</a></li>
+<li><a href="#availibility_set">21. azure的可用性集</a></li>
+<li><a href="#orgd0853a1">22. azure如何提供HA</a></li>
+<li><a href="#org9cbd192">23. load-balance</a></li>
+<li><a href="#org449e158">24. stop and deallocate</a></li>
+<li><a href="#orgd274955">25. 多个region中的数据存储和同步问题</a></li>
+<li><a href="#org9db9b37">26. ip address</a>
+<ul>
+<li><a href="#org97e69f4">26.1. Private IP:</a></li>
+</ul>
+</li>
+<li><a href="#org384b752">27. 网卡</a>
+<ul>
+<li><a href="#org30f4f77">27.1. What are network interfaces?</a></li>
+<li><a href="#orgfb3b69d">27.2. 一个nic上设置多个ip</a></li>
+</ul>
+</li>
+<li><a href="#org7319115">28. 虚拟网络</a>
+<ul>
+<li><a href="#orga8cb49a">28.1. <span class="todo TODO">TODO</span> 网络限制</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge262761" class="outline-2">
+<h2 id="orge262761"><span class="section-number-2">1</span> Azure-cli</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+我们当前使用的是azure-cli 1.0的版本。azure-cli 2.0版本又有不同了。它
+应该是针对arm模式搞了些啥。命令都变成了az而不是azure。
+</p>
+
+<p>
+install azure-cli 1.0:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    npm install -g azure-cli
+</pre>
+</div>
+
+<p>
+启用补全：
+zsh：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'. &lt;(azure --completion)'</span> &gt;&gt; .zshrc
+</pre>
+</div>
+<p>
+bash：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    azure --completion &gt;&gt; ~/azure.completion.sh
+    <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'source ~/azure.completion.sh'</span> &gt;&gt; ~/.bash_profile
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org52f939a" class="outline-2">
+<h2 id="org52f939a"><span class="section-number-2">2</span> command line</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org8d1e65d" class="outline-3">
+<h3 id="org8d1e65d"><span class="section-number-3">2.1</span> <a href="https://manage.windowsazure.cn/">asm</a></h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#19978;&#20256;&#25105;&#20204;&#30340;vhd&#34394;&#25311;&#26426;</span>
+     azure vm image create rivercirros /Users/pengpengxp/VirtualBox<span style="color: #ff4ea3;">\ </span>VMs/ubuntu-vhd-fixe/ubuntu-vhd-fixe.vhd -o linux -l <span style="color: #ff4ea3;">"China East"</span> --verbose
+     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;vm</span>
+     azure vm create rivervm rivercirros --userName river --location <span style="color: #ff4ea3;">"China east"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org57b1b9b" class="outline-3">
+<h3 id="org57b1b9b"><span class="section-number-3">2.2</span> <a href="https://portal.azure.cn/">arm</a></h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">quick-create </span>
+     azure vm quick-create -g exampleResourceGroup -n exampleVMName -l chinaeast -y Linux -u exampleAdminUser -M ~/.ssh/id_rsa.pub -Q UbuntuLTS
+</pre>
+</div>
+
+<p>
+<a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-create-cli-complete/">使用 Azure CLI 创建完整的 Linux 环境</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     azure group create TestRG -l chinaeast
+     azure storage account create -g TestRG -l chinaeast --kind Storage --sku-name GRS rivercmd
+
+     azure network vnet create -g TestRG -n TestVNet -a 192.168.0.0/16 -l chinaeast
+     azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd -a 192.168.1.0/24
+     azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd2 -a 192.168.2.0/24
+
+     azure network public-ip create -d riverdomain TestRG TestPIP chinaeast
+     azure network public-ip create -d riverdomain2 TestRG TestPIP2 chinaeast
+
+     azure network nic create -g TestRG -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd rivernic
+     azure network nic create -g TestRG -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd2 rivernic2
+
+     azure vm create <span style="color: #ff4ea3;">\</span>
+         --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+         --name TestVM1 <span style="color: #ff4ea3;">\</span>
+         --location chinaeast <span style="color: #ff4ea3;">\</span>
+         --os-type linux <span style="color: #ff4ea3;">\</span>
+         --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+         --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+         --storage-account-name rivercmd <span style="color: #ff4ea3;">\</span>
+         --image-urn canonical:UbuntuServer:16.04.0-LTS:latest <span style="color: #ff4ea3;">\</span>
+         --ssh-publickey-file ~/.ssh/id_rsa.pub <span style="color: #ff4ea3;">\</span>
+         --admin-username ops <span style="color: #ff4ea3;">\</span>
+         --public-ip-name TestPIP <span style="color: #ff4ea3;">\</span>
+         --nic-name rivernic
+
+
+     azure vm create <span style="color: #ff4ea3;">\</span>
+         --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+         --name TestVM2 <span style="color: #ff4ea3;">\</span>
+         --location chinaeast <span style="color: #ff4ea3;">\</span>
+         --os-type linux <span style="color: #ff4ea3;">\</span>
+         --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+         --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+         --vnet-subnet-name FrontEnd2 <span style="color: #ff4ea3;">\</span>
+         --storage-account-name rivercmd <span style="color: #ff4ea3;">\</span>
+         --image-urn canonical:UbuntuServer:16.04.0-LTS:latest <span style="color: #ff4ea3;">\</span>
+         --ssh-publickey-file ~/.ssh/id_rsa.pub <span style="color: #ff4ea3;">\</span>
+         --admin-username ops <span style="color: #ff4ea3;">\</span>
+         --public-ip-name TestPIP2 <span style="color: #ff4ea3;">\</span>
+         --nic-names rivernic2,rivernic
+
+
+     azure group export TestRG
+     azure group deployment create -f /tmp/TestRG.json -g NewRGFromTemplate
+
+     azure vm image list chinaeast canonical | grep LTS
+     a network public-ip show testrg testpip
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga67e40f" class="outline-2">
+<h2 id="orga67e40f"><span class="section-number-2">3</span> from mail microsoft cloud</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+发件人: Michael Li (DX) 
+发送时间: divendres, 21 d’octubre de 2016 14:50
+收件人: He Wang &lt;wahe@microsoft.com&gt;
+主题: 部署步骤
+</p>
+
+<p>
+以下是以经典方式创建的参考：
+</p>
+
+<ol class="org-ol">
+<li>创建虚拟机网络，请参考:</li>
+</ol>
+<p>
+<a href="https://social.technet.microsoft.com/wiki/contents/articles/17789.azure-how-to-create-a-virtual-network.aspx">https://social.technet.microsoft.com/wiki/contents/articles/17789.azure-how-to-create-a-virtual-network.aspx</a>
+</p>
+
+<ol class="org-ol">
+<li>按照下面文档的方法，创建一个云服务(Cloud Service):</li>
+</ol>
+<p>
+<a href="https://azure.microsoft.com/en-us/documentation/articles/cloud-services-how-to-create-deploy/">https://azure.microsoft.com/en-us/documentation/articles/cloud-services-how-to-create-deploy/</a>
+仅参考How to: Create a cloud service using Quick Create 的步骤创建即可。云服务配置好之后，可以获得一个互联网可以访问的域名，比如xxxxx.chinacloudapp.cn 这样的。
+</p>
+
+<ol class="org-ol">
+<li>创建虚拟机, 请参考:</li>
+</ol>
+<p>
+<a href="http://www.c-sharpcorner.com/UploadFile/1ae37f/create-virtual-machinevm-in-microsoft-azure-step-by-step/">http://www.c-sharpcorner.com/UploadFile/1ae37f/create-virtual-machinevm-in-microsoft-azure-step-by-step/</a>
+创建虚拟机时，切记，使用From Gallery 方式创建
+在创建虚拟机的向导中，将云服务选择为步骤2中创建的云服务，将虚拟机网络选择为步骤1中创建的虚拟网络以及其子网。
+通常情况下，WAF 需要一台虚拟机，被测试应用程序需要一台或者多台虚拟机(Web、DB等等)。
+</p>
+
+<ol class="org-ol">
+<li>配置端口</li>
+</ol>
+<p>
+<a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-classic-setup-endpoints/">https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-classic-setup-endpoints/</a>
+请将WAF 虚拟机的80 或者443 端口在云服务中进行EndPoint 配置，以便访问云服务的流量先流入WAF 虚拟机。
+</p>
+
+<ol class="org-ol">
+<li>创建完成后，就可以部署WAF 和被测试应用程序了。</li>
+<li>在部署结束之后，就可以对步骤2 创建的云服务地址开始攻击和测试了。</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org1e8e40f" class="outline-2">
+<h2 id="org1e8e40f"><span class="section-number-2">4</span> 出现常见错误的解决办法</h2>
+<div class="outline-text-2" id="text-4">
+<pre class="example">
+    error: The subscription is not registered to use namespace
+    'Microsoft.Network'. See https://aka.ms/rps-not-found for how to
+    register subscriptions.
+</pre>
+
+<p>
+需要把对应的东西注册上：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">    azure provider register Microsoft.Network
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf4018a5" class="outline-2">
+<h2 id="orgf4018a5"><span class="section-number-2">5</span> 使用storage的container时需要认证</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+创建的时候需要填入keys，可以使用 <code>azure storage account keys list
+  rivertestcommand --resource-group teststorage</code> 来查询：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">    azure storage container create --account-name rivertestcommand --account-key uJfdwbn/R3ju+iagt/GnSTAovkiMtpKwA9XaatvinB8M2+qQMQ/PN7d4gLZU1gzMTHiPa6gx47nbrjuHL2m5FQ== --container myimages
+</pre>
+</div>
+
+<p>
+如果是在shell中需要查询container相关的信息时，会提示需要设置环境变量：
+</p>
+<pre class="example">
+    /tmp ᐅ a storage container list
+    info:    Executing command storage container list
+    error:   Please set the storage account parameters or one of the following two environment variables to use the storage command.
+      1. AZURE_STORAGE_CONNECTION_STRING
+      2. AZURE_STORAGE_ACCOUNT and AZURE_STORAGE_ACCESS_KEY
+    error:   Error information has been recorded to /Users/pengpengxp/.azure/azure.err
+    error:   storage container list command failed
+</pre>
+
+<p>
+这样设置环境变量：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell-script">    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">AZURE_STORAGE_CONNECTION_STRING</span>=<span style="color: #ff4ea3;">'DefaultEndpointsProtocol=https;AccountName=rivertestcommand;AccountKey=uJfdwbn/R3ju+iagt/GnSTAovkiMtpKwA9XaatvinB8M2+qQMQ/PN7d4gLZU1gzMTHiPa6gx47nbrjuHL2m5FQ=='</span>
+</pre>
+</div>
+<p>
+该环境变量可以使用下面的命令来查到：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    azure storage account connectionstring show &lt;account_name&gt;
+</pre>
+</div>
+
+<p>
+其中AccountKey就是使用 <code>azure storage account keys list
+  rivertestcommand --resource-group teststorage</code> 来查到的结果。
+</p>
+
+<p>
+<a href="https://azure.microsoft.com/en-us/documentation/articles/storage-azure-cli/">Using the Azure CLI 2.0 with Azure Storage</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge1d17ec" class="outline-2">
+<h2 id="orge1d17ec"><span class="section-number-2">6</span> <span class="todo TODO">TODO</span> Questions</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org9378d37" class="outline-3">
+<h3 id="org9378d37"><span class="section-number-3">6.1</span> azure 多网卡vm</h3>
+</div>
+</div>
+<div id="outline-container-org975518b" class="outline-2">
+<h2 id="org975518b"><span class="section-number-2">7</span> <span class="done DONE">DONE</span> 为毛在command-line创建的vm在web端看不到？</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+azure分为全球区和中国区，我们现在使用的是中国区。
+</p>
+
+<p>
+而azure在中国区分为两种模式：asm模式和arm模式。前者是经典模式。后者是较新的模式。
+</p>
+
+<p>
+azure config mode asm和azure config mode arm可以在这两种模式下切换。
+</p>
+
+<p>
+这两种模式下的资源是分开的。也就是说在arm模式下新建的虚拟机。asm模式下看不到的。
+</p>
+
+<p>
+asm web登陆地址：<a href="https://manage.windowsazure.cn/">https://manage.windowsazure.cn/</a>
+arm web 登陆地址：<a href="https://portal.azure.cn/">https://portal.azure.cn/</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org222de01" class="outline-2">
+<h2 id="org222de01"><span class="section-number-2">8</span> 中国区登陆</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+中国区需要这样登陆：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">    azure login -e AzureChinaCloud
+    azure login -e AzureChinaCloud -u xxx@xxx
+    azure logout xxx@xxx
+</pre>
+</div>
+
+<p>
+azure cli 2.0登陆，参考的 <a href="https://www.azure.cn/documentation/articles/developerdifferences/">这里</a>
+</p>
+<ol class="org-ol">
+<li>使用 az cloud set &#x2013;name AzureChinaCloud 连接中国区 Azure。</li>
+<li>使用 az login -u &lt;account email&gt; -p &lt;account password&gt; 替换其中的
+账号和密码，登陆 Azure。</li>
+<li>如果在中国区 Azure 有多个订阅账户 Subscription，使用 az account
+set &#x2013;subscription &lt;subscirption name&gt; 选择用来生成认证信息的订阅
+账户。</li>
+<li>使用以下命令，生成认证文件 my.azureauth 并保存于本地。 curl -L
+<a href="https://raw.githubusercontent.com/Azure/azure-sdk-for-java/master/tools/authgen.py">https://raw.githubusercontent.com/Azure/azure-sdk-for-java/master/tools/authgen.py</a> |
+python &gt; my.azureauth</li>
+</ol>
+<pre class="example">
+    az cloud set --name AzureChinaCloud
+    az login -u xxx.xxx
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgc8ad770" class="outline-2">
+<h2 id="orgc8ad770"><span class="section-number-2">9</span> <a href="http://azure-sdk-for-python.readthedocs.io/en/latest/">python sdk for azure</a></h2>
+<div class="outline-text-2" id="text-9">
+<p>
+下面是一个hello-world的例子。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/local/bin/python</span>
+    <span style="color: #a1db00;">import</span> os
+    <span style="color: #a1db00;">from</span> azure.common.credentials <span style="color: #a1db00;">import</span> ServicePrincipalCredentials
+    <span style="color: #a1db00;">from</span> azure.mgmt.resource <span style="color: #a1db00;">import</span> ResourceManagementClient
+    <span style="color: #a1db00;">from</span> azure.mgmt.storage <span style="color: #a1db00;">import</span> StorageManagementClient
+    <span style="color: #a1db00;">from</span> azure.mgmt.network <span style="color: #a1db00;">import</span> NetworkManagementClient
+    <span style="color: #a1db00;">from</span> azure.mgmt.compute <span style="color: #a1db00;">import</span> ComputeManagementClient
+    <span style="color: #a1db00;">from</span> haikunator <span style="color: #a1db00;">import</span> Haikunator
+    <span style="color: #a1db00;">from</span> azure.common.credentials <span style="color: #a1db00;">import</span> UserPassCredentials
+
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create all clients with an Application (service principal) token provider</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+
+    <span style="color: #ff8700;">subscription_id</span> = <span style="color: #ff4ea3;">'5ef4723b-155a-4081-9dc5-d41c9a0130ab'</span>
+
+    <span style="color: #ff8700;">credentials</span> = UserPassCredentials(
+        <span style="color: #ff4ea3;">'user'</span>,      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Your user</span>
+        <span style="color: #ff4ea3;">'password'</span>,          <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Your password</span>
+        china = <span style="color: #5fafd7;">True</span>
+    )
+
+    <span style="color: #ff8700;">resource_client</span> = ResourceManagementClient(credentials, subscription_id, base_url = <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+    <span style="color: #ff8700;">compute_client</span> = ComputeManagementClient(credentials, subscription_id, base_url = <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+    <span style="color: #ff8700;">storage_client</span> = StorageManagementClient(credentials, subscription_id, base_url= <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+    <span style="color: #ff8700;">network_client</span> = NetworkManagementClient(credentials, subscription_id, base_url = <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">list all groups</span>
+    <span style="color: #a1db00;">for</span> item <span style="color: #a1db00;">in</span> resource_client.resources.<span style="color: #d18aff;">list</span>():
+        <span style="color: #a1db00;">print</span>(item.name)
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">list all storage_accounts</span>
+    <span style="color: #a1db00;">for</span> item <span style="color: #a1db00;">in</span> storage_client.storage_accounts.<span style="color: #d18aff;">list</span>():
+        <span style="color: #a1db00;">print</span>(item.name)
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">get client by name    </span>
+    <span style="color: #ff8700;">virtual_machine</span> = compute_client.virtual_machines.get(
+        <span style="color: #ff4ea3;">"azure-sample-group-virtual-machines"</span>,
+        <span style="color: #ff4ea3;">"vmname"</span> 
+    )
+
+    <span style="color: #a1db00;">print</span>(virtual_machine)
+</pre>
+</div>
+
+<p>
+下面是一个比较完整的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/local/bin/python</span>
+    <span style="color: #a1db00;">import</span> os
+    <span style="color: #a1db00;">from</span> azure.common.credentials <span style="color: #a1db00;">import</span> ServicePrincipalCredentials
+    <span style="color: #a1db00;">from</span> azure.mgmt.resource <span style="color: #a1db00;">import</span> ResourceManagementClient
+    <span style="color: #a1db00;">from</span> azure.mgmt.storage <span style="color: #a1db00;">import</span> StorageManagementClient
+    <span style="color: #a1db00;">from</span> azure.mgmt.network <span style="color: #a1db00;">import</span> NetworkManagementClient
+    <span style="color: #a1db00;">from</span> azure.mgmt.compute <span style="color: #a1db00;">import</span> ComputeManagementClient
+    <span style="color: #a1db00;">from</span> haikunator <span style="color: #a1db00;">import</span> Haikunator
+    <span style="color: #a1db00;">from</span> azure.common.credentials <span style="color: #a1db00;">import</span> UserPassCredentials
+
+    <span style="color: #ff8700;">haikunator</span> = Haikunator()
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Azure Datacenter</span>
+    <span style="color: #ff8700;">LOCATION</span> = <span style="color: #ff4ea3;">'China east'</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Resource Group</span>
+    <span style="color: #ff8700;">GROUP_NAME</span> = <span style="color: #ff4ea3;">'azure-sample-group-virtual-machines'</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Network</span>
+    <span style="color: #ff8700;">VNET_NAME</span> = <span style="color: #ff4ea3;">'azure-sample-vnet'</span>
+    <span style="color: #ff8700;">SUBNET_NAME</span> = <span style="color: #ff4ea3;">'azure-sample-subnet'</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">VM</span>
+    <span style="color: #ff8700;">OS_DISK_NAME</span> = <span style="color: #ff4ea3;">'azure-sample-osdisk'</span>
+    <span style="color: #ff8700;">STORAGE_ACCOUNT_NAME</span> = haikunator.haikunate(delimiter=<span style="color: #ff4ea3;">''</span>)
+
+    <span style="color: #ff8700;">IP_CONFIG_NAME</span> = <span style="color: #ff4ea3;">'azure-sample-ip-config'</span>
+    <span style="color: #ff8700;">NIC_NAME</span> = <span style="color: #ff4ea3;">'azure-sample-nic'</span>
+    <span style="color: #ff8700;">USERNAME</span> = <span style="color: #ff4ea3;">'userlogin'</span>
+    <span style="color: #ff8700;">PASSWORD</span> = <span style="color: #ff4ea3;">'Pa$$w0rd91'</span>
+    <span style="color: #ff8700;">VM_NAME</span> = <span style="color: #ff4ea3;">'VmName'</span>
+
+    <span style="color: #ff8700;">VM_REFERENCE</span> = {
+        <span style="color: #ff4ea3;">'linux'</span>: {
+            <span style="color: #ff4ea3;">'publisher'</span>: <span style="color: #ff4ea3;">'Canonical'</span>,
+            <span style="color: #ff4ea3;">'offer'</span>: <span style="color: #ff4ea3;">'UbuntuServer'</span>,
+            <span style="color: #ff4ea3;">'sku'</span>: <span style="color: #ff4ea3;">'16.04.0-LTS'</span>,
+            <span style="color: #ff4ea3;">'version'</span>: <span style="color: #ff4ea3;">'latest'</span>
+        },
+        <span style="color: #ff4ea3;">'windows'</span>: {
+            <span style="color: #ff4ea3;">'publisher'</span>: <span style="color: #ff4ea3;">'MicrosoftWindowsServerEssentials'</span>,
+            <span style="color: #ff4ea3;">'offer'</span>: <span style="color: #ff4ea3;">'WindowsServerEssentials'</span>,
+            <span style="color: #ff4ea3;">'sku'</span>: <span style="color: #ff4ea3;">'WindowsServerEssentials'</span>,
+            <span style="color: #ff4ea3;">'version'</span>: <span style="color: #ff4ea3;">'latest'</span>
+        }
+    }
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Manage resources and resource groups - create, update and delete a resource group,</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">deploy a solution into a resource group, export an ARM template. Create, read, update</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">and delete a resource</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">This script expects that the following environment vars are set:</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">AZURE_TENANT_ID: with your Azure Active Directory tenant id or domain</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">AZURE_CLIENT_ID: with your Azure Active Directory Application Client ID</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">AZURE_CLIENT_SECRET: with your Azure Active Directory Application Secret</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">AZURE_SUBSCRIPTION_ID: with your Azure Subscription Id</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">run_example</span>():
+        <span style="color: #ff4b4b;">"""Resource Group management example."""</span>
+        <span style="color: #6c6c6c; font-style: italic;">#</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create all clients with an Application (service principal) token provider</span>
+        <span style="color: #6c6c6c; font-style: italic;">#</span>
+        <span style="color: #ff8700;">subscription_id</span> = <span style="color: #ff4ea3;">'5ef4723b-155a-4081-9dc5-d41c9a0130ab'</span>
+
+        <span style="color: #ff8700;">credentials</span> = UserPassCredentials(
+            <span style="color: #ff4ea3;">'user'</span>,      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Your user</span>
+            <span style="color: #ff4ea3;">'password'</span>,          <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Your password</span>
+            china = <span style="color: #5fafd7;">True</span>
+        )
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20013;&#22269;&#21306;&#30340;&#20851;&#38190;&#23601;&#22312;&#36825;&#37324;&#65292;&#38656;&#35201;&#35774;&#32622;base_url</span>
+        <span style="color: #ff8700;">resource_client</span> = ResourceManagementClient(credentials, subscription_id, base_url = <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+        <span style="color: #ff8700;">compute_client</span> = ComputeManagementClient(credentials, subscription_id, base_url = <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+        <span style="color: #ff8700;">storage_client</span> = StorageManagementClient(credentials, subscription_id, base_url= <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+        <span style="color: #ff8700;">network_client</span> = NetworkManagementClient(credentials, subscription_id, base_url = <span style="color: #ff4ea3;">"https://management.chinacloudapi.cn"</span>)
+
+        <span style="color: #6c6c6c; font-style: italic;">###########</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Prepare #</span>
+        <span style="color: #6c6c6c; font-style: italic;">###########</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create Resource group</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nCreate Resource Group'</span>)
+        resource_client.resource_groups.create_or_update(GROUP_NAME, {<span style="color: #ff4ea3;">'location'</span>:LOCATION})
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create a storage account</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nCreate a storage account'</span>)
+        <span style="color: #ff8700;">storage_async_operation</span> = storage_client.storage_accounts.create(
+            GROUP_NAME,
+            STORAGE_ACCOUNT_NAME,
+            {
+                <span style="color: #ff4ea3;">'sku'</span>: {<span style="color: #ff4ea3;">'name'</span>: <span style="color: #ff4ea3;">'standard_lrs'</span>},
+                <span style="color: #ff4ea3;">'kind'</span>: <span style="color: #ff4ea3;">'storage'</span>,
+                <span style="color: #ff4ea3;">'location'</span>: LOCATION
+            }
+        )
+        storage_async_operation.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create a NIC</span>
+        <span style="color: #ff8700;">nic</span> = create_nic(network_client)
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">#############</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;"># VM Sample #</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">#############</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create Linux VM</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nCreating Linux Virtual Machine'</span>)
+        <span style="color: #ff8700;">vm_parameters</span> = create_vm_parameters(nic.<span style="color: #d18aff;">id</span>, VM_REFERENCE[<span style="color: #ff4ea3;">'linux'</span>])
+        <span style="color: #ff8700;">async_vm_creation</span> = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME, VM_NAME, vm_parameters)
+        async_vm_creation.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Tag the VM</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nTag Virtual Machine'</span>)
+        <span style="color: #ff8700;">async_vm_update</span> = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            {
+                <span style="color: #ff4ea3;">'location'</span>: LOCATION,
+                <span style="color: #ff4ea3;">'tags'</span>: {
+                    <span style="color: #ff4ea3;">'who-rocks'</span>: <span style="color: #ff4ea3;">'python'</span>,
+                    <span style="color: #ff4ea3;">'where'</span>: <span style="color: #ff4ea3;">'on azure'</span>
+                }
+            }
+        )
+        async_vm_update.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Attach data disk</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nAttach Data Disk'</span>)
+        <span style="color: #ff8700;">async_vm_update</span> = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            {
+                <span style="color: #ff4ea3;">'location'</span>: LOCATION,
+                <span style="color: #ff4ea3;">'storage_profile'</span>: {
+                    <span style="color: #ff4ea3;">'data_disks'</span>: [{
+                        <span style="color: #ff4ea3;">'name'</span>: <span style="color: #ff4ea3;">'mydatadisk1'</span>,
+                        <span style="color: #ff4ea3;">'disk_size_gb'</span>: 1,
+                        <span style="color: #ff4ea3;">'lun'</span>: 0,
+                        <span style="color: #ff4ea3;">'vhd'</span>: {
+                            <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">'uri' : "http://{}.blob.core.windows.net/vhds/mydatadisk1.vhd".format(</span>
+                            <span style="color: #ff4ea3;">'uri'</span> : <span style="color: #ff4ea3;">"http://{}.blob.core.chinacloudapi.cn/vhds/mydatadisk1.vhd"</span>.<span style="color: #d18aff;">format</span>(
+                                STORAGE_ACCOUNT_NAME)
+                        },
+                        <span style="color: #ff4ea3;">'create_option'</span>: <span style="color: #ff4ea3;">'Empty'</span>
+                    }]
+                }
+            }
+        )
+        async_vm_update.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Get one the virtual machine by name</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nGet Virtual Machine by Name'</span>)
+        <span style="color: #ff8700;">virtual_machine</span> = compute_client.virtual_machines.get(
+            GROUP_NAME,
+            VM_NAME
+        )
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Detach data disk</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nDetach Data Disk'</span>)
+        <span style="color: #ff8700;">data_disks</span> = virtual_machine.storage_profile.data_disks
+        <span style="color: #ff8700;">data_disks</span>[:] = [disk <span style="color: #a1db00;">for</span> disk <span style="color: #a1db00;">in</span> data_disks <span style="color: #a1db00;">if</span> disk.name != <span style="color: #ff4ea3;">'mydatadisk1'</span>]
+        <span style="color: #ff8700;">async_vm_update</span> = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            virtual_machine
+        )
+        <span style="color: #ff8700;">virtual_machine</span> = async_vm_update.result()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Deallocating the VM (resize prepare)</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nDeallocating the VM (resize prepare)'</span>)
+        <span style="color: #ff8700;">async_vm_deallocate</span> = compute_client.virtual_machines.deallocate(GROUP_NAME, VM_NAME)
+        async_vm_deallocate.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Update OS disk size by 10Gb</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nUpdate OS disk size'</span>)
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Server is not returning the OS Disk size (None), possible bug in server</span>
+        <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> virtual_machine.storage_profile.os_disk.disk_size_gb:
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"\tServer is not returning the OS disk size, possible bug in the server?"</span>)
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"\tAssuming that the OS disk size is 256 GB"</span>)
+            <span style="color: #ff8700;">virtual_machine.storage_profile.os_disk.disk_size_gb</span> = 256
+
+        <span style="color: #ff8700;">virtual_machine.storage_profile.os_disk.disk_size_gb</span> += 10
+        <span style="color: #ff8700;">async_vm_update</span> = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            virtual_machine
+        )
+        <span style="color: #ff8700;">virtual_machine</span> = async_vm_update.result()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Start the VM</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nStart VM'</span>)
+        <span style="color: #ff8700;">async_vm_start</span> = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
+        async_vm_start.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Restart the VM</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nRestart VM'</span>)
+        <span style="color: #ff8700;">async_vm_restart</span> = compute_client.virtual_machines.restart(GROUP_NAME, VM_NAME)
+        async_vm_restart.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Stop the VM</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nStop VM'</span>)
+        <span style="color: #ff8700;">async_vm_stop</span> = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
+        async_vm_stop.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">List VMs in subscription</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nList VMs in subscription'</span>)
+        <span style="color: #a1db00;">for</span> vm <span style="color: #a1db00;">in</span> compute_client.virtual_machines.list_all():
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"\tVM: {}"</span>.<span style="color: #d18aff;">format</span>(vm.name))
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">List VM in resource group</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nList VMs in resource group'</span>)
+        <span style="color: #a1db00;">for</span> vm <span style="color: #a1db00;">in</span> compute_client.virtual_machines.<span style="color: #d18aff;">list</span>(GROUP_NAME):
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"\tVM: {}"</span>.<span style="color: #d18aff;">format</span>(vm.name))
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;"># Delete VM</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">print('\nDelete VM')</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">async_vm_delete = compute_client.virtual_machines.delete(GROUP_NAME, VM_NAME)</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">async_vm_delete.wait()</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;"># Create Windows VM</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">print('\nCreating Windows Virtual Machine')</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;"># Recycling NIC of previous VM</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['windows'])</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">async_vm_creation = compute_client.virtual_machines.create_or_update(</span>
+        <span style="color: #6c6c6c; font-style: italic;">#     </span><span style="color: #6c6c6c; font-style: italic;">GROUP_NAME, VM_NAME, vm_parameters)</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">async_vm_creation.wait()</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">input("Press enter to delete this Resource Group.")</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;"># Delete Resource group and everything in it</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">print('\nDelete Resource Group')</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">delete_async_operation = resource_client.resource_groups.delete(GROUP_NAME)</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">delete_async_operation.wait()</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">print("\nDeleted: {}".format(GROUP_NAME))</span>
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">create_nic</span>(network_client):
+        <span style="color: #ff4b4b;">"""Create a Network Interface for a VM.</span>
+<span style="color: #ff4b4b;">        """</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create VNet</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nCreate Vnet'</span>)
+        <span style="color: #ff8700;">async_vnet_creation</span> = network_client.virtual_networks.create_or_update(
+            GROUP_NAME,
+            VNET_NAME,
+            {
+                <span style="color: #ff4ea3;">'location'</span>: LOCATION,
+                <span style="color: #ff4ea3;">'address_space'</span>: {
+                    <span style="color: #ff4ea3;">'address_prefixes'</span>: [<span style="color: #ff4ea3;">'10.0.0.0/16'</span>]
+                }
+            }
+        )
+        async_vnet_creation.wait()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create Subnet</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nCreate Subnet'</span>)
+        <span style="color: #ff8700;">async_subnet_creation</span> = network_client.subnets.create_or_update(
+            GROUP_NAME,
+            VNET_NAME,
+            SUBNET_NAME,
+            {<span style="color: #ff4ea3;">'address_prefix'</span>: <span style="color: #ff4ea3;">'10.0.0.0/24'</span>}
+        )
+        <span style="color: #ff8700;">subnet_info</span> = async_subnet_creation.result()
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create NIC</span>
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'\nCreate NIC'</span>)
+        <span style="color: #ff8700;">async_nic_creation</span> = network_client.network_interfaces.create_or_update(
+            GROUP_NAME,
+            NIC_NAME,
+            {
+                <span style="color: #ff4ea3;">'location'</span>: LOCATION,
+                <span style="color: #ff4ea3;">'ip_configurations'</span>: [{
+                    <span style="color: #ff4ea3;">'name'</span>: IP_CONFIG_NAME,
+                    <span style="color: #ff4ea3;">'subnet'</span>: {
+                        <span style="color: #ff4ea3;">'id'</span>: subnet_info.<span style="color: #d18aff;">id</span>
+                    }
+                }]
+            }
+        )
+        <span style="color: #a1db00;">return</span> async_nic_creation.result()
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">create_vm_parameters</span>(nic_id, vm_reference):
+        <span style="color: #ff4b4b;">"""Create the VM parameters structure.</span>
+<span style="color: #ff4b4b;">        """</span>
+        <span style="color: #a1db00;">return</span> {
+            <span style="color: #ff4ea3;">'location'</span>: LOCATION,
+            <span style="color: #ff4ea3;">'os_profile'</span>: {
+                <span style="color: #ff4ea3;">'computer_name'</span>: VM_NAME,
+                <span style="color: #ff4ea3;">'admin_username'</span>: USERNAME,
+                <span style="color: #ff4ea3;">'admin_password'</span>: PASSWORD
+            },
+            <span style="color: #ff4ea3;">'hardware_profile'</span>: {
+                <span style="color: #ff4ea3;">'vm_size'</span>: <span style="color: #ff4ea3;">'Standard_DS1'</span>
+            },
+            <span style="color: #ff4ea3;">'storage_profile'</span>: {
+                <span style="color: #ff4ea3;">'image_reference'</span>: {
+                    <span style="color: #ff4ea3;">'publisher'</span>: vm_reference[<span style="color: #ff4ea3;">'publisher'</span>],
+                    <span style="color: #ff4ea3;">'offer'</span>: vm_reference[<span style="color: #ff4ea3;">'offer'</span>],
+                    <span style="color: #ff4ea3;">'sku'</span>: vm_reference[<span style="color: #ff4ea3;">'sku'</span>],
+                    <span style="color: #ff4ea3;">'version'</span>: vm_reference[<span style="color: #ff4ea3;">'version'</span>]
+                },
+                <span style="color: #ff4ea3;">'os_disk'</span>: {
+                    <span style="color: #ff4ea3;">'name'</span>: OS_DISK_NAME,
+                    <span style="color: #ff4ea3;">'caching'</span>: <span style="color: #ff4ea3;">'None'</span>,
+                    <span style="color: #ff4ea3;">'create_option'</span>: <span style="color: #ff4ea3;">'fromImage'</span>,
+                    <span style="color: #ff4ea3;">'vhd'</span>: {
+                        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">'uri': 'https://{}.blob.core.windows.net/vhds/{}.vhd'.format(</span>
+                        <span style="color: #ff4ea3;">'uri'</span>: <span style="color: #ff4ea3;">'https://{}.blob.core.chinacloudapi.cn/vhds/{}.vhd'</span>.<span style="color: #d18aff;">format</span>(
+                            STORAGE_ACCOUNT_NAME, VM_NAME+haikunator.haikunate())
+                    }
+                },
+            },
+            <span style="color: #ff4ea3;">'network_profile'</span>: {
+                <span style="color: #ff4ea3;">'network_interfaces'</span>: [{
+                    <span style="color: #ff4ea3;">'id'</span>: nic_id,
+                }]
+            },
+        }
+
+
+    <span style="color: #a1db00;">if</span> <span style="color: #d18aff;">__name__</span> == <span style="color: #ff4ea3;">"__main__"</span>:
+        run_example()
+</pre>
+</div>
+
+<p>
+在中国区使用azure的python sdk。参考下面：
+</p>
+
+<p>
+<a href="https://github.com/Azure/azure-sdk-for-python/issues/284">Could not using this SDK in China #284</a>
+</p>
+
+<p>
+<a href="https://github.com/ansible/ansible/issues/17925">Allow endpoint override in azure_rm module utils #17925</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org63bd81b" class="outline-2">
+<h2 id="org63bd81b"><span class="section-number-2">10</span> cloud init</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+<a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-using-cloud-init/">https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-using-cloud-init/</a>
+</p>
+
+<p>
+可以使用 <code>--custom-data</code> 来指定cloud-init的模版。在vm启动时执行干点
+啥事儿。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    azure vm create <span style="color: #ff4ea3;">\</span>
+          --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+          --name TestVM2 <span style="color: #ff4ea3;">\</span>
+          --location chinaeast <span style="color: #ff4ea3;">\</span>
+          --os-type linux <span style="color: #ff4ea3;">\</span>
+          --availset-name TestAvailSet <span style="color: #ff4ea3;">\</span>
+          --nic-name LB-NIC2 <span style="color: #ff4ea3;">\</span>
+          --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+          --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+          --storage-account-name pengsaccount <span style="color: #ff4ea3;">\</span>
+          --image-urn canonical:UbuntuServer:16.04.0-LTS:latest <span style="color: #ff4ea3;">\</span>
+          --ssh-publickey-file ~/.ssh/id_rsa.pub <span style="color: #ff4ea3;">\</span>
+          --admin-username ops <span style="color: #ff4ea3;">\</span>
+          --custom-data <span style="color: #ff4ea3;">'/tmp/cloud_config_hostname.txt'</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org36307ad" class="outline-2">
+<h2 id="org36307ad"><span class="section-number-2">11</span> capture vm 捕获虚拟机</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+<a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-capture-image/">参考这里</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#31532;&#19968;&#21477;&#21518;&#23601;&#20250;&#20851;&#26426;&#21862;</span>
+    azure vm deallocate -g testrg -n testvm1
+    azure vm generalize -g testrg -n testvm1
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21069;&#38754;&#20004;&#37096;&#36827;&#34892;&#23436;&#21518;&#65292;&#36825;&#26679;&#26469;capture </span>
+    azure vm capture testrg testvm1 <span style="color: #ff4ea3;">'pengprefix'</span> -t testvm1.json
+</pre>
+</div>
+
+<p>
+<a href="https://blogs.msdn.microsoft.com/avkashchauhan/2013/01/10/using-os-disk-vhd-to-create-a-new-virtual-machine-if-os-vhd-is-still-on-lease-in-windows-azure-virtual-machines/">但是捕获的vm需要的vhd只能给一个机器使用？</a>
+</p>
+
+<p>
+另处，删除vm后，对应的storage中的vhd不会删除，还是存在而且是attached
+的。还不能使用。
+</p>
+<pre class="example">
+    + Creating VM "RasSlaveVm"
+    error:   Long running operation failed with error: 'Blob https://pengsaccount.blob.core.chinacloudapi.cn/vmcontainerd3d33f5b-b80a-428f-b399-3f1700a8c442/osDisk.d3d33f5b-b80a-428f-b399-3f1700a8c442.vhd already exists. Please provide a different blob URI as target for disk 'cli78c5d79e3bf942b1-os-1479173775770'.'.
+    error:   Error information has been recorded to /Users/pengpengxp/.azure/azure.err
+    error:   vm create command failed
+</pre>
+
+<p>
+解决办法：
+</p>
+<ol class="org-ol">
+<li class="on"><code>[X]</code> 把vhd再copy一份到新的vhd，然后使用该vhd启动，最后创建虚拟机的
+那步，不要使用 <code>-d</code> 选项就可以了。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org1261d67" class="outline-2">
+<h2 id="org1261d67"><span class="section-number-2">12</span> 从捕获的虚拟机中拉起vm</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+<a href="azure_command_line.html#org306f7c1">先参考这里把需要的资源组、虚拟网络、子网等拉起来</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">################################################################</span>
+    <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">first</span>
+    <span style="color: #6c6c6c; font-style: italic;">################################################################</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36164;&#28304;&#32452;&#65306;</span>
+    azure group create TestRG -l chinaeast
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20351;&#29992; JSON &#20998;&#26512;&#22120;&#39564;&#35777;&#36164;&#28304;&#32452;&#65306;</span>
+    azure group show TestRG --json | jq <span style="color: #ff4ea3;">'.'</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#23384;&#20648;&#24080;&#25143;&#65306;</span>
+    azure storage account create -g TestRG -l chinaeast --kind Storage --sku-name GRS pengsaccount
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20351;&#29992; JSON &#20998;&#26512;&#22120;&#39564;&#35777;&#23384;&#20648;&#24080;&#25143;&#65306;</span>
+    azure storage account show -g TestRG pengsaccount --json | jq <span style="color: #ff4ea3;">'.'</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#34394;&#25311;&#32593;&#32476;&#65306;</span>
+    azure network vnet create -g TestRG -n TestVNet -a 192.168.0.0/16 -l chinaeast
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#23376;&#32593;&#65306;</span>
+    azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd -a 192.168.1.0/24
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20351;&#29992; JSON &#20998;&#26512;&#22120;&#39564;&#35777;&#34394;&#25311;&#32593;&#32476;&#21644;&#23376;&#32593;&#65306;</span>
+    azure network vnet show TestRG TestVNet --json | jq <span style="color: #ff4ea3;">'.'</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#19968;&#20010;&#20844;&#20849; IP&#65306;</span>
+    azure network public-ip create -g TestRG -n TestLBPIP -l chinaeast -d testlb -a static -i 4
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25105;&#20204;&#30340;&#36127;&#36733;&#22343;&#34913;&#22120;&#24456;&#31354;&#65292;&#22240;&#27492;&#35753;&#25105;&#20204;&#21019;&#24314;&#19968;&#20123; IP &#27744;&#12290;&#25105;&#20204;&#24819;&#35201;&#20026;&#36127;&#36733;&#22343;&#34913;&#22120;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#20004;&#20010; IP &#27744;&#65306;&#19968;&#20010;&#29992;&#20110;&#21069;&#31471;&#65292;&#19968;&#20010;&#29992;&#20110;&#21518;&#31471;&#12290;&#21069;&#31471; IP &#27744;&#23558;&#20844;&#24320;&#26174;&#31034;&#12290;&#23427;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20063;&#26159;&#25105;&#20204;&#23558;&#21069;&#38754;&#21019;&#24314;&#30340; PIP &#20998;&#37197;&#21040;&#30340;&#20301;&#32622;&#12290;&#28982;&#21518;&#25105;&#20204;&#20351;&#29992;&#21518;&#31471;&#27744;&#20316;&#20026; VM &#35201;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#36830;&#25509;&#21040;&#30340;&#20301;&#32622;&#12290;&#36825;&#26679;&#65292;&#27969;&#37327;&#20415;&#21487;&#20197;&#36890;&#36807;&#36127;&#36733;&#22343;&#34913;&#22120;&#27969;&#21521; VM&#12290;&#21019;&#24314;&#36127;&#36733;&#22343;&#34913;&#22120;&#65306;</span>
+    azure network lb create -g TestRG -n TestLB -l chinaeast
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36127;&#36733;&#22343;&#34913;&#22120;&#30340;&#21069;&#31471; IP &#27744;&#24182;&#20851;&#32852;&#20844;&#20849; IP&#65306;</span>
+    azure network lb frontend-ip create -g TestRG -l TestLB -n TestFrontEndPool -i TestLBPIP
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36127;&#36733;&#22343;&#34913;&#22120;&#30340;&#21518;&#31471; IP &#27744;&#65306;</span>
+    azure network lb address-pool create -g TestRG -l TestLB -n TestBackEndPool
+</pre>
+</div>
+<p>
+然后再走下面的流程。
+</p>
+
+<p>
+<a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-capture-image/">参考这里</a>
+</p>
+
+<p>
+capture后得到的模板可能是这样的一个json文件：
+</p>
+<pre class="example">
+    {
+      "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/VM_IP.json",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "vmName": {
+          "type": "string"
+        },
+        "vmSize": {
+          "type": "string",
+          "defaultValue": "Standard_DS1"
+        },
+        "adminUserName": {
+          "type": "string"
+        },
+        "adminPassword": {
+          "type": "securestring"
+        },
+        "networkInterfaceId": {
+          "type": "string"
+        },
+        "availabilitySetId": {
+          "type": "string",
+          "defaultValue": "/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/testrg/providers/Microsoft.Compute/availabilitySets/TESTAVAILSET"
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2016-03-30",
+          "properties": {
+            "availabilitySet": {
+              "id": "[parameters('availabilitySetId')]"
+            },
+            "hardwareProfile": {
+              "vmSize": "[parameters('vmSize')]"
+            },
+            "storageProfile": {
+              "osDisk": {
+                "osType": "Linux",
+                "name": "rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd",
+                "createOption": "FromImage",
+                "image": {
+                  "uri": "https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd"
+                },
+                "vhd": {
+                  "uri": "https://pengsaccount.blob.core.chinacloudapi.cn/vmcontainer38cffc83-a734-4ef6-889f-3fac6d38a39b/osDisk.38cffc83-a734-4ef6-889f-3fac6d38a39b.vhd"
+                },
+                "caching": "ReadWrite"
+              }
+            },
+            "osProfile": {
+              "computerName": "[parameters('vmName')]",
+              "adminUsername": "[parameters('adminUsername')]",
+              "adminPassword": "[parameters('adminPassword')]"
+            },
+            "networkProfile": {
+              "networkInterfaces": [
+                {
+                  "id": "[parameters('networkInterfaceId')]"
+                }
+              ]
+            },
+            "diagnosticsProfile": {
+              "bootDiagnostics": {
+                "enabled": true,
+                "storageUri": "https://pengsaccount.blob.core.chinacloudapi.cn/"
+              }
+            },
+            "provisioningState": 0
+          },
+          "name": "[parameters('vmName')]",
+          "type": "Microsoft.Compute/virtualMachines",
+          "location": "chinaeast"
+        }
+      ]
+    }
+</pre>
+<p>
+把其中 <code>storageProfile</code> 这段中的image填入下面脚本 <code>azure vm create</code>
+中的 <code>-Q</code> 选项中。不能加 <code>-d</code> 选项哦。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">decide delete resource or not</span>
+    <span style="color: #ff8700;">DELETE</span>=0
+
+    <span style="color: #a1db00;">if</span> [ $<span style="color: #ff8700;">DELETE</span> != 0 ]; <span style="color: #a1db00;">then</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">#### delete</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        azure vm delete RasMasterVm -g testrg --quiet
+        azure vm delete RasSlaveVm -g testrg --quiet
+        azure network nic delete -g testrg TEST-NIC1 --quiet
+        azure network nic delete -g testrg TEST-NIC2 --quiet
+        azure network lb inbound-nat-rule delete -g testrg  --name TEST1-SSH testlb --quiet
+        azure network lb inbound-nat-rule delete -g testrg --name TEST2-SSH testlb  --quiet
+    <span style="color: #a1db00;">else</span>
+        <span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">create</span>
+        <span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #ff8700;">totalbegin</span>=<span style="color: #fa8072;">`date`</span>
+
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create inbound-nat-rules begin at `date`"</span>
+        azure network lb inbound-nat-rule create -g TestRG -l TestLB -n TEST1-SSH -p tcp -f 4991 -b 20160
+        azure network lb inbound-nat-rule create -g TestRG -l TestLB -n TEST2-SSH -p tcp -f 4992 -b 20160
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create inbound-nat-rules end at `date`"</span>
+
+
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create nic begin at `date`"</span>
+        azure network nic create -g TestRG -n TEST-NIC1 -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+              -d <span style="color: #ff4ea3;">"/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/backendAddressPools/TestBackEndPool"</span> <span style="color: #ff4ea3;">\</span>
+              -e <span style="color: #ff4ea3;">"/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/inboundNatRules/TEST1-SSH"</span>
+
+        azure network nic create -g TestRG -n TEST-NIC2 -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+              -d <span style="color: #ff4ea3;">"/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/backendAddressPools/TestBackEndPool"</span> <span style="color: #ff4ea3;">\</span>
+              -e <span style="color: #ff4ea3;">"/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/inboundNatRules/TEST2-SSH"</span>
+
+        azure network nic set -g TestRG -n TEST-NIC1 -o TestNSG
+        azure network nic set -g TestRG -n TEST-NIC2 -o TestNSG
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create nic end at `date`"</span>
+
+
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create master begin at `date`"</span>
+        azure vm create <span style="color: #ff4ea3;">\</span>
+              --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+              --name RasMasterVm <span style="color: #ff4ea3;">\</span>
+              --location chinaeast <span style="color: #ff4ea3;">\</span>
+              --os-type linux <span style="color: #ff4ea3;">\</span>
+              --availset-name TestAvailSet <span style="color: #ff4ea3;">\</span>
+              --nic-name TEST-NIC1 <span style="color: #ff4ea3;">\</span>
+              --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+              --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+              --storage-account-name pengsaccount <span style="color: #ff4ea3;">\</span>
+              --admin-password <span style="color: #ff4ea3;">'xxx'</span> <span style="color: #ff4ea3;">\</span>
+              -Q <span style="color: #ff4ea3;">"https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd"</span> <span style="color: #ff4ea3;">\</span>
+              --admin-username username
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create master end at `date`"</span>
+
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create slave begin at `date`"</span>
+        azure vm create <span style="color: #ff4ea3;">\</span>
+              --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+              --name RasSlaveVm <span style="color: #ff4ea3;">\</span>
+              --location chinaeast <span style="color: #ff4ea3;">\</span>
+              --os-type linux <span style="color: #ff4ea3;">\</span>
+              --availset-name TestAvailSet <span style="color: #ff4ea3;">\</span>
+              --nic-name TEST-NIC2 <span style="color: #ff4ea3;">\</span>
+              --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+              --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+              --storage-account-name pengsaccount <span style="color: #ff4ea3;">\</span>
+              --admin-password <span style="color: #ff4ea3;">'xxx'</span> <span style="color: #ff4ea3;">\</span>
+              -Q <span style="color: #ff4ea3;">"https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd"</span> <span style="color: #ff4ea3;">\</span>
+              --admin-username username
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"create slave end at `date`"</span>
+
+        <span style="color: #ff8700;">totalend</span>=<span style="color: #fa8072;">`date`</span>
+
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"###########################################################################"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"script begin at : $totalbegin"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"script end at : $totalend"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"###########################################################################"</span>
+    <span style="color: #a1db00;">fi</span>
+
+
+
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9981bf8" class="outline-2">
+<h2 id="org9981bf8"><span class="section-number-2">13</span> 拉起ubuntu 14.04的机器</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+下面这个脚本可以直接拉一个ubuntu14.04的裸机，所有资源都创建好，没有
+load-balance等东西：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+    <span style="color: #d18aff;">set</span> -x
+
+    <span style="color: #ff8700;">Location</span>=<span style="color: #ff4ea3;">'chinaeast'</span>
+
+    <span style="color: #ff8700;">GroupName</span>=<span style="color: #ff4ea3;">'ScriptTest2'</span>
+    <span style="color: #ff8700;">VirtualNetworkName</span>=<span style="color: #ff4ea3;">'ScriptVNet2'</span>
+    <span style="color: #ff8700;">SubnetName</span>=<span style="color: #ff4ea3;">'ScriptSubnet2'</span>
+    <span style="color: #ff8700;">PublicIp</span>=<span style="color: #ff4ea3;">'ScriptPublicIp2'</span>
+    <span style="color: #ff8700;">NicName</span>=<span style="color: #ff4ea3;">'ScriptNic2'</span>
+    <span style="color: #ff8700;">VmName</span>=<span style="color: #ff4ea3;">'ScriptVm2'</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#36825;&#20004;&#20010;&#23478;&#20249;&#22909;&#20687;&#24517;&#39035;&#26159;&#23567;&#20889;</span>
+    <span style="color: #ff8700;">StorageAccountName</span>=<span style="color: #ff4ea3;">'scriptaccounttest2'</span>
+    <span style="color: #ff8700;">DomainName</span>=<span style="color: #ff4ea3;">'scriptdomain2'</span>
+
+    <span style="color: #ff8700;">DELETE</span>=0
+
+
+    <span style="color: #a1db00;">if</span> [ $<span style="color: #ff8700;">DELETE</span> != 0 ]; <span style="color: #a1db00;">then</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">#### delete</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"######################################################################"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"########################## delete the group ##########################"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"######################################################################"</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">azure vm delete RasMasterVm -g $GroupName -q</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">azure network nic delete -g $GroupName $NicName -q</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">azure public-ip delete -g $GroupName -n $PublicIp -q</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">azure network vnet subnet delete -g $GroupName -n $SubnetName -e $VirtualNetworkName -q</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">azure network vnet delete -g $GroupName -n $VirtualNetworkName -q</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">azure storage account delete -g $GroupName $StorageAccountName -q</span>
+        azure group delete -n $<span style="color: #ff8700;">GroupName</span> -q --nowait
+    <span style="color: #a1db00;">else</span>
+        <span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">create</span>
+        <span style="color: #6c6c6c; font-style: italic;">######################################################################</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"######################################################################"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"######################### Create a new group #########################"</span>
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"######################################################################"</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36164;&#28304;&#32452;</span>
+        azure group create $<span style="color: #ff8700;">GroupName</span> -l $<span style="color: #ff8700;">Location</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#23384;&#20648;&#36134;&#25143;</span>
+        azure storage account create -g $<span style="color: #ff8700;">GroupName</span> -l $<span style="color: #ff8700;">Location</span> --kind Storage --sku-name GRS $<span style="color: #ff8700;">StorageAccountName</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#34394;&#32593;&#32476;</span>
+        azure network vnet create -g $<span style="color: #ff8700;">GroupName</span> -n $<span style="color: #ff8700;">VirtualNetworkName</span> -a 192.168.0.0/16 -l $<span style="color: #ff8700;">Location</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#23376;&#32593; </span>
+        azure network vnet subnet create -g $<span style="color: #ff8700;">GroupName</span> -e $<span style="color: #ff8700;">VirtualNetworkName</span> -n $<span style="color: #ff8700;">SubnetName</span> -a 192.168.1.0/24
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#20844;&#32593;ip</span>
+        azure network public-ip create -d $<span style="color: #ff8700;">DomainName</span> $<span style="color: #ff8700;">GroupName</span> $<span style="color: #ff8700;">PublicIp</span> $<span style="color: #ff8700;">Location</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#32593;&#21345;</span>
+        azure network nic create -g $<span style="color: #ff8700;">GroupName</span> -l $<span style="color: #ff8700;">Location</span> --subnet-vnet-name $<span style="color: #ff8700;">VirtualNetworkName</span> --subnet-name $<span style="color: #ff8700;">SubnetName</span> $<span style="color: #ff8700;">NicName</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25289;&#36215;&#34394;&#25311;&#26426;</span>
+        azure vm create <span style="color: #ff4ea3;">\</span>
+              --resource-group $<span style="color: #ff8700;">GroupName</span> <span style="color: #ff4ea3;">\</span>
+              --name $<span style="color: #ff8700;">VmName</span> <span style="color: #ff4ea3;">\</span>
+              --location $<span style="color: #ff8700;">Location</span> <span style="color: #ff4ea3;">\</span>
+              --os-type linux <span style="color: #ff4ea3;">\</span>
+              --vnet-name $<span style="color: #ff8700;">VirtualNetworkName</span> <span style="color: #ff4ea3;">\</span>
+              --vnet-subnet-name $<span style="color: #ff8700;">SubnetName</span> <span style="color: #ff4ea3;">\</span>
+              --storage-account-name $<span style="color: #ff8700;">StorageAccountName</span> <span style="color: #ff4ea3;">\</span>
+              --admin-username username <span style="color: #ff4ea3;">\</span>
+              --admin-password <span style="color: #ff4ea3;">'xxxx'</span> <span style="color: #ff4ea3;">\</span>
+              --image-urn canonical:UbuntuServer:14.04.2-LTS:latest <span style="color: #ff4ea3;">\</span>
+              --public-ip-name $<span style="color: #ff8700;">PublicIp</span> <span style="color: #ff4ea3;">\</span>
+              --nic-name $<span style="color: #ff8700;">NicName</span>
+    <span style="color: #a1db00;">fi</span>
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org357499e" class="outline-2">
+<h2 id="org357499e"><span class="section-number-2">14</span> cloud-init</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+azure中的cloud-init和openstack中差不多。使用 <code>--custom-data</code> 来指定
+对应的脚本就可以执行了：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    azure vm create <span style="color: #ff4ea3;">\</span>
+          --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+          --name RasMasterVm <span style="color: #ff4ea3;">\</span>
+          --location chinaeast <span style="color: #ff4ea3;">\</span>
+          --os-type linux <span style="color: #ff4ea3;">\</span>
+          --availset-name TestAvailSet <span style="color: #ff4ea3;">\</span>
+          --nic-name TEST-NIC1 <span style="color: #ff4ea3;">\</span>
+          --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+          --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+          --storage-account-name pengsaccount <span style="color: #ff4ea3;">\</span>
+          --admin-password <span style="color: #ff4ea3;">'password'</span> <span style="color: #ff4ea3;">\</span>
+          -Q <span style="color: #ff4ea3;">"https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd"</span> <span style="color: #ff4ea3;">\</span>
+          --admin-username river <span style="color: #ff4ea3;">\</span>
+          --custom-data /tmp/main.sh
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga2755db" class="outline-2">
+<h2 id="orga2755db"><span class="section-number-2">15</span> <a href="https://www.azure.cn/pricing/details/storage/">azure存储</a></h2>
+</div>
+<div id="outline-container-orgcfbdac0" class="outline-2">
+<h2 id="orgcfbdac0"><span class="section-number-2">16</span> azure-cli有两个版本，一个是普通的azure-cli，一个是new azure-cli 2.0 <a href="https://docs.microsoft.com/zh-cn/cli/azure/old-and-new-clis">here</a></h2>
+<div class="outline-text-2" id="text-16">
+<p>
+新的这个安装好后叫az。旧的还叫azure。
+</p>
+</div>
+</div>
+<div id="outline-container-org5feed4c" class="outline-2">
+<h2 id="org5feed4c"><span class="section-number-2">17</span> <a href="https://docs.microsoft.com/zh-cn/cli/azure/storage/blob">az参考文档</a></h2>
+</div>
+<div id="outline-container-org6edcb8a" class="outline-2">
+<h2 id="org6edcb8a"><span class="section-number-2">18</span> <a href="https://docs.microsoft.com/en-us/azure/virtual-machines/azure-cli-arm-commands">azure参考文档</a></h2>
+</div>
+<div id="outline-container-org42cbe15" class="outline-2">
+<h2 id="org42cbe15"><span class="section-number-2">19</span> azure配置静态内网ip</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+<a href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-static-private-ip-arm-cli">https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-static-private-ip-arm-cli</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     azure network nic create -g TestRG -n TestNIC -l centralus -a 192.168.1.101 -m TestVNet -k FrontEnd
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgff465f1" class="outline-2">
+<h2 id="orgff465f1"><span class="section-number-2">20</span> <code>[17/21]</code> Link</h2>
+<div class="outline-text-2" id="text-20">
+<ul class="org-ul">
+<li class="on"><code>[X]</code> <a href="https://manage.windowsazure.cn/">中国区asm登陆入口</a>
+<ul class="org-ul">
+<li><a href="https://www.azure.cn/documentation/articles/developerdifferences/#bookmark-16">中国区azure和全球azure的区别</a></li>
+</ul></li>
+
+<li class="on"><code>[X]</code> <a href="https://portal.azure.cn/">中国区arm登陆入口</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/zh-cn/documentation/">azure中国文档中心</a></li>
+
+<li class="on"><code>[X]</code> <a href="http://azure-sdk-for-python.readthedocs.io/en/latest/installation.html">azure installation</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-create-cli-complete/">使用 Azure CLI 创建完整的 Linux 环境</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/virtual-networks-overview/">虚拟网络概述</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-cli-ps-findimage/">使用 Azure CLI 来选择 Linux 虚拟机映像</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/xplat-cli-connect/#use-the-log-in-method">从 Azure 命令行界面 (Azure CLI) 连接到 Azure 订阅</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-cli-deploy-templates/">使用 Azure 资源管理器模板和 Azure CLI 部署和管理虚拟机</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-command-line-tools/">Azure 服务管理 (asm) 模式下的 Azure CLI 命令</a>
+
+<ul class="org-ul">
+<li>使用这个教程上传vhd成功。不过Mac上不能上传动态分配的vhd。据说是一
+个<a href="https://github.com/Azure/azure-xplat-cli/issues/2168">bug</a> ，但是powershell好像可以上传。<a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-command-line-tools/">英文版</a></li>
+</ul></li>
+
+<li><a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-create-upload-ubuntu/">Prepare an Ubuntu virtual machine for Azure</a>
+<ul class="org-ul">
+<li>动态分配的vhdx不行，必须使用fixed vhd</li>
+<li>推荐使用传统分构方式，不要使用lvm</li>
+<li>不要配置交换分区swap</li>
+<li>&#x2026;&#x2026;</li>
+</ul></li>
+
+<li class="on"><code>[X]</code> <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-upload-vhd/">Upload and create a Linux VM from custom disk image</a> arm模式</li>
+
+<li class="on"><code>[X]</code> <a href="https://blog.kloud.com.au/2016/04/05/azure-classic-vs-azure-resource-manager/">classic mode and arm mode for azure</a>
+<ul class="org-ul">
+<li>azure这玩意儿的开发经历了很大的改变。导致出现了这两种不同的mode。</li>
+<li>Azure Resource Manager(arm)是新的model，推荐新用户使用。</li>
+<li>Classic mode是原来的mode</li>
+</ul></li>
+
+<li class="on"><code>[X]</code> <a href="https://azure.microsoft.com/zh-tw/documentation/articles/storage-azure-cli/">使用 Azure CLI 搭配 Azure 儲存體</a> asm模式</li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-quick-create-cli/">使用 CLI 在 Azure 上创建 Linux VM</a> quick-create arm模式</li>
+
+<li class="on"><code>[X]</code> <a href="https://www.azure.cn/documentation/articles/xplat-cli-azure-resource-manager/">使用 Azure CLI 管理 Azure 资源和资源组</a> arm模式</li>
+
+<li class="off"><code>[&#xa0;]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-classic-create-upload-vhd/">创建并上载包含 Linux 操作系统的虚拟硬盘</a> asm模式
+
+<ul class="org-ul">
+<li><a href="https://www.azure.cn/documentation/articles/virtual-machines-linux-create-upload-generic/">有关未认可分发的信息</a></li>
+</ul></li>
+
+<li class="off"><code>[&#xa0;]</code> <a href="https://www.azure.cn/documentation/articles/storage-create-storage-account/">关于 Azure 存储帐户</a></li>
+
+<li class="off"><code>[&#xa0;]</code> <a href="https://www.azure.cn/documentation/articles/virtual-machines-windows-classic-createupload-vhd/">创建 Windows Server VHD 并将其上载到 Azure</a></li>
+
+<li><a href="https://www.azure.cn/documentation/articles/azure-Iaas-user-manual-part1/">Azure IaaS 用户手册 - 第一部分</a></li>
+
+<li><a href="http://azure-sdk-for-python.readthedocs.io/en/latest/">Azure SDK for Python</a></li>
+
+<li><a href="https://msdn.microsoft.com/zh-cn/library/azure/dn578439.aspx#guidance">中国 Azure 应用程序的开发人员注意事项</a></li>
+
+<li class="on"><code>[X]</code> <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-network-deploy-static-pip-arm-cli/">Deploy a VM with a static public IP using the Azure CLI</a> arm</li>
+
+<li class="on"><code>[X]</code> <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-network-ip-addresses-overview-arm/">IP addresses in Azure overview</a>
+<ul class="org-ul">
+<li>在arm中，public ip也是一种网络资源。可以是动态和静态和动态两种方
+式。使用静态方式时，public ip资源一申请时，ip就分配到了。而如果
+使用动态分配的ip，需要等待public ip attach到的资源启动或者创建的
+时候才会分配ip。</li>
+<li>多网卡的vm，必须把public ip赋给它的primary interface才可以。</li>
+<li>可以把public ip分配给load balance，甚至可以把多个ip分配给
+load-balance，搞成多租户的形式<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>。</li>
+<li>vpn可以用来把azure中的vnet互连，需要给它分配一个public ip，但现
+在只支持动态分配的ip。</li>
+<li>应用程序的gateway，也只能是动态分配的public ip。</li>
+<li><img src="./img/./64587xhr.png" alt="64587xhr.png" /></li>
+</ul></li>
+<li class="off"><code>[&#xa0;]</code> <a href="https://www.azure.cn/documentation/articles/resource-group-template-deploy-cli/">使用 Resource Manager 模板和 Azure CLI 部署资源</a></li>
+
+<li><a href="https://docs.microsoft.com/en-us/azure/storage/storage-azure-cli">Using the Azure CLI with Azure Storage</a></li>
+
+<li><a href="https://www.azure.cn/documentation/articles/azure-subscription-service-limits/">azure的所有限制都可以到这里查到</a></li>
+
+<li><a href="https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/virtual-machines-linux/">微软推荐的几种Linux布署模型</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbf0ee78" class="outline-2">
+<h2 id="availibility_set"><a id="orgbf0ee78"></a><span class="section-number-2">21</span> azure的可用性集</h2>
+<div class="outline-text-2" id="text-availibility_set">
+<p>
+我理解这是微软的承诺：不管什么时候，保证同一个可用性集中的机器至少有
+一个可用。
+</p>
+
+<p>
+下面的原理就是把加入同一个可用性集的多个机器尽量地分至不同的机房啊，
+地域啊。这样万一机房停电了或者出问题，其它机器还是可用的。
+</p>
+
+<p>
+一般把提供同一功能的机器放到同一个可用性集中。在classic模型中，一个
+可用性集还可以使用动态伸缩的功能。不用的时候就给你自动关闭几台机器。
+</p>
+
+
+<p>
+An availability set serves a similar function to fault and upgrade
+domains. Within an availability set, Azure positions the virtual
+machines in a way that prevents localized hardware faults and
+maintenance activities from bringing down all of the machines in
+that group. Availability sets are required to achieve the Azure SLA
+for the availability of Virtual Machines.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd0853a1" class="outline-2">
+<h2 id="orgd0853a1"><span class="section-number-2">22</span> azure如何提供HA</h2>
+<div class="outline-text-2" id="text-22">
+<p>
+<a href="https://docs.microsoft.com/en-us/azure/architecture/resiliency/high-availability-azure-applications">https://docs.microsoft.com/en-us/azure/architecture/resiliency/high-availability-azure-applications</a>
+</p>
+
+<p>
+容错域（Fault domains）：不同地机架上。这样断电等failure不会都影响。
+</p>
+
+<p>
+更新域（Upgrade domains）：和容错域差不多，不过是用于更新的时候。
+</p>
+
+<p>
+可用性集(Availability set)：<a href="#availibility_set">21</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9cbd192" class="outline-2">
+<h2 id="org9cbd192"><span class="section-number-2">23</span> load-balance</h2>
+<div class="outline-text-2" id="text-23">
+<p>
+<a href="https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-overview">https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-overview</a>
+</p>
+
+
+<p>
+Azure Load Balancer can be configured to:
+</p>
+
+<ol class="org-ol">
+<li>Load balance incoming Internet traffic to virtual machines. This
+configuration is known as Internet-facing load balancing.</li>
+<li>Load balance traffic between virtual machines in a virtual
+network, between virtual machines in cloud services, or between
+on-premises computers and virtual machines in a cross-premises
+virtual network. This configuration is known as internal load
+balancing.</li>
+<li>Forward external traffic to a specific virtual machine.</li>
+</ol>
+
+
+<p>
+azure的lb有三种功能：
+</p>
+<ol class="org-ol">
+<li>外网的流量到内网虚拟机。</li>
+<li>在一个vnet中把流量分配到该net中的机器，内部lb。</li>
+<li>直接把流量forward给指定虚拟机。</li>
+</ol>
+
+<p>
+另外，load-balance还要求所有后端vm都在一个可用性集中。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org449e158" class="outline-2">
+<h2 id="org449e158"><span class="section-number-2">24</span> stop and deallocate</h2>
+<div class="outline-text-2" id="text-24">
+<p>
+stop还在收费，deallocate不会收费。
+</p>
+
+<p>
+命令行中可以这样deallocate：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    azure vm deallocate &lt;resource-group&gt; &lt;vm-name&gt;
+</pre>
+</div>
+
+<p>
+在arm界面上，使用stop按钮是deallocate。如果使用ssh登陆进去执
+<code>shutdown</code> 这些命令对应的的stop，这时候还是在收费的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd274955" class="outline-2">
+<h2 id="orgd274955"><span class="section-number-2">25</span> 多个region中的数据存储和同步问题</h2>
+<div class="outline-text-2" id="text-25">
+<p>
+azure上可以使用多个region来做容错。如 <a href="https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/virtual-machines-linux/multi-region-application#traffic-manager-configuration">这里</a> 介绍的。但是这里需要保证
+只有一份数据。 <code>Cassandra</code> 这样的分布式数据存储服务就是满足该需求的。
+</p>
+
+<p>
+这些分布式服务首先需要相互之间是可路由的。 <a href="https://github.com/DSPN/azure-deployment-guide/blob/master/bestpractices.md">这里</a> 推荐了三种方式。
+</p>
+<ol class="org-ol">
+<li>public ip：给每个数据结点都整一个public ip，然后可以使用nsg来限定
+它们只能用于数据服务。这种方式是推荐的，因为public ip是在azure的
+主干网上，速度很快。</li>
+<li>VPN gateway：使用VPN技术来搞。这种配置麻烦。</li>
+<li>Express route：我理解是专用线路。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org9db9b37" class="outline-2">
+<h2 id="org9db9b37"><span class="section-number-2">26</span> ip address</h2>
+<div class="outline-text-2" id="text-26">
+<p>
+<a href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-ip-addresses-overview-arm">https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-ip-addresses-overview-arm</a>
+</p>
+</div>
+
+<div id="outline-container-org97e69f4" class="outline-3">
+<h3 id="org97e69f4"><span class="section-number-3">26.1</span> Private IP:</h3>
+<div class="outline-text-3" id="text-26-1">
+<p>
+There are two methods in which a private IP address is allocated:
+dynamic or static. The default allocation method is dynamic, where
+the IP address is automatically allocated from the resource's subnet
+(using DHCP). This IP address can change when you stop and start the
+resource.
+</p>
+
+<p>
+You can set the allocation method to static to ensure the IP address
+remains the same. In this case, you also need to provide a valid IP
+address that is part of the resource's subnet.
+</p>
+
+
+<p>
+The table below shows the specific property through which a private
+IP address can be associated to a top-level resource, and the
+possible allocation methods (dynamic or static) that can be used.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Top-level resource</th>
+<th scope="col" class="org-left">IP address association</th>
+<th scope="col" class="org-left">Dynamic</th>
+<th scope="col" class="org-left">Static</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Virtual machine</td>
+<td class="org-left">Network interface</td>
+<td class="org-left">Yes</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">Load balancer</td>
+<td class="org-left">Front end configuration</td>
+<td class="org-left">Yes</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">Application gateway</td>
+<td class="org-left">Front end configuration</td>
+<td class="org-left">Yes</td>
+<td class="org-left">Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org384b752" class="outline-2">
+<h2 id="org384b752"><span class="section-number-2">27</span> 网卡</h2>
+<div class="outline-text-2" id="text-27">
+</div>
+<div id="outline-container-org30f4f77" class="outline-3">
+<h3 id="org30f4f77"><span class="section-number-3">27.1</span> <a href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-network-interface-overview">What are network interfaces?</a></h3>
+<div class="outline-text-3" id="text-27-1">
+<p>
+Has a MAC address, which is persisted with the NIC for as long as it
+remains attached to a VM. The MAC address is persisted whether the
+VM is restarted (from within the operating system) or stopped
+(de-allocated) and started using the Azure Portal, Azure PowerShell,
+or the Azure Command-Line Interface. If it's detached from a VM and
+attached to a different VM, the NIC receives a different MAC
+address. If the NIC is deleted, the MAC address is assigned to other
+NICs.
+</p>
+
+<p>
+nic只要被attach给了vm，mac就不会变。除非detach或者该nic被删除。
+</p>
+
+<p>
+Is often created in the same resource group as the VM it's attached
+to or the same VNet that it's connected to, though it isn't required
+to be.
+</p>
+
+<p>
+网卡常和它attach上的vm在一个资源组。或者和它所在的vNet在一个资源组。
+但这不是必须的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfb3b69d" class="outline-3">
+<h3 id="orgfb3b69d"><span class="section-number-3">27.2</span> <a href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-multiple-ip-addresses-cli-nodejs">一个nic上设置多个ip</a></h3>
+<div class="outline-text-3" id="text-27-2">
+<p>
+You can assign up to 250 private IP addresses to each NIC. While you
+can assign multiple public IP addresses to each NIC, there are
+limits to how many public IP addresses that can be used in an Azure
+subscription. Multiple IP addresses cannot be assigned to resources
+created through the classic deployment model.
+</p>
+
+<p>
+一个网卡上最多可以搞250个私有ip，也可以搞多个public ip。但是不要忘了
+一个订阅中的public ip是有限制的。 <b>重要</b> ：只有arm上支持一个网卡多个
+ip。classic不支持。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7319115" class="outline-2">
+<h2 id="org7319115"><span class="section-number-2">28</span> 虚拟网络</h2>
+<div class="outline-text-2" id="text-28">
+<p>
+azure中的虚拟网络可以划分子网，一个子网在一个广播域中。不同的子网是
+路由可达的。
+</p>
+</div>
+<div id="outline-container-orga8cb49a" class="outline-3">
+<h3 id="orga8cb49a"><span class="section-number-3">28.1</span> <span class="todo TODO">TODO</span> <a href="https://docs.microsoft.com/zh-cn/azure/azure-subscription-service-limits#networking-limits">网络限制</a></h3>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">a multi-tenant environment
+with SSL-based websites.</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

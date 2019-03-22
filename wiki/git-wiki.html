@@ -1,0 +1,1416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-18 一 16:47 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Git wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Git wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orga77eef8">1. git reset</a>
+<ul>
+<li><a href="#org79f0e0d">1.1. git reset base</a></li>
+<li><a href="#org880d899">1.2. git reset with path or files</a></li>
+</ul>
+</li>
+<li><a href="#orgdb8b135">2. git checkout with path or file</a></li>
+<li><a href="#org86e1a50">3. git blame</a></li>
+<li><a href="#org4dd66fb">4. git merge</a>
+<ul>
+<li><a href="#orgd4b559f">4.1. git 解决merge冲突的经验和技巧</a></li>
+<li><a href="#orgb775b87">4.2. git merge conflict 以某一分支为准直接应用</a></li>
+<li><a href="#org877b2cb">4.3. git merge-base</a></li>
+</ul>
+</li>
+<li><a href="#orgcf66108">5. git merge rebase and cherry-pick</a></li>
+<li><a href="#org9eb1e1a">6. git stash</a></li>
+<li><a href="#git_config">7. git config</a>
+<ul>
+<li><a href="#org97d2872">7.1. git config base</a></li>
+<li><a href="#org56a3d28">7.2. git config的 <code>--global</code> 选项</a></li>
+</ul>
+</li>
+<li><a href="#orga916225">8. git reflog和git log</a></li>
+<li><a href="#org637f68b">9. git revert</a></li>
+<li><a href="#git-push">10. git push</a>
+<ul>
+<li><a href="#org4d30211">10.1. 常规用法</a></li>
+<li><a href="#orgc6dffba">10.2. 具体解释</a></li>
+<li><a href="#git-push-default">10.3. push.default</a></li>
+</ul>
+</li>
+<li><a href="#git-track">11. git track							  :git track:</a></li>
+<li><a href="#git-fetch">12. git fetch</a></li>
+<li><a href="#git-pull">13. git pull</a></li>
+<li><a href="#orgb63cde1">14. git remote</a>
+<ul>
+<li><a href="#org1d1b7a2">14.1. git remote base</a></li>
+<li><a href="#orgae917b3">14.2. git remote add &amp; git fetch</a></li>
+</ul>
+</li>
+<li><a href="#org14774e7">15. git diff</a></li>
+<li><a href="#org1eb5268">16. git clean</a></li>
+<li><a href="#orgec54083">17. git 工具</a>
+<ul>
+<li><a href="#org365819f">17.1. tig</a>
+<ul>
+<li><a href="#orgee69341">17.1.1. 命令行下的git interface</a></li>
+<li><a href="#org4bad1cb">17.1.2. status view(s)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#git-example">18. 一个实际的例子</a>
+<ul>
+<li><a href="#org0604421">18.1. 传是去以后还有一些文件夹没有实际上传</a></li>
+<li><a href="#org6b6ed1a">18.2. 配置ssh，不需要每次输入密码</a></li>
+</ul>
+</li>
+<li><a href="#orgd49cbf2">19. git submodule</a></li>
+<li><a href="#orgacef3c2">20. MISC</a>
+<ul>
+<li><a href="#orga8cf460">20.1. 找一个库中someone修改过的文件</a></li>
+<li><a href="#org710eb57">20.2. Doc</a></li>
+<li><a href="#org2cee985">20.3. git clone只能克隆master分支，需要所有分支的时候不知道怎么办？</a></li>
+<li><a href="#orgdca1546">20.4. 远程怎么删除分支</a></li>
+<li><a href="#orgc6dd896">20.5. 在emacs使用magit与远程进行交互</a></li>
+</ul>
+</li>
+<li><a href="#orgfacde93">21. <span class="todo TODO">TODO</span> 自已配置一个git server自已使用</a></li>
+<li><a href="#org3833f20">22. 定义自己本地的 <code>.gitignore</code></a></li>
+<li><a href="#org4234e55">23. magit</a></li>
+<li><a href="#org2ce4656">24. 使用gitlab直接在command line中gitlab发merge request</a></li>
+<li><a href="#org74ea53c">25. git显示一个文件的所有历史修改记录</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga77eef8" class="outline-2">
+<h2 id="orga77eef8"><span class="section-number-2">1</span> git reset</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org79f0e0d" class="outline-3">
+<h3 id="org79f0e0d"><span class="section-number-3">1.1</span> git reset base</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+reset其实就是在move HEAD指针。顺便会改变几个空间中的内容。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">head = HEAD~, index = HEAD, working_directory = HEAD</span>
+      git reset --soft HEAD~
+
+      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">head = HEAD~, index = HEAD~, working_directory = HEAD ,default</span>
+      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">methods</span>
+      git reset --mixed HEAD~
+
+      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">head = HEAD~, index = HEAD~, working_directory = HEAD~ , this is</span>
+      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">dangerous because some commit may lost!</span>
+      git reset --hard HEAD~
+</pre>
+</div>
+
+<p>
+<code>git add</code> 到index中的内容是不可回退的。git add后，使用 <code>git reset
+   HEAD</code> 可以回退到add之前的状态。
+</p>
+
+<p>
+<code>reset --hard</code> 后，其实那些commit是还在的。这些没有被任何branch引
+用的commit叫 <code>dangling commit</code> 。这些东西git会定期清理它。如果想手
+动清理，需要先把reflog清理掉（我理解reflog还是在“引用”它。）然后
+手动用 <code>git gc</code> 来清理就可以了。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       git reflog expire --expire-unreachable=now --all
+       git gc --prune=now
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org880d899" class="outline-3">
+<h3 id="org880d899"><span class="section-number-3">1.2</span> git reset with path or files</h3>
+<div class="outline-text-3" id="text-1-2">
+<pre class="example">
+      +----------------------------------------------------------------------+
+      |                                                    +---------------+ |
+      |                                                    |     HEAD      | |
+      |                                                    +------+--------+ |
+      |                                                           |          |
+      |                                                    +------+--------+ |
+      |                                                    |    master     | |
+      |                                                    +------+--------+ |
+      |                                                           |          |
+      +---------------+          +---------------+         +------v--------+ |
+      |  commit_id:x  |          |  commit_id:y  |         |  commit_id:z  | |
+      |               |          |               |         |               | |
+      |   file.txt    |&lt;---------+   file.txt    |&lt;--------+   file.txt    | |
+      |     v1        |          |     v2        |         |     v3        | |
+      |               |          |               |         |               | |
+      +---------------+          +---------------+         +---------------+ |
+      |                                                                      |
+      |                          Git repository                              |
+      +----------------------------------------------------------------------+
+
+      +---------------+          +---------------+         +-----------------+
+      |    HEAD       |          |    Index      |         |Working Directory|
+      +---------------+          +---------------+         +-----------------+
+      |  commit_id:z  |          |               |         |                 |
+      |               |          |               |         |                 |
+      |   file.txt    |          |   file.txt    |         |   file.txt      |
+      |     v3        |          |     v1        |         |     v3          |
+      |               |          |               |         |                 |
+      +---------------+          +---------------+         +-----------------+
+
+      git reset commit_id:x file.txt
+</pre>
+
+<p>
+<code>git reset</code> 如果针对file或path进行操作。只是简单地是把对应
+commit<sub>id中的的file放到Index</sub>（暂存区）中。
+</p>
+
+<p>
+如果对应的commit<sub>id刚好是HEAD</sub>，则 <code>git reset HEAD file</code> 刚好和
+<code>git add file</code> 在上图是对称动作。
+</p>
+<pre class="example">
+      +----------+                           +----------+                   +-----------------+
+      |  HEAD    |                           |  Index   |                   |Working Directory|
+      +----------+                           +----------+                   +-----------------+
+      |          |                           |          |                   |                 |
+      |          |  git reset HEAD file.txt  |          |  git add file.txt |                 |
+      | file.txt |--------------------------&gt;| file.txt |&lt;------------------|   file.txt      |
+      |          |                           |          |                   |                 |
+      |          |                           |          |                   |                 |
+      +----------+                           +----------+                   +-----------------+
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdb8b135" class="outline-2">
+<h2 id="orgdb8b135"><span class="section-number-2">2</span> git checkout with path or file</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<code>git checkout commid_id file</code> 和 <code>git reset commid_id file</code> 的区别
+是把对应commit<sub>id中的file同时放到了Index和Working</sub> Directory。
+</p>
+<pre class="example">
+     +----------------------------------------------------------------------+
+     |                                                    +---------------+ |
+     |                                                    |     HEAD      | |
+     |                                                    +------+--------+ |
+     |                                                           |          |
+     |                                                    +------+--------+ |
+     |                                                    |    master     | |
+     |                                                    +------+--------+ |
+     |                                                           |          |
+     +---------------+          +---------------+         +------v--------+ |
+     |  commit_id:x  |          |  commit_id:y  |         |  commit_id:z  | |
+     |               |          |               |         |               | |
+     |   file.txt    |&lt;---------+   file.txt    |&lt;--------+   file.txt    | |
+     |     v1        |          |     v2        |         |     v3        | |
+     |               |          |               |         |               | |
+     +---------------+          +---------------+         +---------------+ |
+     |                                                                      |
+     |                          Git repository                              |
+     +----------------------------------------------------------------------+
+
+     +---------------+          +---------------+         +-----------------+
+     |    HEAD       |          |    Index      |         |Working Directory|
+     +---------------+          +---------------+         +-----------------+
+     |  commit_id:z  |          |               |         |                 |
+     |               |          |               |         |                 |
+     |   file.txt    |          |   file.txt    |         |   file.txt      |
+     |     v3        |          |     v1        |         |     v1          |
+     |               |          |               |         |                 |
+     +---------------+          +---------------+         +-----------------+
+
+     git checkout commit_id:x file.txt
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org86e1a50" class="outline-2">
+<h2 id="org86e1a50"><span class="section-number-2">3</span> git blame</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<code>git blame &lt;filename&gt;</code> 可以查看一个文件被谁修改过，这个在debug的时候
+很有用
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4dd66fb" class="outline-2">
+<h2 id="org4dd66fb"><span class="section-number-2">4</span> git merge</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgd4b559f" class="outline-3">
+<h3 id="orgd4b559f"><span class="section-number-3">4.1</span> git 解决merge冲突的经验和技巧</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+<a href="https://www.zhihu.com/question/21215715">对于解决 Git 的 Merge Conflict 你有哪些经验和技巧？</a>
+</p>
+<pre class="example">
+     我的经验是使用rebase。
+
+     具体操作
+     1. git add &lt;FILE&gt;
+     2. git commit ...
+     3. git pull --rebase （将你的版本加在最后的节点上） 如果有冲突，会
+        提示你。冲突分为两种，一种是在不同地方的冲突，通常情况下，git是
+        可以自己合并的。另外一种是因为可能是同一个文件的编辑，git没法自
+        动合并，需要二选一，这时候打开冲突的文件，手动编辑文件到可用的版
+        本。然后。
+     4. git rebase --continue
+     5. 重复3，4直到所有的都solve
+     6. git push
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgb775b87" class="outline-3">
+<h3 id="orgb775b87"><span class="section-number-3">4.2</span> git merge conflict 以某一分支为准直接应用</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+By default, when Git sees a conflict between two branches being
+merged, it will add merge conflict markers into your code and mark
+the file as conflicted and let you resolve it. If you would prefer
+for Git to simply choose a specific side and ignore the other side
+instead of letting you manually merge the conflict, you can pass
+the merge command either a -Xours or -Xtheirs.
+</p>
+
+<p>
+如果出现了confict，如果确信是可以保存某一分支的内容。可以使用这个选
+项。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      git checkout -b A
+      git checkout master
+      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#21512;&#24182;&#21518;&#20197;&#24403;&#21069;master&#20026;&#20934;</span>
+      git merge -Xours A
+      <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#21512;&#24182;&#21518;&#20197;A&#20026;&#20934;</span>
+      git merge -Xtheris A
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org877b2cb" class="outline-3">
+<h3 id="org877b2cb"><span class="section-number-3">4.3</span> git merge-base</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+可以找到两个commit的共同的祖先。这个在想找到分支的交叉点的时候很有
+用。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      git merge-base 7d6930f4c77bc7cd5e018ce046a26726ec448db3 000351e7b82e3211dd8fa5f4d0c09d647b66f450
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcf66108" class="outline-2">
+<h2 id="orgcf66108"><span class="section-number-2">5</span> git merge rebase and cherry-pick</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+merge在history上是直接汇总两个分支。
+</p>
+
+<p>
+rebase是使用把两个分支中的不同内容整成一个patch，然后应用到被rebase
+的分支。它会修改git的历史。做了rebase操作，git log不会出现 <code>Merged
+  from</code> 这样的提交。history是线性的。
+</p>
+
+<p>
+cherry-pick: <code>A cherry-pick in Git is like a rebase for a single
+  commit.</code> cherry-pick可以把某一个特定的commit rebase到对应分支。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9eb1e1a" class="outline-2">
+<h2 id="org9eb1e1a"><span class="section-number-2">6</span> git stash</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+可以暂存当前工作区的内容，以待后续使用。它是以栈的形式存在的。使用
+直接就 <code>git stash</code> 就可以了，这样当前缓冲区就是clean的了。需要恢复
+的时候，使用 <code>git stash apply XXXX</code> 就可以了。
+</p>
+
+<p>
+常用命令：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     git stash
+     git stash list
+     git stash apply
+     git stash clear
+     git stash pop
+     git stash drop
+</pre>
+</div>
+
+<p>
+最新建的stash的index是0哦。最旧的数字最大。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org72a5066" class="outline-2">
+<h2 id="git_config"><a id="org72a5066"></a><span class="section-number-2">7</span> git config</h2>
+<div class="outline-text-2" id="text-git_config">
+</div>
+<div id="outline-container-org97d2872" class="outline-3">
+<h3 id="org97d2872"><span class="section-number-3">7.1</span> git config base</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+使用git时最先需要设置的是就是用户名和邮箱：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      git config --global user.name <span style="color: #ffa500;">'xxxxx'</span>
+      git config --global user.email <span style="color: #ffa500;">'xxxx@gmail.com'</span>
+</pre>
+</div>
+
+<p>
+设置commit的模版，以后每次commit都会自动加入这个模版。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      git config --global commit.template ~/.gitmessage.txt
+</pre>
+</div>
+
+<p>
+配置默认使用emacs编辑器，这里 <code>emacsclient</code> 不能加 <code>--no-wait</code> 选项。
+需要让命令行等待emacsclient：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      git config --global core.editor <span style="color: #ffa500;">'emacsclient'</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org56a3d28" class="outline-3">
+<h3 id="org56a3d28"><span class="section-number-3">7.2</span> git config的 <code>--global</code> 选项</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+可以看到上一小节中我们在配置时都带了 <code>--global</code> 选项。从名字中可以
+看出这是一个全局设置的意思。它默认修改的是 <code>~/.gitconfig</code> 文件。比
+如我当前的这个文件长这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-conf-space">     [<span style="color: #00ff00;">diff</span>]
+             <span style="color: #8fbc8f;">tool</span> = bc3
+     [<span style="color: #00ff00;">difftool</span>]
+             <span style="color: #8fbc8f;">prompt</span> = false
+     [<span style="color: #00ff00;">merge</span>]
+             <span style="color: #8fbc8f;">tool</span> = bc3
+     [<span style="color: #00ff00;">mergetool</span>]
+             <span style="color: #8fbc8f;">prompt</span> = true
+             <span style="color: #8fbc8f;">keepBackup</span> = false
+     <span style="color: #8fbc8f;">[filter</span> <span style="color: #ffa500;">"lfs"</span>]
+             <span style="color: #8fbc8f;">clean</span> = git-lfs clean %f
+             <span style="color: #8fbc8f;">smudge</span> = git-lfs smudge %f
+             <span style="color: #8fbc8f;">required</span> = true
+     [<span style="color: #00ff00;">user</span>]
+             <span style="color: #8fbc8f;">name</span> = PengXie
+             <span style="color: #8fbc8f;">email</span> = xxx@gmail.com
+     [<span style="color: #00ff00;">core</span>]
+             <span style="color: #8fbc8f;">quotepath</span> = false
+             <span style="color: #8fbc8f;">editor</span> = emacsclient
+     [<span style="color: #00ff00;">commit</span>]
+             <span style="color: #8fbc8f;">template</span> = /Users/pengpengxp/.gitmessage.txt
+     [<span style="color: #00ff00;">http</span>]
+             <span style="color: #8fbc8f;">proxy</span> = socks5://172.16.25.48:1089
+     [<span style="color: #00ff00;">https</span>]
+             <span style="color: #8fbc8f;">proxy</span> = socks5://172.16.25.48:1089
+     [<span style="color: #00ff00;">push</span>]
+             <span style="color: #8fbc8f;">default</span> = simple
+
+</pre>
+</div>
+
+<p>
+如果不加这个选项，默认是就是配置当前仓库（需在在一个仓库内执行，不
+然会报错。）。此时它修改的是当前目录下 <code>.git/config</code> 文件。只对本仓
+库有效。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga916225" class="outline-2">
+<h2 id="orga916225"><span class="section-number-2">8</span> git reflog和git log</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+<code>git reflog</code> 是暂存本地自己的commit、pull、checkout等操作的，感觉就
+像是操作日志。记录了每个commit号。它是和commit等这样如果你不小心执
+行了删除分支等操作。但是你也许还是可以找回来的。它默认是暂存90天的。
+可以配置。也就是说git里只要commit了。信息应该是很难丢失的。可以使用
+<code>git log -g</code> 来更详细地显示reflog。
+</p>
+
+<p>
+<code>git log</code> 是从当前HEAD指向的commit一级一级回退到祖先的日志。
+</p>
+
+<p>
+下面是教程上讲的 <code>git reflog</code> ：
+</p>
+<pre class="example">
+     这样就丢弃了最新的两个 commit ── 包含这两个 commit 的分支不存在了。
+     现在要做的是找出最新的那个 commit 的 SHA，然后添加一个指它它的分支。关
+     键在于找出最新的 commit 的 SHA ── 你不大可能记住了这个 SHA，是吧？
+
+     通常最快捷的办法是使用 git reflog 工具。当你 (在一个仓库下) 工作时，
+     Git 会在你每次修改了 HEAD 时悄悄地将改动记录下来。当你提交或修改分支时，
+     reflog 就会更新。git update-ref 命令也可以更新 reflog，这是在本章前面
+     的 "Git References" 部分我们使用该命令而不是手工将 SHA 值写入 ref 文件
+     的理由。任何时间运行 git reflog 命令可以查看当前的状态：
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org637f68b" class="outline-2">
+<h2 id="org637f68b"><span class="section-number-2">9</span> git revert</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+git revert commit<sub>id会把对应的commit的修改找出来干掉</sub>，如果有冲突就
+提示unmerge。它不会修改提交历史，而是会产生一次新的commit。
+</p>
+
+<p>
+我试了一下，如果要去掉的这次commit<sub>id完全工作在一个和后面提交都不相</sub>
+关的文件时，可以直接revert。它产生了新的提交，新提交中去掉了
+commit<sub>id对应的内容</sub>。原来的那些提交都在的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0745676" class="outline-2">
+<h2 id="git-push"><a id="org0745676"></a><span class="section-number-2">10</span> git push</h2>
+<div class="outline-text-2" id="text-git-push">
+</div>
+<div id="outline-container-org4d30211" class="outline-3">
+<h3 id="org4d30211"><span class="section-number-3">10.1</span> 常规用法</h3>
+<div class="outline-text-3" id="text-10-1">
+<pre class="example">
+     git push origin local-branch-name:server-branch-name
+</pre>
+<p>
+把local的branch推送到origin标记的remote上的名字为server-branch-name的
+branch，如果没有，则新建。
+</p>
+<pre class="example">
+     git push origin --all
+</pre>
+<p>
+把本地所有分支推送到remote上去。名字就和本地是一样的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc6dffba" class="outline-3">
+<h3 id="orgc6dffba"><span class="section-number-3">10.2</span> 具体解释</h3>
+<div class="outline-text-3" id="text-10-2">
+<hr />
+<p>
+git push origin serverfix:serverfix
+</p>
+
+<p>
+it says,"Take my <i>serverfix</i> and make it the remote's <i>serverfix</i>." You
+can use thsi format to push a local branch into a remote branch that
+is named differently. If you didn't want it to be called <i>serverfix</i> on
+the remote, you could instead run git push origin
+<i>serverfix</i>:awesomebranch to push your local <i>serverfix</i> branch to the
+awesomebranch branch on the remote project; If you didn't want it to
+be called <i>serverfix</i> on the remote, you could instead run \(git push
+   origin serverfix:awesomebranch\) to push your local <i>serverfix</i> branch to
+the awesomebranch branch on the remote project.
+</p>
+<hr />
+
+<p>
+<b>我的理解</b>
+</p>
+<hr />
+<p>
+git push origin localserverfix:remoteserverfix
+</p>
+
+<p>
+localserverfix是本地branch的名字，remoteserverfix是remote端branch的名
+字。
+</p>
+<hr />
+</div>
+</div>
+<div id="outline-container-org2ddd5b7" class="outline-3">
+<h3 id="git-push-default"><a id="org2ddd5b7"></a><span class="section-number-3">10.3</span> push.default</h3>
+<div class="outline-text-3" id="text-git-push-default">
+<p>
+设置这个选项，可以不用每次都显示的指定需要push的分支，设置对了，以后就
+直接git push就行了。。manual上面是这么写的：
+</p>
+<pre class="example">
+     push.default
+         Defines the action git push should take if no refspec is explicitly given. Different values are well-suited for specific
+         workflows; for instance, in a purely central workflow (i.e. the fetch source is equal to the push destination), upstream is
+         probably what you want. Possible values are:
+
+         ·   nothing - do not push anything (error out) unless a refspec is explicitly given. This is primarily meant for people who
+             want to avoid mistakes by always being explicit.
+
+         ·   current - push the current branch to update a branch with the same name on the receiving end. Works in both central and
+             non-central workflows.
+
+         ·   upstream - push the current branch back to the branch whose changes are usually integrated into the current branch (which
+             is called @{upstream}). This mode only makes sense if you are pushing to the same repository you would normally pull from
+             (i.e. central workflow).
+
+         ·   simple - in centralized workflow, work like upstream with an added safety to refuse to push if the upstream branch’s name
+             is different from the local one.
+
+             When pushing to a remote that is different from the remote you normally pull from, work as current. This is the safest
+             option and is suited for beginners.
+
+             This mode will become the default in Git 2.0.
+
+         ·   matching - push all branches having the same name on both ends. This makes the repository you are pushing to remember the
+             set of branches that will be pushed out (e.g. if you always push maint and master there and no other branches, the
+             repository you push to will have these two branches, and your local maint and master will be pushed there).
+
+             To use this mode effectively, you have to make sure all the branches you would push out are ready to be pushed out before
+             running git push, as the whole point of this mode is to allow you to push all of the branches in one go. If you usually
+             finish work on only one branch and push out the result, while other branches are unfinished, this mode is not for you. Also
+             this mode is not suitable for pushing into a shared central repository, as other people may add new branches there, or
+             update the tip of existing branches outside your control.
+
+             This is currently the default, but Git 2.0 will change the default to simple.
+
+</pre>
+<p>
+我暂时使用设置成了 <code>current</code> 选项。每次都push我的当前分支。现在推
+荐使用 <code>simple</code> 。
+</p>
+<pre class="example">
+     git config --global push.default "simple"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf16347c" class="outline-2">
+<h2 id="git-track"><a id="orgf16347c"></a><span class="section-number-2">11</span> git track							  :git track:</h2>
+<div class="outline-text-2" id="text-git-track">
+<p>
+<b>原文</b>
+</p>
+<hr />
+<p>
+When you clone a repository, it generally automatically creates a
+master branch that tracks origin/master.
+</p>
+
+<p>
+这就是为什么我自己建立一个local的repository，再使用push传到网上之后，
+没有建立联系的原因。我没有track。
+</p>
+<hr />
+
+<p>
+新建一个branch，然后track remote端的branch：
+</p>
+<pre class="example">
+    git checkout -b new-branch --track origin/master
+</pre>
+<p>
+我是新建了一个test branch track了origin/master以后。将master branch改
+名为master<sub>bak</sub>，然后将test改名为master这样曲线救国的。
+</p>
+
+<p>
+<b>Question</b>
+</p>
+<hr />
+<ol class="org-ol">
+<li>how to make the current branch(master) to track the remote branch
+rather than making a new local branch?</li>
+</ol>
+<hr />
+</div>
+</div>
+
+<div id="outline-container-org39339bc" class="outline-2">
+<h2 id="git-fetch"><a id="org39339bc"></a><span class="section-number-2">12</span> git fetch</h2>
+<div class="outline-text-2" id="text-git-fetch">
+<p>
+我理解如下：
+</p>
+<ol class="org-ol">
+<li>git fetch就是和远端做了一次“数据库同步”。</li>
+<li>它更新了本地git的“数据库”。</li>
+<li>它完全不会修改本地任何文件。</li>
+</ol>
+
+<p>
+举一个简单的例子：A和B都clone了仓库后，B先push了一次代码。那么A怎么
+能知道B的修改呢？git可能会提醒你需要使用 <a href="#git-pull">git pull</a> 。但如果你不想把你
+当前工作的目录弄的乱七八糟的。我真心 <b>不建议</b> 使用 <code>git pull</code> 。
+</p>
+
+<p>
+这时候A使用 <code>git fetch</code> 。它就能知道B的修改啦。而且我保证，A的工作目
+录没有任何修改。
+</p>
+
+<p>
+git fetch可以选择fetch不同的remote：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    git fetch origin
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6c07d6e" class="outline-2">
+<h2 id="git-pull"><a id="org6c07d6e"></a><span class="section-number-2">13</span> git pull</h2>
+<div class="outline-text-2" id="text-git-pull">
+<p>
+<code>git pull</code> 全等于 <code>git fetch; git merge FETCH_END</code>
+</p>
+
+<p>
+progit上这么写的：
+</p>
+<pre class="example">
+    Running git pull generally fetches data from the server you originally
+    cloned from and automatically tries to merge it into the code you’re
+    currently working on.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgb63cde1" class="outline-2">
+<h2 id="orgb63cde1"><span class="section-number-2">14</span> git remote</h2>
+<div class="outline-text-2" id="text-14">
+</div>
+<div id="outline-container-org1d1b7a2" class="outline-3">
+<h3 id="org1d1b7a2"><span class="section-number-3">14.1</span> git remote base</h3>
+<div class="outline-text-3" id="text-14-1">
+<p>
+git可以是一个本地库，但是它更多地，应该是和远端做交互，以进行多人协
+作。
+</p>
+
+<p>
+<code>git remote</code> 命令就是设置远端库的地址的。常用的命令：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26597;&#35810;&#25152;&#26377;&#36828;&#31471;</span>
+     git remote -v
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#28155;&#21152;</span>
+     git remote add origin &lt;url&gt;
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#20462;&#25913;</span>
+     git remote set-url origin &lt;url&gt;
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#20854;&#23427;</span>
+     git remote --help
+</pre>
+</div>
+
+<p>
+其实可以看到，这些 <code>origin</code> 都只是一个 <code>url</code> 的别名而已。
+</p>
+
+<p>
+git和远端进行交互，有两种方式可选：ssh和https。不过一般https都只有下
+载权限（就像很多开源软件一样，大家都可以下载）。而上传权限的话，一般
+需要配置 <code>ssh</code> 方式了。使用ssh最好上传公钥到github上去，这样push就可
+以不需要密码了， 可以参考 <a href="#git-example">一个实际的例子</a> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgae917b3" class="outline-3">
+<h3 id="orgae917b3"><span class="section-number-3">14.2</span> git remote add &amp; git fetch</h3>
+<div class="outline-text-3" id="text-14-2">
+<p>
+<b>我的理解</b>
+</p>
+<hr />
+<p>
+读了pro git对应部份，终于明白了。git remote就是控制远程的分支的。一般默
+认origin/master是你最近一次和remote连接的时候，remote那边的master指向的
+snapshot。在本地，origin/master就是指向remote的master的“指针”。
+master是指向本地的。如果在最近有别人修改过remote上的master（也就是把
+master向前推进了），使用git fetch origin来获得所有remote上origin有的而
+本地没有的。
+</p>
+
+<p>
+英文原文：To synchronize your work, you run a git fetch origin
+command. This command looks up which server origin is, fetches any
+data from it that you don't yet have, and updates your local database,
+moving your origin/master pointer to its new, more up-to-date
+position.
+</p>
+
+<p>
+那么还有一个问题：如果origin还有其他分支呢？也会一起fetch过来然后
+update了？是的。英文原文如下：
+</p>
+
+<p>
+It's important to note that when you do a fetch that brings down new
+remote branches, you don't automatically have local, ediable copies of
+them. In other words, in this case, you don't have a new serverfix
+branch &#x2013; you only have an origin/serverfix pointer that you can't modify.
+</p>
+
+<p>
+If you want your own serverfix branch that you can work on, you can
+base it off your remote branch:
+</p>
+<pre class="example">
+     git checkout -b origin/serverfix
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org14774e7" class="outline-2">
+<h2 id="org14774e7"><span class="section-number-2">15</span> git diff</h2>
+<div class="outline-text-2" id="text-15">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">command</th>
+<th scope="col" class="org-left">for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">git diff</td>
+<td class="org-left">To see what you’ve changed but not yet staged</td>
+</tr>
+
+<tr>
+<td class="org-left">git diff &#x2013;staged</td>
+<td class="org-left">If you want to see what you’ve staged that will go into your next commit</td>
+</tr>
+
+<tr>
+<td class="org-left">git diff &#x2013;cached</td>
+<td class="org-left">?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org1eb5268" class="outline-2">
+<h2 id="org1eb5268"><span class="section-number-2">16</span> git clean</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+删除没有跟踪的文件。
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">option</th>
+<th scope="col" class="org-left">explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>-d</code></td>
+<td class="org-left">删除untrack的文件夹和文件</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>-f</code></td>
+<td class="org-left">如果 <code>clean.requireForce</code> 没有设置为false，git clean要删除文件或目录必须加上 <code>-f</code> 选项</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>-x</code></td>
+<td class="org-left">也删除忽略的文件</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>-X</code></td>
+<td class="org-left">只删除忽略的文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgec54083" class="outline-2">
+<h2 id="orgec54083"><span class="section-number-2">17</span> git 工具</h2>
+<div class="outline-text-2" id="text-17">
+</div>
+<div id="outline-container-org365819f" class="outline-3">
+<h3 id="org365819f"><span class="section-number-3">17.1</span> tig</h3>
+<div class="outline-text-3" id="text-17-1">
+</div>
+<div id="outline-container-orgee69341" class="outline-4">
+<h4 id="orgee69341"><span class="section-number-4">17.1.1</span> 命令行下的git interface</h4>
+<div class="outline-text-4" id="text-17-1-1">
+<p>
+tig可认通过edit命令直接调出编辑器来编辑对应行的文件。我希望配置成
+emacs来编辑。默认是使用git的默认编辑器。但是 <a href="#git_config">7</a> 我们配置
+editor是等待的。对于tig，我不希望等待。可以通过设置 <code>GIT_EDITOR</code> 环
+境变量来实现。把下面这句话写到 <code>~/.bashrc</code> 就可以了。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">      <span style="color: #b0c4de;">alias</span> <span style="color: #8fbc8f;">tig</span>=<span style="color: #ffa500;">'GIT_EDITOR="emacsclient --no-wait" tig'</span>
+</pre>
+</div>
+
+<p>
+配置好tig后，直接使用 <code>e</code> 就可以调用默认编辑器来编辑对应在文件的对
+应行了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4bad1cb" class="outline-4">
+<h4 id="org4bad1cb"><span class="section-number-4">17.1.2</span> status view(s)</h4>
+<div class="outline-text-4" id="text-17-1-2">
+<ul class="org-ul">
+<li><code>R</code>: refresh</li>
+<li><code>u</code>: 在unstage和stage状态中切换，对于同一文件，
+<code>unstage-&gt;staged</code> 会覆盖stage中的内容，应该是 <code>git add</code> 操作。
+<code>staged-&gt;unstage</code> ，会保留 unstage状态中的内容，应该是调用了
+<code>git reset HEAD &lt;filename&gt;</code></li>
+<li><code>!</code>: 只能作用于unstaged的modified状态的文件。 <code>git checkout --
+      &lt;filename&gt;</code> 。</li>
+<li class="off"><code>[&#xa0;]</code> <code>C</code>: commit。但是我这样设置了编辑器后，就没法在tig中commit了。
+还有点问题。commit还是自己用命令来搞吧。</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org5c1ee7e" class="outline-2">
+<h2 id="git-example"><a id="org5c1ee7e"></a><span class="section-number-2">18</span> 一个实际的例子</h2>
+<div class="outline-text-2" id="text-git-example">
+<p>
+本地有一个git仓库，我想把它放到github上去。
+</p>
+
+<p>
+本机上需要先配置git的用户名和邮箱：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    git config --global user.name <span style="color: #ffa500;">"pengpengxp"</span>
+    git config --global user.email <span style="color: #ffa500;">"pengpengxppri@gmail.com"</span>
+</pre>
+</div>
+
+<p>
+当然，为了方便，这里我还是先使用 <code>ssh-keygen</code> 生成了公钥。然后到我的
+github上把我的mka的公钥传上去了。这样以后push都不需要密码的。这样使
+用ssh的方式，用户名都是默认使用 <code>git</code> 。github区分不同的用户不是靠用
+户名，而是靠的密钥文件，详细可以参考 <a href="2017-06-21-multi-git-account-in-a-machine.html">一台电脑上多个github用户的配置</a>
+。
+</p>
+
+<p>
+然后添加上远程的url：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    git remote add origin git@github.com:pengpengxp/emacs.d-mac.git
+</pre>
+</div>
+
+<p>
+然后使用 <code>git push origin master</code> 直接就可以传上去了。
+</p>
+
+<p>
+如果想直接就push，可以参考 <a href="#git-push-default">push.default</a> 。
+</p>
+</div>
+
+<div id="outline-container-org0604421" class="outline-3">
+<h3 id="org0604421"><span class="section-number-3">18.1</span> 传是去以后还有一些文件夹没有实际上传</h3>
+<div class="outline-text-3" id="text-18-1">
+<p>
+原因是这些文件夹都是我通过使用`git clone'下来的。里面被理解成了
+submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所以我希望
+能建立一个完全独立的.emacs.d的话。每次下载下来的东西。最好都把.git
+去掉。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6b6ed1a" class="outline-3">
+<h3 id="org6b6ed1a"><span class="section-number-3">18.2</span> 配置ssh，不需要每次输入密码</h3>
+<div class="outline-text-3" id="text-18-2">
+<p>
+可以使用ssh的方式来和github仓库交互，配置默认无密码后，每次提交都不需
+要输入用户名和密码了，很方便。
+</p>
+
+<p>
+配置默认的ssh和一般几台机器上差不多，先使用ssh-keygen生成id<sub>rsa.pub</sub>。
+然后拷贝其中内容到github端。github帐户那儿有设置ssh的。把它粘贴上去就
+行了。当然最后需要输入密码确认一遍。
+</p>
+
+<p>
+刚开始的时候我配置好了ssh，但是push还是需要输入用户名密码，结果发现，
+原来一般git clone的时候使用的是https，所有保存在origin中的url都是https
+的。需要修改为ssh的。我认为应该可以直接修改.git目录中的config中的url都
+可以的。但是我还是照着网上说的，使用命令来修改的：
+</p>
+<pre class="example">
+     git remote set-url origin git@github.com:pengpengxp/.emacs.d.git
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd49cbf2" class="outline-2">
+<h2 id="orgd49cbf2"><span class="section-number-2">19</span> git submodule</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+一个仓库下也许某个子目录也是一个git仓库。这个目录就是一个
+<code>submodule</code> 。
+</p>
+
+<p>
+对于每个submodule都执行一下git命令：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: PaleYellow;">for</span> i<span style="color: PaleYellow;"> in</span> <span style="color: #fa8072;">`find $PWD -type d -name "*git"`</span>;<span style="color: PaleYellow;">do</span> chdir <span style="color: #fa8072;">`dirname $i`</span>;<span style="color: #b0c4de;">echo</span> $<span style="color: #8fbc8f;">i</span>;git status;<span style="color: PaleYellow;">done</span>
+     <span style="color: PaleYellow;">for</span> i<span style="color: PaleYellow;"> in</span> <span style="color: #fa8072;">`find $PWD -type d -name "*git"`</span>;<span style="color: PaleYellow;">do</span> <span style="color: #8fbc8f;">now</span>=<span style="color: #fa8072;">`pwd`</span>;<span style="color: #b0c4de;">cd</span> <span style="color: #fa8072;">`dirname $i`</span>;<span style="color: #b0c4de;">echo</span> <span style="color: #ffa500;">"====&gt;`pwd`"</span>; git status;<span style="color: #b0c4de;">cd</span> $<span style="color: #8fbc8f;">now</span>;<span style="color: PaleYellow;">done</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgacef3c2" class="outline-2">
+<h2 id="orgacef3c2"><span class="section-number-2">20</span> MISC</h2>
+<div class="outline-text-2" id="text-20">
+</div>
+<div id="outline-container-orga8cf460" class="outline-3">
+<h3 id="orga8cf460"><span class="section-number-3">20.1</span> 找一个库中someone修改过的文件</h3>
+<div class="outline-text-3" id="text-20-1">
+<div class="org-src-container">
+<pre class="src src-sh">     git log --pretty=<span style="color: #ffa500;">"%H"</span> --author=<span style="color: #ffa500;">"authorname"</span> |
+         <span style="color: PaleYellow;">while </span><span style="color: #b0c4de;">read</span> commit_hash
+         <span style="color: PaleYellow;">do</span>
+             git show --oneline --name-only $<span style="color: #8fbc8f;">commit_hash</span> | tail -n+2
+         <span style="color: PaleYellow;">done</span> | sort | uniq
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org710eb57" class="outline-3">
+<h3 id="org710eb57"><span class="section-number-3">20.2</span> Doc</h3>
+<div class="outline-text-3" id="text-20-2">
+<p>
+<a href="https://git-scm.com/book/zh/v1/">中文的doc</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org2cee985" class="outline-3">
+<h3 id="org2cee985"><span class="section-number-3">20.3</span> git clone只能克隆master分支，需要所有分支的时候不知道怎么办？</h3>
+<div class="outline-text-3" id="text-20-3">
+<p>
+其实是都在的，只不过是被隐藏了。使用下面的命令可以看到的。
+</p>
+<pre class="example">
+     git branch -a
+</pre>
+<p>
+不过如果要在remote上的其他分支上进行开发，最好在弄出一个本地分支出来做：
+</p>
+<pre class="example">
+     git checkout -b "local-branch-name" "remote-branch-name"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgdca1546" class="outline-3">
+<h3 id="orgdca1546"><span class="section-number-3">20.4</span> 远程怎么删除分支</h3>
+<div class="outline-text-3" id="text-20-4">
+<p>
+使用下面的命令删除远程分支：
+</p>
+<pre class="example">
+     git push origin --delete "remote-branch-name"
+</pre>
+<p>
+也可以这样简写：
+</p>
+<pre class="example">
+     git push origin :"remote-branch-name"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc6dd896" class="outline-3">
+<h3 id="orgc6dd896"><span class="section-number-3">20.5</span> 在emacs使用magit与远程进行交互</h3>
+<div class="outline-text-3" id="text-20-5">
+<p>
+在magit的状态下，使用P，有&#x2013;force选项，直接按-f，然后再按一次P就行了。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfacde93" class="outline-2">
+<h2 id="orgfacde93"><span class="section-number-2">21</span> <span class="todo TODO">TODO</span> 自已配置一个git server自已使用</h2>
+</div>
+<div id="outline-container-org3833f20" class="outline-2">
+<h2 id="org3833f20"><span class="section-number-2">22</span> 定义自己本地的 <code>.gitignore</code></h2>
+<div class="outline-text-2" id="text-22">
+<p>
+我使用 <code>gtags, cscope</code> 等文件，会生成一些tags和cscope开头的索引文件。
+又不想对每一个库都修改它的 <code>.gitignore</code> 。可以设置一下本地的 <code>git</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">git config --global core.excludesfile <span style="color: #ffa500;">"~/.gitignore"</span>
+</pre>
+</div>
+<p>
+然后把我需要怱略的文件都写到里面：
+</p>
+<pre class="example">
+# tags and cscope files
+TAGS
+tags
+GTAGS
+GSYMS
+GRTAGS
+GPATH
+cscope.*
+</pre>
+
+<p>
+这下每个库中git都不会管这些文件了。
+</p>
+</div>
+</div>
+<div id="outline-container-org4234e55" class="outline-2">
+<h2 id="org4234e55"><span class="section-number-2">23</span> magit</h2>
+<div class="outline-text-2" id="text-23">
+<p>
+<code>magit-log-buffer-file</code> 可以显示出来一个文件对应修改的commit。选中区
+域后还可以只显示出修改这个区域的commit。这个命令对于查看一个文件的修
+改历史很有用。
+</p>
+</div>
+</div>
+<div id="outline-container-org2ce4656" class="outline-2">
+<h2 id="org2ce4656"><span class="section-number-2">24</span> 使用gitlab直接在command line中gitlab发merge request</h2>
+<div class="outline-text-2" id="text-24">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">!/bin/</span><span style="color: PaleYellow;">bash</span>
+
+<span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#38656;&#35201;&#20808;&#23433;&#35013;&#19968;&#20010;ruby&#30340;&#21253;</span>
+<span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">gem install gitlab</span>
+
+<span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#35774;&#32622;&#19968;&#19979;gitlab&#30340;restfull api&#22320;&#22336;</span>
+<span style="color: #b0c4de;">export</span> <span style="color: #8fbc8f;">GITLAB_API_ENDPOINT</span>=http://10.0.0.3:9000/api/v4
+
+<span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#36825;&#20010;token&#38656;&#35201;&#21040;&#33258;&#24049;&#30340;gitlab&#36134;&#25143;&#37324;&#38754;&#21435;&#29983;&#25104;&#19968;&#20010;&#65292;&#30452;&#25509;copy&#19979;&#26469;</span>
+<span style="color: #b0c4de;">export</span> <span style="color: #8fbc8f;">GITLAB_API_PRIVATE_TOKEN</span>=&lt;your token&gt;
+
+<span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26368;&#21518;&#30340;assignee_id&#23601;&#26159;&#25351;&#23450;&#30340;assignee&#30340;&#29992;&#25143;&#65292;&#21487;&#20197;&#20351;&#29992;gitlab users&#26597;&#23545;&#24212;&#30340;id</span>
+gitlab create_merge_request zhangjm/test <span style="color: #ffa500;">"New merge request"</span> <span style="color: #ffa500;">"{source_branch: 'pull_request_cmd', target_branch: 'master', assignee_id: 2}"</span>
+
+<span style="color: PaleYellow;">exit</span> 0
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org74ea53c" class="outline-2">
+<h2 id="org74ea53c"><span class="section-number-2">25</span> git显示一个文件的所有历史修改记录</h2>
+<div class="outline-text-2" id="text-25">
+<div class="org-src-container">
+<pre class="src src-sh">git log --follow -p -- &lt;file&gt;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2019-03-18 一 16:47</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

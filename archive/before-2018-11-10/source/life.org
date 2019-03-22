@@ -1,0 +1,29 @@
+
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+
+# #+BEGIN_HTML
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/index.html">Home</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/life.html">生活</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/wiki.html">Wiki</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/about.html">关于我</a>
+# #+END_HTML
+#+BEGIN_SRC artist
+  '##:::::::'####:'########:'########:
+   ##:::::::. ##:: ##.....:: ##.....::
+   ##:::::::: ##:: ##::::::: ##:::::::
+   ##:::::::: ##:: ######::: ######:::
+   ##:::::::: ##:: ##...:::: ##...::::
+   ##:::::::: ##:: ##::::::: ##:::::::
+   ########:'####: ##::::::: ########:
+  ........::....::..::::::::........::
+#+END_SRC
+
+[[file:index.org][Home]] [[file:wiki.org][wiki]] [[file:life.org][生活]] [[file:about.org][关于我]] 
+     
+
+   + [[file:2017-07-07-%E4%B9%B0%E6%88%BF.org][2017-07-07-买房]]

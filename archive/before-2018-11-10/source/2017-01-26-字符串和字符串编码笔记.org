@@ -1,0 +1,115 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: align
+#+STARUP: hideblocks
+
+# #+OPTIONS: toc:nil 
+# #+BEGIN_HTML
+# ---
+# layout: post
+# title: 2017-01-26-字符串和字符串编码笔记
+# excerpt: "记录我对字符集和编解码的理解"
+# modified: 2017-01-26
+# tags: [Charset, Encode, Decode]
+# categories: Linux
+# ---
+
+# #+END_HTML
+
+
+# #+TOC: headlines 1 local
+
+
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+#+Title: 字符串和字符串编码笔记
+
+
+* 字符集和编解码
+字符集我理解就是把字符映射为数字的映射关系。编码是指把转化后的数字存入
+电脑的方式。解码是编码的逆。
+
+比如字符 =a= 在ascii码表中的值是97。然后存入计算机是一个字节
+=01100001= 。这里的ascii码表其实就是一个字符集，它其实一个 =f(x) = y=
+的函数，这里也就是：
+#+BEGIN_EXAMPLE
+  f(a) = 97
+#+END_EXAMPLE
+编码是指这里的97具体上怎么存在计算器上的。这里举例（也就是实际应用中）
+我们是存的一个字节。那么完全可以在编码的时候存两个字节： =00000000
+01100001= 。这就可以叫“完全没必要编码”:)
+
+我们常见的字符集：
++ ASCII字符集：最初的英文字符集
++ GB2312字符集：中文字符集
++ BIG5字符集：台湾搞的中文字符集，由于是自己定义的，文字集和编码方式
+  并没有分开。
++ Unicode字符集：统一、完全的字符集。
++ ...
+
+* 中文gb系列
+刚开始ASCII码的时候，编解码就一字节8个位，按照ascii码表（字符集）存就
+行。
+
+对于中文， =GB2312 是对 ASCII 的中文扩展。= 这句话很直观，也就是中国人
+民需要使用电脑，对ASCII码表进行了扩展。扩展方式为[fn:2:这下面基本都是
+直接引用的，见参考文档]：
+1. GB2312: 一个小于127的字符的意义与原来相同，但两个大于127的字符连在
+   一起时，就表示一个汉字，前面的一个字节（他称之为高字节）从0xA1用到
+   0xF7，后面一个字节（低字节）从0xA1到0xFE，这样我们就可以组合出大约
+   7000多个简体汉字了。因为小于127的还是占一个字节，大于127的占两个字
+   节。这就是当时说的汉字占两个英文字符的由来。所谓的全角和半角标点符
+   号，分别对应两字节和一字节编码。
+2. GBK： 后来还是不够用，于是干脆不再要求低字节一定是127号之后的内码，
+   只要第一个字节是大于127就固定表示这是一个汉字的开始，不管后面跟的是
+   不是扩展字符集里的内容。结果扩展之后的编码方案被称为 GBK 标准，GBK
+   包括了GB2312 的所有内容，同时又增加了近20000个新的汉字（包括繁体字）
+   和符号。
+3. gb18030: 后来少数民族也要用电脑了，于是我们再扩展，又加了几千个新的
+   少数民族的字，GBK扩成了 GB18030。从此之后，中华民族的文化就可以在计
+   算机时代中传承了。
+
+总的来说 =gb2312 < gbk < gb18030= 。对于gb2312系列,最常用的编码方式叫
+=EUC-CN= 。
+
+* unicode字符集和utf*编码
+全世界每个民族如果都单独搞一套字符集的话，就没办法国际化啦。最后来了一
+个统一的 =Unicode= 。如果以语言来举例子的话：各种字符集就像是各国的语
+言，unicode就像是世界通用的世界语。
+
+怎么存unicode呢？也就是unicode的编码方式：
++ utf-16:也是变长码。但是一般只使用前65535个unicode，所以一般为2字节
+  (16位)。两字节存的话，还需要考虑大端小端的问题，于是又有了不同的方式：
+  #+BEGIN_EXAMPLE
+    So far I've told you three ways of encoding Unicode. The traditional
+    store-it-in-two-byte methods are called UCS-2 (because it has two
+    bytes) or UTF-16 (because it has 16 bits), and you still have to
+    figure out if it's high-endian UCS-2 or low-endian UCS-2. And there's
+    the popular new UTF-8 standard which has the nice property of also
+    working respectably if you have the happy coincidence of English text
+    and braindead programs that are completely unaware that there is
+    anything other than ASCII.
+  #+END_EXAMPLE
++ utf-8:变长的码。向后兼容ASCII码
++ utf-32:对每个字符都使用4字节
++ ...
+
+开始的时候存unicode的时候，一个字符都是使用两个字节来存（utf16）。但是
+这样如果只存英文，会造成空间有极大浪费。聪明人就发明了utf-8这种变长的
+编码方式，看看这段：
+#+BEGIN_EXAMPLE
+  Thus was invented the brilliant concept of UTF-8. UTF-8 was another
+  system for storing your string of Unicode code points, those magic U+
+  numbers, in memory using 8 bit bytes. In UTF-8, every code point from
+  0-127 is stored in a single byte. Only code points 128 and above are
+  stored using 2, 3, in fact, up to 6 bytes.
+#+END_EXAMPLE
+当字符的unicode值小于127时，还是像ascii码一样存一个字节[fn:1:所以utf-8
+向后兼容ascii码。]。只有当字符的unicode值大于127时，才会占用2个以上6个
+以下字节空间。
+
+* 参考文档
+  [[http://www.joelonsoftware.com/articles/Unicode.html][这篇英文博客讲得很不错]]
+
+  [[http://blog.csdn.net/u010159842/article/details/51445694][这篇文章详细讲解了gbk系列的来源]] 

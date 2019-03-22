@@ -1,0 +1,205 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: docker网络访问
+
+* 安装docker 
+** Mac
+   Mac上可以去 [[https://www.docker.com/][官网]] 上下载一个docker.img文件，然后直接安装就可以了。启
+   动后，命令行下自动就会有docker命令。
+
+** ubuntu
+   ubuntu14.04上，docekr的安装包名字不叫docker，而是叫 =docker.io= 。
+   所以需要这样安装：
+   #+BEGIN_SRC sh
+     sudo apt-get install -susdo  docker.io
+   #+END_SRC
+   
+   安装好后，需要把当前用户加入docker组内：
+   #+BEGIN_SRC sh
+     sudo usermod -a -G docker <username>
+    #+END_SRC
+    
+    重新登陆后，启动docker服务即可：
+    #+BEGIN_SRC sh
+      sudo service docker start
+    #+END_SRC
+
+* 如何访问docker中的容器
+  拉起ras容器很简单：
+  #+BEGIN_SRC sh
+    docker run -d xxx:xxx
+  #+END_SRC
+  
+  重点是解决如何在“外部”访问容器。也就是网络方面的问题。Mac上通过端
+  口映射的方式太“原始”。在纯Linux的环境中，可以有更好的选择。
+
+  Linux下默认docker使用的网络结构如下图所示：
+  #+BEGIN_EXAMPLE
+    +------------------------------------------------------------------------+
+    |                             Host                                       |
+    |                                                                        |
+    |     +------------------+                     +------------------+      |
+    |     |                  |                     |                  |      |
+    |     |                  |                     |                  |      |
+    |     |    Container1    |                     |    Container2    |      |
+    |     |                  |                     |                  |      |
+    |     |    +--------+    |                     |    +--------+    |      |
+    |     |    |  eth0  |    |                     |    |  eth0  |    |      |
+    |     +----+---+----+----+                     +----+----+---+----+      |
+    |              ^  172.17.42.2                            ^  172.17.42.3  |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              v                                         v               |
+    |          +---+-----+                              +----+----+          |
+    |          |         |                              |         |          |
+    |     +----+ vethXX  +------------------------------+ vethYY  +----+     |
+    |     |    |         |                              |         |    |     |
+    |     |    +---------+           docker0            +---------+    |     | 
+    |     |                       +------------+                       |     |
+    |     +-----------------------+  docker0   +-----------------------+     |
+    |                             +-----+------+ 172.17.42.1/16              |
+    |                                                                        |
+    |                       +--------------------------+                     |
+    +-----------------------|         eth0             |---------------------+
+                            +--------------------------+
+                                                 10.10.10.1
+  #+END_EXAMPLE
+
+  默认情况下会新建一个名叫 =docker0= 的网桥。可以理解为 =docker0= 就是
+  Linux在内部使用软件虚拟出了一个交换机。拉起的容器中的 =eth0= 都通过
+  特殊的技术(veth pair 可以参考 [[file:2017-01-23-Linux%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E7%9B%B8%E5%85%B3%E7%9A%84%E5%A4%A7%E6%9D%82%E7%83%A9.org::#veth][veth]] )连接在这个交换机上。这样，宿主机
+  和容器以及容器和容器之间都可以相互通信。如上图所示的，172网段也就是
+  该宿主机中的虚拟网络。容器中如果需要访问外部10网段，可以通过NAT来实
+  现。
+  
+  但是这样 会导致宿主机以外的机器不能访问到容器。为了实现“外部”也可以
+  访问容器。我们可以这样设计：
+  #+BEGIN_EXAMPLE
+    +------------------------------------------------------------------------+
+    |                             Host                                       |
+    |                                                                        |
+    |     +------------------+                     +------------------+      |
+    |     |                  |                     |                  |      |
+    |     |                  |                     |                  |      |
+    |     |    Container1    |                     |    Container2    |      |
+    |     |                  |                     |                  |      |
+    |     |    +--------+    |                     |    +--------+    |      |
+    |     |    |  eth0  |    |                     |    |  eth0  |    |      |
+    |     +----+---+----+----+                     +----+----+---+----+      |
+    |              ^  10.10.10.2                             ^  10.10.10.3   |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              v                                         v               |
+    |          +---+-----+                              +----+----+          |
+    |          |         |                              |         |          |
+    |     +----+ vethXX  +------------------------------+ vethYY  +----+     |
+    |     |    |         |                              |         |    |     |
+    |     |    +---------+         bridge-eth0          +---------+    |     | 
+    |     |                     +---------------+                      |     |
+    |     +---------------------+  bridge-eth0  +----------------------+     |
+    |                           +---------------+                            |
+    |                                   ^   10.10.10.1                       |
+    |                                   |                                    |
+    |                                   v                                    |
+    |                       +-----------+--------------+                     |
+    +-----------------------|         eth0             |---------------------+
+                            +--------------------------+                   
+  #+END_EXAMPLE
+  1. 把宿主机上的eth0网卡用的ip地址“移”到网桥上 =bridge-eth0= 。
+  2. 设置宿主机中的eth0网卡也连到 =bridge-eth0= 上。
+  3. 配置docker服务使用名为 =bridge-eth0= 的网桥。
+     
+  下面的脚本接受一个 =<interface>= 参数。实现如下功能：
+  1. 新建一个名为 =bridge-<interface-name>= 的网桥。
+  2. 把原来 =<interface>= 的ip地址分配给了 =bridge-<interface-name>= 。
+  3. 把原来 =<interface>= 的连到 =bridge-<interface-name>= 网桥。
+     
+  #+BEGIN_SRC sh
+    #!/bin/bash
+    moveHostIntf(){
+        IFINDEX=$1
+        BRIDGE=bridge-$IFINDEX
+
+        bridge link show|cut -d\  -f 2|grep "^$IFINDEX\$"
+        #brctl show $BRIDGE | grep "\<$IFINDEX\>" >/dev/null
+        if [ $? = 0 ];then
+            echo "host interface $IFINDEX already in bridge $BRIDGE"
+            return 1
+        fi
+
+        #save route table related to this interface
+        myRoute=$(ip route show scope global dev $IFINDEX | while read dst via gw;do if [ "$via" = "via" ]; then echo "route add -net $dst gw $gw";fi;done;)
+
+        #save IP of this interface
+        myIp=$(getIpAddr $IFINDEX)
+
+
+        brctl addbr $BRIDGE
+        ip addr flush dev $IFINDEX
+        brctl addif $BRIDGE $IFINDEX
+
+        #restore IP of the old interface to new one
+        ifconfig $BRIDGE $myIp
+
+        #restore route table related to this interface
+        for r in "$myRoute";do
+            $r
+        done
+
+    }
+
+    getIpAddr(){
+        ip addr show $1|grep -o "inet [^[:space:]]*"|cut -d\  -f2
+    }
+
+
+    moveHostIntf $1
+
+  #+END_SRC
+
+  最后配置docker使用名为 =bridge-<interface-name>= 网桥，需要先停止
+  docker服务：
+  #+BEGIN_SRC sh
+    sudo service docker stop
+  #+END_SRC
+  
+  修改docker配置文件 =/etc/default/docker= ，加入这句：
+  #+BEGIN_EXAMPLE
+    DOCKER_OPTS="-b=bridge-eth0"
+  #+END_EXAMPLE
+  
+  最后该文件可能看起来像这样：
+  #+BEGIN_EXAMPLE
+    # Here in Debian, this file is sourced by:
+    #   - /etc/init.d/docker (sysvinit)
+    #   - /etc/init/docker (upstart)
+    #   - systemd's docker.service
+
+    # Use of this file for configuring your Docker daemon is discouraged.
+
+    # The recommended alternative is "/etc/docker/daemon.json", as described in:
+    #   https://docs.docker.com/v1.11/engine/reference/commandline/daemon/#daemon-configuration-file
+
+    # If that does not suit your needs, try a systemd drop-in file, as described in:
+    #   https://docs.docker.com/v1.11/engine/admin/systemd/#custom-docker-daemon-options
+    DOCKER_OPTS="-b=bridge-eth0"
+  #+END_EXAMPLE
+
+  这样拉起的容器，就可以分到10网段的ip地址。它们也就暴露在外部网络中了。
+
+  这样再拉起ras容器后，可以直接通过ip来访问了。比如这里两个容器就可以
+  分别用 =http://10.10.10.2:80= 和 =http://10.10.10.3:80= 访问对应容器
+  的端口。
+
+* TODO Mac上使用
+  由于Mac上的一些限制（没有网桥这个概念，host不通ping通容器），目前Mac
+  上拉起vm后，只能通过端口映射的方式访问拉起的vm :(
+   #+BEGIN_SRC sh
+     docker run -d -p 20145:20145 -p 20146:20146 -p 20147:20147 -p 20148:20148 -p 20149:20149 -p 20150:20150 -p 20151:20151 -p 20152:20152 -p 20153:20153 -p 20154:20154 -p 20155:20155 -p 20156:20156 -p 20157:20157 -p 20158:20158 -p 20159:20159 -p 20160:20160 xxx:2.2.4
+   #+END_SRC

@@ -1,0 +1,1418 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: Azure wiki
+
+* Azure-cli
+  我们当前使用的是azure-cli 1.0的版本。azure-cli 2.0版本又有不同了。它
+  应该是针对arm模式搞了些啥。命令都变成了az而不是azure。
+  
+  install azure-cli 1.0:
+  #+BEGIN_SRC sh
+    npm install -g azure-cli
+  #+END_SRC
+  
+  启用补全：
+  zsh：
+  #+BEGIN_SRC sh
+    echo '. <(azure --completion)' >> .zshrc
+  #+END_SRC
+  bash：
+  #+BEGIN_SRC sh
+    azure --completion >> ~/azure.completion.sh
+    echo 'source ~/azure.completion.sh' >> ~/.bash_profile
+  #+END_SRC
+* command line
+** [[https://manage.windowsazure.cn/][asm]]
+   #+BEGIN_SRC sh
+     # 上传我们的vhd虚拟机
+     azure vm image create rivercirros /Users/pengpengxp/VirtualBox\ VMs/ubuntu-vhd-fixe/ubuntu-vhd-fixe.vhd -o linux -l "China East" --verbose
+     # 创建vm
+     azure vm create rivervm rivercirros --userName river --location "China east"
+   #+END_SRC
+
+** [[https://portal.azure.cn/][arm]]
+   #+BEGIN_SRC sh
+     # quick-create 
+     azure vm quick-create -g exampleResourceGroup -n exampleVMName -l chinaeast -y Linux -u exampleAdminUser -M ~/.ssh/id_rsa.pub -Q UbuntuLTS
+   #+END_SRC
+
+   [[https://www.azure.cn/documentation/articles/virtual-machines-linux-create-cli-complete/][使用 Azure CLI 创建完整的 Linux 环境]]
+   #+BEGIN_SRC sh
+     azure group create TestRG -l chinaeast
+     azure storage account create -g TestRG -l chinaeast --kind Storage --sku-name GRS rivercmd
+
+     azure network vnet create -g TestRG -n TestVNet -a 192.168.0.0/16 -l chinaeast
+     azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd -a 192.168.1.0/24
+     azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd2 -a 192.168.2.0/24
+
+     azure network public-ip create -d riverdomain TestRG TestPIP chinaeast
+     azure network public-ip create -d riverdomain2 TestRG TestPIP2 chinaeast
+
+     azure network nic create -g TestRG -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd rivernic
+     azure network nic create -g TestRG -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd2 rivernic2
+
+     azure vm create \
+         --resource-group TestRG \
+         --name TestVM1 \
+         --location chinaeast \
+         --os-type linux \
+         --vnet-name TestVnet \
+         --vnet-subnet-name FrontEnd \
+         --storage-account-name rivercmd \
+         --image-urn canonical:UbuntuServer:16.04.0-LTS:latest \
+         --ssh-publickey-file ~/.ssh/id_rsa.pub \
+         --admin-username ops \
+         --public-ip-name TestPIP \
+         --nic-name rivernic
+
+
+     azure vm create \
+         --resource-group TestRG \
+         --name TestVM2 \
+         --location chinaeast \
+         --os-type linux \
+         --vnet-name TestVnet \
+         --vnet-subnet-name FrontEnd \
+         --vnet-subnet-name FrontEnd2 \
+         --storage-account-name rivercmd \
+         --image-urn canonical:UbuntuServer:16.04.0-LTS:latest \
+         --ssh-publickey-file ~/.ssh/id_rsa.pub \
+         --admin-username ops \
+         --public-ip-name TestPIP2 \
+         --nic-names rivernic2,rivernic
+
+
+     azure group export TestRG
+     azure group deployment create -f /tmp/TestRG.json -g NewRGFromTemplate
+
+     azure vm image list chinaeast canonical | grep LTS
+     a network public-ip show testrg testpip
+   #+END_SRC
+
+* from mail microsoft cloud
+  发件人: Michael Li (DX) 
+  发送时间: divendres, 21 d’octubre de 2016 14:50
+  收件人: He Wang <wahe@microsoft.com>
+  主题: 部署步骤
+ 
+  以下是以经典方式创建的参考：
+ 
+  1. 创建虚拟机网络，请参考:
+  https://social.technet.microsoft.com/wiki/contents/articles/17789.azure-how-to-create-a-virtual-network.aspx
+ 
+  2. 按照下面文档的方法，创建一个云服务(Cloud Service):
+  https://azure.microsoft.com/en-us/documentation/articles/cloud-services-how-to-create-deploy/
+  仅参考How to: Create a cloud service using Quick Create 的步骤创建即可。云服务配置好之后，可以获得一个互联网可以访问的域名，比如xxxxx.chinacloudapp.cn 这样的。
+ 
+  3. 创建虚拟机, 请参考:
+  http://www.c-sharpcorner.com/UploadFile/1ae37f/create-virtual-machinevm-in-microsoft-azure-step-by-step/
+  创建虚拟机时，切记，使用From Gallery 方式创建
+  在创建虚拟机的向导中，将云服务选择为步骤2中创建的云服务，将虚拟机网络选择为步骤1中创建的虚拟网络以及其子网。
+  通常情况下，WAF 需要一台虚拟机，被测试应用程序需要一台或者多台虚拟机(Web、DB等等)。
+ 
+  4. 配置端口
+  https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-classic-setup-endpoints/
+  请将WAF 虚拟机的80 或者443 端口在云服务中进行EndPoint 配置，以便访问云服务的流量先流入WAF 虚拟机。
+ 
+  5. 创建完成后，就可以部署WAF 和被测试应用程序了。
+  6. 在部署结束之后，就可以对步骤2 创建的云服务地址开始攻击和测试了。
+* 出现常见错误的解决办法
+  #+BEGIN_EXAMPLE
+    error: The subscription is not registered to use namespace
+    'Microsoft.Network'. See https://aka.ms/rps-not-found for how to
+    register subscriptions.
+  #+END_EXAMPLE
+
+  需要把对应的东西注册上：
+  #+BEGIN_SRC shell-script
+    azure provider register Microsoft.Network
+  #+END_SRC 
+
+* 使用storage的container时需要认证
+  创建的时候需要填入keys，可以使用 =azure storage account keys list
+  rivertestcommand --resource-group teststorage= 来查询：
+  #+BEGIN_SRC shell-script
+    azure storage container create --account-name rivertestcommand --account-key uJfdwbn/R3ju+iagt/GnSTAovkiMtpKwA9XaatvinB8M2+qQMQ/PN7d4gLZU1gzMTHiPa6gx47nbrjuHL2m5FQ== --container myimages
+  #+END_SRC
+
+  如果是在shell中需要查询container相关的信息时，会提示需要设置环境变量：
+  #+BEGIN_EXAMPLE
+    /tmp ᐅ a storage container list
+    info:    Executing command storage container list
+    error:   Please set the storage account parameters or one of the following two environment variables to use the storage command.
+      1. AZURE_STORAGE_CONNECTION_STRING
+      2. AZURE_STORAGE_ACCOUNT and AZURE_STORAGE_ACCESS_KEY
+    error:   Error information has been recorded to /Users/pengpengxp/.azure/azure.err
+    error:   storage container list command failed
+  #+END_EXAMPLE
+  
+  这样设置环境变量：
+  
+  #+BEGIN_SRC shell-script
+    export AZURE_STORAGE_CONNECTION_STRING='DefaultEndpointsProtocol=https;AccountName=rivertestcommand;AccountKey=uJfdwbn/R3ju+iagt/GnSTAovkiMtpKwA9XaatvinB8M2+qQMQ/PN7d4gLZU1gzMTHiPa6gx47nbrjuHL2m5FQ=='
+  #+END_SRC
+  该环境变量可以使用下面的命令来查到：
+  #+BEGIN_SRC sh
+    azure storage account connectionstring show <account_name>
+  #+END_SRC
+
+  其中AccountKey就是使用 =azure storage account keys list
+  rivertestcommand --resource-group teststorage= 来查到的结果。
+
+  [[https://azure.microsoft.com/en-us/documentation/articles/storage-azure-cli/][Using the Azure CLI 2.0 with Azure Storage]]
+
+* TODO Questions
+** azure 多网卡vm 
+* DONE 为毛在command-line创建的vm在web端看不到？
+  azure分为全球区和中国区，我们现在使用的是中国区。
+
+  而azure在中国区分为两种模式：asm模式和arm模式。前者是经典模式。后者是较新的模式。
+
+  azure config mode asm和azure config mode arm可以在这两种模式下切换。
+
+  这两种模式下的资源是分开的。也就是说在arm模式下新建的虚拟机。asm模式下看不到的。
+
+  asm web登陆地址：https://manage.windowsazure.cn/
+  arm web 登陆地址：https://portal.azure.cn/
+
+* 中国区登陆
+  中国区需要这样登陆：
+  #+BEGIN_SRC shell-script
+    azure login -e AzureChinaCloud
+    azure login -e AzureChinaCloud -u xxx@xxx
+    azure logout xxx@xxx
+  #+END_SRC
+  
+  azure cli 2.0登陆，参考的 [[https://www.azure.cn/documentation/articles/developerdifferences/][这里]]
+  1. 使用 az cloud set --name AzureChinaCloud 连接中国区 Azure。
+  2. 使用 az login -u <account email> -p <account password> 替换其中的
+     账号和密码，登陆 Azure。
+  3. 如果在中国区 Azure 有多个订阅账户 Subscription，使用 az account
+     set --subscription <subscirption name> 选择用来生成认证信息的订阅
+     账户。
+  4. 使用以下命令，生成认证文件 my.azureauth 并保存于本地。 curl -L
+     https://raw.githubusercontent.com/Azure/azure-sdk-for-java/master/tools/authgen.py |
+     python > my.azureauth
+  #+BEGIN_EXAMPLE
+    az cloud set --name AzureChinaCloud
+    az login -u xxx.xxx
+  #+END_EXAMPLE
+  
+* [[http://azure-sdk-for-python.readthedocs.io/en/latest/][python sdk for azure]] 
+  下面是一个hello-world的例子。
+  #+BEGIN_SRC python
+    #!/usr/local/bin/python
+    import os
+    from azure.common.credentials import ServicePrincipalCredentials
+    from azure.mgmt.resource import ResourceManagementClient
+    from azure.mgmt.storage import StorageManagementClient
+    from azure.mgmt.network import NetworkManagementClient
+    from azure.mgmt.compute import ComputeManagementClient
+    from haikunator import Haikunator
+    from azure.common.credentials import UserPassCredentials
+
+    #
+    #
+    # Create all clients with an Application (service principal) token provider
+    #
+
+    subscription_id = '5ef4723b-155a-4081-9dc5-d41c9a0130ab'
+
+    credentials = UserPassCredentials(
+        'user',      # Your user
+        'password',          # Your password
+        china = True
+    )
+
+    resource_client = ResourceManagementClient(credentials, subscription_id, base_url = "https://management.chinacloudapi.cn")
+    compute_client = ComputeManagementClient(credentials, subscription_id, base_url = "https://management.chinacloudapi.cn")
+    storage_client = StorageManagementClient(credentials, subscription_id, base_url= "https://management.chinacloudapi.cn")
+    network_client = NetworkManagementClient(credentials, subscription_id, base_url = "https://management.chinacloudapi.cn")
+
+
+    # list all groups
+    for item in resource_client.resources.list():
+        print(item.name)
+    # list all storage_accounts
+    for item in storage_client.storage_accounts.list():
+        print(item.name)
+
+    # get client by name    
+    virtual_machine = compute_client.virtual_machines.get(
+        "azure-sample-group-virtual-machines",
+        "vmname" 
+    )
+
+    print(virtual_machine)
+  #+END_SRC
+
+  下面是一个比较完整的例子：
+  #+BEGIN_SRC python
+    #!/usr/local/bin/python
+    import os
+    from azure.common.credentials import ServicePrincipalCredentials
+    from azure.mgmt.resource import ResourceManagementClient
+    from azure.mgmt.storage import StorageManagementClient
+    from azure.mgmt.network import NetworkManagementClient
+    from azure.mgmt.compute import ComputeManagementClient
+    from haikunator import Haikunator
+    from azure.common.credentials import UserPassCredentials
+
+    haikunator = Haikunator()
+
+    # Azure Datacenter
+    LOCATION = 'China east'
+
+    # Resource Group
+    GROUP_NAME = 'azure-sample-group-virtual-machines'
+
+    # Network
+    VNET_NAME = 'azure-sample-vnet'
+    SUBNET_NAME = 'azure-sample-subnet'
+
+    # VM
+    OS_DISK_NAME = 'azure-sample-osdisk'
+    STORAGE_ACCOUNT_NAME = haikunator.haikunate(delimiter='')
+
+    IP_CONFIG_NAME = 'azure-sample-ip-config'
+    NIC_NAME = 'azure-sample-nic'
+    USERNAME = 'userlogin'
+    PASSWORD = 'Pa$$w0rd91'
+    VM_NAME = 'VmName'
+
+    VM_REFERENCE = {
+        'linux': {
+            'publisher': 'Canonical',
+            'offer': 'UbuntuServer',
+            'sku': '16.04.0-LTS',
+            'version': 'latest'
+        },
+        'windows': {
+            'publisher': 'MicrosoftWindowsServerEssentials',
+            'offer': 'WindowsServerEssentials',
+            'sku': 'WindowsServerEssentials',
+            'version': 'latest'
+        }
+    }
+
+    # Manage resources and resource groups - create, update and delete a resource group,
+    # deploy a solution into a resource group, export an ARM template. Create, read, update
+    # and delete a resource
+    #
+    # This script expects that the following environment vars are set:
+    #
+    # AZURE_TENANT_ID: with your Azure Active Directory tenant id or domain
+    # AZURE_CLIENT_ID: with your Azure Active Directory Application Client ID
+    # AZURE_CLIENT_SECRET: with your Azure Active Directory Application Secret
+    # AZURE_SUBSCRIPTION_ID: with your Azure Subscription Id
+    #
+    def run_example():
+        """Resource Group management example."""
+        #
+        # Create all clients with an Application (service principal) token provider
+        #
+        subscription_id = '5ef4723b-155a-4081-9dc5-d41c9a0130ab'
+
+        credentials = UserPassCredentials(
+            'user',      # Your user
+            'password',          # Your password
+            china = True
+        )
+
+        # 中国区的关键就在这里，需要设置base_url
+        resource_client = ResourceManagementClient(credentials, subscription_id, base_url = "https://management.chinacloudapi.cn")
+        compute_client = ComputeManagementClient(credentials, subscription_id, base_url = "https://management.chinacloudapi.cn")
+        storage_client = StorageManagementClient(credentials, subscription_id, base_url= "https://management.chinacloudapi.cn")
+        network_client = NetworkManagementClient(credentials, subscription_id, base_url = "https://management.chinacloudapi.cn")
+
+        ###########
+        # Prepare #
+        ###########
+
+        # Create Resource group
+        print('\nCreate Resource Group')
+        resource_client.resource_groups.create_or_update(GROUP_NAME, {'location':LOCATION})
+
+        # Create a storage account
+        print('\nCreate a storage account')
+        storage_async_operation = storage_client.storage_accounts.create(
+            GROUP_NAME,
+            STORAGE_ACCOUNT_NAME,
+            {
+                'sku': {'name': 'standard_lrs'},
+                'kind': 'storage',
+                'location': LOCATION
+            }
+        )
+        storage_async_operation.wait()
+
+        # Create a NIC
+        nic = create_nic(network_client)
+
+        # #############
+        # # VM Sample #
+        # #############
+
+        # Create Linux VM
+        print('\nCreating Linux Virtual Machine')
+        vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'])
+        async_vm_creation = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME, VM_NAME, vm_parameters)
+        async_vm_creation.wait()
+
+        # Tag the VM
+        print('\nTag Virtual Machine')
+        async_vm_update = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            {
+                'location': LOCATION,
+                'tags': {
+                    'who-rocks': 'python',
+                    'where': 'on azure'
+                }
+            }
+        )
+        async_vm_update.wait()
+
+        # Attach data disk
+        print('\nAttach Data Disk')
+        async_vm_update = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            {
+                'location': LOCATION,
+                'storage_profile': {
+                    'data_disks': [{
+                        'name': 'mydatadisk1',
+                        'disk_size_gb': 1,
+                        'lun': 0,
+                        'vhd': {
+                            # 'uri' : "http://{}.blob.core.windows.net/vhds/mydatadisk1.vhd".format(
+                            'uri' : "http://{}.blob.core.chinacloudapi.cn/vhds/mydatadisk1.vhd".format(
+                                STORAGE_ACCOUNT_NAME)
+                        },
+                        'create_option': 'Empty'
+                    }]
+                }
+            }
+        )
+        async_vm_update.wait()
+
+        # Get one the virtual machine by name
+        print('\nGet Virtual Machine by Name')
+        virtual_machine = compute_client.virtual_machines.get(
+            GROUP_NAME,
+            VM_NAME
+        )
+
+        # Detach data disk
+        print('\nDetach Data Disk')
+        data_disks = virtual_machine.storage_profile.data_disks
+        data_disks[:] = [disk for disk in data_disks if disk.name != 'mydatadisk1']
+        async_vm_update = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            virtual_machine
+        )
+        virtual_machine = async_vm_update.result()
+
+        # Deallocating the VM (resize prepare)
+        print('\nDeallocating the VM (resize prepare)')
+        async_vm_deallocate = compute_client.virtual_machines.deallocate(GROUP_NAME, VM_NAME)
+        async_vm_deallocate.wait()
+
+        # Update OS disk size by 10Gb
+        print('\nUpdate OS disk size')
+        # Server is not returning the OS Disk size (None), possible bug in server
+        if not virtual_machine.storage_profile.os_disk.disk_size_gb:
+            print("\tServer is not returning the OS disk size, possible bug in the server?")
+            print("\tAssuming that the OS disk size is 256 GB")
+            virtual_machine.storage_profile.os_disk.disk_size_gb = 256
+
+        virtual_machine.storage_profile.os_disk.disk_size_gb += 10
+        async_vm_update = compute_client.virtual_machines.create_or_update(
+            GROUP_NAME,
+            VM_NAME,
+            virtual_machine
+        )
+        virtual_machine = async_vm_update.result()
+
+        # Start the VM
+        print('\nStart VM')
+        async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
+        async_vm_start.wait()
+
+        # Restart the VM
+        print('\nRestart VM')
+        async_vm_restart = compute_client.virtual_machines.restart(GROUP_NAME, VM_NAME)
+        async_vm_restart.wait()
+
+        # Stop the VM
+        print('\nStop VM')
+        async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
+        async_vm_stop.wait()
+
+        # List VMs in subscription
+        print('\nList VMs in subscription')
+        for vm in compute_client.virtual_machines.list_all():
+            print("\tVM: {}".format(vm.name))
+
+        # List VM in resource group
+        print('\nList VMs in resource group')
+        for vm in compute_client.virtual_machines.list(GROUP_NAME):
+            print("\tVM: {}".format(vm.name))
+
+        # # Delete VM
+        # print('\nDelete VM')
+        # async_vm_delete = compute_client.virtual_machines.delete(GROUP_NAME, VM_NAME)
+        # async_vm_delete.wait()
+
+        # # Create Windows VM
+        # print('\nCreating Windows Virtual Machine')
+        # # Recycling NIC of previous VM
+        # vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['windows'])
+        # async_vm_creation = compute_client.virtual_machines.create_or_update(
+        #     GROUP_NAME, VM_NAME, vm_parameters)
+        # async_vm_creation.wait()
+
+        # input("Press enter to delete this Resource Group.")
+
+        # # Delete Resource group and everything in it
+        # print('\nDelete Resource Group')
+        # delete_async_operation = resource_client.resource_groups.delete(GROUP_NAME)
+        # delete_async_operation.wait()
+        # print("\nDeleted: {}".format(GROUP_NAME))
+
+    def create_nic(network_client):
+        """Create a Network Interface for a VM.
+        """
+        # Create VNet
+        print('\nCreate Vnet')
+        async_vnet_creation = network_client.virtual_networks.create_or_update(
+            GROUP_NAME,
+            VNET_NAME,
+            {
+                'location': LOCATION,
+                'address_space': {
+                    'address_prefixes': ['10.0.0.0/16']
+                }
+            }
+        )
+        async_vnet_creation.wait()
+
+        # Create Subnet
+        print('\nCreate Subnet')
+        async_subnet_creation = network_client.subnets.create_or_update(
+            GROUP_NAME,
+            VNET_NAME,
+            SUBNET_NAME,
+            {'address_prefix': '10.0.0.0/24'}
+        )
+        subnet_info = async_subnet_creation.result()
+
+        # Create NIC
+        print('\nCreate NIC')
+        async_nic_creation = network_client.network_interfaces.create_or_update(
+            GROUP_NAME,
+            NIC_NAME,
+            {
+                'location': LOCATION,
+                'ip_configurations': [{
+                    'name': IP_CONFIG_NAME,
+                    'subnet': {
+                        'id': subnet_info.id
+                    }
+                }]
+            }
+        )
+        return async_nic_creation.result()
+
+    def create_vm_parameters(nic_id, vm_reference):
+        """Create the VM parameters structure.
+        """
+        return {
+            'location': LOCATION,
+            'os_profile': {
+                'computer_name': VM_NAME,
+                'admin_username': USERNAME,
+                'admin_password': PASSWORD
+            },
+            'hardware_profile': {
+                'vm_size': 'Standard_DS1'
+            },
+            'storage_profile': {
+                'image_reference': {
+                    'publisher': vm_reference['publisher'],
+                    'offer': vm_reference['offer'],
+                    'sku': vm_reference['sku'],
+                    'version': vm_reference['version']
+                },
+                'os_disk': {
+                    'name': OS_DISK_NAME,
+                    'caching': 'None',
+                    'create_option': 'fromImage',
+                    'vhd': {
+                        # 'uri': 'https://{}.blob.core.windows.net/vhds/{}.vhd'.format(
+                        'uri': 'https://{}.blob.core.chinacloudapi.cn/vhds/{}.vhd'.format(
+                            STORAGE_ACCOUNT_NAME, VM_NAME+haikunator.haikunate())
+                    }
+                },
+            },
+            'network_profile': {
+                'network_interfaces': [{
+                    'id': nic_id,
+                }]
+            },
+        }
+
+
+    if __name__ == "__main__":
+        run_example()
+  #+END_SRC
+
+  在中国区使用azure的python sdk。参考下面：
+
+  [[https://github.com/Azure/azure-sdk-for-python/issues/284][Could not using this SDK in China #284]]
+  
+  [[https://github.com/ansible/ansible/issues/17925][Allow endpoint override in azure_rm module utils #17925]]
+  
+* cloud init
+  https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-using-cloud-init/
+  
+  可以使用 =--custom-data= 来指定cloud-init的模版。在vm启动时执行干点
+  啥事儿。
+  #+BEGIN_SRC sh
+    azure vm create \
+          --resource-group TestRG \
+          --name TestVM2 \
+          --location chinaeast \
+          --os-type linux \
+          --availset-name TestAvailSet \
+          --nic-name LB-NIC2 \
+          --vnet-name TestVnet \
+          --vnet-subnet-name FrontEnd \
+          --storage-account-name pengsaccount \
+          --image-urn canonical:UbuntuServer:16.04.0-LTS:latest \
+          --ssh-publickey-file ~/.ssh/id_rsa.pub \
+          --admin-username ops \
+          --custom-data '/tmp/cloud_config_hostname.txt'
+  #+END_SRC
+
+* capture vm 捕获虚拟机
+  [[https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-capture-image/][参考这里]]
+  #+BEGIN_SRC sh
+    # 第一句后就会关机啦
+    azure vm deallocate -g testrg -n testvm1
+    azure vm generalize -g testrg -n testvm1
+    # 前面两部进行完后，这样来capture 
+    azure vm capture testrg testvm1 'pengprefix' -t testvm1.json
+  #+END_SRC
+
+  [[https://blogs.msdn.microsoft.com/avkashchauhan/2013/01/10/using-os-disk-vhd-to-create-a-new-virtual-machine-if-os-vhd-is-still-on-lease-in-windows-azure-virtual-machines/][但是捕获的vm需要的vhd只能给一个机器使用？]]
+
+  另处，删除vm后，对应的storage中的vhd不会删除，还是存在而且是attached
+  的。还不能使用。
+  #+BEGIN_EXAMPLE
+    + Creating VM "RasSlaveVm"
+    error:   Long running operation failed with error: 'Blob https://pengsaccount.blob.core.chinacloudapi.cn/vmcontainerd3d33f5b-b80a-428f-b399-3f1700a8c442/osDisk.d3d33f5b-b80a-428f-b399-3f1700a8c442.vhd already exists. Please provide a different blob URI as target for disk 'cli78c5d79e3bf942b1-os-1479173775770'.'.
+    error:   Error information has been recorded to /Users/pengpengxp/.azure/azure.err
+    error:   vm create command failed
+  #+END_EXAMPLE
+
+  解决办法：
+  1) [X] 把vhd再copy一份到新的vhd，然后使用该vhd启动，最后创建虚拟机的
+     那步，不要使用 =-d= 选项就可以了。
+
+* 从捕获的虚拟机中拉起vm
+  [[file:azure_command_line.org::*%5B%5Bhttps:/www.azure.cn/documentation/articles/virtual-machines-linux-create-cli-complete/%5D%5B%E4%BD%BF%E7%94%A8%20Azure%20CLI%20%E5%88%9B%E5%BB%BA%E5%AE%8C%E6%95%B4%E7%9A%84%20Linux%20%E7%8E%AF%E5%A2%83%5D%5D%20%E6%8C%89%E7%85%A7%E8%BF%99%E4%B8%AA%E6%9D%A5%E6%90%9E%E4%B8%80%E4%B8%AAload-balance%E8%AF%95%E8%AF%95][先参考这里把需要的资源组、虚拟网络、子网等拉起来]]
+  
+  #+BEGIN_SRC sh
+    ################################################################
+    #### first
+    ################################################################
+    # 创建资源组：
+    azure group create TestRG -l chinaeast
+    # 使用 JSON 分析器验证资源组：
+    azure group show TestRG --json | jq '.'
+    # 创建存储帐户：
+    azure storage account create -g TestRG -l chinaeast --kind Storage --sku-name GRS pengsaccount
+    # 使用 JSON 分析器验证存储帐户：
+    azure storage account show -g TestRG pengsaccount --json | jq '.'
+    # 创建虚拟网络：
+    azure network vnet create -g TestRG -n TestVNet -a 192.168.0.0/16 -l chinaeast
+    # 创建子网：
+    azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd -a 192.168.1.0/24
+    # 使用 JSON 分析器验证虚拟网络和子网：
+    azure network vnet show TestRG TestVNet --json | jq '.'
+    # 创建一个公共 IP：
+    azure network public-ip create -g TestRG -n TestLBPIP -l chinaeast -d testlb -a static -i 4
+
+    # 我们的负载均衡器很空，因此让我们创建一些 IP 池。我们想要为负载均衡器
+    # 创建两个 IP 池：一个用于前端，一个用于后端。前端 IP 池将公开显示。它
+    # 也是我们将前面创建的 PIP 分配到的位置。然后我们使用后端池作为 VM 要
+    # 连接到的位置。这样，流量便可以通过负载均衡器流向 VM。创建负载均衡器：
+    azure network lb create -g TestRG -n TestLB -l chinaeast
+    # 创建负载均衡器的前端 IP 池并关联公共 IP：
+    azure network lb frontend-ip create -g TestRG -l TestLB -n TestFrontEndPool -i TestLBPIP
+    # 创建负载均衡器的后端 IP 池：
+    azure network lb address-pool create -g TestRG -l TestLB -n TestBackEndPool
+  #+END_SRC
+  然后再走下面的流程。
+  
+  [[https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-capture-image/][参考这里]]
+
+  capture后得到的模板可能是这样的一个json文件：
+  #+BEGIN_EXAMPLE
+    {
+      "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/VM_IP.json",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "vmName": {
+          "type": "string"
+        },
+        "vmSize": {
+          "type": "string",
+          "defaultValue": "Standard_DS1"
+        },
+        "adminUserName": {
+          "type": "string"
+        },
+        "adminPassword": {
+          "type": "securestring"
+        },
+        "networkInterfaceId": {
+          "type": "string"
+        },
+        "availabilitySetId": {
+          "type": "string",
+          "defaultValue": "/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/testrg/providers/Microsoft.Compute/availabilitySets/TESTAVAILSET"
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2016-03-30",
+          "properties": {
+            "availabilitySet": {
+              "id": "[parameters('availabilitySetId')]"
+            },
+            "hardwareProfile": {
+              "vmSize": "[parameters('vmSize')]"
+            },
+            "storageProfile": {
+              "osDisk": {
+                "osType": "Linux",
+                "name": "rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd",
+                "createOption": "FromImage",
+                "image": {
+                  "uri": "https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd"
+                },
+                "vhd": {
+                  "uri": "https://pengsaccount.blob.core.chinacloudapi.cn/vmcontainer38cffc83-a734-4ef6-889f-3fac6d38a39b/osDisk.38cffc83-a734-4ef6-889f-3fac6d38a39b.vhd"
+                },
+                "caching": "ReadWrite"
+              }
+            },
+            "osProfile": {
+              "computerName": "[parameters('vmName')]",
+              "adminUsername": "[parameters('adminUsername')]",
+              "adminPassword": "[parameters('adminPassword')]"
+            },
+            "networkProfile": {
+              "networkInterfaces": [
+                {
+                  "id": "[parameters('networkInterfaceId')]"
+                }
+              ]
+            },
+            "diagnosticsProfile": {
+              "bootDiagnostics": {
+                "enabled": true,
+                "storageUri": "https://pengsaccount.blob.core.chinacloudapi.cn/"
+              }
+            },
+            "provisioningState": 0
+          },
+          "name": "[parameters('vmName')]",
+          "type": "Microsoft.Compute/virtualMachines",
+          "location": "chinaeast"
+        }
+      ]
+    }
+  #+END_EXAMPLE
+  把其中 =storageProfile= 这段中的image填入下面脚本 =azure vm create=
+  中的 =-Q= 选项中。不能加 =-d= 选项哦。
+  #+BEGIN_SRC sh
+    #!/bin/bash
+    # decide delete resource or not
+    DELETE=0
+
+    if [ $DELETE != 0 ]; then
+        # ######################################################################
+        # #### delete
+        # ######################################################################
+        azure vm delete RasMasterVm -g testrg --quiet
+        azure vm delete RasSlaveVm -g testrg --quiet
+        azure network nic delete -g testrg TEST-NIC1 --quiet
+        azure network nic delete -g testrg TEST-NIC2 --quiet
+        azure network lb inbound-nat-rule delete -g testrg  --name TEST1-SSH testlb --quiet
+        azure network lb inbound-nat-rule delete -g testrg --name TEST2-SSH testlb  --quiet
+    else
+        ######################################################################
+        #### create
+        ######################################################################
+        totalbegin=`date`
+
+        echo "create inbound-nat-rules begin at `date`"
+        azure network lb inbound-nat-rule create -g TestRG -l TestLB -n TEST1-SSH -p tcp -f 4991 -b 20160
+        azure network lb inbound-nat-rule create -g TestRG -l TestLB -n TEST2-SSH -p tcp -f 4992 -b 20160
+        echo "create inbound-nat-rules end at `date`"
+
+
+        echo "create nic begin at `date`"
+        azure network nic create -g TestRG -n TEST-NIC1 -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd \
+              -d "/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/backendAddressPools/TestBackEndPool" \
+              -e "/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/inboundNatRules/TEST1-SSH"
+
+        azure network nic create -g TestRG -n TEST-NIC2 -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd \
+              -d "/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/backendAddressPools/TestBackEndPool" \
+              -e "/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/inboundNatRules/TEST2-SSH"
+
+        azure network nic set -g TestRG -n TEST-NIC1 -o TestNSG
+        azure network nic set -g TestRG -n TEST-NIC2 -o TestNSG
+        echo "create nic end at `date`"
+
+
+        echo "create master begin at `date`"
+        azure vm create \
+              --resource-group TestRG \
+              --name RasMasterVm \
+              --location chinaeast \
+              --os-type linux \
+              --availset-name TestAvailSet \
+              --nic-name TEST-NIC1 \
+              --vnet-name TestVnet \
+              --vnet-subnet-name FrontEnd \
+              --storage-account-name pengsaccount \
+              --admin-password 'xxx' \
+              -Q "https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd" \
+              --admin-username username
+        echo "create master end at `date`"
+
+        echo "create slave begin at `date`"
+        azure vm create \
+              --resource-group TestRG \
+              --name RasSlaveVm \
+              --location chinaeast \
+              --os-type linux \
+              --availset-name TestAvailSet \
+              --nic-name TEST-NIC2 \
+              --vnet-name TestVnet \
+              --vnet-subnet-name FrontEnd \
+              --storage-account-name pengsaccount \
+              --admin-password 'xxx' \
+              -Q "https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd" \
+              --admin-username username
+        echo "create slave end at `date`"
+
+        totalend=`date`
+
+        echo "###########################################################################"
+        echo "script begin at : $totalbegin"
+        echo "script end at : $totalend"
+        echo "###########################################################################"
+    fi
+
+
+
+
+  #+END_SRC
+ 
+* 拉起ubuntu 14.04的机器
+  下面这个脚本可以直接拉一个ubuntu14.04的裸机，所有资源都创建好，没有
+  load-balance等东西：
+  #+BEGIN_SRC sh
+    #!/bin/bash
+    set -x
+
+    Location='chinaeast'
+
+    GroupName='ScriptTest2'
+    VirtualNetworkName='ScriptVNet2'
+    SubnetName='ScriptSubnet2'
+    PublicIp='ScriptPublicIp2'
+    NicName='ScriptNic2'
+    VmName='ScriptVm2'
+
+    # 这两个家伙好像必须是小写
+    StorageAccountName='scriptaccounttest2'
+    DomainName='scriptdomain2'
+
+    DELETE=0
+
+
+    if [ $DELETE != 0 ]; then
+        # ######################################################################
+        # #### delete
+        # ######################################################################
+        echo "######################################################################"
+        echo "########################## delete the group ##########################"
+        echo "######################################################################"
+        # azure vm delete RasMasterVm -g $GroupName -q
+        # azure network nic delete -g $GroupName $NicName -q
+        # azure public-ip delete -g $GroupName -n $PublicIp -q
+        # azure network vnet subnet delete -g $GroupName -n $SubnetName -e $VirtualNetworkName -q
+        # azure network vnet delete -g $GroupName -n $VirtualNetworkName -q
+        # azure storage account delete -g $GroupName $StorageAccountName -q
+        azure group delete -n $GroupName -q --nowait
+    else
+        ######################################################################
+        #### create
+        ######################################################################
+        echo "######################################################################"
+        echo "######################### Create a new group #########################"
+        echo "######################################################################"
+        # 创建资源组
+        azure group create $GroupName -l $Location
+        # 创建存储账户
+        azure storage account create -g $GroupName -l $Location --kind Storage --sku-name GRS $StorageAccountName
+        # 创建虚网络
+        azure network vnet create -g $GroupName -n $VirtualNetworkName -a 192.168.0.0/16 -l $Location
+        # 创建子网 
+        azure network vnet subnet create -g $GroupName -e $VirtualNetworkName -n $SubnetName -a 192.168.1.0/24
+        # 创建公网ip
+        azure network public-ip create -d $DomainName $GroupName $PublicIp $Location
+        # 创建网卡
+        azure network nic create -g $GroupName -l $Location --subnet-vnet-name $VirtualNetworkName --subnet-name $SubnetName $NicName
+
+        # 拉起虚拟机
+        azure vm create \
+              --resource-group $GroupName \
+              --name $VmName \
+              --location $Location \
+              --os-type linux \
+              --vnet-name $VirtualNetworkName \
+              --vnet-subnet-name $SubnetName \
+              --storage-account-name $StorageAccountName \
+              --admin-username username \
+              --admin-password 'xxxx' \
+              --image-urn canonical:UbuntuServer:14.04.2-LTS:latest \
+              --public-ip-name $PublicIp \
+              --nic-name $NicName
+    fi
+
+  #+END_SRC
+* cloud-init
+  azure中的cloud-init和openstack中差不多。使用 =--custom-data= 来指定
+  对应的脚本就可以执行了：
+  #+BEGIN_SRC sh
+    azure vm create \
+          --resource-group TestRG \
+          --name RasMasterVm \
+          --location chinaeast \
+          --os-type linux \
+          --availset-name TestAvailSet \
+          --nic-name TEST-NIC1 \
+          --vnet-name TestVnet \
+          --vnet-subnet-name FrontEnd \
+          --storage-account-name pengsaccount \
+          --admin-password 'password' \
+          -Q "https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd" \
+          --admin-username river \
+          --custom-data /tmp/main.sh
+  #+END_SRC
+
+* [[https://www.azure.cn/pricing/details/storage/][azure存储]]
+* azure-cli有两个版本，一个是普通的azure-cli，一个是new azure-cli 2.0 [[https://docs.microsoft.com/zh-cn/cli/azure/old-and-new-clis][here]]
+  新的这个安装好后叫az。旧的还叫azure。
+* [[https://docs.microsoft.com/zh-cn/cli/azure/storage/blob][az参考文档]]
+* [[https://docs.microsoft.com/en-us/azure/virtual-machines/azure-cli-arm-commands][azure参考文档]]
+* azure配置静态内网ip
+  https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-static-private-ip-arm-cli
+  #+BEGIN_SRC sh
+     azure network nic create -g TestRG -n TestNIC -l centralus -a 192.168.1.101 -m TestVNet -k FrontEnd
+  #+END_SRC
+* [17/21] Link
+  + [X] [[https://manage.windowsazure.cn/][中国区asm登陆入口]]
+    + [[https://www.azure.cn/documentation/articles/developerdifferences/#bookmark-16][中国区azure和全球azure的区别]]
+
+  + [X] [[https://portal.azure.cn/][中国区arm登陆入口]] 
+
+  + [X] [[https://www.azure.cn/zh-cn/documentation/][azure中国文档中心]]
+
+  + [X] [[http://azure-sdk-for-python.readthedocs.io/en/latest/installation.html][azure installation]]
+
+  + [X] [[https://www.azure.cn/documentation/articles/virtual-machines-linux-create-cli-complete/][使用 Azure CLI 创建完整的 Linux 环境]]
+
+  + [X] [[https://www.azure.cn/documentation/articles/virtual-networks-overview/][虚拟网络概述]]
+
+  + [X] [[https://www.azure.cn/documentation/articles/virtual-machines-linux-cli-ps-findimage/][使用 Azure CLI 来选择 Linux 虚拟机映像]]
+
+  + [X] [[https://www.azure.cn/documentation/articles/xplat-cli-connect/#use-the-log-in-method][从 Azure 命令行界面 (Azure CLI) 连接到 Azure 订阅]]
+
+  + [X] [[https://www.azure.cn/documentation/articles/virtual-machines-linux-cli-deploy-templates/][使用 Azure 资源管理器模板和 Azure CLI 部署和管理虚拟机]]
+
+  + [X] [[https://www.azure.cn/documentation/articles/virtual-machines-command-line-tools/][Azure 服务管理 (asm) 模式下的 Azure CLI 命令]]
+
+    + 使用这个教程上传vhd成功。不过Mac上不能上传动态分配的vhd。据说是一
+      个[[https://github.com/Azure/azure-xplat-cli/issues/2168][bug]] ，但是powershell好像可以上传。[[https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-command-line-tools/][英文版]]
+
+  + [[https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-create-upload-ubuntu/][Prepare an Ubuntu virtual machine for Azure]]
+    + 动态分配的vhdx不行，必须使用fixed vhd
+    + 推荐使用传统分构方式，不要使用lvm
+    + 不要配置交换分区swap
+    + ......
+
+  + [X] [[https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-upload-vhd/][Upload and create a Linux VM from custom disk image]] arm模式
+
+  + [X] [[https://blog.kloud.com.au/2016/04/05/azure-classic-vs-azure-resource-manager/][classic mode and arm mode for azure]]
+    + azure这玩意儿的开发经历了很大的改变。导致出现了这两种不同的mode。
+    + Azure Resource Manager(arm)是新的model，推荐新用户使用。
+    + Classic mode是原来的mode
+
+  + [X] [[https://azure.microsoft.com/zh-tw/documentation/articles/storage-azure-cli/][使用 Azure CLI 搭配 Azure 儲存體]] asm模式
+
+  + [X] [[https://www.azure.cn/documentation/articles/virtual-machines-linux-quick-create-cli/][使用 CLI 在 Azure 上创建 Linux VM]] quick-create arm模式
+
+  + [X] [[https://www.azure.cn/documentation/articles/xplat-cli-azure-resource-manager/][使用 Azure CLI 管理 Azure 资源和资源组]] arm模式
+
+  + [ ] [[https://www.azure.cn/documentation/articles/virtual-machines-linux-classic-create-upload-vhd/][创建并上载包含 Linux 操作系统的虚拟硬盘]] asm模式
+
+    + [[https://www.azure.cn/documentation/articles/virtual-machines-linux-create-upload-generic/][有关未认可分发的信息]]
+
+  + [ ] [[https://www.azure.cn/documentation/articles/storage-create-storage-account/][关于 Azure 存储帐户]]
+
+  + [ ] [[https://www.azure.cn/documentation/articles/virtual-machines-windows-classic-createupload-vhd/][创建 Windows Server VHD 并将其上载到 Azure]]
+
+  + [[https://www.azure.cn/documentation/articles/azure-Iaas-user-manual-part1/][Azure IaaS 用户手册 - 第一部分]]
+
+  + [[http://azure-sdk-for-python.readthedocs.io/en/latest/][Azure SDK for Python]]
+
+  + [[https://msdn.microsoft.com/zh-cn/library/azure/dn578439.aspx#guidance][中国 Azure 应用程序的开发人员注意事项]]
+
+  + [X] [[https://azure.microsoft.com/en-us/documentation/articles/virtual-network-deploy-static-pip-arm-cli/][Deploy a VM with a static public IP using the Azure CLI]] arm
+
+  + [X] [[https://azure.microsoft.com/en-us/documentation/articles/virtual-network-ip-addresses-overview-arm/][IP addresses in Azure overview]]
+    + 在arm中，public ip也是一种网络资源。可以是动态和静态和动态两种方
+      式。使用静态方式时，public ip资源一申请时，ip就分配到了。而如果
+      使用动态分配的ip，需要等待public ip attach到的资源启动或者创建的
+      时候才会分配ip。
+    + 多网卡的vm，必须把public ip赋给它的primary interface才可以。
+    + 可以把public ip分配给load balance，甚至可以把多个ip分配给
+      load-balance，搞成多租户的形式[fn:1:a multi-tenant environment
+      with SSL-based websites.]。
+    + vpn可以用来把azure中的vnet互连，需要给它分配一个public ip，但现
+      在只支持动态分配的ip。
+    + 应用程序的gateway，也只能是动态分配的public ip。
+    + [[./img/./64587xhr.png]]
+  + [ ] [[https://www.azure.cn/documentation/articles/resource-group-template-deploy-cli/][使用 Resource Manager 模板和 Azure CLI 部署资源]]
+
+  + [[https://docs.microsoft.com/en-us/azure/storage/storage-azure-cli][Using the Azure CLI with Azure Storage]]
+
+  + [[https://www.azure.cn/documentation/articles/azure-subscription-service-limits/][azure的所有限制都可以到这里查到]]
+
+  + [[https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/virtual-machines-linux/][微软推荐的几种Linux布署模型]]
+
+* azure的可用性集
+  :PROPERTIES:
+  :CUSTOM_ID: availibility_set
+  :END:
+  我理解这是微软的承诺：不管什么时候，保证同一个可用性集中的机器至少有
+  一个可用。
+  
+  下面的原理就是把加入同一个可用性集的多个机器尽量地分至不同的机房啊，
+  地域啊。这样万一机房停电了或者出问题，其它机器还是可用的。
+
+  一般把提供同一功能的机器放到同一个可用性集中。在classic模型中，一个
+  可用性集还可以使用动态伸缩的功能。不用的时候就给你自动关闭几台机器。
+  
+
+  An availability set serves a similar function to fault and upgrade
+  domains. Within an availability set, Azure positions the virtual
+  machines in a way that prevents localized hardware faults and
+  maintenance activities from bringing down all of the machines in
+  that group. Availability sets are required to achieve the Azure SLA
+  for the availability of Virtual Machines.
+  
+* azure如何提供HA
+  https://docs.microsoft.com/en-us/azure/architecture/resiliency/high-availability-azure-applications
+
+  容错域（Fault domains）：不同地机架上。这样断电等failure不会都影响。
+
+  更新域（Upgrade domains）：和容错域差不多，不过是用于更新的时候。
+
+  可用性集(Availability set)：[[#availibility_set]]
+
+* load-balance
+  https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-overview
+  
+
+  Azure Load Balancer can be configured to:
+
+  1. Load balance incoming Internet traffic to virtual machines. This
+     configuration is known as Internet-facing load balancing.
+  2. Load balance traffic between virtual machines in a virtual
+     network, between virtual machines in cloud services, or between
+     on-premises computers and virtual machines in a cross-premises
+     virtual network. This configuration is known as internal load
+     balancing.
+  3. Forward external traffic to a specific virtual machine.
+
+     
+  azure的lb有三种功能：
+  1. 外网的流量到内网虚拟机。
+  2. 在一个vnet中把流量分配到该net中的机器，内部lb。
+  3. 直接把流量forward给指定虚拟机。
+
+  另外，load-balance还要求所有后端vm都在一个可用性集中。
+
+* stop and deallocate
+  stop还在收费，deallocate不会收费。
+
+  命令行中可以这样deallocate：
+  #+BEGIN_SRC sh
+    azure vm deallocate <resource-group> <vm-name>
+  #+END_SRC
+  
+  在arm界面上，使用stop按钮是deallocate。如果使用ssh登陆进去执
+  =shutdown= 这些命令对应的的stop，这时候还是在收费的。
+
+* 多个region中的数据存储和同步问题
+  azure上可以使用多个region来做容错。如 [[https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/virtual-machines-linux/multi-region-application#traffic-manager-configuration][这里]] 介绍的。但是这里需要保证
+  只有一份数据。 =Cassandra= 这样的分布式数据存储服务就是满足该需求的。
+
+  这些分布式服务首先需要相互之间是可路由的。 [[https://github.com/DSPN/azure-deployment-guide/blob/master/bestpractices.md][这里]] 推荐了三种方式。
+  1. public ip：给每个数据结点都整一个public ip，然后可以使用nsg来限定
+     它们只能用于数据服务。这种方式是推荐的，因为public ip是在azure的
+     主干网上，速度很快。
+  2. VPN gateway：使用VPN技术来搞。这种配置麻烦。
+  3. Express route：我理解是专用线路。
+
+* ip address
+  https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-ip-addresses-overview-arm
+
+** Private IP:
+  There are two methods in which a private IP address is allocated:
+  dynamic or static. The default allocation method is dynamic, where
+  the IP address is automatically allocated from the resource's subnet
+  (using DHCP). This IP address can change when you stop and start the
+  resource.
+  
+  You can set the allocation method to static to ensure the IP address
+  remains the same. In this case, you also need to provide a valid IP
+  address that is part of the resource's subnet.
+
+  
+  The table below shows the specific property through which a private
+  IP address can be associated to a top-level resource, and the
+  possible allocation methods (dynamic or static) that can be used.
+  
+  |---------------------+-------------------------+---------+--------|
+  | Top-level resource  | IP address association  | Dynamic | Static |
+  |---------------------+-------------------------+---------+--------|
+  | Virtual machine     | Network interface       | Yes     | Yes    |
+  | Load balancer       | Front end configuration | Yes     | Yes    |
+  | Application gateway | Front end configuration | Yes     | Yes    |
+  |---------------------+-------------------------+---------+--------|
+
+* 网卡
+** [[https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-network-interface-overview][What are network interfaces?]]
+
+  Has a MAC address, which is persisted with the NIC for as long as it
+  remains attached to a VM. The MAC address is persisted whether the
+  VM is restarted (from within the operating system) or stopped
+  (de-allocated) and started using the Azure Portal, Azure PowerShell,
+  or the Azure Command-Line Interface. If it's detached from a VM and
+  attached to a different VM, the NIC receives a different MAC
+  address. If the NIC is deleted, the MAC address is assigned to other
+  NICs.
+
+  nic只要被attach给了vm，mac就不会变。除非detach或者该nic被删除。
+
+  Is often created in the same resource group as the VM it's attached
+  to or the same VNet that it's connected to, though it isn't required
+  to be.
+
+  网卡常和它attach上的vm在一个资源组。或者和它所在的vNet在一个资源组。
+  但这不是必须的。
+  
+** [[https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-multiple-ip-addresses-cli-nodejs][一个nic上设置多个ip]]
+
+ You can assign up to 250 private IP addresses to each NIC. While you
+ can assign multiple public IP addresses to each NIC, there are
+ limits to how many public IP addresses that can be used in an Azure
+ subscription. Multiple IP addresses cannot be assigned to resources
+ created through the classic deployment model.
+
+ 一个网卡上最多可以搞250个私有ip，也可以搞多个public ip。但是不要忘了
+ 一个订阅中的public ip是有限制的。 *重要* ：只有arm上支持一个网卡多个
+ ip。classic不支持。
+
+* 虚拟网络
+  azure中的虚拟网络可以划分子网，一个子网在一个广播域中。不同的子网是
+  路由可达的。
+** TODO [[https://docs.microsoft.com/zh-cn/azure/azure-subscription-service-limits#networking-limits][网络限制]]
+* TODO COMMENT 从template中创建RAS环境                             :重要:脚本:自动化:
+  # 先创建资源组和存储账户
+  azure group create testt -l chinanorth
+  azure storage account create -g tt -l chinanorth --kind Storage --sku-name GRS templateteststorage
+
+  # 在命令行认证存储账户需要先查询环境变量：
+  #+BEGIN_SRC sh
+    azure storage account connectionstring show -g <group_name> <account_name>
+  #+END_SRC
+  # 设置环境变量：
+  #+BEGIN_SRC shell-script
+    export AZURE_STORAGE_CONNECTION_STRING='DefaultEndpointsProtocol=https;AccountName=rivertestcommand;AccountKey=uJfdwbn/R3ju+iagt/GnSTAovkiMtpKwA9XaatvinB8M2+qQMQ/PN7d4gLZU1gzMTHiPa6gx47nbrjuHL2m5FQ=='
+  #+END_SRC
+
+  # 把镜像copy过来
+  a storage blob copy start https://armcustomsan.blob.core.chinacloudapi.cn/vhds/base20170202.vhd pengvhds
+  # 显示copy进度
+  a storage blob copy show --container pengvhds --blob base20170202.vhd
+
+  # 将下面的模版保存为pengtest.json
+  #+BEGIN_SRC conf-space
+    {
+      "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "StorageAccountName": {
+          "type": "String"
+        },
+        "ContainerName": {
+          "type": "String"
+        },
+        "virtualMachines_pentestpubvmname_name": {
+          "defaultValue": "pengtest-vmnmae",
+          "type": "String"
+        },
+        "networkInterfaces_pengtestnicpubvmnic_name": {
+          "defaultValue": "pengtest-nic",
+          "type": "String"
+        },
+        "publicIPAddresses_pengtestpip_name": {
+          "defaultValue": "pengtest-pip",
+          "type": "String"
+        },
+        "virtualNetworks_pengtestvnet_name": {
+          "defaultValue": "pengtest-vnet",
+          "type": "String"
+        },
+        "adminPassword": {
+          "type": "SecureString",
+            "metadata": {
+                "description": "Password for the Virtual Machine"
+            }
+        }
+      },
+        "variables": {
+            "apiVersion": "2015-06-15"
+        },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "[parameters('virtualMachines_pentestpubvmname_name')]",
+          "apiVersion": "[variables('apiVersion')]",
+          "location": "chinanorth",
+          "tags": {},
+          "properties": {
+            "hardwareProfile": {
+              "vmSize": "Standard_DS1"
+            },
+            "storageProfile": {
+              "osDisk": {
+                "osType": "Linux",
+                "name": "peng-test-disk",
+                "createOption": "FromImage",
+                  "image":{
+                      "uri": "[concat('https://', parameters('StorageAccountName'), '.blob.core.chinacloudapi.cn/', parameters('ContainerName'), '/base20170202.vhd')]"
+                  },
+                "vhd": {
+                    "uri": "[concat('https://', parameters('StorageAccountName'), '.blob.core.chinacloudapi.cn/', parameters('ContainerName'), '/base20170202new.vhd')]"
+                },
+                "caching": "ReadWrite"
+              },
+              "dataDisks": []
+            },
+            "osProfile": {
+              "computerName": "[parameters('virtualMachines_pentestpubvmname_name')]",
+              "adminUsername": "user",
+              "adminPassword": "[parameters('adminPassword')]",
+              "linuxConfiguration": {
+                "disablePasswordAuthentication": false
+              },
+              "secrets": []
+            },
+            "networkProfile": {
+              "networkInterfaces": [
+                {
+                  "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_pengtestnicpubvmnic_name'))]"
+                }
+              ]
+            },
+            "diagnosticsProfile": {
+              "bootDiagnostics": {
+                "enabled": true,
+                "storageUri": "[concat('https', '://', parameters('StorageAccountName'), '.blob.core.chinacloudapi.cn', '/')]"
+              }
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_pengtestnicpubvmnic_name'))]"
+          ]
+        },
+
+
+        {
+          "type": "Microsoft.Network/networkInterfaces",
+          "name": "[parameters('networkInterfaces_pengtestnicpubvmnic_name')]",
+          "apiVersion": "2016-03-30",
+          "location": "chinanorth",
+          "properties": {
+            "ipConfigurations": [
+              {
+                "name": "default-ip-config",
+                "properties": {
+                  "privateIPAddress": "192.168.0.4",
+                  "privateIPAllocationMethod": "Dynamic",
+                  "publicIPAddress": {
+                    "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_pengtestpip_name'))]"
+                  },
+                  "subnet": {
+                    "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_pengtestvnet_name')), '/subnets/pengtestsubnet')]"
+                  }
+                }
+              }
+            ],
+            "dnsSettings": {
+              "dnsServers": []
+            },
+            "enableIPForwarding": false
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_pengtestpip_name'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_pengtestvnet_name'))]"
+          ]
+        },
+
+
+        {
+          "type": "Microsoft.Network/publicIPAddresses",
+          "name": "[parameters('publicIPAddresses_pengtestpip_name')]",
+          "apiVersion": "2016-03-30",
+          "location": "chinanorth",
+          "properties": {
+            "publicIPAllocationMethod": "Dynamic",
+            "idleTimeoutInMinutes": 4,
+            "dnsSettings": {
+              "domainNameLabel": "pengtestdomain"
+            }
+          },
+          "dependsOn": []
+        },
+
+
+
+        {
+          "type": "Microsoft.Network/virtualNetworks",
+          "name": "[parameters('virtualNetworks_pengtestvnet_name')]",
+          "apiVersion": "2016-03-30",
+          "location": "chinanorth",
+          "properties": {
+            "addressSpace": {
+              "addressPrefixes": [
+                "192.168.0.0/16"
+              ]
+            },
+            "dhcpOptions": {
+              "dnsServers": []
+            },
+            "subnets": [
+              {
+                "name": "pengtestsubnet",
+                "properties": {
+                  "addressPrefix": "192.168.0.0/16"
+                }
+              }
+            ]
+          },
+          "dependsOn": []
+        }
+      ]
+    }
+  #+END_SRC
+
+  使用下面的命令拉起
+  azure group deployment create --template-file pengtest.json testt
+  
+  *开始创建资源组和存储账号可以使用这个脚本：*
+  #+BEGIN_SRC sh
+    #!/bin/bash
+
+    Prefix="mytest"
+    GroupName=$Prefix"Group"
+    StorageName=$Prefix"storage"
+    ContainerName=$Prefix"contanier"
+
+    # 先创建资源组和存储账户
+    azure group create -l chinanorth $GroupName
+    azure storage account create -g $GroupName -l chinanorth --kind Storage --sku-name GRS $StorageName
+
+    ConnectingString=`azure storage account connectionstring show -g $GroupName $StorageName |grep connectionstring:|awk '{print $3}'`
+    export AZURE_STORAGE_CONNECTION_STRING=$ConnectingString
+
+    azure storage container create $ContainerName
+    azure storage container list
+
+    # 把ras的镜像copy过来
+    azure storage blob copy start https://armcustomsan.blob.core.chinacloudapi.cn/vhds/base20170202.vhd $ContainerName --verbose
+
+
+
+    echo '================================================================'
+    echo 'you can use this command to set storage connectstring'
+    echo ''
+    echo 'export AZURE_STORAGE_CONNECTION_STRING="'$ConnectingString'"'
+    echo ''
+    echo '================================================================'
+
+    echo '================================================================'
+    echo 'you can use this command to check if the copy process has finished'
+    echo ''
+    echo 'azure storage blob list --container '$ContainerName
+    echo ''
+    echo '================================================================'
+
+    echo '================================================================'
+    echo 'After copy process finished, you can use this command to deploy the template'
+    echo ''
+    echo 'azure group deployment create --template-file <your template json file> '$GroupName
+    echo ''
+    echo 'StorageName = '$StorageName
+    echo 'ContainerName = '$ContainerName
+    echo '================================================================'
+
+
+
+    ################################################################
+    # # 下面保留一些命令
+    # # 创建container命令
+    # azure storage container create peng-test-container
+
+    # # 显示container命令
+    # azure storage container list
+
+    # 删除container
+    # azure storage container delete peng-test-container --quiet
+
+    # 显示container中的blob
+    # azure storage blob list --container pengvhds
+  #+END_SRC
+
+** TODO 问题
+   1. [ ] 能不能为每个虚拟机新建一个存储账户？当前都是在一个账户里面的。
+      问题是为每一个虚拟机新建一个存储账户，是不是需要再copy一份ras的
+      vhd到对应账户中？vhd和镜像是到底啥关系？它只是一个磁盘吗？

@@ -1,0 +1,82 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-07-19-lldp协议笔记
+
+* lldpd协议
+** 源码和配置相关
+   lldpd代码中编译会生成server端即lldpd。还有一个client端，名为lldpcli。
+
+   可以通过lldpcli来配置lldpd。比如下面这些测试命令，具体可以man一下：
+   #+BEGIN_SRC sh
+lldpcli show configuration
+lldpcli show statistics
+lldpcli show statistics ports eth0
+lldpcli show statistics ports wlan0
+
+sudo lldpcli configure system description "my little server"
+sudo lldpcli unconfigure system description
+
+sudo lldpcli pause
+sudo lldpcli resume
+
+lldpcli show neighbors ports eth0
+   #+END_SRC
+
+   lldpd启动的时候有对应的配置文件，默认为 =/etc/lldpd.conf= 和
+   =/etc/lldpd.d= 目录下的所有以 =.conf= 结尾的文件。这些配置文件其实
+   就是lldpcli命令的集合。每行就是一行lldpcli命令。比如当前我测试的配
+   置文件可以这样写：
+   #+BEGIN_SRC conf-space
+# You can put lldpd configuration snippets into this directory.
+# Upon start, lldpd will read each files in this directory and execute content
+# as if they were passed as arguments to lldpcli
+#
+# Files should be suffixed by .conf and have content like:
+#   configure system description 'my little server'
+#
+# See lldpcli(8) for more details.
+
+configure system description 'my little server'
+   #+END_SRC
+
+** [[https://en.wikipedia.org/wiki/Link_Layer_Discovery_Protocol][Wiki: Link Layer Discovery Protocol]]
+
+   #+BEGIN_EXAMPLE
+LLDP information is sent by devices from each of their interfaces at
+a fixed interval, in the form of an Ethernet frame. Each frame
+contains one LLDP Data Unit (LLDPDU). Each LLDPDU is a sequence of
+type-length-value (TLV) structures.
+
+LLDP消息定时从设备的每个网卡中发出。消息都是以太网的frame形式。每个
+frame包含了一个LLDP的数据单元。每个LLDP数据单元是多个TLV结构的组合。
+
+The Ethernet frame used in LLDP has its destination MAC address
+typically set to a special multicast address that 802.1D-compliant
+bridges do not forward.^[note 1] Other multicast and unicast
+destination addresses are permitted. The EtherType field is set to
+0x88cc.
+
+目的地址一般都是特定的多播地址，以保证802.1D的网桥不会转发这些报文。其
+它的多播或都单播地址都是允许的。EtheType这个区域填0x88cc。
+   #+END_EXAMPLE
+
+   TLV的结构如下：
+   #+caption: TLV structure
+   |--------+--------+--------------|
+   | Type   | Length | Value        |
+   |--------+--------+--------------|
+   | 7 bits | 9 bits | 0-511 octets |
+   |--------+--------+--------------|
+
+   结构化的TLV可以克服兼容性问题，高级版本中可能加入新type的TLV。低版本
+   碰到不认识的type后，直接跳过对应长度处理下一个TLV即可。
+
+   #+caption: LLDP Ethernet frame structure
+   |----------+------------------------------------+-------------------+-----------+----------------+-------------+------------------+----------------------------+-------------------+----------------------|
+   | Preamble | Destination MAC                    | Source MAC        | Ethertype | Chassis ID TLV | Port ID TLV | Time to live TLV | Optional TLVs              | End of LLDPDU TLV | Frame check sequence |
+   |----------+------------------------------------+-------------------+-----------+----------------+-------------+------------------+----------------------------+-------------------+----------------------|
+   |          | 01:80:c2:00:00: =[00 or 0e or 03]= | Station's address |    0x88CC | Type=1         | Type=2      | Type=3           | Zero or more complete TLVs | Type=0, Length=0  |                      |
+   |----------+------------------------------------+-------------------+-----------+----------------+-------------+------------------+----------------------------+-------------------+----------------------|
+

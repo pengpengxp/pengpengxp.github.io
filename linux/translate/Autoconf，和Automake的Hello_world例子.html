@@ -1,0 +1,167 @@
+
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>Autoconf，和 Automake 的Hello world例子</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <div w3-include-html="学习GNU开发工具链_index.html"></div> 
+      </div>
+
+      <div class="article">
+        <h2 id="hello_world_example">Autoconf，和 Automake 的Hello world例子</h2>
+
+        <p>接下来我们以C语言的Hello world为例，介结如何使用 Autoconf 和 Automake。
+          经典的C语言的Hello world如下：</p>
+        <pre class="cpp"><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="function-name">main</span>()
+{
+    printf(<span class="string">"Howdy world!\n"</span>);
+}</pre>
+
+        <p>把它存为hello.c文件，然后放到一个空目录下。像这种简单的程序可以直接使用下面的命令就编译运行了：</p>
+        <pre class="bash">
+          gcc hello.c -o hello
+          hello </pre>
+
+        <p>如果你不是在GNU系统，而是在一个Unix系统上，编译器可能是'cc'，但是使用方式都是类似的。</p>
+
+        <p>接下来使用 Autoconf 和 Automake 来做相同的事情。首先创建下面的两个文件。</p>
+
+        <p><b>Makefile.am</b></p>
+        <pre class="code">
+bin_PROGRAMS = hello
+hello_SOURCES = hello.c</pre>
+
+        <p><b>configure.in</b></p>
+        <pre class="code">
+AC_INIT(hello.c)
+AM_INIT_AUTOMAKE(hello,0.1)
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_OUTPUT(Makefile)</pre>
+
+        <p>然后执行：</p>
+        <pre class="code">
+% aclocal
+% autoconf</pre>
+
+        <p>这将产生一个shell脚本文件configure。下一步，执行'automake'：</p>
+        <pre class="code">
+          % automake -a
+required file <span class="string">"./install-sh"</span> not found; installing
+required file <span class="string">"./mkinstalldirs"</span> not found; installing
+required file <span class="string">"./missing"</span> not found; installing
+required file <span class="string">"./INSTALL"</span> not found; installing
+required file <span class="string">"./NEWS"</span> not found
+required file <span class="string">"./README"</span> not found
+required file <span class="string">"./COPYING"</span> not found; installing
+required file <span class="string">"./AUTHORS"</span> not found
+required file <span class="string">"./ChangeLog"</span> not found</pre>
+
+        <p>首次执行此操作时，'aotumake'会有一系列的警告。
+          一是找不到install-sh、mkinstalldirs和missing文件，它直接安装了拷贝。
+          这些文件中包含'automake'在生成makefiles文件时所需要的一些样板shell脚本。
+          它还指出，没有下面这些文件：</p>
+        <pre class="code">
+INSTALL, COPYING, NEWS, README, AUTHORS, ChangeLog</pre>
+
+        <p>这些文件都是GNU代码标准所要求的，我们在 <a href="维护文档文件.html">维护文档文件</a> 中讨论这些细节。
+        最好是都这些文件都创建好，否则如果你尝试执行'make distcheck'，工具总是显示地报错。执行以下命令来创建这些文件：</p>
+<pre class="code">% touch NEWS README AUTHORS ChangeLog</pre>
+
+        <p>让 Automake 知道它们的存在，需要再次执行一下：</p>
+        <pre class="code">% automake -a</pre>
+
+        <p>只有当 Automake 完成并且没有任何报错的时候，你才可以假设生成的Makefile.in是正确的。</p>
+
+        <p>此时，我们的软件包就正好和用户从源代码分发中取到软件包并解压后的状态一致。
+        作为未来的参考，我们称该状态为autoconfiscated（不知道翻成啥？）状态。
+          处在这个状态意位着，可以直接执行下面的命令来编译和执行hello world程序：</p>
+<pre class="code">% ./configure
+% make
+% ./hello</pre>
+
+        <p>如果想安装它，可以执行：</p>
+<pre class="code"># make install</pre>
+
+        <p>卸载可以执行：</p>
+<pre class="code"># make uninstall</pre>
+
+        <p>如果你没有使有'--prefix'参数来指定你的家目录或是指定一个你有写入和执行权限的目录时，你需要超级用户的权限来执行安装和卸载的命令。</p>
+
+        <p>如果你想进行源代码分发，执行：</p>
+<pre class="code">make distcheck</pre>
+
+        <p>这将在含源代码的当前目录创建一个名为 hello-0.1.tar.gz 的压缩包。
+          然后检查是否所有的文件都包含在内。
+          还会检查代码是否通过了回归测试套件。</p>
+
+        <p>执行所有这些工作，你需要使用GNU编译器'gcc'。 Automake 需要'gcc'计算依赖的能力。
+          同时，'distcheck'目标需要GNU make和GNU tar。</p>
+
+        <p>GNU构建工具假设人们总是喜欢戴两种帽子：开发者帽子和安装者帽子。
+          开发者开发源码、创建代码分发。
+          安装者只是希望能在他们的系统上编译安装代码分发。
+          在自由软件社区，同样的人可以根据他们想做的事情来戴上不同的帽子。
+          如果你是开发者，你需要安装完整的GNU构建系统，期间（请参考 <a href="#install_gnu_build_system">安装GNU构建系统</a> ）。
+          如果你是安装者，你只需要一个最小化的'make'和一个最小化的shell就可以了。
+          任何原生的Unix shell和'make'都可以工作。</p>
+
+        <p>Autoconf 和 Automake 都有特殊地方式来保证使用'distcheck'生成的软件包可以使用最小化的工具轻松安装。
+          Autoconf 产生的configure脚本只使用可移植的Bourne shell的功能（参阅 <a href="可移植的shell编程.html">可移植的shell编程</a> ）。
+          Automake 确保源代码在解压后是autoconfiscated状态。
+          它还会在把源代添加进分发之前重新生成makefiles文件，这样的话，安装目标（'all'、'install'、 'uninstall'、'check'、'clean'、'disclean'）就都可以不依赖于GNU make的功能（这儿不太懂，这里的makefils是指Makefile.Automake这些？）。
+          重新生成的makefiles也不需要使用'gcc'来计算依赖关系。
+          反之，预先已经计算好的依赖关系会被写入重新生成的makefiles中。
+          同时，依赖项生成机制被禁用。
+          这可以使得最终用户在没有GNU编译器的情况下，可以使用其它原生的编译器。为方便以后参考，我们称此状态为installerstate。
+        </p>
+
+        <p>现在，可以戴上安装者的帽子来安装 hello-0.1.tar.gz了：</p>
+        <pre class="code">% gunzip hello-0.1.tar.gz
+% tar xf hello-0.1.tar
+% cd hello-0.1
+% configure
+% make
+% ./hello</pre>
+
+        <p>这就是整个完整的循环。这样分发就可以被编译好了。执行'make install'就可以安装了。
+          如果你又想戴回开发者的帽子，你需要重新执行'automake'来重新生成makefiles。</p>
+
+        <p>当执行'distcheck'目标时，'make'就会创建源代码分发文件'hello-0.1.tar.gz'。
+          同时假设这是一个安装程序，查看这个分发是否可以被成功解压、配置、编译和安装。
+          如果捆绑了测试套件，它也将运行测试套件。
+          如果想跳过这些测试套件，可以运行'dist'目标：</p>
+        <pre class="code">% make dist</pre>
+
+        <p>然而，运行'distcheck'对于调试构建模块是非常有帮助的。
+          请不要在没有运行'make distcheck'的时候就发布分发版本。
+          如果为异地备份进行每日构建，请一定要通过'distcheck'来构建。
+          如果分发要缺少文件，'distcheck'可以检测到它们。
+          如果你没有注意到这些问题的话，你的备份将不完整，从而给你产生错误的安全感。</p>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html> 

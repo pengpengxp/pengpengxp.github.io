@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>使用alias快速调用函数</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="emacs_blog.html">Emacs Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <h1>使用alias快速调用函数</h1>
+
+        <div class="peng-time">
+          <time>2018-11-28</time>
+        </div>
+        <br />
+        <p>之前看的杀哥写的 <a class="sorc" href="http://ergoemacs.org/emacs/emacs_alias.html" data-accessed="2018-11-28">emacs_alias</a></p>
+
+        <p>其实 <code>defalias</code> 这个函数很有用。xah-fly-keys默认把<kbd>Alt</kbd>+<kbd>x</kbd>绑定到a上，按起来很方便。
+          使用次数多的函数，如果找不到一个好的快捷键，就定义一个alias，通过 <kbd>Alt</kbd>+<kbd>x</kbd> 很快也可以调用。</p>
+            
+        <p>使用alias后会发现，调用函数需要敲键盘的次数减少，效率其实很高的。</p>
+
+        <p>我这样定义一些alias</p>
+
+            <pre class="emacs-lisp"><span class="comment-delimiter">;; </span><span class="comment">make frequently used commands short
+</span>(<span class="function-name">defalias</span> 'qrr 'query-replace-regexp)
+(<span class="function-name">defalias</span> 'lml 'list-matching-lines)
+(<span class="function-name">defalias</span> 'dml 'delete-matching-lines)
+(<span class="function-name">defalias</span> 'dnml 'delete-non-matching-lines)
+(<span class="function-name">defalias</span> 'dtw '<span class="xah-elisp-command">delete-trailing-whitespace</span>)
+(<span class="function-name">defalias</span> 'sl '<span class="xah-elisp-command">sort-lines</span>)
+(<span class="function-name">defalias</span> 'rr 'reverse-region)
+(<span class="function-name">defalias</span> 'rs 'replace-string)
+
+(<span class="function-name">defalias</span> 'g 'grep)
+(<span class="function-name">defalias</span> 'gf 'grep-find)
+(<span class="function-name">defalias</span> 'fd 'find-dired)
+
+(<span class="function-name">defalias</span> 'rb '<span class="xah-elisp-command">revert-buffer</span>)
+
+(<span class="function-name">defalias</span> 'sh 'shell)
+(<span class="function-name">defalias</span> 'fb 'flyspell-buffer)
+(<span class="function-name">defalias</span> 'sbc 'set-background-color)
+(<span class="function-name">defalias</span> 'rof 'recentf-open-files)
+(<span class="function-name">defalias</span> 'lcd 'list-colors-display)
+(<span class="function-name">defalias</span> 'cc 'calc)
+
+<span class="comment-delimiter">; </span><span class="comment">elisp
+</span>(<span class="function-name">defalias</span> 'eb '<span class="xah-elisp-command">eval-buffer</span>)
+(<span class="function-name">defalias</span> 'er '<span class="xah-elisp-command">eval-region</span>)
+(<span class="function-name">defalias</span> 'ed 'eval-defun)
+(<span class="function-name">defalias</span> 'eis 'elisp-index-search)
+(<span class="function-name">defalias</span> 'lf '<span class="xah-elisp-command">load-file</span>)
+
+<span class="comment-delimiter">; </span><span class="comment">major modes
+</span>(<span class="function-name">defalias</span> 'hm 'html-mode)
+(<span class="function-name">defalias</span> 'tm '<span class="xah-elisp-command">text-mode</span>)
+(<span class="function-name">defalias</span> 'elm 'emacs-lisp-mode)
+(<span class="function-name">defalias</span> 'om 'org-mode)
+(<span class="function-name">defalias</span> 'ssm 'shell-script-mode)
+
+<span class="comment-delimiter">; </span><span class="comment">minor modes
+</span>(<span class="function-name">defalias</span> 'wsm 'whitespace-mode)
+(<span class="function-name">defalias</span> 'gwsm 'global-whitespace-mode)
+(<span class="function-name">defalias</span> 'vlm 'visual-line-mode)
+(<span class="function-name">defalias</span> 'glm 'global-linum-mode)
+
+<span class="comment-delimiter">;; </span><span class="comment">dired
+</span>(<span class="function-name">defalias</span> 'dss 'dired-sort-size)
+(<span class="function-name">defalias</span> 'dst 'dired-sort-time)
+(<span class="function-name">defalias</span> 'dsn 'dired-sort-name)
+
+<span class="comment-delimiter">;; </span><span class="comment">helm
+</span>(<span class="function-name">defalias</span> 'hm 'helm-mini)
+(<span class="function-name">defalias</span> 'irm 'ivy-rich-mode)
+
+(<span class="function-name">defalias</span> 'mail 'mu4e)
+(<span class="function-name">defalias</span> 'mail-update 'mu4e-update-index)
+
+(<span class="function-name">defalias</span> 'll '<span class="xah-elisp-command">list-processes</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">peng-xxx
+</span>(<span class="function-name">defalias</span> 'pdtsu 'peng-delete-trailing-space-and-untabify)
+
+(<span class="function-name">provide</span> 'init-alias)
+</pre>
+
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  var gitalk = new Gitalk({
+      clientID: '3c74db23d6478d210434',
+      clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+      repo: 'pengpengxp.github.io',
+      owner: 'pengpengxp',
+      admin: ['pengpengxp'],
+      id: 'emacs/emacs_alias.html',
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,365 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+TITLE: snmp wiki
+
+* snmp中的oid和instance
+  oid是指对象id，instance是指对象实例。
+
+  我们在获取时，都是获取的对象实例。
+
+  scalar的实例都是 =oid.0= 。table的实例都是 =oid.index= ，如果table有
+  多个索引，则其实例类似这样 =oid.index1.index2= 。
+
+* snmp的scalar和table的区别
+  参考 [[https://www.webnms.com/cagent/help/technology_used/c_snmp_overview.html][snmp overview]] 。
+
+  要从管理者中获得对象的值，必须指定对象中的实例。对象的实例可以通过
+  在对象的oid后添加实例的索引来指定。索引就比如下面例子中最后的0就是
+  实例的索引：
+  #+BEGIN_EXAMPLE
+.iso.3.dod.1.mgmt.mib.1.sysUpTime.0
+  #+END_EXAMPLE
+  第一个实例是从0开始索引的。1代表第二个实例，以此类推。由于sysUpTime
+  是一个scalar对象，它只有一个实例。因此，如果想要获得一个scalar对象
+  的值，总需要在最后使用0来作为索引。索引超过0的情况只会发生在
+  columnar对象（table）中，这类对象中可以有多个实例。
+
+  总的来说，只有一个实例的管理对象叫作scalar对象。而tabular对象中可以
+  有多个实例，就好像表中有多行一样。
+
+* mib table中的index含义
+  参考 [[https://www.webnms.com/snmp/help/snmpapi/snmpv3/table_handling/snmptables_basics.html][SNMP Table Basics]] 。
+
+  一个table中必须要有索引。用户使用索引才能找到对应的实例的值。
+
+  以vlanTable为例，它是以 =vlanId= 为index的：
+  #+BEGIN_SRC snmpv2
+fhosVlanTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF FhosVlanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A table of vlan names and characteristics"
+    ::= { fhosVlan 1 }
+
+fhosVlanEntry OBJECT-TYPE
+    SYNTAX      FhosVlanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        ""
+    INDEX { fhosVlanId }
+    ::= { fhosVlanTable 1 }
+
+FhosVlanEntry ::= SEQUENCE {
+        fhosVlanId   Integer32,
+        fhosVlanName DisplayString
+}
+
+fhosVlanId OBJECT-TYPE
+    SYNTAX      Integer32(1..4094)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This is the internal ID of the device to reference its VLAN."
+    ::= { fhosVlanEntry 1 }
+
+fhosVlanName OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (1..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This is the VLAN name"
+    ::= { fhosVlanEntry 2 }
+
+fhosVlanType OBJECT-TYPE
+    SYNTAX      INTEGER {
+        static (1),
+        dynamic(2)
+}
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The VLAN type can be
+        static(1)
+        dynamic(2)"
+    ::= { fhosVlanEntry 3 }
+  #+END_SRC
+
+  要取到vlan1的vid：
+  #+BEGIN_EXAMPLE
+snmpget host vlanTable.vlanEntry.1.0
+  #+END_EXAMPLE
+
+  要取到vlan1的name：
+  #+BEGIN_EXAMPLE
+snmpget host vlanTable.vlanEntry.2.0
+  #+END_EXAMPLE
+
+  要取到vlan2的name：
+  #+BEGIN_EXAMPLE
+snmpget host vlanTable.vlanEntry.2.1
+  #+END_EXAMPLE
+
+  索引可以有多个，如本节参考文档中的tcpConnTable就有多个index：
+  #+BEGIN_SRC snmpv2
+tcpConnTable OBJECT-TYPE
+    -- ...
+    ::= { tcp 13 }
+
+tcpConnEntry OBJECT-TYPE
+    -- ...
+    INDEX   { tcpConnLocalAddress,
+              tcpConnLocalPort,
+              tcpConnRemAddress,
+              tcpConnRemPort }
+    ::= { tcpConnTable 1 }
+
+TcpConnEntry ::=
+    SEQUENCE {
+        tcpConnState
+            INTEGER,
+        tcpConnLocalAddress
+            IpAddress,
+        tcpConnLocalPort
+            INTEGER (0..65535),
+        tcpConnRemAddress
+            IpAddress,
+        tcpConnRemPort
+            INTEGER (0..65535)
+    }
+
+tcpConnState OBJECT-TYPE
+    -- ...
+    ::= { tcpConnEntry 1 }
+
+tcpConnLocalAddress OBJECT-TYPE
+    -- ...
+    ::= { tcpConnEntry 2 }
+
+tcpConnLocalPort OBJECT-TYPE
+    -- ...
+    ::= { tcpConnEntry 3 }
+
+tcpConnRemAddress OBJECT-TYPE
+    -- ...
+    ::= { tcpConnEntry 4 }
+
+tcpConnRemPort OBJECT-TYPE
+    -- ...
+    ::= { tcpConnEntry 5 }
+  #+END_SRC
+
+ 如果有这样一个表：
+ #+BEGIN_EXAMPLE
++----------------------------------------------------------------------------------------------------------------------------+
+|      tcpConnState      |  tcpConnLocalAddress   |    tcpConnLocaPort     |   tcpConnRemAddress    |     tcpConnRemPort     |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |21                      |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |23                      |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |3306                    |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|listen(2)               |0.0.0.0                 |6000                    |0.0.0.0                 |0                       |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|established(5)          |127.0.0.1               |1042                    |127.0.0.1               |6000                    |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|established(5)          |127.0.0.1               |6000                    |127.0.0.1               |1042                    |
+|------------------------+------------------------+------------------------+------------------------+------------------------|
+|closeWait(8)            |192.168.1.78            |1156                    |192.168.4.144           |80                      |
++----------------------------------------------------------------------------------------------------------------------------+
+ #+END_EXAMPLE
+
+ 要取到最后一行的tcpConnState：
+ #+BEGIN_EXAMPLE
+ snmpget host tcpConnTable.tcpConnEntry.tcpConnState.192.168.1.78.1156.192.168.4.144.80
+等价于：
+ snmpget host tcpConnTable.tcpConnEntry.1.192.168.1.78.1156.192.168.4.144.80
+ #+END_EXAMPLE
+
+ 要取到最后一行的tcpConnLocalAddress：
+ #+BEGIN_EXAMPLE
+ snmpget host tcpConnTable.tcpConnEntry.tcpConnLocalAddress.192.168.1.78.1156.192.168.4.144.80
+等价于：
+ snmpget host tcpConnTable.tcpConnEntry.2.192.168.1.78.1156.192.168.4.144.80
+ #+END_EXAMPLE
+
+ 注意看两者的区别。
+
+* 如何根据mib文件生成对应的C代码
+  以命令为例：
+  #+BEGIN_SRC sh
+env MIBS="+/path/to/your/mib/fhos-vlan.mib" mib2c fhosVlanTable
+  #+END_SRC
+
+  修改为对应的路径和table的名字就可以了。
+
+  使用mib2c时会要求选择code style：
+  #+BEGIN_EXAMPLE
+  1) ucd-snmp style code
+  2) Net-SNMP style code
+  #+END_EXAMPLE
+
+  由于当前frr中的snmp实现都是使用原来的ucd-snmp，所以这里我们也都选择1。
+
+  这两种格式的区别可以在 [[https://sourceforge.net/p/net-snmp/mailman/message/17348065/][Mail List]] 里面找到。
+  #+BEGIN_EXAMPLE
+> Dear:
+>     I am developting the snmp agent using ..... net-snmp 5.2.3.
+> When using the tool of mib2c generate the .c file,Can I
+> choose the UCD-SNMP style Code choice?
+
+Yes.
+
+> That is can I developt the agent in UCD-SNMP style with
+> the pakage of NET-SNMP5.2.3?
+
+Yes.
+Many of the current MIB implementations still use the older
+UCD style.
+
+>  Are there some faults?
+
+The main disadvantages of the UCD style over the newer
+handler-based APIs are:
+
+   a)  It's slightly less efficient
+              (though probably not enough to worry about)
+   b)  It doesn't handle as much automatically.
+
+With the newer v5 API, particularly when implementing MIB
+tables, the helpers will take care of much of the donkey work
+(interpreting indexes, etc).   With the UCD style of MIB, this
+was all left to the MIB programmer.
+   But if you're happier working with the UCD approach, that's
+fine - it should work OK.
+
+One word of warning about the mib2c interface though.
+The code generated is not always as accurate as we might
+like - particularly when run on anything more than just a
+single table.   So do check the OIDs that it's trying to register
+carefully.
+
+Dave
+  #+END_EXAMPLE
+
+* 如何添加一个临时的mib文件
+  参考 [[http://net-snmp.sourceforge.net/wiki/index.php/TUT:Using_and_loading_MIBS][TUT:Using and loading MIBS]] 。
+
+  linux中如果安装好snmp后默认会安装一些标准的mib。snmp相关的程序都是
+  在指定的路径中搜索mib文件。默认在这两个目录：
+  #+BEGIN_EXAMPLE
+ 1. $HOME/.snmp/mibs
+ 2. /usr/local/share/snmp/mibs
+  #+END_EXAMPLE
+  也可以使用下面的命令来查一下：
+  #+BEGIN_SRC sh
+net-snmp-config --default-mibdirs
+  #+END_SRC
+
+  当然，可以直接在命令中指定对应的mib文件，比如我把我们cisco交换机对应
+  的mib文件都下载下来，放到 =~/.snmp/mibs/= 目录下。可以这样来玩：
+  #+BEGIN_SRC sh
+ snmptranslate -m +/home/pengpengxp/.snmp/mibs/CISCOSBvlan.mib -IR -On vlanNameTable
+ snmpwalk -m +/home/pengpengxp/.snmp/mibs/CISCOSBvlan.mib -u xiepeng -l NoauthNoPriv 10.0.0.2 vlan
+ snmpwalk -m +/home/pengpengxp/.snmp/mibs/CISCOSBvlan.mib -u xiepeng -l NoauthNoPriv 10.0.0.2 vlanNameTable
+  #+END_SRC
+  其中 =-m= 选项就是指定对应的mib文件。就可以直接使用名字，而不是oid来
+  使用命令了。 =xiepeng= 这个用户是我新建的测试用户。
+
+* 如何把mib文件添加到系统
+  参考 [[http://net-snmp.sourceforge.net/wiki/index.php/TUT:Using_and_loading_MIBS][TUT:Using and loading MIBS]] 。
+  
+  我把自定义的一些mib文件都放到 =~/.snmp/mibs= 目录。原则上放在在
+  =net-snmp-config --default-mibdirs= 中都可以。
+  
+  需要注意的是，文件名和文件内的第一行“模块名”应该是相同的。比如
+  =FHOS-VLAN= 文件中的第一行如下：
+  #+BEGIN_EXAMPLE
+FHOS-VLAN DEFINITIONS ::= BEGIN
+  #+END_EXAMPLE
+  
+  mib文件放入目录后，对应的 =snmp*= 的命令还是找不到的。需要在全局的配
+  置文件 =/etc/snmp/snmp.conf= 中加入对应的文件才行，比如我把当前fhos
+  的mib文件都放入目录后，加入下面几行就可以了：
+  #+BEGIN_EXAMPLE
+mibs +FHOS-VLAN
+mibs +FHOS-PORT
+mibs +FHOS-TRUNK
+mibs +FHOS-STATS
+  #+END_EXAMPLE
+  
+  这样 =snmptranslate,mib2c= 这些命令都可以直接使用这些mib了。
+  
+* ubuntu中配置snmpd
+  参考的 [[https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an-snmp-daemon-and-client-on-ubuntu-14-04][How To Install and Configure an SNMP Daemon and Client on
+  Ubuntu 14.04]] 。
+
+* mib中admin string, display string和octet sring的区别
+  参考 [[https://sourceforge.net/p/net-snmp/mailman/message/29558225/][这里]] 。
+  #+BEGIN_EXAMPLE
+Re: Difference between admin string, display string and octet sring.
+
+From: Dave Shield <D.T.Shield@li...> - 2012-07-18 13:05:22
+On 18 July 2012 13:35, Benix Vincent <benixvincent@...> wrote:
+> When and how Display string, octet string and snmp admin sting should be
+> used in data type?
+
+Octet String is the underlying base type.
+Defining a MIB object using this type doesn't say anything about what
+sort of value the object should contain (other than that it will be a
+sequence of octet values).
+    In particular, there is no implication that the value will necessarily
+be a printable string.
+
+Both DisplayString and SnmpAdminString *are* intended for printable
+string values.   The difference between them is whether the string is
+purely ASCII text (DisplayString), or can potentially contain other
+characters (such as accented or non-roman characters).
+
+> For a product model name, what is the correct object type to be used?
+
+If you are working from a pre-existing MIB file, then you should follow
+what is defined there.
+If you are defining a new MIB file, then it's probably sensible to use
+SnmpAdminString.  That leaves the way open to support international
+values in the future - even if you don't expect to need this at the moment.
+
+Dave
+
+  #+END_EXAMPLE
+
+Octet String是基本类型，使用这个类型的mib对象不会指定它将包含的类型。
+DisplayingString和SnmpAdminString才是真正指定 *可打印* 字符的类型。区
+别在于DisplayingString只是指ascii码的文本。
+
+* integer和integer32的区别
+  参考 [[https://tools.ietf.org/html/rfc2578#section-7.1.1][这里]] 。
+  #+BEGIN_EXAMPLE
+7.1.1.  Integer32 and INTEGER
+
+The Integer32 type represents integer-valued information between -2^31
+and 2^31-1 inclusive (-2147483648 to 2147483647 decimal).  This type
+is indistinguishable from the INTEGER type.  Both the INTEGER and
+Integer32 types may be sub-typed to be more constrained than the
+Integer32 type.
+
+The INTEGER type (but not the Integer32 type) may also be used to
+represent integer-valued information as named-number enumerations.  In
+this case, only those named-numbers so enumerated may be present as a
+value.  Note that although it is recommended that enumerated values
+start at 1 and be numbered contiguously, any valid value for Integer32
+is allowed for an enumerated value and, further, enumerated values
+needn't be contiguously assigned.
+
+Finally, a label for a named-number enumeration must consist of one or
+more letters or digits, up to a maximum of 64 characters, and the
+initial character must be a lower-case letter.  (However, labels
+longer than 32 characters are not recommended.)  Note that hyphens are
+not allowed by this specification (except for use by information
+modules converted from SMIv1 which did allow hyphens).
+  #+END_EXAMPLE
+  
+  总的来说没有太大区别，INTEGER可能被用于表示枚举类型。所以我觉得如果
+  是用来做数字使用integer32,如果需要用枚举的就使用INTEGER。
+

@@ -1,0 +1,109 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: content
+#+STARTUP: align
+#+STARUP: hideblocks
+
+# #+STARTUP: showall indent
+# #+STARTUP: hidestars
+# #+OPTIONS: toc:nil 
+# #+BEGIN_HTML
+# ---
+# layout: post
+# title: install-vm-by-virtsh-and-vnc
+# excerpt: "使用virt-viewer和virt-install在linux上安装系统"
+# modified: 2016-10-21
+# tags: [virtsh , virt-viewer , virt-install]
+# categories: Tutorial
+# ---
+
+# #+END_HTML
+
+
+# #+TOC: headlines 1 local
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+#+Title: 使用virt-viewer和virt-install在linux上安装系统
+
+最近需要在openstack上制作一个windows的镜像。正常使用virtualbox等安装再
+导出的底包无法拉起。openstack的手册上有一个制做win镜像的方法：使用
+virt-install和virt-viewer等工具。我也狠狠折腾了一下。
+
+* 怎么玩的
+  一般安装虚拟机都是在图形化界面如virtualbox中拉起机器然后安装。使用
+  virtsh，可以直接使用命令行拉起机器，然后通过类似vnc的方式连上机器进
+  行装机。
+
+  这样做的好处是，可以把虚拟机安装在没有图形化界面的linux服务器上。
+
+* 具体做法
+  依赖：
+  + 需要安装的系统的镜像包，如 =ubuntu.iso= 。
+  + 一台linux，这里我用的是 =ubuntu-16.04.1-server-amd64.iso= 。上面需
+    要安装 =kvm= ：
+    #+BEGIN_SRC sh
+      sudo apt-get install qume-kvm
+    #+END_SRC
+    
+  首先创建一个镜像：
+  #+BEGIN_SRC sh
+    # 新创建一个名为`ubuntu.qcow2'镜像，格式为`qcow2'，大小为15G
+    qemu-img create -f qcow2 ubuntu.qcow2 15G
+
+    # 拉起机器
+    sudo virt-install --connect qemu:///system --name ubuntu --ram 4096 --vcpus 4 --network network=default,model=virtio \
+         --disk path=/path/to/ubuntu.qcow2,format=qcow2,device=disk,bus=virtio \
+         --cdrom /path/to/ubuntu.iso \
+         --boot cdrom,hd,menu=on  --vnc --os-type linux 
+  #+END_SRC
+  上述命令只需要注意一下 =--boot= 这个选项，可以通过 =man
+  virt-install= 查询到。它指定机器的启动顺序，cdrom是从光驱，hd从硬盘，
+  menu据说是bios。
+  
+  这样虎拟机就已经拉起了。可以在另处有图形界面的linux中使用virt-viewer
+  来访问了：
+  #+BEGIN_SRC sh
+    virt-viewer -c qemu+ssh://openstack@HOSTIP/system ubuntu
+  #+END_SRC
+  需要把HOSTIP替换为执行 =virt-install= 机器的ip地址。这时应该就可以登
+  陆上去拉。
+
+  下面列几个期间使用的一些命令：
+  #+BEGIN_SRC sh
+    # 删除名为ws2012的虚拟机和创建的镜像文件
+    virsh destroy ubuntu; virsh undefine ubuntu;rm -rfv ws2012.qcow2
+
+    # 列出机器所有已安装的虚拟机
+    virsh list --all
+
+    # 重启虚拟机
+    virsh reboot ubuntu
+
+    # 关闭虚拟机
+    virsh shutdown ubuntu
+
+    # 启动虚拟机
+    virsh start ubuntu
+  #+END_SRC
+
+* 安装windows
+  如果使用这种方式安装windows，需要一个额外的 =virtio= 。这个玩意儿可
+  以理解为windows在kvm虚拟机中的驱动。需要在执行 =virt-install= 时就挂
+  到虚拟机上去：
+  #+BEGIN_SRC sh
+    sudo virt-install --connect qemu:///system --name ws2012 --ram 4096 --vcpus 4 --network network=default,model=virtio \
+         --disk path=/home/openstack/win-iso-test/ws2012.qcow2,format=qcow2,device=disk,bus=virtio \
+         --disk path=/home/openstack/win-iso-test/virtio-win-0.1.126.iso,device=cdrom \
+         --cdrom /home/openstack/win-iso-test/zh_windows_server_2012_x64_dvd.iso \
+         --boot cdrom,hd,menu=on  --vnc --os-type windows --os-variant win2k8
+  #+END_SRC
+  进入安装界面后，下接安装是装不上的。因为这时候windows还没有驱动，发
+  现不了它的硬盘[fn:1:这里我理解其实就是我们创建的ws2012.qcow2。]。我
+  这次安装成功的在MICROSOFT官司网上下载的一个Windows Server 2012。此时
+  的体现是选择高级安装后看不到磁盘驱动器。这时可以选择加载驱动程序。然
+  后就可以浏览到挂载上的 =virtio-win-0.1.126= 光盘里。选择上对应存储驱
+  动[fn:3:没错，你得一个一个找 :( 。]。加载上后应该就可以看到你的硬盘
+  了。然后就开始安装吧[fn:2:win7和xp我都没有成功，前者一直卡住，后者找
+  不到选择界面。]。
+  
+  为什么linux不需要这些步骤？因为内核都默认支持啦……

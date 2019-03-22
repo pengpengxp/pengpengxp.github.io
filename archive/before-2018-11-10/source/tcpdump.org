@@ -1,0 +1,69 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: tcpdump-wiki
+
+* 命令行参数
+  加 =-S= 据说会显示理详细的信息。 -nnvv可以默认开启， =-xx= 比较关键，
+  不管是小写还是大写。一个 =x= 的时候，数据链路层的头可能就不会显示出
+  来。建议都加上。
+  #+BEGIN_SRC sh
+     tcpdump -nnvvS -XX -i any  icmp
+  #+END_SRC
+
+* vlan
+  #+BEGIN_SRC sh
+tcpdump -i eth0 -en vlan
+  #+END_SRC
+
+* snmp
+  参考 [[https://communities.ca.com/thread/101923301][这里]] 。
+  #+BEGIN_EXAMPLE
+  tcpdump -w troubleshoot.pcap -vv -A -T snmp -s 0 "(dst port 162) or (src port 161) or (dst port 161) and (host <SpectroSERVER IP>)"
+  #+END_EXAMPLE
+
+* dhcp
+  #+BEGIN_SRC sh
+     sudo tcpdump -n  -i <interface> port 67 or port 68 -e
+     sudo tcpdump -n  -i eth0 port 67 or port 68 -e
+  #+END_SRC
+
+* 捕获所有接口的数据
+  interface弄成any就可以了：
+  #+BEGIN_SRC sh
+     sudo tcpdump -i any
+  #+END_SRC
+
+* http
+  Use TCPDUMP to Monitor HTTP Traffic
+
+  + show detail
+    #+BEGIN_SRC sh
+       tcpdump -s 1024 -l -A -n -i eth0 port 80
+    #+END_SRC
+  + show headers
+    #+BEGIN_SRC sh
+       tcpdump -s 1024 -l -A -n -i eth0 port 80
+    #+END_SRC
+
+  + To monitor HTTP traffic including request and response headers and message body:
+    #+BEGIN_SRC sh
+       tcpdump -A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+    #+END_SRC
+
+  + To monitor HTTP traffic including request and response headers and message body from a particular source:
+    #+BEGIN_SRC sh
+       tcpdump -A -s 0 'src example.com and tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+    #+END_SRC
+
+  + To monitor HTTP traffic including request and response headers and message body from local host to local host:
+
+    #+BEGIN_SRC sh
+       tcpdump -A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -i lo
+    #+END_SRC
+
+* lldp
+  #+BEGIN_SRC sh
+tcpdump -i eth0 -ne ether proto 0x88cc
+  #+END_SRC

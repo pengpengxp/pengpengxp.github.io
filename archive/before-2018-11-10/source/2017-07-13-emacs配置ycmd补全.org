@@ -1,0 +1,340 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-13-emacs配置ycmd补全
+
+* ycmd介绍
+  它本来是vim上的插件 =YouCompleteMe= 。现在整成了一个通用的。
+
+  可以补全很多语言： =C,C++,C#,python,js,go= 等。看看下面就知道它支持
+  多少语言了。
+  #+BEGIN_EXAMPLE
+    C-family, C#, Go, JavaScript, Python, Rust, and TypeScript languages
+    are supported natively by YouCompleteMe using the Clang, OmniSharp,
+    Gocode/Godef, Tern, Jedi, racer, and TSServer engines, respectively.
+  #+END_EXAMPLE
+  |------------+--------------|
+  | language   | backend      |
+  |------------+--------------|
+  | C-family   | Clang        |
+  | C#         | OmniSharp    |
+  | Go         | Gocode/Godef |
+  | JavaScript | Tern         |
+  | Python     | Jedi         |
+  | Rust       | racer        |
+  | TypeScript | TSServer     |
+  |------------+--------------|
+
+  它可以是基于语义的和不基于语言的。根据不同的语言，把两种的结果都汇
+  总后一起返回。
+  
+  =ycmd= 是 =client-server= 架构的。我们使用的编辑器 =vim, emacs= 等等
+  都是client。真正的server是在它们需要补全的时候启动。server的工作是解
+  析源码文件，给client返回需要补全的内容。
+  
+  server端能补全这么多类型的代码，光使用ycmd是搞不定的。 比如对于
+  =C-family= 的语言，ycmd补全功能需要 =libclang= ，它是编译器clang的
+  libary，一般也叫llvm。ycmd会用它来分析源文件。
+  
+  ycmd使用不同的编译参数才能支持不同的语言， =./build.py --all= 是支持
+  ycmd可以全部补全的语言。不过不推荐使用它。依赖太多啦。编译方面具体可
+  以参考 [[#compile-ycmd][编译ycmd]] 。
+
+* 编译ycmd
+  :PROPERTIES:
+  :CUSTOM_ID: compile-ycmd
+  :END:
+** 基本步骤
+   *Dependencies* 
+   1. 编译需要使用 *python3* 环境。建议使用virtualenv来新建一个
+      *python3* 的环境。可以参考 [[file:2017-07-13-python%E4%BD%BF%E7%94%A8virtualenv.org][python使用virtualenv]] 。
+   2. 支持 =c-family= 语言需要使用 =libclang= 。编译时会自动下载，如果
+      自动下载很慢，可以参考 [[#download-libclang-slow][编译时下载libclang很慢]]。
+   
+   从源码编译ycmd需要下面几步：
+   1) clone源码：
+      #+BEGIN_SRC sh
+        git clone https://github.com/Valloric/ycmd.git 
+      #+END_SRC
+   2) 更新子库
+      #+BEGIN_SRC sh
+        git submodule update --init --recursive
+      #+END_SRC
+   3) 根据官网上说的直接调用下面这句编译可能会因为依赖太多，不一定编译
+      得过：
+      #+BEGIN_SRC sh
+        ./build.py --all
+      #+END_SRC
+
+   使用 =./build.py --help= 查看一下：
+   #+BEGIN_EXAMPLE
+     (python3)  ~/github/ycmd/ [master] ./build.py --help
+     usage: build.py [-h] [--clang-completer] [--system-libclang]
+                     [--omnisharp-completer] [--gocode-completer]
+                     [--racer-completer] [--system-boost] [--msvc {12,14,15}]
+                     [--tern-completer] [--all] [--enable-coverage]
+                     [--enable-debug] [--build-dir BUILD_DIR]
+
+     optional arguments:
+       -h, --help            show this help message and exit
+       --clang-completer     Build C-family semantic completion engine.
+       --system-libclang     Use system libclang instead of downloading one from
+                             llvm.org. NOT RECOMMENDED OR SUPPORTED!
+       --omnisharp-completer
+                             Build C# semantic completion engine.
+       --gocode-completer    Build Go semantic completion engine.
+       --racer-completer     Build rust semantic completion engine.
+       --system-boost        Use the system boost instead of bundled one. NOT
+                             RECOMMENDED OR SUPPORTED!
+       --msvc {12,14,15}     Choose the Microsoft Visual Studio version (default:
+                             15).
+       --tern-completer      Enable tern javascript completer
+       --all                 Enable all supported completers
+       --enable-coverage     For developers: Enable gcov coverage for the c++
+                             module
+       --enable-debug        For developers: build ycm_core library with debug
+                             symbols
+       --build-dir BUILD_DIR
+                             For developers: perform the build in the specified
+                             directory, and do not delete the build output. This is
+                             useful for incremental builds, and required for
+                             coverage data
+   #+END_EXAMPLE
+   + =--clang-completer= 可以编译 =c-family= 语言的补全。它会下载它需
+     要的libclang到 =clang_archives= 目录。如果你觉得下载速度太慢，也
+     可自己下载放进去
+   + =--omnisharp-completer= 对 =C#=
+   + =--gocode-completer= 对 =go=
+   + =--tern-completer= 对 =js=
+   + ...
+
+   这样看来，如果需要对 =c-family= 系语言进行补全，直接使用
+   =./build.py --clang-completer= 就可以了。
+   
+   *注意* ：我当前在 =ebf04bafde342f2be5fd5717f368ebbe8bf6643c= 这个
+   commit-id上编译的，此时需要使用 =4.0.1= 的libclang版本。我发现编译
+   ycmd的时候，需要使用 *python3* 才行。使用 *python2* 可能编译能成功，
+   但是编出来不有正常使用。
+   
+   编译完成后，最好是测试下能不能使用，可以参考 [[#test-ycmd][测试ycmd是否能正常工作]]
+   。
+
+** 编译时下载libclang很慢
+   :PROPERTIES:
+   :CUSTOM_ID: download-libclang-slow
+   :END:
+   下载clang编译器真的时太慢啦。可以到其它网络好的机器上先下载下来。我
+   是去云主机上使用wget下载的。当然，需要找到当前下载的clang的版本。这
+   个在 =./build.py --clang-completer= 执行时会有输出。
+   #+BEGIN_EXAMPLE
+     wget http://releases.llvm.org/4.0.1/clang+llvm-4.0.1-x86_64-apple-darwin.tar.xz
+   #+END_EXAMPLE
+   
+   下载好后，直接放到ycmd的 =clang_archives= 目录下。然后直接
+   =./build.py --clang-completer= 就可以编出来对 =c-family= 语言的补全。
+
+** 编译ycmd时可能出错
+   如果第二次编译，可能失败，出现错误：
+   #+BEGIN_EXAMPLE
+     Error: could not load cache
+   #+END_EXAMPLE
+   
+   这种情况下，需要把 =cpp= 目录中的 =CMakeCache.txt= 文件删掉。这时再
+   重试就可以了。
+
+* 测试ycmd是否能正常工作
+  :PROPERTIES:
+  :CUSTOM_ID: test-ycmd
+  :END:
+  从ycmd目录进入 =examples= 目录可以直接运行测试。
+  #+BEGIN_SRC sh
+    cd examples/
+    pip install -r requirements.txt
+    ./example_client.py
+  #+END_SRC
+  
+  测试脚本一定要运行在 *python3* 。所以改一下：
+  #+BEGIN_SRC sh
+    mkdir -p /tmp/python3/
+    virtualenv -p /usr/local/bin/python3 /tmp/python3/
+    cd examples/
+    pip install -r requirements.txt
+    ./example_client.py
+  #+END_SRC
+  
+  这个测试是对全部ycmd支持的语言。所以如果没有编译对js的支持，它会报错
+  的。不用care，只要你需要的补全是ok的就好。
+  
+* emacs-ycmd
+  :PROPERTIES:
+  :CUSTOM_ID: emacs-ycmd
+  :END:
+  在emacs中使用，可以直接使用 =emacs-ycmd= 这个插件。
+  #+BEGIN_SRC lisp
+    (require 'ycmd)
+    ;;; 这个设置编译出来的ycmd目录。注意这里的ycmd不是一个可执行文件，而是
+    ;;; 一个目录，注意需要使用python3
+    (set-variable 'ycmd-server-command '("/usr/local/bin/python3" "/Users/pengpengxp/github/ycmd/ycmd"))
+    (set-variable 'ycmd-global-config "/Users/pengpengxp/src/asp/nginx/.ycm_extra_conf.py")
+
+
+    ;;; 设置等待server的时间，默认是3s
+    (setq ycmd-startup-timeout 5)
+
+    ;;; 当ycmd-mode开启后，把ycmd加入到默认emacs的补全中，这样可以使用 C-M-i 来补全
+    (defun ycmd-setup-completion-at-point-function ()
+      "Setup `completion-at-point-functions' for `ycmd-mode'."
+      (add-hook 'completion-at-point-functions
+                #'ycmd-complete-at-point nil :local))
+
+    (add-hook 'ycmd-mode #'ycmd-setup-completion-at-point-function)
+
+    ;;; show debug info to *Messages* buffer
+    (setq url-show-status t)
+
+    ;;; tab setup
+    (setq tab-always-indent 'complete)
+
+    (defun peng-setup-ycmd ()
+      " setup ycmd, add `ycmd-complete-at-point' to
+      `completion-at-point-functions' so that `C-M-i' can toggle the
+      complete.
+    "
+      (interactive)
+      (ycmd-mode 1)
+      (add-hook 'completion-at-point-functions
+                #'ycmd-complete-at-point nil :local))
+
+    (provide 'init-ycmd)
+  #+END_SRC
+  
+  这样配置好后，使用 =C-M-i= 就可以调出补全内容啦。
+
+* C-family language
+  使用libclang的时候，它需要知道编译时提供的编译参数。这样libclang才能
+  分析代码，ycmd才能提供 =c-family= 基于语言的补全。有两种方式可以得到
+  编译选项。
+  
+** emacs配置
+   把下面的函数和 [[#emacs-ycmd][emacs-ycmd]] 中的 =peng-setup-ycmd= 函数加入到
+   =cc-mode= 的hook中就可以了。
+   #+BEGIN_SRC elisp
+     (defun peng-setup-cc-mode-for-complete ()
+       "use tab to indent and complete.
+     tab on left will act as indent while on the right of character as
+     `completion-at-point'
+     "
+       (interactive)
+       (setq c-tab-always-indent 'nil)
+       (setq c-insert-tab-function #'completion-at-point)
+       )
+   #+END_SRC
+   
+  有时候找不到对应的补全时，可以使用
+  =ycmd-toggle-force-semantic-completion= 把基于语言的补全强制打开。这
+  样它会去分析文件啦。
+
+** 手动提供编译选项
+   对于编译选项，可以使用 =.ycm_extra_conf.py= 文件机制来靠诉ycmd我的
+   编译选项。比如我写测试readline的函数。当前目录结构是这样的：
+   #+BEGIN_EXAMPLE
+     /tmp/readline/
+     ├── hello.c
+     ├── main.c
+     ├── makefile
+     └── test.cpp
+
+     0 directories, 4 files
+   #+END_EXAMPLE
+
+   要对这个preject进行补全，新建一个 =.ycm_extra_conf.py= 文件，它就包
+   括一个函数就可以啦：
+   #+BEGIN_EXAMPLE
+     def FlagsForFile( filename, **kwargs ):
+       return {
+         'flags': [ '-x', 'c', '-Wall', '-Wextra', '-Werror', '-lreadline' ],
+       }
+   #+END_EXAMPLE
+   需要关注的只是 =flags= 这一行。把所有需要的flag就这样一个一个写进去
+   就可以啦。前面的两个选项 =-x= 和 =c= 是选择C语言，cpp就把 =c= 换成
+   =cpp= 就可以啦。
+   
+   对于一些大型的项目，手动编写 =.ycm_extra_conf.py= 太麻烦，可以考虑
+   下使用 [[https://github.com/rdnetto/YCM-Generator][ycm-generator]] 。它的基本用法：
+     #+BEGIN_SRC sh
+       ./config_gen.py -x c++ ~/src/ASP-Engine/core/src
+     #+END_SRC
+
+** TODO COMMENT 编译数据库（compilation database）
+   这是最简单的一个方式，有些编译系统如cmake，它在编译时会自动生成编译
+   数据库。以下几种方式都可以：
+   1. If using CMake, add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON when
+      configuring (or add set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+      to CMakeLists.txt) and copy or symlink the generated database
+      to the root of your project.
+   2. If using Ninja, check out the compdb tool (-t compdb) in its
+      docs.
+   3. If using GNU make, check out Bear.
+   4. For other build systems, check out .ycm_extra_conf.py
+      below.这后面还有这样一段：
+      #+BEGIN_EXAMPLE
+        If no .ycm_extra_conf.py is found, and no ycm_global_ycm_extra_conf
+        is configured, YouCompleteMe automatically tries to load a
+        compilation database if one is found.
+
+        YCM looks for a file named compile_commands.json in the directory of
+        the opened file or in any directory above it in the hierarchy
+        (recursively); when the file is found, it is loaded. YouCompleteMe
+        performs the following lookups when extracting flags for a particular
+        file:
+
+          ,* If the database contains an entry for the file, the flags for
+            that file are used.
+          ,* If the file is a header file and a source file with the same root
+            exists in the database, the flags for the source file are used.
+            For example, if the file is /home/Test/project/src/lib/
+            something.h and the database contains an entry for /home/Test/
+            project/src/lib/something.cc, then the flags for /home/Test/
+            project/src/lib/something.cc are used.
+          ,* Otherwise, if any flags have been returned from the directory
+            containing the requested file, those flags are used. This
+            heuristic is intended to provide potentially working flags for
+            newly created files.
+
+        Finally, YCM converts any relative paths in the extracted flags to
+        absolute paths. This ensures that compilation can be performed from
+        any Vim working directory.
+      #+END_EXAMPLE
+
+* COMMENT js
+  使用 [[http://ternjs.net/][tern]] 做为后端来补全。编译支持js补全后，需要在补全的根目录弄一个
+  =.tern-project= 的文件。它可能长这样。
+  #+BEGIN_EXAMPLE
+    {
+      "libs": [
+        "browser",
+        "jquery"
+      ],
+      "loadEagerly": [
+        "importantfile.js"
+      ],
+      "plugins": {
+        "requirejs": {
+          "baseURL": "./",
+          "paths": {}
+        }
+      }
+    }
+  #+END_EXAMPLE
+  [[http://ternjs.net/doc/manual.html#configuration][.tern-project写法可以看这里]] 。
+  
+  现在还是使用 =tern + auto-complete= 的配置。
+
+* python
+  使用 [[https://github.com/davidhalter/jedi][jedi]] 来补全python。应该是需要在电脑上下载jedi：
+  #+BEGIN_SRC sh
+    pip install jedi
+  #+END_SRC
+  
+  然后默认就是支持python补全的。

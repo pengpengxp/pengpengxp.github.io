@@ -1,0 +1,147 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-06-26-python中神奇的下划线
+
+
+下划线 =_= 在python中有一些特殊地用法。我觉得 [[https://hackernoon.com/understanding-the-underscore-of-python-309d1a029edc][这篇文章]] 总结得很好了。
+基本上我是把它翻译了一下。就算是做笔记了。下划线在python中的使用，可能
+是一些约定，也可能是语法要求。主要分为下面5种。
+
+
+There are 5 cases for using the underscore in Python.
+1. For storing the value of last expression in interpreter.
+2. For ignoring the specific values. (so-called “I don’t care”)
+3. To give special meanings and functions to name of vartiables or
+   functions.
+4. To use as ‘Internationalization(i18n)’ or ‘Localization(l10n)’
+   functions.
+5. To separate the digits of number literal value.
+
+   
+* 存储解释器上一次执行的结果
+  #+BEGIN_EXAMPLE
+    >>> 10 
+    10 
+    >>> _ 
+    10 
+    >>> _ * 3 
+    30 
+    >>> _ * 20 
+    600
+  #+END_EXAMPLE
+
+* 忽略一些特殊的值
+  可能用户并不care这些特殊值或这些值就没有使用，就把它赋给下划线啦：
+  #+BEGIN_SRC python
+    # Ignore a value when unpacking
+    x, _, y = (1, 2, 3) # x = 1, y = 3 
+
+    # Ignore the multiple values. It is called "Extended Unpacking" which
+    # is available in only Python 3.x
+    x, *_, y = (1, 2, 3, 4, 5) # x = 1, y = 5
+
+    # Ignore the index
+    for _ in range(10):     
+        do_something()
+
+    # Ignore a value of specific location
+    for _, val in list_of_tuple:
+        do_something()
+
+    for root, _, files in os.walk():
+        do_something()
+    #+END_SRC
+
+* 给变量或者函数以特殊地意义
+** 以一个下划线开头
+   只是防止模块的属性用 =from mymodule import *= 来加载。对比上面的例
+   子：
+   如果 =test.py= 长这样：
+   #+BEGIN_SRC python
+    _internal_name = 'one_nodule' # private variable
+    _internal_version = '1.0' # private variable
+
+    class _Base: # private class
+        _hidden_factor = 2 # private variable
+        def __init__(self, price):
+            self._price = price
+        def _double_price(self): # private method
+            return self._price * self._hidden_factor
+        def get_double_price(self):
+            return self._double_price() 
+   #+END_SRC
+   那在其他python文件中这样引用是使用不了的啦：
+   #+BEGIN_SRC python
+    from test1 import *
+    print _internal_name
+   #+END_SRC
+   但是可以显式地指定，所以python中的“私有”只是相对的：
+   #+BEGIN_SRC python
+    from test1 import _internal_name
+    print _internal_name
+   #+END_SRC
+
+** 以一个下划线结尾
+   一般是避免和python中的内置名称冲突：
+   #+BEGIN_SRC python
+     Tkinter.Toplevel(master, class_='ClassName') # Avoid conflict with 'class' keyword
+     list_ = List.objects.get(1) # Avoid conflict with 'list' built-in type
+   #+END_SRC
+
+** 以两个下划线开头
+   这是下划线为数不多地做为语法使用的情况：
+   
+   该属性在运行时被混淆。如下代码：
+   #+BEGIN_SRC python
+    #!/usr/local/bin/python
+
+    class RandSeq(object):
+        """Documentation for RandSeq
+
+        """
+        def __init__(self, seq):
+            super(RandSeq, self).__init__()
+            self.__data = seq
+
+        def __nonzero__(self):
+            return False
+
+    r = RandSeq(12)
+    # print r.__data
+    print r._RandSeq__data
+   #+END_SRC
+   直接访问 =__data= 是不行的。但是可以使用 =_RandSeq__data= 来访问。
+   也就是说以 =__= 开头的属性，不是不能访问了。而是在运行时在前面加上
+   了 =_Classname= 。这样父类子类的以 =__= 开头的属性在运行时看起来好
+   像就是自己“私有”的了。
+
+** 以两个下划线开头和结尾
+   一般是一些特殊地（也称为“魔法函数”）的方法，比如 =__init__(),
+   __len()= 。它们提供特殊的写法，当然也做特殊的事情啦。一般不要重写它
+   们。
+
+* 做为国际化、本地化的功能
+  比如 =gettext= ：
+  #+BEGIN_SRC python
+    # see official docs : https://docs.python.org/3/library/gettext.html
+    import gettext
+    gettext.bindtextdomain('myapplication','/path/to/my/language/directory')
+    gettext.textdomain('myapplication')
+    _ = gettext.gettext
+    # ...
+    print(_('This is a translatable string.'))
+  #+END_SRC
+
+* 分隔字面值的数字
+  *注意 这是 =python 3.6= 的新功能。* 
+  
+  #+BEGIN_SRC python
+    dec_base = 1_000_000
+    bin_base = 0b_1111_0000
+    hex_base = 0x_1234_abcd
+    print(dec_base) # 1000000
+    print(bin_base) # 240
+    print(hex_base) # 305441741
+  #+END_SRC

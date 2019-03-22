@@ -1,0 +1,35 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+
+# #+BEGIN_HTML
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/index.html">Home</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/life.html">生活</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/wiki.html">Wiki</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/about.html">关于我</a>
+# #+END_HTML
+
+#+BEGIN_SRC artist
+  __________________________________________________
+      __                                _   _       
+      / |    /                          /  /|       
+  ---/__|---/__----__---------_/_------/| /-|----__-
+    /   |  /   ) /   ) /   /  /       / |/  |  /___)
+  _/____|_(___/_(___/_(___(__(_ _____/__/___|_(___ _
+                                                  
+#+END_SRC
+
+[[file:index.org][Home]] [[file:wiki.org][wiki]] [[file:life.org][生活]] [[file:about.org][关于我]] 
+   
+   + 谢鹏，坐标成都
+   + [[http://www.cqupt.edu.cn/cqupt/index.shtml][重庆邮电大学]] 读完了研究生， =2015.7~2016.7= 毕业后去华为成研所开
+     了一年的会， =2016.8~2017.8= 在一家 [[https://www.riversecurity.com.cn/][小公司]] 做云相关的工作。
+     =2017.9= 开始到了 [[http://www.yuqiinf.com/][富华宇祺]] 。
+   + 喜欢Coding，主要写过 =C/C++, elisp, python, ruby= 。当前主要写C语
+     言。
+   + 喜欢折腾 [[https://www.gnu.org/software/emacs/][Emacs]] ，这个静态blog就是使用 Emacs搭建起来的。
+   + 喜欢运动，打篮球、游泳、跑步……
+   + 这是 [[mailto:pengpengxppri@sina.com][邮箱]]

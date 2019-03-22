@@ -1,0 +1,28 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 使用rtags和emacs来查看C代码
+
+
+* rtags使用其它机器中的index
+  我的笔记本性能不行，可以在性能不错的机器上做好index然后copy出来使用。
+  参考 [[https://github.com/Andersbakken/rtags/blob/master/tests/sbroot/sbroot_test_help.md][这里]] 。
+  
+  在其它机器上这样做：
+  #+BEGIN_SRC sh
+mkdir -p ~/.rtags/rtags_db
+
+rdm --socket-file=~/.rtags/rdm_socket --no-rc --data-dir=~/.rtags/rtags_db --log-file=~/.rtags/rtags.log --crash-dump-file=crash_dump.txt --job-count=12 --watch-sources-only --sandbox-root=~/
+
+rc --socket-file ~/.rtags/rdm_socket -J .
+  #+END_SRC
+
+  
+  然后把对应的db拷过来。在本机上也这样启动rdm，然后本机也需要使用rc再
+  来index一下。不过这时index就可以重用了。
+  #+BEGIN_SRC sh
+rdm --socket-file=~/.rtags/rdm_socket --no-rc --data-dir=~/.rtags/rtags_db --log-file=~/.rtags/rtags.log --crash-dump-file=crash_dump.txt --job-count=12 --watch-sources-only --sandbox-root=~/
+
+rc --socket-file ~/.rtags/rdm_socket -J .
+  #+END_SRC

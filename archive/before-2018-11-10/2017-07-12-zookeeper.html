@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>zookeeper笔记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">zookeeper笔记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6aae4b0">1. 简介</a></li>
+<li><a href="#org7979440">2. 安装</a></li>
+<li><a href="#org0cfbd17">3. hello, World</a></li>
+<li><a href="#org1279d72">4. 设计理念和架构</a>
+<ul>
+<li><a href="#orga15ce86">4.1. 设计目标</a></li>
+<li><a href="#org215c2f6">4.2. 数据模型和分层命名空间</a></li>
+<li><a href="#orga4684dd">4.3. 节点和临时节点</a></li>
+<li><a href="#orga5a4bc0">4.4. 条件更新和watch</a></li>
+<li><a href="#org570435c">4.5. 保证</a></li>
+<li><a href="#orgccdad7a">4.6. 简单的API</a></li>
+</ul>
+</li>
+<li><a href="#org0654ca7">5. 实现</a></li>
+<li><a href="#orgdaf9ffd">6. 可靠性</a></li>
+<li><a href="#org7f2bed5">7. kazoo</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6aae4b0" class="outline-2">
+<h2 id="org6aae4b0"><span class="section-number-2">1</span> 简介</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+其官方简介直译过来就是：zookeeper是用于分布式应用程序的分布式协作的
+高性能服务。
+</p>
+
+<p>
+当前我们主要使用它来同步配置文件。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7979440" class="outline-2">
+<h2 id="org7979440"><span class="section-number-2">2</span> 安装</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+无需安装，<a href="https://zookeeper.apache.org/releases.html">这里</a> 下载解压即可。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0cfbd17" class="outline-2">
+<h2 id="org0cfbd17"><span class="section-number-2">3</span> hello, World</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+进入解压目录，新建配置文件 <code>conf/zoo.cfg</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-conf-space">    <span style="color: #ff8700;">tickTime=2000</span>
+    <span style="color: #ff8700;">dataDir=/var/lib/zookeeper</span>
+    <span style="color: #ff8700;">clientPort=2181</span>
+</pre>
+</div>
+<ol class="org-ol">
+<li><code>tickTime</code> 是zookeeper的基本时间单元。</li>
+<li><code>dataDir</code> 用来存放内存中数据库的快照。另外，除非另外指定，它还用
+来存放数据库更新时的事务日志。</li>
+<li><code>clientPort</code> 用来监听客户端连接的端口。</li>
+</ol>
+
+<p>
+现在可以启动server：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    bin/zkServer.sh start
+</pre>
+</div>
+
+<p>
+在本机可以这样连接zookeeper：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    bin/zkCli.sh -server 127.0.0.1:2181
+</pre>
+</div>
+
+<p>
+连接上以后，会进入到一zk的shell中。help可以查询：
+</p>
+<pre class="example">
+    [zk: 127.0.0.1:2181(CONNECTED) 10] help
+    ZooKeeper -server host:port cmd args
+            stat path [watch]
+            set path data [version]
+            ls path [watch]
+            delquota [-n|-b] path
+            ls2 path [watch]
+            setAcl path acl
+            setquota -n|-b val path
+            history
+            redo cmdno
+            printwatches on|off
+            delete path [version]
+            sync path
+            listquota path
+            rmr path
+            get path [watch]
+            create [-s] [-e] path data acl
+            addauth scheme auth
+            quit
+            getAcl path
+            close
+            connect host:port
+    [zk: 127.0.0.1:2181(CONNECTED) 11]
+</pre>
+
+<p>
+查询一下看当前存了啥：
+</p>
+<pre class="example">
+    [zk: 127.0.0.1:2181(CONNECTED) 13] ls /
+    [zookeeper]
+</pre>
+
+<p>
+现在啥也没有。下面我们新建一个znode然后进行一些查询动作：
+</p>
+<pre class="example">
+    [zk: 127.0.0.1:2181(CONNECTED) 14] create /zk_test my_data
+    Created /zk_test
+    [zk: 127.0.0.1:2181(CONNECTED) 15] ls /
+    [zookeeper, zk_test]
+    [zk: 127.0.0.1:2181(CONNECTED) 16] get /zk_test
+    my_data
+    cZxid = 0xb
+    ctime = Wed Jul 12 17:00:18 CST 2017
+    mZxid = 0xb
+    mtime = Wed Jul 12 17:00:18 CST 2017
+    pZxid = 0xb
+    cversion = 0
+    dataVersion = 0
+    aclVersion = 0
+    ephemeralOwner = 0x0
+    dataLength = 7
+    numChildren = 0
+    [zk: 127.0.0.1:2181(CONNECTED) 17] set /zk_test my_data_2
+    cZxid = 0xb
+    ctime = Wed Jul 12 17:00:18 CST 2017
+    mZxid = 0xc
+    mtime = Wed Jul 12 17:00:34 CST 2017
+    pZxid = 0xb
+    cversion = 0
+    dataVersion = 1
+    aclVersion = 0
+    ephemeralOwner = 0x0
+    dataLength = 9
+    numChildren = 0
+    [zk: 127.0.0.1:2181(CONNECTED) 18] get /zk_test
+    my_data_2
+    cZxid = 0xb
+    ctime = Wed Jul 12 17:00:18 CST 2017
+    mZxid = 0xc
+    mtime = Wed Jul 12 17:00:34 CST 2017
+    pZxid = 0xb
+    cversion = 0
+    dataVersion = 1
+    aclVersion = 0
+    ephemeralOwner = 0x0
+    dataLength = 9
+    numChildren = 0
+    [zk: 127.0.0.1:2181(CONNECTED) 19]
+</pre>
+
+<p>
+然后我从另一台安装了zookeeper的机器中连接进来，执行查询操作：
+</p>
+<pre class="example">
+    xxx@box:/tmp/zookeeper-3.4.10$ bin/zkCli.sh -server 192.168.57.1:2181
+    [zk: 192.168.57.1:2181(CONNECTED) 0] ls /
+    [zookeeper, zk_test]
+    [zk: 192.168.57.1:2181(CONNECTED) 1] get /zk_test
+    my_data_2
+    cZxid = 0xb
+    ctime = Wed Jul 12 17:00:18 CST 2017
+    mZxid = 0xc
+    mtime = Wed Jul 12 17:00:34 CST 2017
+    pZxid = 0xb
+    cversion = 0
+    dataVersion = 1
+    aclVersion = 0
+    ephemeralOwner = 0x0
+    dataLength = 9
+    numChildren = 0
+    [zk: 192.168.57.1:2181(CONNECTED) 2]
+</pre>
+<p>
+可以发现，此时这台机器上也可以查到刚才我们新加的节点信息。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1279d72" class="outline-2">
+<h2 id="org1279d72"><span class="section-number-2">4</span> 设计理念和架构</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orga15ce86" class="outline-3">
+<h3 id="orga15ce86"><span class="section-number-3">4.1</span> 设计目标</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+zookeeper旨在给分布式的应用程序减负，可以让它们不再从头实现一遍协作
+服务。
+</p>
+
+<p>
+<b>zookeeper是简单的。</b> zookeeper允许分布式的应用程序通过一个类似于标
+准文件系统的共享式地分层命名空间来相互协作。
+</p>
+
+<p>
+这个共享的命名空间是由data registers构成的（按zookeeper的说法是：
+znodes），它们就像是文件和目录一样。和传统文件系统不同，zookeeper的
+数据是存在内存中的，这使得它可以实现高吞吐量和低延迟。
+</p>
+
+<p>
+zookeeper保证了高性能、高可靠性和严格的顺序访问。高性能是表现在它可
+以用在大型的分布式系统中。高可靠性是指它可以避免单点故障的情况出现。
+严格的顺序执行使得客户端可以执行复杂的同步原语操作。
+</p>
+
+<p>
+<b>zookeeper是自冗余的</b> 。就像其它分布式程序一样，zookeeper也可以冗余
+地分布在多个物理主机上。如下图：
+</p>
+
+
+<div class="figure">
+<p><img src="./images/zookeeper-service.png" alt="zookeeper-service.png" />
+</p>
+</div>
+
+<p>
+组成zookeeper服务的每一个server都知道所有的servers。它们共同维护了一
+张内存中状态映象，还维护了存放在磁盘中的事务日志和快照。只要大多数的
+server是可用的，zookeeper的服务就是可用的。
+</p>
+
+<p>
+客户只和一个server连接。client和server之前，通过一个tcp连接来发送请
+求、接收回复、接收事件以及发送心跳。如果client和一个server的连接断掉，
+它会和另外的server建立连接。
+</p>
+
+<p>
+<b>zookeeper是有序的</b> 。它用一个数字标记每一个更新，这些数字可以反映所
+有zookeeper事务的顺序。后续操作可以使用这个顺序来实现更高级别的抽象，
+比如同步原语。
+</p>
+
+<p>
+<b>zookeeper是很快的</b> 。特别是对于主要是读的操作。zookeeper应用程序在
+成千上万台机器上运行，读操作多写操作更多进，它的性能最好，大概能达到
+10:1 的比例。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org215c2f6" class="outline-3">
+<h3 id="org215c2f6"><span class="section-number-3">4.2</span> 数据模型和分层命名空间</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+命名空间就像传统一文件系统一样。每个节点都是一个path。
+</p>
+
+
+<div class="figure">
+<p><img src="./images/zookeeper-namespace.png" alt="zookeeper-namespace.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga4684dd" class="outline-3">
+<h3 id="orga4684dd"><span class="section-number-3">4.3</span> 节点和临时节点</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+不像传统文件系统，每个zookeeper节点上都可以既有数据，也有子节点。这
+就好像有一个文件系统允许文件也是目录一样。（zookeeper设计来是为了存
+协作数据的：状态信息，配置文件，位置信息等，所以在每个节点上存的数
+据应该不会太多，在b到kb范围。）。这里我们直接使用znode来表示
+zookeeper中的数据节点。
+</p>
+
+<p>
+znodes维护一个统计结构，包括数据修改，ACL修改和时间戳的版本号。每次
+znode的数据改变了，版本号都会增加。每次client取回数据时，它也会取回
+数据的版本号。
+</p>
+
+<p>
+存在节点中的数据是自动进行读和写的。读会取出关联到这个节点上所有数
+据，写则覆盖它上面的所有数据。每个节点都有访问控制列表（Access
+Control List），它决定了谁能做什么操作。
+</p>
+
+<p>
+zookeeper还支持临时节点的概念。这些临时节点和创建它们的会话同时存在，
+当会话结束，它们就被删除了。由于这样的特性，临时节点不能有子节点。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga5a4bc0" class="outline-3">
+<h3 id="orga5a4bc0"><span class="section-number-3">4.4</span> 条件更新和watch</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+zookeeper还支持watch的概念。client可以设置对一个节点进行watch。当一
+个节点发生变化时，一个watch可能被触发或者删除。当一个watch被触发，
+client将会收到节点变化的数据包。如果client和server之前的连接断掉了，
+client会收到一个本地的提醒。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org570435c" class="outline-3">
+<h3 id="org570435c"><span class="section-number-3">4.5</span> 保证</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+zookeeper很快也很简单。而它的目标是做为许多更加复杂的服务的基础。所
+以它一定能保证下面的内容：
+</p>
+<ol class="org-ol">
+<li>顺序一致性：从client发来的更新一定会按照它们发送的顺序来执行。</li>
+<li>原子性：更新要么成功要么失败，没有其它结果。</li>
+<li>单一系统快照：client不管连接的哪个server，都应该看到的是同一个
+service。</li>
+<li>可靠性：一旦一个更新被应用，它就应该一直是这个状态，直到下一次某
+个client再次更新它。</li>
+<li>及时性：client在一定时限内，都可以访问到最新的系统。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgccdad7a" class="outline-3">
+<h3 id="orgccdad7a"><span class="section-number-3">4.6</span> 简单的API</h3>
+<div class="outline-text-3" id="text-4-6">
+<p>
+简单是zookeeper的设计思想，所以它只是提供了下面这些操作：
+</p>
+
+<ul class="org-ul">
+<li>create：在树的某个位置创建节点。</li>
+<li>delete：删除一个节点</li>
+<li>exists：测试一个节点是否存在</li>
+<li>get data：从节点中读取断数据</li>
+<li>set data：把数据写到节点中</li>
+<li>get children：取回一个节点的了节点集合</li>
+<li>sync：等待数据传播</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0654ca7" class="outline-2">
+<h2 id="org0654ca7"><span class="section-number-2">5</span> 实现</h2>
+<div class="outline-text-2" id="text-5">
+
+<div class="figure">
+<p><img src="./images/zookeeper-components.png" alt="zookeeper-components.png" />
+</p>
+</div>
+
+<p>
+上图显示了zookeeper比较高层面的组件。
+</p>
+
+<p>
+除了请求处理器，其它所有组成zookeeper服务的server都会保留一份每个组
+件的拷贝。（这句话没看懂）
+</p>
+
+<p>
+图中的replicated database存放在内存中，它包含了所有的数据（整颗树）。
+为了可恢复性，所有的更新都记录在磁盘上。而所有写地操作都会先序列化到
+磁盘再应用到内存中的数据库中。
+</p>
+
+<p>
+每个server都可以为client服务，每个client都可以任意连接到一个server来
+请求数据。读请求直接就请求到每个server内存中的数据库。任何更改服务状
+态的请求和写请求都由一个叫 <code>agreement protocol</code> 来处理。
+</p>
+
+<p>
+做为 <code>agreement protocol</code> 的一部分：所有从客户端发来的写请求都直接发
+送给了单个server，这个server叫loader。剩下的servers都叫followers，它
+们接收来自leader的消息，并同意消息传递。消息传递层来处理发生失败时
+leader的选择，它可能会重新选择一个leader，然后它还负责给新的leader同
+步followers。
+</p>
+
+<p>
+zookeeper使用一个自定义的原子消息协议。正因为消息传递层是原子的，
+zookeeper能保证本地的副本不会出现分叉。当leader收到一个写请求时，它
+会计算出当这个写请求将要被应用时系统的状态，然后把它转化为捕获请状态
+的事务。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdaf9ffd" class="outline-2">
+<h2 id="orgdaf9ffd"><span class="section-number-2">6</span> 可靠性</h2>
+<div class="outline-text-2" id="text-6">
+
+<div class="figure">
+<p><img src="./images/zookeeper-reliability.png" alt="zookeeper-reliability.png" />
+</p>
+</div>
+
+<p>
+The are a few important observations from this graph. First, if
+followers fail and recover quickly, then ZooKeeper is able to sustain
+a high throughput despite the failure. But maybe more importantly,
+the leader election algorithm allows for the system to recover fast
+enough to prevent throughput from dropping substantially. In our
+observations, ZooKeeper takes less than 200ms to elect a new leader.
+Third, as followers recover, ZooKeeper is able to raise throughput
+again once they start processing requests.
+</p>
+
+
+<p>
+上图可以看出：
+</p>
+<ol class="org-ol">
+<li>如果followers发生错误，然后很快又恢复了，zookeeper还是能保持一个
+很高的吞吐量。</li>
+<li>更重要的，leader选举算法可以允许系统很快的恢复。这样可以保证系统
+吞吐量不会因为leader发生错误而很快下降。据我们观察来看，zookeeper
+在200ms以内就可以选出一个新的leader出来。</li>
+<li>当一个follower恢复后，zookeeper又可以恢复原来的吞吐量。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org7f2bed5" class="outline-2">
+<h2 id="org7f2bed5"><span class="section-number-2">7</span> kazoo</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+kazoo is python bindings for zookeeper.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">from</span> kazoo.client <span style="color: #a1db00;">import</span> KazooClient
+    <span style="color: #a1db00;">import</span> logging
+    logging.basicConfig()
+
+    <span style="color: #ff8700;">zk</span> = KazooClient(hosts=<span style="color: #ff4ea3;">'127.0.0.1:2181'</span>)
+    zk.start()
+
+    <span style="color: #00d7af;">@zk.ChildrenWatch</span>(<span style="color: #ff4ea3;">"/my/favorite/node"</span>)
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">watch_children</span>(children):
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"From children watchs Children are now: %s"</span> % children)
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Above function called immediately, and from then on</span>
+
+    <span style="color: #00d7af;">@zk.DataWatch</span>(<span style="color: #ff4ea3;">"/my/favorite"</span>)
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">watch_node</span>(data, stat):
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"From data watchs Version: %s, data: %s"</span> % (stat.version, data.decode(<span style="color: #ff4ea3;">"utf-8"</span>)))
+
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Ensure a path, create if necessary</span>
+    zk.ensure_path(<span style="color: #ff4ea3;">"/my/favorite"</span>)
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Create a node with data</span>
+    <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> zk.exists(<span style="color: #ff4ea3;">"/my/favorite"</span>):
+        zk.create(<span style="color: #ff4ea3;">"/my/favorite/node"</span>, b<span style="color: #ff4ea3;">"a value"</span>)
+
+    <span style="color: #a1db00;">if</span> zk.exists(<span style="color: #ff4ea3;">"/my/favorite"</span>):
+        <span style="color: #ff8700;">data</span>, <span style="color: #ff8700;">stat</span> = zk.get(<span style="color: #ff4ea3;">"/my/favorite"</span>)
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"Version: %s, data: %s"</span> % (stat.version, data.decode(<span style="color: #ff4ea3;">"utf-8"</span>)))
+
+        <span style="color: #ff8700;">children</span> = zk.get_children(<span style="color: #ff4ea3;">"/my/favorite"</span>)
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"There are %s children with names %s"</span> % (<span style="color: #d18aff;">len</span>(children), children))
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">update the node with data</span>
+        zk.<span style="color: #d18aff;">set</span>(<span style="color: #ff4ea3;">"/my/favorite"</span>, b<span style="color: #ff4ea3;">"some data"</span>)
+
+        <span style="color: #ff8700;">data</span>, <span style="color: #ff8700;">stat</span> = zk.get(<span style="color: #ff4ea3;">"/my/favorite"</span>)
+        <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"Version: %s, data: %s"</span> % (stat.version, data.decode(<span style="color: #ff4ea3;">"utf-8"</span>)))
+
+
+    zk.ensure_path(<span style="color: #ff4ea3;">"/my/favorite/node/test"</span>)
+    <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> zk.exists(<span style="color: #ff4ea3;">'/my/favorite/node/test'</span>):
+        zk.create(<span style="color: #ff4ea3;">"/my/favorite/node/test"</span>, b<span style="color: #ff4ea3;">"a test value"</span>)
+
+    zk.delete(<span style="color: #ff4ea3;">"/my/favorite/node"</span>, recursive=<span style="color: #5fafd7;">True</span>)
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

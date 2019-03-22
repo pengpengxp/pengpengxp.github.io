@@ -1,0 +1,497 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+Title: Shell script wiki
+
+* loop
+  下面的例子里，第一个 =SERVICE_NAME= 是一个数组。每二个我也不知道是啥，
+  反正可以用。推荐使用第一种方式。
+  #+BEGIN_SRC sh :results output
+SERVICE_NAME=(api ess collect registry ras-cluster)
+loop() {
+    echo "Clean RCS service."
+
+    for service in "${SERVICE_NAME[@]}"
+    do
+        echo $service
+    done
+
+}
+
+loop
+
+echo "######"
+echo  ${SERVICE_NAME[1]}
+
+echo "${SERVICE_NAME[@]}"
+SERVICE="api     ess    collect registry ras-cluster"
+for i in $SERVICE; do
+    echo $i/bin
+done
+  #+END_SRC
+
+  #+RESULTS:
+  #+begin_example
+    Clean RCS service.
+    api
+    ess
+    collect
+    registry
+    ras-cluster
+    ######
+    ess
+    api ess collect registry ras-cluster
+    api/bin
+    ess/bin
+    collect/bin
+    registry/bin
+    ras-cluster/bin
+  #+end_example
+
+* 老一点的shell中的loop
+  使用busybox时，需要这样做：
+  #+BEGIN_SRC sh
+for i in `seq 1 5`;do echo $i;done  
+  #+END_SRC
+
+  #+RESULTS:
+  | 1 |
+  | 2 |
+  | 3 |
+  | 4 |
+  | 5 |
+
+* shell脚本中的判断
+  下面的版本应该选择哪一个：
+  #+BEGIN_SRC sh
+    has_gunzip=1
+    if [ $has_gunzip = 1 ]; then
+        echo 'yes'
+    else
+        echo 'no'
+    fi
+
+    if [[ $has_gunzip = 1 ]]; then
+        echo 'yes'
+    else
+        echo 'no'
+    fi
+
+    if [[ $has_gunzip == 1 ]]; then
+        echo 'yes'
+    else
+        echo 'no'
+    fi
+
+    if [ $has_gunzip == 1 ]; then
+        echo 'yes'
+    else
+        echo 'no'
+    fi
+
+    if [ "$has_gunzip" == 1 ]; then
+        echo 'yes'
+    else
+        echo 'no'
+    fi
+  #+END_SRC
+  
+  看下下面的例子：
+  #+BEGIN_EXAMPLE
+    bash-4.4$ x=1
+    bash-4.4$ [ $x = 1 ] && echo y
+    y
+    bash-4.4$ unset x
+    bash-4.4$ [ $x = 1 ] && echo y
+    bash: [: =: unary operator expected
+    bash-4.4$ [[ $x = 1 ]] && echo y
+    bash-4.4$ [ $x = 1 ] && echo y
+    bash: [: =: unary operator expected
+    bash-4.4$ [ "$x" = 1 ] && echo y
+    bash-4.4$ x=1
+    bash-4.4$ [ "$x" = 1 ] && echo y
+    y
+    bash-4.4$ [ $x = 1 ] && echo y
+    y
+    bash-4.4$ [[ $x = 1 ]] && echo y
+    y
+    bash-4.4$ [[ "$x" = 1 ]] && echo y
+    y
+    bash-4.4$
+
+  #+END_EXAMPLE
+
+  原因：在很老的bash上只有
+  #+BEGIN_SRC sh
+    [ $x = 1 ]
+    #+END_SRC
+  这种单个中括号的。如果里面判断的变量未定义，直接使用这种方式会报错。
+  需要这样
+  #+BEGIN_SRC sh
+    [ "$x" = 1 ]
+  #+END_SRC
+
+  新的bash支持
+  #+BEGIN_SRC sh
+    [[ $x=1 ]]
+  #+END_SRC
+  这种，它在x没有定义时也不会报错。
+  
+  至于一个等号还是两个。好像是都可以的。
+
+  *所以推荐使用：*
+  #+BEGIN_SRC sh
+    if [ "$has_gunzip" = 1 ]; then
+        echo 'yes'
+    else
+        echo 'no'
+    fi
+  #+END_SRC
+  这种方式。兼容性最好。
+
+  下面是bash的man page：
+  #+BEGIN_EXAMPLE
+    string1 == string2
+    string1 = string2
+    True if the strings are equal.  = should be used with the test command for POSIX conformance.  When used with the [[ command, this performs pattern matching as described above (Compound Com- mands).
+
+
+
+
+    test expr
+    [ expr ]
+           Return a status of 0 (true) or 1 (false) depending on the evaluation of the conditional expression expr.  Each operator and operand must be a separate argument.  Expressions are composed of the
+           primaries described above under CONDITIONAL EXPRESSIONS.  test does not accept any options, nor does it accept and ignore an argument of -- as signifying the end of options.
+
+           Expressions  may be combined using the following operators, listed in decreasing order of precedence.  The evaluation depends on the number of arguments; see below.  Operator precedence is used
+           when there are five or more arguments.
+           ! expr True if expr is false.
+           ( expr )
+                  Returns the value of expr.  This may be used to override the normal precedence of operators.
+           expr1 -a expr2
+                  True if both expr1 and expr2 are true.
+           expr1 -o expr2
+                  True if either expr1 or expr2 is true.
+
+           test and [ evaluate conditional expressions using a set of rules based on the number of arguments.
+
+           0 arguments
+                  The expression is false.
+           1 argument
+                  The expression is true if and only if the argument is not null.
+           2 arguments
+                  If the first argument is !, the expression is true if and only if the second argument is null.  If the first argument is one of the unary conditional operators listed above under  CONDI-
+                  TIONAL EXPRESSIONS, the expression is true if the unary test is true.  If the first argument is not a valid unary conditional operator, the expression is false.
+           3 arguments
+                  The following conditions are applied in the order listed.  If the second argument is one of the binary conditional operators listed above under CONDITIONAL EXPRESSIONS, the result of the
+                  expression is the result of the binary test using the first and third arguments as operands.  The -a and -o operators are considered binary operators when there are three arguments.   If
+                  the first argument is !, the value is the negation of the two-argument test using the second and third arguments.  If the first argument is exactly ( and the third argument is exactly ),
+                  the result is the one-argument test of the second argument.  Otherwise, the expression is false.
+           4 arguments
+                  If the first argument is !, the result is the negation of the three-argument expression composed of the remaining arguments.  Otherwise, the expression is parsed and evaluated  according
+                  to precedence using the rules listed above.
+           5 or more arguments
+                  The expression is parsed and evaluated according to precedence using the rules listed above.
+
+           When used with test or [, the < and > operators sort lexicographically using ASCII ordering.
+
+
+
+
+
+           [[ expression ]]
+                  Return  a  status of 0 or 1 depending on the evaluation of the conditional expression expression.  Expressions are composed of the primaries described below under CONDITIONAL EXPRESSIONS.  Word
+                  splitting and pathname expansion are not performed on the words between the [[ and ]]; tilde expansion, parameter and variable expansion, arithmetic  expansion,  command  substitution,  process
+                  substitution, and quote removal are performed.  Conditional operators such as -f must be unquoted to be recognized as primaries.
+
+                  When used with [[, the < and > operators sort lexicographically using the current locale.
+
+                  When  the == and != operators are used, the string to the right of the operator is considered a pattern and matched according to the rules described below under Pattern Matching, as if the ext-
+                  glob shell option were enabled.  The = operator is equivalent to ==.  If the nocasematch shell option is enabled, the match is performed without regard to the  case  of  alphabetic  characters.
+                  The  return  value  is  0  if  the string matches (==) or does not match (!=) the pattern, and 1 otherwise.  Any part of the pattern may be quoted to force the quoted portion to be matched as a
+                  string.
+
+                  An additional binary operator, =~, is available, with the same precedence as == and !=.  When it is used, the string to the right of the operator is considered an  extended  regular  expression
+                  and  matched  accordingly  (as  in  regex(3)).   The return value is 0 if the string matches the pattern, and 1 otherwise.  If the regular expression is syntactically incorrect, the conditional
+                  expression's return value is 2.  If the nocasematch shell option is enabled, the match is performed without regard to the case of alphabetic characters.  Any part of the pattern may  be  quoted
+                  to  force the quoted portion to be matched as a string.  Bracket expressions in regular expressions must be treated carefully, since normal quoting characters lose their meanings between brack-
+                  ets.  If the pattern is stored in a shell variable, quoting the variable expansion forces the entire pattern to be matched as a  string.   Substrings  matched  by  parenthesized  subexpressions
+                  within  the  regular expression are saved in the array variable BASH_REMATCH.  The element of BASH_REMATCH with index 0 is the portion of the string matching the entire regular expression.  The
+                  element of BASH_REMATCH with index n is the portion of the string matching the nth parenthesized subexpression.
+
+                  Expressions may be combined using the following operators, listed in decreasing order of precedence:
+
+                  ( expression )
+                         Returns the value of expression.  This may be used to override the normal precedence of operators.
+                  ! expression
+                         True if expression is false.
+                  expression1 && expression2
+                         True if both expression1 and expression2 are true.
+                  expression1 || expression2
+                         True if either expression1 or expression2 is true.
+
+                  The && and || operators do not evaluate expression2 if the value of expression1 is sufficient to determine the return value of the entire conditional expression.
+  #+END_EXAMPLE
+  
+  [[https://unix.stackexchange.com/questions/16109/bash-double-equals-vs-eq/16115#16115][这里]] 有更细的说明：
+  #+BEGIN_EXAMPLE
+    To elaborate on bollovan's answer...
+
+    There is no >= or <= comparison operator for strings. But you could
+    use them with the ((...)) arithmetic command to compare integers.
+
+    You can also use the other string comparison operators (==, !=, <, >,
+    but not =) to compare integers if you use them inside ((...)).
+
+    Examples
+
+    Both [[ 01 -eq 1 ]] and (( 01 == 1 )) do integer comparisons. Both are true.
+    Both [[ 01 == 1 ]] and [ 01 = 1 ] do string comparisons. Both are false.
+    Both (( 01 -eq 1 )) and (( 01 = 1 )) will return an error.
+    Note: The double bracket syntax [[...]] and the double parentheses syntax ((...)) are not supported by all shells.
+  #+END_EXAMPLE
+** 总结
+   以string的方式来对比的话，下面几种方式是相同的，一个中括号和两个中
+   括号没有区别。一个和两个等号也没有区别：
+   #+BEGIN_SRC sh :results output
+     echo '**************** [[ 01 == 1 ]] ****************'
+     if [[ 01 == 1 ]]; then
+         echo'True'
+     else
+         echo 'False'       
+     fi
+
+     echo '**************** [[ 01 = 1 ]] ****************'
+     if [[ 01 = 1 ]]; then
+         echo'True'
+     else
+         echo 'False'       
+     fi
+
+     echo '**************** [ 01 == 1 ] ****************'
+     if [ 01 == 1 ]; then
+         echo'True'
+     else
+         echo 'False'       
+     fi
+
+     echo '**************** [ 01 = 1 ] ****************'
+     if [ 01 = 1 ]; then
+         echo 'True'
+     else
+         echo 'False'       
+     fi
+
+     echo '**************** [ 1 == 1 ] ****************'
+     if [ 1 == 1 ]; then
+         echo 'True'
+     else
+         echo 'False'       
+     fi
+   #+END_SRC
+   #+RESULTS:
+   #+begin_example
+   **************** [[ 01 == 1 ]] ****************
+   False
+   **************** [[ 01 = 1 ]] ****************
+   False
+   **************** [ 01 == 1 ] ****************
+   False
+   **************** [ 01 = 1 ] ****************
+   False
+   **************** [ 1 == 1 ] ****************
+   True
+#+end_example
+
+   不是所有的shell都支持两个中括号的形式：
+   #+BEGIN_SRC sh
+     [[ x=1 ]]
+   #+END_SRC
+
+   以数值来比，就没有一个等号说法：
+   #+BEGIN_SRC sh :results output
+     if (( 1 == 1 )); then
+         echo 'True'
+     else
+         echo 'False'
+     fi
+
+     if [[ 1 -eq 1 ]]; then
+         echo 'True'
+     else
+         echo 'False'
+     fi
+   #+END_SRC
+
+   #+RESULTS:
+   : True
+   : True
+
+   最后，多看下这个：
+   #+BEGIN_EXAMPLE
+     Both [[ 01 -eq 1 ]] and (( 01 == 1 )) do integer comparisons. Both are true.
+     Both [[ 01 == 1 ]] and [ 01 = 1 ] do string comparisons. Both are false.
+     Both (( 01 -eq 1 )) and (( 01 = 1 )) will return an error.
+   #+END_EXAMPLE
+
+* shell中的判断有时候可以不用写if，直接一行搞定
+  判断是否是file还是dir
+  #+BEGIN_SRC sh
+    [ -f /tmp ] && echo "yes it is a file" || echo "no it is not a file"
+    [ -d /tmp ] && echo "yes it's a directory" || echo "no is's not a directory"
+  #+END_SRC
+
+  #+RESULTS:
+  | no  | it   | is | not       | a | file |
+  | yes | it's | a  | directory |   |      |
+
+* 把标准输出给多个管道做为标准输入
+  zsh下可以这样：
+  #+BEGIN_SRC sh
+    touch /tmp/1 /tmp/2
+    ls /tmp/ > >(grep 1) > >(grep 2)
+  #+END_SRC
+
+* shell中去掉前缀和后缀
+  #+BEGIN_SRC sh
+    foo=/Users/pengpengxp/Library/Application\ Support/Karabiner/private.xml
+    HOME=`echo ~`
+    suffix="private.xml"
+
+    foo=${foo#$HOME/}
+    foo=${foo%$suffix}
+
+    echo $foo
+  #+END_SRC
+
+  #+RESULTS:
+  : Library/Application Support/Karabiner/
+
+* 数组
+  #+BEGIN_SRC sh
+    FILES=(
+        ~/.bashrc
+        ~/.peng_bashrc
+        ~/.zshrc
+        ~/.mutt
+        ~/.muttrc
+        ~/.slate
+        ~/.ssh
+        ~/.stardict
+        ~/.tigrc
+        ~/.tmux.conf
+        ~/.vimrc
+        ~/.zsh
+    )
+
+    for f in "${FILES[@]}"
+    do
+        echo "================backup $f================"
+    done
+  #+END_SRC
+
+  #+RESULTS:
+
+  读取数组的一般格式是这样的：
+  #+BEGIN_EXAMPLE
+    ${array_name[index]}
+  #+END_EXAMPLE
+  #+BEGIN_SRC sh :results outputs :tangle /tmp/test_from_org_tangle.sh :exports both
+    a=(A B C D)
+
+    echo ${a[0]}
+    echo ${a[1]}
+    echo ${a[2]}
+    echo ${a[3]}
+  #+END_SRC
+
+  #+RESULTS:
+  | A |
+  | B |
+  | C |
+  | D |
+
+  使用 =@= 或 =*= 可以获取数组中的所有元素：
+  #+BEGIN_SRC sh :results outputs :tangle /tmp/test_from_org_tangle.sh :exports both
+    a=(A B C D)
+
+    echo ${a[@]}
+    echo ${a[*]}
+  #+END_SRC
+
+  #+RESULTS:
+  | A | B | C | D |
+  | A | B | C | D |
+
+  获取数组长度的方法与获取字符串长度的方法相同:
+  #+BEGIN_SRC sh :results outputs :tangle /tmp/test_from_org_tangle.sh :exports both
+
+    a=(A B C D)
+
+    echo ${#a[@]}
+    echo ${#a[*]}
+  #+END_SRC
+
+  #+RESULTS:
+  | 4 |
+  | 4 |
+
+* 得到脚本存放的目录
+  脚本目录加入 =PATH= 变量后，可以在任何地方运行脚本。那么怎么得到脚本
+  存放的地址呢？ =$0= 里面其实就存放是脚本的绝对地址啦。把下面脚本加入
+  =PATH= 路径中的一处，然后在任何地方试试？都会输出脚本的绝对路径的。
+  #+BEGIN_SRC sh
+    #!/bin/bash
+
+    echo $0
+  #+END_SRC
+
+* 脚本中使用cat输入很多内容
+  下面这样的 =EOF= 可以换为其它，只要两个对应得上就可以。
+  #+BEGIN_SRC sh
+cat << EOF  > /tmp/kk
+    xiwapnefwfwajf
+EOF
+  #+END_SRC
+
+* 根据进程是否启动来作不同的处理
+  #+BEGIN_SRC sh
+#!/bin/bash
+
+
+mkdir -p ~/.rtags/rtags_db
+
+
+function run()
+{
+    echo "start rdm server."
+
+    rdm --socket-file=~/.rtags/rdm_socket \
+        --no-rc                           \
+        --data-dir=~/.rtags/rtags_db      \
+        --log-file=~/.rtags/rtags.log     \
+        --crash-dump-file=crash_dump.txt  \
+        --job-count=12                    \
+        --watch-sources-only              \
+        --sandbox-root=~/ &
+}
+
+pgrep "^rdm$" && echo "rdm is already running." && exit 1
+
+pgrep "^rdm$" || echo "start rdm server." && run
+  #+END_SRC
+
+* 方便地取得传入的参数
+  #+BEGIN_SRC sh
+option=${1:-"start"}
+if [ $option = "start" ]; then
+    echo "start"
+elif [ $option = "install" ]; then
+  echo "install"
+elif [ $option = "debug" ]; then
+    echo "debug"
+elif [ $option = "uninstall" ]; then
+    echo "uninstall"
+else
+  echo "unknown"
+  exit 127
+fi
+  #+END_SRC

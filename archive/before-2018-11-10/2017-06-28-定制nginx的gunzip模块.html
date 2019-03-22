@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>定制nginx的gunzip模块</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">定制nginx的gunzip模块</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#gunzip">1. gunzip and gzip</a></li>
+<li><a href="#org61ccf71">2. 特殊情况的下定制nginx的gunzip模块</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org16e1225" class="outline-2">
+<h2 id="gunzip"><a id="org16e1225"></a><span class="section-number-2">1</span> gunzip and gzip</h2>
+<div class="outline-text-2" id="text-gunzip">
+<div class="org-src-container">
+<pre class="src src-artist">           +---------------------------+        (3)        +---------------------+
+           |                           |&lt;------------------|                     |
+           |   Host 2: Nginx proxy     |                   |  Host 3: Upstream   |
+           |                           |------------------&gt;|                     |
+           +---------------------------+        (2)        +---------------------+
+                |                 ^                
+            (4) |                 | (1)            
+                v                 |     
+           +---------------------------+
+           |                           |
+           |   Host 2: Client          |
+           |                           |
+           +---------------------------+
+</pre>
+</div>
+<ul class="org-ul">
+<li>gzip模块针对上图中的 (4) 。即返回给client的时候进行压缩。</li>
+<li>gunzip模块针对 (4) 。返回给client的时候，如果client是老式的不支持
+解析压缩数据的客户<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>。把这个开关打开后，Host 2中的
+nginx会把数据解压后再返回给client。如果client支持解压gzip文件
+<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>，则Host 2在第 (4) 步的时候不会进行解压。</li>
+<li class="on"><code>[X]</code> gzip开启后，第 (2) 步会不会进行压缩？这一步进不进行压缩要考虑两方面。
+<ul class="org-ul">
+<li><p>
+Nginx请求给upstream时有没有加入对应的http头
+</p>
+<pre class="example">
+        "Accept-Encoding: gzip"
+</pre></li>
+<li>Upstream支不支持压缩数据</li>
+</ul></li>
+<li class="on"><code>[X]</code> gzip开启后， (3) 压缩了以后，在第 (4) 步会不会进行二次压缩？我
+觉得应该不会了</li>
+<li class="on"><code>[X]</code> nginx的gunzip对第 (2) 步能不能生效？不会，nginx在host 2上，管
+不了host 3上的server。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org61ccf71" class="outline-2">
+<h2 id="org61ccf71"><span class="section-number-2">2</span> 特殊情况的下定制nginx的gunzip模块</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+如果有一个第三方定制模块 <code>my_module</code> ，每次upstream返回给客户的数据
+它都需要做一些加工处理。这种情况下，如果upstream返回的是压缩后的数据，
+<code>my_module</code> 处理不了。
+</p>
+
+<p>
+以 <a href="#gunzip">1</a> 的图为例，现在 <code>my_module</code> 要求upstream (3) 回的消息不能
+是zip过的。
+</p>
+
+<p>
+现在使用nginx的gunzip模块，在我们 <code>my_module</code> 模块去处理upstream的
+reponse之前对reponse先做处理，如果是zip的文件，就先unzip后再给
+=my_module=模块处理。
+</p>
+
+<p>
+支持这样的功能后，upstream可以通过压缩数据的方式减少upstream到proxy
+（内网）的网络流量<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>。
+</p>
+
+<p>
+修改点：
+</p>
+<ol class="org-ol">
+<li>编译nginx时，需要修改modules的加载顺序，使gunzip在 <code>my_module</code> 之
+前加载<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>。</li>
+<li><p>
+默认gunzip中有一个判断，如果客户发起的请求中显示有
+<code>Accept-encoding: gzip</code> 这样的http header。表示客户支持解压zip文
+件。这时默认gunzip模块不会对upstream传回来的压缩后的zip文件进行解
+压的。这不符合我们的使用要求（我们要求是zip的数据就全部都解压让我
+们的 <code>my_module</code> 处理）。于是我们修改了一下原始的gunzip模块，如果
+加载了我们的模块，则对response全部都做解压。然后再交给
+<code>my_module</code> 模块处理。
+</p>
+<div class="org-src-container">
+<pre class="src src-C">       <span style="color: #a1db00;">static</span> <span style="color: #00d7af;">ngx_int_t</span>
+       <span style="color: #ffd700;">ngx_http_gunzip_header_filter</span>(<span style="color: #00d7af;">ngx_http_request_t</span> *<span style="color: #ff8700;">r</span>)
+       {
+
+           <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">... </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+           <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>r-&gt;gzip_tested) {
+               <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">&#22312;&#36825;&#37324;&#20570;&#30340;&#21028;&#26029; </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+               <span style="color: #a1db00;">if</span> (ngx_http_gzip_ok(r) == NGX_OK) {
+                   <span style="color: #a1db00;">return</span> ngx_http_next_header_filter(r);
+               }
+
+           }
+           <span style="color: #a1db00;">else</span> <span style="color: #a1db00;">if</span> (r-&gt;gzip_ok) {
+               <span style="color: #a1db00;">return</span> ngx_http_next_header_filter(r);
+           }
+       }
+</pre>
+</div>
+<p>
+修改为：
+</p>
+<div class="org-src-container">
+<pre class="src src-C">       <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>r-&gt;gzip_tested) {
+           <span style="color: #a1db00;">if</span> (ngx_http_gzip_ok(r) == NGX_OK) {
+               <span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;">                * Always unzip the gzip stream from upstream before</span>
+<span style="color: #ff4b4b;">                * it send to RAS modules.</span>
+<span style="color: #ff4b4b;">                */</span>
+               <span style="color: #a1db00;">if</span> (r-&gt;headers_in.gunzip) {
+                   r-&gt;gzip_tested = 1;
+               }
+               <span style="color: #a1db00;">else</span> {
+                   <span style="color: #a1db00;">return</span> ngx_http_next_header_filter(r);
+               }
+           }
+
+       } <span style="color: #a1db00;">else</span> <span style="color: #a1db00;">if</span> (r-&gt;gzip_ok) {
+</pre>
+</div>
+<p>
+在结构体 <code>ngx_http_headers_in_t</code> 里面添加 <code>gunzip</code> 位。如果配置文
+件中设置了 <code>gunzip on</code> ，则它的值应不为0。
+</p>
+<div class="org-src-container">
+<pre class="src src-C">       <span style="color: #a1db00;">typedef</span> <span style="color: #a1db00;">struct</span> {
+           <span style="color: #00d7af;">ngx_list_t</span>                        <span style="color: #ff8700;">headers</span>;
+           <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">... </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+           <span style="color: #00d7af;">unsigned</span>                          <span style="color: #ff8700;">gunzip</span>:2;
+       } <span style="color: #00d7af;">ngx_http_headers_in_t</span>;
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">比如curl。</div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara">如chrome。</div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara">因为有些用户服务器可能出现cpu没满而网卡满了
+的情况。</div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara">当前默认编译时，gunzip在第三方filter模块 <code>my_module</code>
+之后。</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

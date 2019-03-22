@@ -1,0 +1,89 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+SETUPFILE: theme.setup
+
+#+Title: 结合tig使用emacs
+
+
+emacs中已经有了 =magit= =helm-ag= =counsel-ag= 等很多好用的东西了。但
+是有时候我还是推荐 [[https://github.com/jonas/tig][tig]] 这个工具。推荐理由就是一个字：快。做一些简单的
+配置后，用起来还是很不错的。
+
+* 做一点简单的配置先
+  tig可认通过edit命令直接调出编辑器来编辑对应行的文件。我希望配置成emacs
+  来编辑。默认是使用git的默认编辑器。对于tig，可以通过设置 =GIT_EDITOR=
+  环境变量来实现。把下面这句话写到 =~/.bashrc= 就可以了。
+  #+BEGIN_SRC sh
+    alias tig='GIT_EDITOR="emacsclient --no-wait" tig'
+  #+END_SRC
+
+  配置好编辑器后，在tig中直接使用 =e= 就可以调用Emacs来编辑对应文件的对
+  应行了。这样配置后，结合后面tig的各种view，可以精准地定位到文件的某行
+  然后使用emacs打开它。
+
+  默认的tig配置文件在 =~/.tigrc= ，我只做了很少一些配置：
+  #+BEGIN_EXAMPLE
+  bind generic 1 move-first-line
+  bind generic 2 move-last-line
+  bind main 1 move-first-line
+  bind main 2 move-last-line
+
+  # can exec git command
+  #bind status b !git branch
+
+  bind status r refresh
+
+  # Change grep view to be similar to `git grep` format
+  set grep-view = file-name:yes line-number:yes,interval=1 text
+  #+END_EXAMPLE
+  由于 =g= 默认绑到tig的 =grep views= 。所以我把1和2分别绑定到跳转到第一
+  行和最后一行。怎么写配置可以参考 [[http://jonas.nitro.dk/tig/tigrc.5.html][这里]] 。
+
+  接下来讲一下tig中的两个我常用的view。
+
+* grep view(g)
+  grep整个git工程。非常快。默认绑到 =g= 上。按下 =g= 后，输入 =test=
+  ，会把全部包含 =test= 的行全部找出来。
+  
+  它支持vim like的search操作。可以使用 =/= =n,N= 来在结果中继续搜索。
+  
+  我觉得它的好处是 =regexp= 是我比较熟悉的。不像有时候在打开 =helm-ag=
+  或者 =counsel-ag= ，我不知道怎么样才能正确区配。
+   
+* status view(s)
+  + =R=: refresh
+  + =u=: 在unstage和stage状态中切换，对于同一文件，
+    =unstage->staged= 会覆盖stage中的内容，应该是 =git add= 操作。
+    =staged->unstage= ，会保留 unstage状态中的内容，应该是调用了
+    =git reset HEAD <filename>=
+  + =!=: 只能作用于unstaged的modified状态的文件。 =git checkout --
+    <filename>= 。
+  + [ ] =C=: commit。但是我这样设置了编辑器后，就没法在tig中commit了。
+    还有点问题。commit还是自己用命令来搞吧。
+
+* 配置tig的补全
+  参考代码中的 =tig-completion.zsh= 文件：
+  #+BEGIN_EXAMPLE
+    #compdef tig
+    #
+    # zsh completion wrapper for tig
+    # ==============================
+    #
+    # You need to install this script to zsh fpath with tig-completion.bash.
+    #
+    # The recommended way to install this script is to copy this and tig-completion.bash
+    # to '~/.zsh/_tig' and '~/.zsh/tig-completion.bash' and
+    # then add following to your ~/.zshrc file:
+    #
+    #  fpath=(~/.zsh $fpath)
+
+
+    _tig () {
+      local e
+      e=$(dirname ${funcsourcetrace[1]%:*})/tig-completion.bash
+      if [ -f $e ]; then
+        . $e
+      fi
+    }
+  #+END_EXAMPLE
+  

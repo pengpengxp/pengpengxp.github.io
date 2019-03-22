@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>acmkdir的hello_world例子</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>acmkdir的hello_world例子</h2>
+        <p>当你开始一个新的项目时，你需要做过多的配置才能使用GNU构建系统。
+        正如 <a href="维护文档文件.html">维护文档文件</a> 中描述的，你需要安装文档。
+        还需要像 <a href="在子目录中组织你的工程.html">在子目录中组织你的工程</a> 中一样设置你的目录结构。
+        在进行永无止境的自动化的探索过程中，你可以使用'acmkdir'这个工具来自动完成这些操作。</p>
+
+        <p>在shell中敲入下面这条命令来开始使用acmkdir：
+          <pre class="code">% acmkdir hello</pre></p>
+
+        <p>'acmkdir'会要求你输入程序的名字、你的名字和邮箱地址。
+          输入完后，acmkdir会问你是否真的要继续。敲'y'。
+          然后，'acmkdir'会为你做下面的操作：</p>
+
+        <ol>
+          <li>创建hello-0.1目录和doc、m4和src子目录。</li>
+          <li>生成下面的configure.in文件：<pre class="code">AC_INIT
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(test,0.1)
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_RANLIB
+AC_OUTPUT(Makefile doc/Makefile m4/Makefile src/Makefile)</pre>
+            默认情况下，C和C++编译器都被初始化了。如果你没有计划使用C++，可以把'AC_PROG_CXX'这一行去掉。
+            你可以按照你的需要编辑该文件。
+            特别地，每次发布新版本时，你都需要更新'AM_INIT_AUTOMAKE'中的版本号（参阅 <a href="处理版本号.html">处理版本号</a> ）。
+            你还需要确保在'AC_OUTPUT'中列出子目录中的所有Makefile.am。</li>
+          <li>在顶层目录和doc、m4和src目录中都放入样板Makefile.am 。顶层的Makefile.Automake包括：
+            <pre class="codfe">EXTRA_DIST = reconf configure
+SUBDIRS = m4 doc src</pre>
+          在src和doc子目录中的Makefile.am是空的。在m4中的Makefile.am包含一个模板Makefile.am文件，如果你需要添加新的 Autoconf 宏，就可以修改这个文件。（FIXME: Crossreference）</li>
+          <li>创建COPYING、 INSTALL、 AUTHORS、 NEWS、 README、 THANKS和ChangeLog文件并为它们生成默认内容。
+            这些内容你在后面开发软件的时候也可以修改它们。（参阅 <a href="维护文档文件.html">维护文档文件</a> ）</li>
+
+          <li>创建一个reconf脚本，每次你修改configure.in文件后，都可以使用它来重新配置你的软件包。
+            执行reconf脚本在顶层目录执行下面的shell命令：
+<pre class="code">% rm -f config.cache
+% rm -f acconfig.h
+% aclocal -I m4
+% autoconf
+% acconfig
+% autoheader
+% automake -a</pre>
+          在'acmkdir'退出前，它会为您调用一次'reconf'脚本。</li>
+        </ol>
+
+        <p>这个时候，就可以执行：
+          <pre class="code">% ./configure
+% make</pre></p>
+
+        <p>但是不会有什么事情发生，因为这时软件都是空的。</p>
+
+        <p>添加一个简单的hello world程序，你需要添加下面的两个文件：</p>
+
+        <ol>
+          <li>src/Makefile.Automake
+            <pre class="code">bin_PROGRAMS = hello
+              hello_SOURCES = hello.c</pre></li>
+
+          <li>src/hello.c
+            <pre class="c"><span class="preprocessor">#if</span> HAVE_CONFIG_H
+<span class="preprocessor"># include</span> <span class="string">&lt;config.h&gt;</span>
+<span class="preprocessor">#endif</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span>
+<span class="function-name">main</span> ()
+{
+    printf (<span class="string">"Hello world\n"</span>);
+}
+</pre></li>
+        </ol>
+
+        <p>接下来在顶层目录执行下面的命令来编译程序并打包分发：
+          <pre class="code">% ./reconf
+% ./configure
+% make
+% make distcheck</pre>
+</p>
+
+        <p>就是这么简单。</p>
+
+        <p>一般来说，使用GNU构建系统开发简单的程序，你可以使用'acmkdir'来配置工程目录树。
+          你只需要写源代码，放入必须的Makefile.am，然后更新configure.in文件就可以了。
+          实际上，这个时候你基本上知道了所有你需要知道的关于开发源代码分发、编译和安装简单C程序的知识。
+        所有你需要做的只是，写源代码，然后把源代码文件在'*_SOURCES'中列出来就可以了。</p>
+
+        <p>在接下来的章节中，我们将会解释更多有关使用GNU构建系统开发遵循GNU代码标准软件的相关细节。</p>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>

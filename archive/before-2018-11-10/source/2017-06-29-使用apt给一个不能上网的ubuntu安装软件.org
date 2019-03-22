@@ -1,0 +1,125 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 使用apt给一个不能上网的ubuntu安装软件
+
+
+特殊情况下，ubuntu并不能连网，但是又需要新安装软件，这篇文章就是解决这
+个独特地需求的。
+
+* 下载一个软件所有依赖的包到本地目录
+  [[https://stackoverflow.com/questions/13756800/how-to-download-all-dependencies-and-packages-to-directory][这里]] 讲了如何下载到所有的安装包到一个目录：
+  
+  一种解法是这样：
+  #+BEGIN_EXAMPLE
+    # aptitude clean
+    # aptitude --download-only install <your_package_here>
+    # cp /var/cache/apt/archives/*.deb <your_directory_here>
+  #+END_EXAMPLE
+  但是如果你的机器是一台已经使用过很久的机器了。需要它可能已经安装了好
+  多软件了。这样可能下载不到最完的依赖，因为很多软件已经安装了就不会再
+  下载了。
+
+  需要先安装 =apt-rdepends= ：
+  #+BEGIN_SRC sh
+    sudo apt-get install apt-rdepends
+  #+END_SRC
+  #+BEGIN_SRC sh
+    apt-get download $(apt-rdepends <package>|grep -v "^ ")
+  #+END_SRC
+  这样会有些报错。可能有些包没有对应的下载的地方。
+  
+  [[https://superuser.com/questions/1112525/ignore-apt-get-download-errors][这里]] 有人写了这样的脚本来忽略这些下载不到的包：
+  #+BEGIN_SRC sh
+    #!/bin/bash
+    export MAXPARAMETERS=255
+
+    function array_contains_find_index() {
+        local n=$#
+        local i=0
+        local value=${!n}
+
+        for (( i=1; i < n; i++ )) { 
+            if [ "${!i}" == "${value}" ]; then
+                echo "REMOVING $i: ${!i} = ${value}"
+                return $i
+            fi
+        }
+        return $MAXPARAMETERS
+    }
+
+    function Pause() { 
+        if [[ -z $1 ]]; then
+                read -n1 -r -p "continue..." 
+        else
+                read -n1 -r -p "$1" 
+        fi
+    }
+
+    export IFS=$'\n'
+    # Store all reverse dependencies in an indexed array and output them to STDOUT & a log file 
+    # for easy checking later
+    LIST=( $( apt-rdepends $1 | grep -v "^ " ) )
+    echo ${LIST[*]}
+    echo ${LIST[*]} > getdepends.log.results
+    Pause "... Packages that will be downloaded (Continue or CTRL+C) ..."
+
+    # Try to download the dependencies
+    RESULTS=( $( apt-get download ${LIST[*]} |& cut -d' ' -f 8 ) ) 
+
+    # If RESULTS contains any items that means we have packages that are
+    # problematic that need to be removed from LIST. (note: `|&` is shortform for `2>&1 |`)
+
+    LISTLEN=${#LIST[@]}                                     #Array elements aren't removed so the size is constant
+
+    while [ ${#RESULTS[@]} -gt 0 ]; do
+        for (( i=0; i < $LISTLEN; i++ )); do
+                array_contains_find_index ${RESULTS[@]} ${LIST[$i]}
+                ret=$?
+
+                if (( $ret != $MAXPARAMETERS )); then
+                    unset LIST[$i]
+                fi
+        done
+
+        FULLRESULTS=$( apt-get download ${LIST[*]} 2>&1  )
+        RESULTS=( $( echo $FULLRESULTS |& cut -d' ' -f 11 | sed -r "s/'(.*?):(.*$)/\1/g" ) )
+
+        echo ${LIST[*]} > getdepends.list                                   #Log of downloaded packages
+        echo ${FULLRESULTS[*]} >> getdepends.fullresults    #Verbose log of skipped packages
+        echo ${RESULTS[*]} >> getdepends.results                    #Just the name of skipped packages
+    done 
+
+    apt-get download ${LIST[*]}
+  #+END_SRC
+  
+  这样，使用这个脚本可以把所有的依赖包下载到本地，假设是目录
+  =/tmp/temp= 。
+
+* 制做一个apt-get update可以读取的packages列表
+  [[https://askubuntu.com/questions/170348/how-to-create-a-local-apt-repository][参考的这里]]
+
+  下载 =dpkg-dev= ：
+  #+BEGIN_SRC sh
+    sudo apt-get install dpkg-dev
+  #+END_SRC
+  
+  到已载下dep包的目录 =/tmp/temp= ，执行下面的命令生成列表：
+  #+BEGIN_SRC sh
+    dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+  #+END_SRC
+
+* 修改 =apt-get= 的source文件
+  修改 =/etc/apt/sources.list= ，加入下面一行：
+  #+BEGIN_EXAMPLE
+    deb file:/tmp/temp ./
+  #+END_EXAMPLE
+
+  这样设置后，再用 =apt-get update= ，然后就可以无网络安装需要的软件了。
+  
+  安装的时候需要这样：
+  #+BEGIN_SRC sh
+    sudo apt-get install -y --allow-unauthenticated <package-name>
+  #+END_SRC
+  

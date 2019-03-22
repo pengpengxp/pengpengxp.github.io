@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>字符串和字符串编码笔记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">字符串和字符串编码笔记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgcf35326">1. 字符集和编解码</a></li>
+<li><a href="#orgaadd3f7">2. 中文gb系列</a></li>
+<li><a href="#org5b1b9d1">3. unicode字符集和utf*编码</a></li>
+<li><a href="#org9c964fe">4. 参考文档</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgcf35326" class="outline-2">
+<h2 id="orgcf35326"><span class="section-number-2">1</span> 字符集和编解码</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+字符集我理解就是把字符映射为数字的映射关系。编码是指把转化后的数字存入
+电脑的方式。解码是编码的逆。
+</p>
+
+<p>
+比如字符 <code>a</code> 在ascii码表中的值是97。然后存入计算机是一个字节
+<code>01100001</code> 。这里的ascii码表其实就是一个字符集，它其实一个 <code>f(x) = y</code>
+的函数，这里也就是：
+</p>
+<pre class="example">
+  f(a) = 97
+</pre>
+<p>
+编码是指这里的97具体上怎么存在计算器上的。这里举例（也就是实际应用中）
+我们是存的一个字节。那么完全可以在编码的时候存两个字节： <code>00000000
+01100001</code> 。这就可以叫“完全没必要编码”:)
+</p>
+
+<p>
+我们常见的字符集：
+</p>
+<ul class="org-ul">
+<li>ASCII字符集：最初的英文字符集</li>
+<li>GB2312字符集：中文字符集</li>
+<li>BIG5字符集：台湾搞的中文字符集，由于是自己定义的，文字集和编码方式
+并没有分开。</li>
+<li>Unicode字符集：统一、完全的字符集。</li>
+<li>&#x2026;</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgaadd3f7" class="outline-2">
+<h2 id="orgaadd3f7"><span class="section-number-2">2</span> 中文gb系列</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+刚开始ASCII码的时候，编解码就一字节8个位，按照ascii码表（字符集）存就
+行。
+</p>
+
+<p>
+对于中文， <code>GB2312 是对 ASCII 的中文扩展。</code> 这句话很直观，也就是中国人
+民需要使用电脑，对ASCII码表进行了扩展。扩展方式为<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>：
+</p>
+<ol class="org-ol">
+<li>GB2312: 一个小于127的字符的意义与原来相同，但两个大于127的字符连在
+一起时，就表示一个汉字，前面的一个字节（他称之为高字节）从0xA1用到
+0xF7，后面一个字节（低字节）从0xA1到0xFE，这样我们就可以组合出大约
+7000多个简体汉字了。因为小于127的还是占一个字节，大于127的占两个字
+节。这就是当时说的汉字占两个英文字符的由来。所谓的全角和半角标点符
+号，分别对应两字节和一字节编码。</li>
+<li>GBK： 后来还是不够用，于是干脆不再要求低字节一定是127号之后的内码，
+只要第一个字节是大于127就固定表示这是一个汉字的开始，不管后面跟的是
+不是扩展字符集里的内容。结果扩展之后的编码方案被称为 GBK 标准，GBK
+包括了GB2312 的所有内容，同时又增加了近20000个新的汉字（包括繁体字）
+和符号。</li>
+<li>gb18030: 后来少数民族也要用电脑了，于是我们再扩展，又加了几千个新的
+少数民族的字，GBK扩成了 GB18030。从此之后，中华民族的文化就可以在计
+算机时代中传承了。</li>
+</ol>
+
+<p>
+总的来说 <code>gb2312 &lt; gbk &lt; gb18030</code> 。对于gb2312系列,最常用的编码方式叫
+<code>EUC-CN</code> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5b1b9d1" class="outline-2">
+<h2 id="org5b1b9d1"><span class="section-number-2">3</span> unicode字符集和utf*编码</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+全世界每个民族如果都单独搞一套字符集的话，就没办法国际化啦。最后来了一
+个统一的 <code>Unicode</code> 。如果以语言来举例子的话：各种字符集就像是各国的语
+言，unicode就像是世界通用的世界语。
+</p>
+
+<p>
+怎么存unicode呢？也就是unicode的编码方式：
+</p>
+<ul class="org-ul">
+<li><p>
+utf-16:也是变长码。但是一般只使用前65535个unicode，所以一般为2字节
+(16位)。两字节存的话，还需要考虑大端小端的问题，于是又有了不同的方式：
+</p>
+<pre class="example">
+    So far I've told you three ways of encoding Unicode. The traditional
+    store-it-in-two-byte methods are called UCS-2 (because it has two
+    bytes) or UTF-16 (because it has 16 bits), and you still have to
+    figure out if it's high-endian UCS-2 or low-endian UCS-2. And there's
+    the popular new UTF-8 standard which has the nice property of also
+    working respectably if you have the happy coincidence of English text
+    and braindead programs that are completely unaware that there is
+    anything other than ASCII.
+</pre></li>
+<li>utf-8:变长的码。向后兼容ASCII码</li>
+<li>utf-32:对每个字符都使用4字节</li>
+<li>&#x2026;</li>
+</ul>
+
+<p>
+开始的时候存unicode的时候，一个字符都是使用两个字节来存（utf16）。但是
+这样如果只存英文，会造成空间有极大浪费。聪明人就发明了utf-8这种变长的
+编码方式，看看这段：
+</p>
+<pre class="example">
+  Thus was invented the brilliant concept of UTF-8. UTF-8 was another
+  system for storing your string of Unicode code points, those magic U+
+  numbers, in memory using 8 bit bytes. In UTF-8, every code point from
+  0-127 is stored in a single byte. Only code points 128 and above are
+  stored using 2, 3, in fact, up to 6 bytes.
+</pre>
+<p>
+当字符的unicode值小于127时，还是像ascii码一样存一个字节<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>。只有当字符的unicode值大于127时，才会占用2个以上6个
+以下字节空间。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9c964fe" class="outline-2">
+<h2 id="org9c964fe"><span class="section-number-2">4</span> 参考文档</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<a href="http://www.joelonsoftware.com/articles/Unicode.html">这篇英文博客讲得很不错</a>
+</p>
+
+<p>
+<a href="http://blog.csdn.net/u010159842/article/details/51445694">这篇文章详细讲解了gbk系列的来源</a> 
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">这下面基本都是
+直接引用的，见参考文档</div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara">所以utf-8
+向后兼容ascii码。</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

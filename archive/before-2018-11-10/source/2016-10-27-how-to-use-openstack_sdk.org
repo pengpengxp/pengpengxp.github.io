@@ -1,0 +1,240 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: content
+#+STARTUP: align
+#+STARUP: hideblocks
+
+# #+OPTIONS: toc:nil 
+# #+BEGIN_HTML
+# ---
+# layout: post
+# title: 2016-10-27-how_to_use_openstack_sdk
+# excerpt: "介绍如何使用openstack的sdk"
+# modified: 2016-10-27
+# tags: [openstack]
+# categories: Tutorial
+# ---
+
+# #+END_HTML
+# #+TOC: headlines 1 local
+
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+#+Title: 如何使用openstack的sdk
+
+* openstack对外提供的几种不同的接口
+  + REST full API
+  + openstack command line client
+  + openstack SDKs
+
+  这里主要是使用openstack的python的sdk来实现类似hello world的功能。
+* 具体方法
+  [[http://docs.openstack.org/user-guide/sdk.html][openstack python sdk在这里]] 。
+
+  [[http://docs.openstack.org/user-guide/sdk-overview.html][Overview部分介绍了几种方式的区别。]] 每个项目单独的sdk不推荐使用，所以我
+  们这里直接使用的就是统一的 =openstacksdk= 。[[http://developer.openstack.org/sdks/python/openstacksdk/users/index.html][教程在这里]] 。
+   
+  安装参考 [[#openstack_sdk_install]] 。
+** install python sdk by pip
+   :PROPERTIES:
+   :CUSTOM_ID: openstack_sdk_install
+   :END:
+   先得使用下面的命令来安装对应的lib。使用默认源的下载很慢，国内可以使
+   用豆瓣的源来加速。
+   #+BEGIN_SRC sh
+     # 指定国内源安装速度杠杠的，
+     pip install openstacksdk -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+  #+END_SRC
+   
+     下面这些单独的lib不推荐直接使用，下面这些是openstack的python SDKs，
+     可以选择性的安装，不过这些库里也包含对应的command line client，需
+     要使用对应command line client就需要安装。安装使用 =pip install
+     python-PROJECTclient= 这样的格式。
+   #+BEGIN_SRC sh
+     pip install python-openstackclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-novaclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-glanceclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-neutronclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-swiftclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-heatclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-keystoneclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+   #+END_SRC
+** hello world example
+
+   sdk使用的时候，首先得完成和server进行认证的过程。openstack的python
+   sdk都是使用的 [[http://docs.openstack.org/developer/os-client-config/][os-client-config]] 这个lib来和server做认证的。
+  
+   os-client-config支持三种方式的认证：
+   1) 环境变量方式。
+   2) 配置文件方式。
+   3) 什么都没有，直接将认证写入代码中。
+
+*** 配置文件
+    默认的配置文件名为 =clouds.yaml= 。默认寻找的先后顺序是[fn:1:也可以
+    设置OS_CLIENT_CONFIG_FILE这个环境变量直接指定，这个我没有尝试。]：
+   
+    1) 当前目录
+    2) `USER_CONFIG_DIR`
+    3) `SITE_CONFIG_DIR`
+
+    后面两个不同的平台对应的地址不同：
+    #+BEGIN_EXAMPLE
+      `USER_CONFIG_DIR` is different on Linux, OSX and Windows.
+
+      ,* Linux: `~/.config/openstack`
+      ,* OSX: `~/Library/Application Support/openstack`
+      ,* Windows: `C:\\Users\\USERNAME\\AppData\\Local\\OpenStack\\openstack`
+
+      `SITE_CONFIG_DIR` is different on Linux, OSX and Windows.
+
+      ,* Linux: `/etc/openstack`
+      ,* OSX: `/Library/Application Support/openstack`
+      ,* Windows: `C:\\ProgramData\\OpenStack\\openstack`
+    #+END_EXAMPLE
+
+    所以在Linux下存寻找该文什的先后顺序是：
+    1) Current Directory
+    2) ~/.config/openstack
+    3) /etc/openstack
+
+    最后该文件内容是这样的：
+    #+BEGIN_SRC yaml
+         clouds:
+           test_cloud:
+             region_name: RegionOne
+             auth:
+               project_domain_name: default
+               user_domain_name: default
+               project_name: demo
+               username: demo
+               password: demo1703
+               auth_url: http://172.16.222.10:5000/v3
+               identity_api_version: 3
+               image_api_version: 2
+    #+END_SRC
+    直接按照官方文档中的模版写，对于我们的cloud总是不行。但是我在
+    os-client-config的manual里看到了这一句：
+    #+BEGIN_EXAMPLE
+       The keys are all of the keys you’d expect from OS_* - except lower
+       case and without the OS prefix. So, region name is set with
+       region_name.
+    #+END_EXAMPLE
+    意思就是说相对使用环境变量的方式，这个里面就是把前面的 =OS_= 去掉。
+    看下之前使用command-line时的demo-openrc.sh：
+    #+BEGIN_SRC sh
+       export OS_PROJECT_DOMAIN_NAME=default
+       export OS_USER_DOMAIN_NAME=default
+       export OS_PROJECT_NAME=demo
+       export OS_USERNAME=demo
+       export OS_PASSWORD=demo1703
+       export OS_AUTH_URL=http://172.16.222.10:5000/v3
+       export OS_IDENTITY_API_VERSION=3
+       export OS_IMAGE_API_VERSION=2
+    #+END_SRC
+    于是我把这里所有的环境变量都设置到了clouds.yaml中，就成了前面的yaml
+    文件。
+
+    这样配置后，就可以按照官网教程来玩了，我在clouds.yaml所在目录新建一
+    个python脚本：
+    #+BEGIN_SRC python
+         #!/usr/local/bin/python
+         import argparse
+         import os
+
+         import os_client_config
+
+         from openstack import connection
+         from openstack import profile
+         from openstack import utils
+         import sys
+
+         class Opts(object):
+             def __init__(self, cloud_name='test_cloud', debug=False):
+                 self.cloud = cloud_name
+                 self.debug = debug
+                 # Use identity v3 API for examples.
+                 self.identity_api_version = '3'
+         def create_connection_from_config():
+             opts = Opts()
+             occ = os_client_config.OpenStackConfig()
+             cloud = occ.get_one_cloud(opts.cloud)
+             return connection.from_config(cloud_config=cloud, options=opts)
+         def create_connection_from_args():
+             parser = argparse.ArgumentParser()
+             config = os_client_config.OpenStackConfig()
+             config.register_argparse_arguments(parser, sys.argv[1:])
+             args = parser.parse_args()
+             return connection.from_config(options=args)
+
+
+         conn = create_connection_from_config()
+         print(conn)
+
+         def list_servers(conn):
+             print("List Servers:")
+
+             for server in conn.compute.servers():
+                 print(server)
+
+         def list_images(conn):
+             print("List Images:")
+
+             for image in conn.compute.images():
+                 print(image)
+
+         list_images(conn)
+
+    #+END_SRC
+    最后直接把conn拿来用就可以了。
+
+*** 直接使用
+    [[http://inaugust.com/posts/simple-openstack-clients.html][这篇博客也写得很不错]]
+   
+    也是把demo-openrc.sh中的变量全部写过来：
+    #+BEGIN_SRC python
+      #!/usr/local/bin/python
+      import argparse
+      import os
+      import os_client_config
+      from openstack import connection
+      from openstack import profile
+      from openstack import utils
+      import sys
+      def create_connection():
+          prof = profile.Profile()
+          prof.set_region(profile.Profile.ALL, "RegionOne")
+          return connection.Connection(
+              profile=prof,
+              user_agent='examples',
+              auth_url='http://172.16.222.10:5000/v3',
+              username='demo',
+              password='demo1703',
+              project_name='demo',
+              region_name='RegionOne',
+              project_domain_name='default',
+              user_domain_name='default',
+              identity_api_version=3,
+              image_api_version=2)
+
+
+      def list_servers(conn):
+
+          print("List Servers:")
+
+          for server in conn.compute.servers():
+              print(server)
+
+      def list_images(conn):
+          print("List Images:")
+
+          for image in conn.compute.images():
+              print(image)
+
+      conn = create_connection()
+
+      list_images(conn)
+    #+END_SRC
+   
+*** TODO 环境变量
+    

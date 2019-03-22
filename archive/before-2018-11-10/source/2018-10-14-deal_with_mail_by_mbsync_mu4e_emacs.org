@@ -1,0 +1,470 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-10-14-deal_with_mail_by_mbsync_mu4e_emacs.org
+
+* 下载邮件
+  下载邮件到本地，之前使用过 =offlineimap= 和 =fetchmail= 。这次换了电脑，
+  折腾了一下 mbsync 。
+
+  #+BEGIN_SRC conf-space
+Expunge None
+Create Slave               # 只在Slave上创建新文件夹, 不对Master做操作
+
+# --------------------------------------------------------------------
+# ACCOUNT INFORMATION
+# --------------------------------------------------------------------
+IMAPAccount gmail
+Host imap.gmail.com
+Timeout 0                       # 0表示不超时
+User pengpengxpplay@gmail.com
+PassCmd "security find-generic-password -s mail_gmail -w"
+AuthMechs PLAIN # google邮箱开启允许安全性较低的应用登陆时用这个选项可以成功登陆
+SSLType IMAPS   # 993端口用这个选项
+
+IMAPAccount sinapub
+Host imap.sina.com
+Port 993
+User pengpengxppub@sina.com
+PassCmd "security find-generic-password -s mail_sinapub -w"
+AuthMechs LOGIN              # 普通的993端口的imap使用这个方式就可以了
+SSLType IMAPS
+# CertificateFile /Users/pengpengxp/.pem/sina.pem
+
+IMAPAccount sinapri
+Host imap.sina.com
+Port 993
+User pengpengxppri@sina.com
+PassCmd "security find-generic-password -s mail_sinapri -w"
+AuthMechs LOGIN
+SSLType IMAPS
+
+IMAPAccount qq
+Host imap.qq.com
+Port 993
+Timeout 0
+User 474364048@qq.com
+PassCmd "security find-generic-password -s mail_qq -w"
+AuthMechs LOGIN
+SSLType IMAPS
+
+IMAPAccount cdyq
+Host pop.yuqiinf.com
+Port 993
+Timeout 0
+User xiepeng@yuqiinf.com
+PassCmd "security find-generic-password -s mail_cdyq -w"
+AuthMechs LOGIN
+SSLType IMAPS
+
+# ################ gmail store begin ################
+# REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
+IMAPStore gmail-remote
+Account gmail
+
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p Maildir/gmail)
+MaildirStore gmail-local
+Path ~/Maildir/gmail/     # 这个目录需要先用 mkdir -p ~/Maildir/gmail/
+Inbox ~/Maildir/gmail/inbox
+# ################ gmail store end ################
+
+# ################ sinapub store begin ################
+IMAPStore sinapub-remote
+Account sinapub
+
+MaildirStore sinapub-local
+Path ~/Maildir/sinapub/
+Inbox ~/Maildir/sinapub/inbox
+# ################ sinapub store end ################
+
+# ################ sinapri store begin ################
+IMAPStore sinapri-remote
+Account sinapri
+
+MaildirStore sinapri-local
+Path ~/Maildir/sinapri/
+Inbox ~/Maildir/sinapri/inbox
+# ################ sinapri store end ################
+
+# ################ qq store begin ################
+IMAPStore qq-remote
+Account qq
+
+MaildirStore qq-local
+Path ~/Maildir/qq/
+Inbox ~/Maildir/qq/inbox
+# ################ qq store end ################
+
+# ################ cdyq store begin ################
+IMAPStore cdyq-remote
+Account cdyq
+
+MaildirStore cdyq-local
+Path ~/Maildir/cdyq/
+Inbox ~/Maildir/cdyq/inbox
+# ################ cdyq store end ################
+
+# --------------------------------------------------------------------
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+#
+# FOR INSTANCE IN THE SPECIFICATION BELOW:
+#
+# gmail-inbox gets the folder INBOX, ARCHIVE, and everything under
+# "ARCHIVE*"
+#
+# gmail-trash gets only the "[Gmail]/Trash" folder and stores it to
+# the local "trash" folder
+# --------------------------------------------------------------------
+
+Channel gmail-inbox
+Master :gmail-remote:
+Slave :gmail-local:
+Patterns "INBOX" "Arch*"
+Expunge Slave
+Sync Pull
+CopyArrivalDate yes #将原邮箱的时间信息也同步过来, 否则以拉取的时刻上传, 不方便
+
+Channel gmail-trash
+Master :gmail-remote:"[Gmail]/Trash"
+Slave :gmail-local:trash
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-sent
+Master :gmail-remote:"[Gmail]/Sent Mail"
+Slave :gmail-local:sent
+Create Both
+Expunge Both
+SyncState *
+
+Channel sinapub-inbox
+Master :sinapub-remote:
+Slave :sinapub-local:
+Patterns "INBOX" "Arch*"
+Expunge Slave
+Sync Pull
+CopyArrivalDate yes
+
+Channel sinapri-inbox
+Master :sinapri-remote:
+Slave :sinapri-local:
+Patterns "INBOX" "Arch*"
+Expunge Slave
+Sync Pull
+CopyArrivalDate yes
+
+Channel qq-inbox
+Master :qq-remote:
+Slave :qq-local:
+Patterns "INBOX" "Arch*" "Sent*"
+Expunge Slave
+Sync Pull
+CopyArrivalDate yes
+
+Channel qq-sent
+Master :qq-remote:
+Slave :qq-local:sent
+Patterns "Sent*"
+Expunge Slave
+Sync Pull
+CopyArrivalDate yes
+
+Channel cdyq-inbox
+Master :cdyq-remote:
+Slave :cdyq-local:
+Patterns "INBOX" "Arch*"
+Expunge Slave
+Sync Pull
+CopyArrivalDate yes
+
+# --------------------------------------------------------------------
+# GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
+# MBSYNC ON A GROUP TO SYNC ALL CHANNELS
+#
+# FOR INSTANCE: "mbsync gmail" GETS MAIL FROM
+# "gmail-inbox", "gmail-sent", and "gmail-trash"
+# --------------------------------------------------------------------
+
+Group gmail
+Channel gmail-inbox
+Channel gmail-sent
+Channel gmail-trash
+
+Group all-mail
+Channel qq-inbox
+Channel qq-sent
+Channel sinapub-inbox
+Channel sinapri-inbox
+Channel cdyq-inbox
+
+  #+END_SRC
+
+  mbsync配置大体分三块：
+  1. 账户：这个区域设置用户的账户信息，就包括用户名密码。这里的选项很
+     重要，设置正确才能登陆成功。这里主要配置了gmail和一个普通的imap邮
+     箱。
+     1. gmail： =AuthMechs PLAIN= 这个选项设对后，在google账户中设置允
+        许安全性较低的应用访问。就搞定啦。
+     2. 普通imap账户，我试了qq和新浪邮箱以及一个公司的邮箱，按照上面的
+        配置都是可以的（都是登陆的993端口）。注意 =AuthMechs LOGIN= 这
+        个选项。普通imap邮箱需要设置为这个才可以登陆。如果imap server
+        没有对应的pem，可以参考 [[#no_pem]] 。
+  2. STORES： 我理解这里就是指定一对一对的remote和local。对于我们只需
+     要拉邮件的用户用说，remote就直接设置为上面配置好的账户即可。local
+     就是设置这些邮件拉下来对应存在本地哪个目录。
+  3. channel: channel的名字可以直接供mbsync命令行使用，比如可以直接
+     =mbsync gmail-inbox= 这个channel。它主要指定一个master和slave，这
+     里其实就是一个remote和local。
+     1. patterns表示匹配， =Patterns "INBOX" "Arch*"= 表示匹配inbox和
+        所有归档的邮件。
+     2. [ ] Sync:
+     3. [ ] Expunge:
+  4. group:这个简单，把多个channel合到一个group，直接 =mbsync
+     <group-name>= 就可以执行到所有group下面的所有channel。
+
+* 使用mu进行index
+  #+BEGIN_SRC sh
+rm ~/.mu
+mu index --rebuild -m ~/Maildir
+  #+END_SRC
+
+* 使用mu4e
+  之前写过一篇 [[file:2017-08-24-emacs-use-mu4e.org][emacs-use-mu4e]] 。
+
+* MISC
+** TODO 有些imap可能没有pem文件
+   :PROPERTIES:
+   :CUSTOM_ID: no_pem
+   :END:
+   这个pem文件现在我不知道是干啥的，默认安装好了openssl后，就有一个比
+   较全的pem文件： =/usr/local/etc/openssl/cert.pem= 。
+
+   如果对应imap的server不包括在上面这个pem文件中，可以用类似下面的命令
+   查询对应的imap server。
+   #+BEGIN_SRC sh :results output
+openssl s_client -showcerts -connect imap.qq.com:993
+   #+END_SRC
+
+   结果可能如下：
+   #+BEGIN_EXAMPLE
+depth=1 C = US, O = DigiCert Inc, OU = www.digicert.com, CN = GeoTrust RSA CA 2018
+verify error:num=20:unable to get local issuer certificate
+verify return:0
+CONNECTED(00000006)
+---
+Certificate chain
+ 0 s:/C=CN/ST=Guangdong/L=Shenzhen/O=Tencent Technology (Shenzhen) Company Limited/OU=R&D/CN=pop.qq.com
+   i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=GeoTrust RSA CA 2018
+-----BEGIN CERTIFICATE-----
+MIIHHTCCBgWgAwIBAgIQD29m716RhcHnqp5k3+rhyjANBgkqhkiG9w0BAQsFADBe
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMR0wGwYDVQQDExRHZW9UcnVzdCBSU0EgQ0EgMjAxODAe
+Fw0xODA5MTAwMDAwMDBaFw0xOTEyMTAxMjAwMDBaMIGPMQswCQYDVQQGEwJDTjES
+MBAGA1UECBMJR3Vhbmdkb25nMREwDwYDVQQHEwhTaGVuemhlbjE2MDQGA1UEChMt
+VGVuY2VudCBUZWNobm9sb2d5IChTaGVuemhlbikgQ29tcGFueSBMaW1pdGVkMQww
+CgYDVQQLDANSJkQxEzARBgNVBAMTCnBvcC5xcS5jb20wggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCiClbinsoiXxj/nrczA2W2uAobA/7GPcYhvhX+TVfG
+eGvdXMpcGTkXuMa5VsTtCaYZxbshk1FmisVRWSJEBp3krZS2hN73rxN8HXD3eztP
+K2fuRCz/q1cyfp/eiclgJldMCQycPsxMvMDOyCBK88I4ZEz4p3S2zDtu1gESxQJd
+0AloNliQlNeIz92h8Qq/o0vSRZyadEDccgDdgk6QxKxFCRYFq08N0DILxC1hjZb1
+nMsW9KseVd56a/xlQZE4pcUYp/UWn6xxK+9IjeJ1795TymfZ1uzLQKZErcUfwKdZ
+FmRdIeXNRZsOgpuDZntb39oShWUyQZhEHvzN6E5Qj0+bAgMBAAGjggOjMIIDnzAf
+BgNVHSMEGDAWgBSQWP+wnHWoUVR3se3yo0MWOJ5sxTAdBgNVHQ4EFgQUNoEqF2m6
+eVtIDmfipxxZ5oh+O/gwgZoGA1UdEQSBkjCBj4IKcG9wLnFxLmNvbYIKZGF2LnFx
+LmNvbYIJZXgucXEuY29tggtzbXRwLnFxLmNvbYIKbXgxLnFxLmNvbYILaW1hcC5x
+cS5jb22CCm14Mi5xcS5jb22CDW14Yml6Mi5xcS5jb22CDW14Yml6MS5xcS5jb22C
+DmNsb3VkbXgucXEuY29tggpteDMucXEuY29tMA4GA1UdDwEB/wQEAwIFoDAdBgNV
+HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwPwYDVR0fBDgwNjA0oDKgMIYuaHR0
+cDovL2NkcDEuZGlnaWNlcnQuY29tL0dlb1RydXN0UlNBQ0EyMDE4LmNybDBMBgNV
+HSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5k
+aWdpY2VydC5jb20vQ1BTMAgGBmeBDAECAjB0BggrBgEFBQcBAQRoMGYwJQYIKwYB
+BQUHMAGGGWh0dHA6Ly9vY3NwMS5kaWdpY2VydC5jb20wPQYIKwYBBQUHMAKGMWh0
+dHA6Ly9jYWNlcnRzLmdlb3RydXN0LmNvbS9HZW9UcnVzdFJTQUNBMjAxOC5jcnQw
+CQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYApLkJkLQYWBSH
+uxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFlwg5KwAAABAMARzBFAiAfsZKk2vNr
+O0D7r9q8HIEEC5huCFCUy5T8xjHlUNNw8QIhANNMcY634gUlvWJhytO6BfzIQWDP
+p0YdhcOUQ41/RGSBAHYAh3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8A
+AAFlwg5LoQAABAMARzBFAiEAxSyuhY1buGgibmi6FMoVzMj63eLGzLdOdxjhNPxO
+UFcCIGHNjFW7wwDkRuPz+BS7SwH3HwjFj5dRdTzdDo8rsfAKAHcAu9nfvB+KcbWT
+lCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFlwg5K7AAABAMASDBGAiEA8nL/Uv3j
+lMvPN/6kwlwHpqTcMesJLs/P4GJaqahea8sCIQDiUnlmrhx7eh8q9h9gcDYprv8l
+cl4m772jakApjrBJeTANBgkqhkiG9w0BAQsFAAOCAQEAck0fNQSZVfWymUBwSRXz
+mooSjmFXLU+GJ85/bQLPX8ipRYXNmX0JC0wiho5qNh9JqmAq6Ami+3dvKrZG4lh0
+WVdjOOX2qD8mmp27qUDKGyljA3RFuTyonBaYHI9bQ4H3pGoXzoYxrD4v0waQecmQ
+ahnd2tf4iO7arNxH3rHX3Ih+HeUSoq1rUBRv77QpVO3DVtbomovVWMEkX9O0T5IL
+iNm9BnAA3SjCbJJkMw42quB1+CqPlsvzgT07x8c0b2y9FrQE1NGOqqmbpap7+/NR
+rb9No1zt3v8/txh7kwk1C9oTxLftvX2qcQbcbzXdGEhhJGcYo4hgO0n7RXK6riYM
+mQ==
+-----END CERTIFICATE-----
+ 1 s:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=GeoTrust RSA CA 2018
+   i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert Global Root CA
+-----BEGIN CERTIFICATE-----
+MIIEizCCA3OgAwIBAgIQBUb+GCP34ZQdo5/OFMRhczANBgkqhkiG9w0BAQsFADBh
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
+QTAeFw0xNzExMDYxMjIzNDVaFw0yNzExMDYxMjIzNDVaMF4xCzAJBgNVBAYTAlVT
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
+b20xHTAbBgNVBAMTFEdlb1RydXN0IFJTQSBDQSAyMDE4MIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAv4rRY03hGOqHXegWPI9/tr6HFzekDPgxP59FVEAh
+150Hm8oDI0q9m+2FAmM/n4W57Cjv8oYi2/hNVEHFtEJ/zzMXAQ6CkFLTxzSkwaEB
+2jKgQK0fWeQz/KDDlqxobNPomXOMJhB3y7c/OTLo0lko7geG4gk7hfiqafapa59Y
+rXLIW4dmrgjgdPstU0Nigz2PhUwRl9we/FAwuIMIMl5cXMThdSBK66XWdS3cLX18
+4ND+fHWhTkAChJrZDVouoKzzNYoq6tZaWmyOLKv23v14RyZ5eqoi6qnmcRID0/i6
+U9J5nL1krPYbY7tNjzgC+PBXXcWqJVoMXcUw/iBTGWzpwwIDAQABo4IBQDCCATww
+HQYDVR0OBBYEFJBY/7CcdahRVHex7fKjQxY4nmzFMB8GA1UdIwQYMBaAFAPeUDVW
+0Uy7ZvCj4hsbw5eyPdFVMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEF
+BQcDAQYIKwYBBQUHAwIwEgYDVR0TAQH/BAgwBgEB/wIBADA0BggrBgEFBQcBAQQo
+MCYwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBCBgNVHR8E
+OzA5MDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRHbG9i
+YWxSb290Q0EuY3JsMD0GA1UdIAQ2MDQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxo
+dHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMA0GCSqGSIb3DQEBCwUAA4IBAQAw
+8YdVPYQI/C5earp80s3VLOO+AtpdiXft9OlWwJLwKlUtRfccKj8QW/Pp4b7h6QAl
+ufejwQMb455OjpIbCZVS+awY/R8pAYsXCnM09GcSVe4ivMswyoCZP/vPEn/LPRhH
+hdgUPk8MlD979RGoUWz7qGAwqJChi28uRds3thx+vRZZIbEyZ62No0tJPzsSGSz8
+nQ//jP8BIwrzBAUH5WcBAbmvgWfrKcuv+PyGPqRcc4T55TlzrBnzAzZ3oClo9fTv
+O9PuiHMKrC6V6mgi0s2sa/gbXlPCD9Z24XUMxJElwIVTDuKB0Q4YMMlnpN/QChJ4
+B0AFsQ+DU0NCO+f78Xf7
+-----END CERTIFICATE-----
+---
+Server certificate
+subject=/C=CN/ST=Guangdong/L=Shenzhen/O=Tencent Technology (Shenzhen) Company Limited/OU=R&D/CN=pop.qq.com
+issuer=/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=GeoTrust RSA CA 2018
+---
+No client certificate CA names sent
+---
+SSL handshake has read 3299 bytes and written 632 bytes
+---
+New, TLSv1/SSLv3, Cipher is RC4-SHA
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : RC4-SHA
+    Session-ID: C37234B79C67AE088ADFC172A0C70D3B555E283E7E3BBA4C883B2FB598B70A9D
+    Session-ID-ctx:
+    Master-Key: F797C3AF87DD7A73B2DE29E37C6983B2492E01074FFA1EB7E44DE3B3F38999487F17AED89782912DEF7E0EE282360494
+    TLS session ticket lifetime hint: 1200 (seconds)
+    TLS session ticket:
+    0000 - 6d 87 b3 14 f8 c8 3c be-9d 32 b3 cf 4b 6b 5a 42   m.....<..2..KkZB
+    0010 - 54 56 90 b6 d7 31 64 ba-03 78 ca b5 6a 6c a1 57   TV...1d..x..jl.W
+    0020 - 5f ef 4d 52 b8 ae 66 5e-14 fe df e4 4c 03 e1 8e   _.MR..f^....L...
+    0030 - b6 3b 20 5f 62 d9 83 ee-32 90 5b 7e 64 87 70 58   .; _b...2.[~d.pX
+    0040 - 6c 25 36 72 6c 1e c0 71-9b 8f a4 a1 52 22 ab e2   l%6rl..q....R"..
+    0050 - f3 f1 3b 92 83 2c 44 5d-97 fc 5e 68 ff c0 34 b1   ..;..,D]..^h..4.
+    0060 - 7c 72 d3 75 f4 5b 5d b9-ec 60 13 9a 90 1f 66 31   |r.u.[]..`....f1
+    0070 - 2f 20 0a ff 49 63 af f2-c6 d5 46 f2 f1 78 19 ad   / ..Ic....F..x..
+    0080 - c8 b1 69 af e8 be 07 0e-65 c5 8c 26 5c 91 af ac   ..i.....e..&\...
+    0090 - dd c0 ea e7 b4 d0 4e 92-23 ec bf 78 e8 11 23 f5   ......N.#..x..#.
+
+    Start Time: 1539527304
+    Timeout   : 300 (sec)
+    Verify return code: 0 (ok)
+---
+ * OK [CAPABILITY IMAP4 IMAP4rev1 ID AUTH=LOGIN NAMESPACE] QQMail IMAP4Server ready
+   #+END_EXAMPLE
+
+   把包括 =BEGIN CERTIFICATE= 和 =END CERTIFICATE= 中间的内容分别存为文
+   件，这里两个区域，存为两个文件 =qq-1.pem= 和 =qq-2.pem= 即可。文件可
+   能就长这样：
+   #+BEGIN_EXAMPLE
+-----BEGIN CERTIFICATE-----
+MIIHHTCCBgWgAwIBAgIQD29m716RhcHnqp5k3+rhyjANBgkqhkiG9w0BAQsFADBe
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMR0wGwYDVQQDExRHZW9UcnVzdCBSU0EgQ0EgMjAxODAe
+Fw0xODA5MTAwMDAwMDBaFw0xOTEyMTAxMjAwMDBaMIGPMQswCQYDVQQGEwJDTjES
+MBAGA1UECBMJR3Vhbmdkb25nMREwDwYDVQQHEwhTaGVuemhlbjE2MDQGA1UEChMt
+VGVuY2VudCBUZWNobm9sb2d5IChTaGVuemhlbikgQ29tcGFueSBMaW1pdGVkMQww
+CgYDVQQLDANSJkQxEzARBgNVBAMTCnBvcC5xcS5jb20wggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCiClbinsoiXxj/nrczA2W2uAobA/7GPcYhvhX+TVfG
+eGvdXMpcGTkXuMa5VsTtCaYZxbshk1FmisVRWSJEBp3krZS2hN73rxN8HXD3eztP
+K2fuRCz/q1cyfp/eiclgJldMCQycPsxMvMDOyCBK88I4ZEz4p3S2zDtu1gESxQJd
+0AloNliQlNeIz92h8Qq/o0vSRZyadEDccgDdgk6QxKxFCRYFq08N0DILxC1hjZb1
+nMsW9KseVd56a/xlQZE4pcUYp/UWn6xxK+9IjeJ1795TymfZ1uzLQKZErcUfwKdZ
+FmRdIeXNRZsOgpuDZntb39oShWUyQZhEHvzN6E5Qj0+bAgMBAAGjggOjMIIDnzAf
+BgNVHSMEGDAWgBSQWP+wnHWoUVR3se3yo0MWOJ5sxTAdBgNVHQ4EFgQUNoEqF2m6
+eVtIDmfipxxZ5oh+O/gwgZoGA1UdEQSBkjCBj4IKcG9wLnFxLmNvbYIKZGF2LnFx
+LmNvbYIJZXgucXEuY29tggtzbXRwLnFxLmNvbYIKbXgxLnFxLmNvbYILaW1hcC5x
+cS5jb22CCm14Mi5xcS5jb22CDW14Yml6Mi5xcS5jb22CDW14Yml6MS5xcS5jb22C
+DmNsb3VkbXgucXEuY29tggpteDMucXEuY29tMA4GA1UdDwEB/wQEAwIFoDAdBgNV
+HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwPwYDVR0fBDgwNjA0oDKgMIYuaHR0
+cDovL2NkcDEuZGlnaWNlcnQuY29tL0dlb1RydXN0UlNBQ0EyMDE4LmNybDBMBgNV
+HSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5k
+aWdpY2VydC5jb20vQ1BTMAgGBmeBDAECAjB0BggrBgEFBQcBAQRoMGYwJQYIKwYB
+BQUHMAGGGWh0dHA6Ly9vY3NwMS5kaWdpY2VydC5jb20wPQYIKwYBBQUHMAKGMWh0
+dHA6Ly9jYWNlcnRzLmdlb3RydXN0LmNvbS9HZW9UcnVzdFJTQUNBMjAxOC5jcnQw
+CQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYApLkJkLQYWBSH
+uxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFlwg5KwAAABAMARzBFAiAfsZKk2vNr
+O0D7r9q8HIEEC5huCFCUy5T8xjHlUNNw8QIhANNMcY634gUlvWJhytO6BfzIQWDP
+p0YdhcOUQ41/RGSBAHYAh3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8A
+AAFlwg5LoQAABAMARzBFAiEAxSyuhY1buGgibmi6FMoVzMj63eLGzLdOdxjhNPxO
+UFcCIGHNjFW7wwDkRuPz+BS7SwH3HwjFj5dRdTzdDo8rsfAKAHcAu9nfvB+KcbWT
+lCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFlwg5K7AAABAMASDBGAiEA8nL/Uv3j
+lMvPN/6kwlwHpqTcMesJLs/P4GJaqahea8sCIQDiUnlmrhx7eh8q9h9gcDYprv8l
+cl4m772jakApjrBJeTANBgkqhkiG9w0BAQsFAAOCAQEAck0fNQSZVfWymUBwSRXz
+mooSjmFXLU+GJ85/bQLPX8ipRYXNmX0JC0wiho5qNh9JqmAq6Ami+3dvKrZG4lh0
+WVdjOOX2qD8mmp27qUDKGyljA3RFuTyonBaYHI9bQ4H3pGoXzoYxrD4v0waQecmQ
+ahnd2tf4iO7arNxH3rHX3Ih+HeUSoq1rUBRv77QpVO3DVtbomovVWMEkX9O0T5IL
+iNm9BnAA3SjCbJJkMw42quB1+CqPlsvzgT07x8c0b2y9FrQE1NGOqqmbpap7+/NR
+rb9No1zt3v8/txh7kwk1C9oTxLftvX2qcQbcbzXdGEhhJGcYo4hgO0n7RXK6riYM
+mQ==
+-----END CERTIFICATE-----
+   #+END_EXAMPLE
+
+   qq2:
+   #+BEGIN_EXAMPLE
+-----BEGIN CERTIFICATE-----
+MIIEizCCA3OgAwIBAgIQBUb+GCP34ZQdo5/OFMRhczANBgkqhkiG9w0BAQsFADBh
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
+QTAeFw0xNzExMDYxMjIzNDVaFw0yNzExMDYxMjIzNDVaMF4xCzAJBgNVBAYTAlVT
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
+b20xHTAbBgNVBAMTFEdlb1RydXN0IFJTQSBDQSAyMDE4MIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAv4rRY03hGOqHXegWPI9/tr6HFzekDPgxP59FVEAh
+150Hm8oDI0q9m+2FAmM/n4W57Cjv8oYi2/hNVEHFtEJ/zzMXAQ6CkFLTxzSkwaEB
+2jKgQK0fWeQz/KDDlqxobNPomXOMJhB3y7c/OTLo0lko7geG4gk7hfiqafapa59Y
+rXLIW4dmrgjgdPstU0Nigz2PhUwRl9we/FAwuIMIMl5cXMThdSBK66XWdS3cLX18
+4ND+fHWhTkAChJrZDVouoKzzNYoq6tZaWmyOLKv23v14RyZ5eqoi6qnmcRID0/i6
+U9J5nL1krPYbY7tNjzgC+PBXXcWqJVoMXcUw/iBTGWzpwwIDAQABo4IBQDCCATww
+HQYDVR0OBBYEFJBY/7CcdahRVHex7fKjQxY4nmzFMB8GA1UdIwQYMBaAFAPeUDVW
+0Uy7ZvCj4hsbw5eyPdFVMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEF
+BQcDAQYIKwYBBQUHAwIwEgYDVR0TAQH/BAgwBgEB/wIBADA0BggrBgEFBQcBAQQo
+MCYwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBCBgNVHR8E
+OzA5MDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRHbG9i
+YWxSb290Q0EuY3JsMD0GA1UdIAQ2MDQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxo
+dHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMA0GCSqGSIb3DQEBCwUAA4IBAQAw
+8YdVPYQI/C5earp80s3VLOO+AtpdiXft9OlWwJLwKlUtRfccKj8QW/Pp4b7h6QAl
+ufejwQMb455OjpIbCZVS+awY/R8pAYsXCnM09GcSVe4ivMswyoCZP/vPEn/LPRhH
+hdgUPk8MlD979RGoUWz7qGAwqJChi28uRds3thx+vRZZIbEyZ62No0tJPzsSGSz8
+nQ//jP8BIwrzBAUH5WcBAbmvgWfrKcuv+PyGPqRcc4T55TlzrBnzAzZ3oClo9fTv
+O9PuiHMKrC6V6mgi0s2sa/gbXlPCD9Z24XUMxJElwIVTDuKB0Q4YMMlnpN/QChJ4
+B0AFsQ+DU0NCO+f78Xf7
+-----END CERTIFICATE-----
+
+   #+END_EXAMPLE
+
+   然后在 mbsync 的配置文件中显示指定就可以了。应该配到账户中，比如上面
+   的qq邮箱就可以这样指定：
+   #+BEGIN_SRC conf-space
+IMAPAccount qq
+Host imap.qq.com
+Port 993
+Timeout 0
+User 474364048@qq.com
+PassCmd "yous command to get your password"
+AuthMechs LOGIN
+SSLType IMAPS
+CertificateFile /Users/pengpengxp/.pem/qq-1.pem
+CertificateFile /Users/pengpengxp/.pem/qq-2.pem
+   #+END_SRC

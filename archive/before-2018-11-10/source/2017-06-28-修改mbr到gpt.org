@@ -1,0 +1,160 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 把mbr分驱方式转换成gpt
+
+
+Long long ago, 我们安装openstack compute节点是在virtualbox中制做好镜像
+后，使用dd把镜像导出来，然后再使用dd进行安装的。当时大概是按这个教程做
+的：
+#+BEGIN_EXAMPLE
+  compute的安装步骤
+  1、用live盘启动新装compute节点，进入系统后将网卡的ip地址，注意关闭wifi。
+  2、执行如下命令将compute－install镜像写入硬盘
+     sudo su ssh openstack@xxx.xxx.xxx.xxx "dd if=path/to/compute-install.img" | dd of=/dev/sda
+     reboot
+  3、再用live盘启动，进入界面后运行gparted，将剩余空间开辟一个53000M的空间，用于扩张compute的根文件系统，
+    并将剩余的空间分成另一个盘，将两个文件格式指定为lvm格式。
+  4、拔掉compute的两根网线，并重启系统（这一步很重要）
+  5、进入系统后修改/etc/hostname，将compute修改为对应的computeX
+     同时，修改/etc/network/interface，修改为相应的IP地址。
+     将/etc/nova/nova.conf中的my_ip修改为本机xxx.xxx.xxx.xxx
+     执行如下命令，扩展根文件系统，注意，通过fdisk -l /dev/sda看53000M分区对应的是sdaX，下面以sda3为例：
+     pvcreate /dev/sda3
+     vgextend compute-vg /dev/sda3
+     lvextend -l +100%FREE /dev/compute-vg/root
+     resize2fs /dev/compute-vg/root
+  6、重启系统，插上网线
+#+END_EXAMPLE
+
+这样安装会导致我们的分驱策略是这样的：
+#+BEGIN_EXAMPLE
+  +---------------------------------------------------------------+
+  |   +-------------------+-------------------+-------------------+-------------------+
+  |   |    Primary        |    Extened        |    Primary        |    Primary        |
+  |   |                   |                   |                   |                   |
+  |   |    500MB          |     7.5GB         |      50GB         |    160GB          |
+  |   |                   |                   |                   |                   |
+  |   +-------------------+--------+----------+-------------------+-------------------+
+  |                                |                              |
+  |                                |                              |
+  |                                |                              |
+  |                                |                              |
+  |                                |                LVM           |
+  |                                v                              |
+  |                       +--------+----------+                   |
+  |                       |    Logical        |                   |
+  |                       |                   |                   |
+  |                       |    7.5GB          |                   |
+  |                       |                   |                   |
+  +-----------------------+-------------------+-------------------+
+#+END_EXAMPLE
+
+这样分配，主要的问题就在于，Extened分驱已经不能扩展了！Extened分驱已经
+不能扩展了！Extened分驱已经不能扩展了！
+
+使用MBR方式的分驱表，因为只有64K，有只能分四个主分驱的限制！！！
+
+这样，最后的160GB，就不能再分了。假如需求是这样：再加入60GB的空间到LVM，
+然后剩下100GB的空间以后备用。这种状态下，PMs一定会大声地回答你：这个需
+求做不了！
+
+可能的解决思路是：使用gpt的分驱方式，这种方式的优点是：没有只能四个主
+分驱的限制。实际上它就没有主分驱和扩展分驱一说。于是PM立马提需求：我们
+“无损地”把mbr方式分好的分驱表转成gpt，可以分多个驱了，问题就解决啦。
+
+程序员们收到指令后就开始Google、Coding，Testing。一套组合拳之后，终于
+有了眉目：
+
+1. gdisk可以把mbr转成gpt。
+2. 转换之后，bootloader会被搞坏，需要重新安装。这里使用了syslinux。因
+   为它支持引导gpt分驱的磁盘。
+3. 不是所有的bios都支持gpt方式的分驱，这个问题在程序员给God献上了自己
+   的膝盖后得到了解决：我们的小盒子是支持的。
+
+最后程序员为了能让不会写代码的PM也能搞定这件事情以方便他们出去吹牛逼。
+写下了下面的脚本：
+#+BEGIN_SRC sh
+  #!/bin/bash
+  # 使用liveCD进入，这里以16.04为例。如果是其它live，请对应修改下面的软
+  # 件源
+
+  # 用gdisk把sda的分驱表转为gpt（gdisk /dev/sda，然后r f y w就可以了）。
+
+  # 然后使用gparted把sda的最后一个已经分好的lvm的分驱删掉（就是上图中
+  # 160GB的那个分驱）。important。如果此时不使用gparted删，会有问题，
+  # pvscan最后还是会扫出来它。这是一个坑，不知道gparted多做了些什么事情。
+
+  # 最后使用gparted把sda1设为 =legacy_boot= 的方式启动。选中
+  # sda1（Partition->Manage Flags->legacy_boot）。
+
+  # 下面这个脚本就是去安装bootloader。使用syslinux来做为bootloader（因为
+  # 它支持从bios中识别gpt分驱，不过这也是需要bios支持，我们的小盒子是支
+  # 持的，但是老一点的bios就不支持了。）。
+
+
+  # 更新软件源，安装需要的软件包
+  echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse' > /etc/apt/sources.list
+  echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse' >> /etc/apt/sources.list
+  echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse' >> /etc/apt/sources.list
+  echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse' >> /etc/apt/sources.list
+  echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse' >> /etc/apt/sources.list
+  apt-get update;apt-get install extlinux syslinux-common -y
+
+  # 使lvm的卷在liveCD中可见,Activate all volume groups available.
+  vgchange -a y
+  # 挂载上来
+  mount /dev/compute-vg/root /mnt
+  mount /dev/sda1 /mnt/boot
+  mkdir /mnt/boot/extlinux/
+
+  # 安装extlinux
+  extlinux -i  /mnt/boot/extlinux/
+
+  cp /usr/lib/syslinux/modules/bios/* /mnt/boot/extlinux/
+
+  # 配置extlinux的引导
+  echo 'UI menu.c32' > /mnt/boot/extlinux/extlinux.conf
+  echo 'PROMPT 0' >> /mnt/boot/extlinux/extlinux.conf
+  echo '' >> /mnt/boot/extlinux/extlinux.conf
+  echo 'MENU TITLE Boot Menu' >> /mnt/boot/extlinux/extlinux.conf
+  echo 'TIMEOUT 50' >> /mnt/boot/extlinux/extlinux.conf
+  echo 'DEFAULT ubuntu' >> /mnt/boot/extlinux/extlinux.conf
+  echo '' >> /mnt/boot/extlinux/extlinux.conf
+  echo 'LABEL ubuntu' >> /mnt/boot/extlinux/extlinux.conf
+  echo '        MENU LABEL Ubuntu Linux' >> /mnt/boot/extlinux/extlinux.conf
+  echo '        LINUX ../vmlinuz-4.4.0-38-generic' >> /mnt/boot/extlinux/extlinux.conf
+  echo '        APPEND root=/dev/compute-vg/root ro' >> /mnt/boot/extlinux/extlinux.conf
+  echo '        INITRD ../initrd.img-4.4.0-38-generic' >> /mnt/boot/extlinux/extlinux.conf
+
+   # Copy syslinux IPL which is capable of booting GPT partition to the
+   # disk's MBR.
+  dd if=/usr/lib/syslinux/mbr/gptmbr.bin of=/dev/sda bs=440 count=1
+#+END_SRC
+
+重启系统，现在可以使用parted命令来分驱啦（mkpart，按提示走就可以了）。
+
+最后附上把新建好的盘加入lvm中的命令：
+#+BEGIN_SRC sh
+  # 把sda2搞成lvm的，这样使用pvscan才能扫出来，（如果使用图形话的gparted
+  # 新建的lvm磁盘的话，应该会默认执行这一步）
+  pvcreate /dev/sda2
+  pvscan
+
+  vgextend /dev/compute-vg /dev/sda2
+  lvresize -l +100%FREE /dev/compute-vg/root
+  resize2fs /dev/compute-vg/root
+#+END_SRC
+
+
+参考文档：
+[[https://wiki.archlinux.org/index.php/GUID_Partition_Table_(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)][GUID Partition Table]]
+
+[[http://www.rodsbooks.com/gdisk/mbr2gpt.html][Converting to or from GPT]]
+
+[[http://www.lightofdawn.org/wiki/wiki.cgi/BIOSBootGPT][Booting GPT disk on BIOS systems]]
+
+[[http://shallowsky.com/linux/extlinux.html][How to install extlinux (syslinux) as a bootloader]]
+
+[[https://wiki.archlinux.org/index.php/Syslinux_(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)][Syslinux]]

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>（以前的）配置头</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>（以前的）配置头</h2>
+        <p>注意，这部分内容可能有点过时了。不再需要使用和Autotoolset一起分发的'acconfig'程序了。
+          因为 Autoconf 和 Automake 都不再使用 acconfig.h文件了。
+          这一节放在这里是因为一些历史原因，该节可能很快就会被删除或是重写。
+          但是，对于'autoheader'行为的描述是更新过并且是正确的。</p>
+
+        <p>你可以看到，正如之前的例子，configure脚本定义了两个可以在代码中使用的预编译宏：PACKAGE和VERSION。
+          随着你对'autoconf'工具越来越熟悉，你可能会定义更多的这样的宏。
+          如果你在编译的时候检查'make'的输出，你会发现这些宏都是通过'-D'选项来传递给编译器的，每个宏一个'-D'选项。
+          当有太多这种宏时，就会有两个问题：第一个是会让'make'的输出很难读。
+          而更重要的是，可能会超过一些braindead实现（没脑子的实现？）的'make'的缓冲区限制。
+          为了解决这个问题，一个折衷的方案就是：把所有这些宏都定义到一个文件中，然后在每个源文件中包含它。</p>
+
+        <p>一个使用这个解决办法的hello world程序就像这样：</p>
+
+        <ul>
+          <li><b>configure.ac</b><br />
+          <pre class="code">AC_INIT([Hello Program],
+        [1.0], [Author Of The Program <aotp@zxcv.com>],
+        [hello])
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT</pre></li>
+
+          <li><b>Makefile.am</b><br />
+            <pre class="code">bin_PROGRAMS = hello
+hello_SOURCES = hello.c</pre></li>
+
+          <li><b>hello.c</b><br />
+            <pre class="cpp"><span class="preprocessor">#ifdef</span> HAVE_CONFIG_H
+<span class="preprocessor">#include</span> <span class="string">&lt;config.h&gt;</span>
+<span class="preprocessor">#endif</span>
+
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="function-name">main</span>()
+{
+    printf(<span class="string">"Howdy, partner!\n"</span>);
+}
+</pre></li>
+        </ul>
+
+        <p>注意我们在configure.ac中使用了一个新的宏：AM_CONFIG_HEADER。
+        而且我们使用下面三句话有条件地使用配置文件：
+<pre class="cpp"><span class="preprocessor">#ifdef</span> HAVE_CONFIG_H
+<span class="preprocessor">#include</span> <span class="string">&lt;config.h&gt;</span>
+<span class="preprocessor"><span class="hl-line">#endif</span></span></pre></p>
+
+        <p>重要的是要保证config.h文件在最前面被包含。接下来就可以做下面的操作：</p>
+
+        <pre class="code">% aclocal
+% autoconf
+% touch NEWS README AUTHORS ChangeLog
+% automake -a
+configure.ac: installing `./install-sh'
+configure.ac: installing `./mkinstalldirs'
+configure.ac: installing `./missing'
+Makefile.am: installing `./INSTALL'
+Makefile.am: installing `./COPYING'
+configure.ac:5: required file `./config.h.in' not found
+Makefile.am: installing `./depcomp'</pre>
+
+        <p> Automake会报错，找不到一个名为'config.h.in'的文件。
+        可以使用'autoheader'程序来生成一个这样的文件，所以执行：</p>
+
+        <pre class="code">% autoheader
+% configure
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for gcc... gcc
+checking for C compiler default output... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+checking for style of include used by make... GNU
+checking dependency style of gcc... gcc3
+checking for a BSD-compatible install... /usr/bin/install -c
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+% make
+make  all-am
+make[1]: Entering directory `/home/mroberto/programs/autotoolset/hello5'
+source='hello.c' object='hello.o' libtool=no \
+depfile='.deps/hello.Po' tmpdepfile='.deps/hello.TPo' \
+depmode=gcc3 /bin/sh ./depcomp \
+gcc -DHAVE_CONFIG_H -I. -I. -I.     -g -O2 -c `test -f 'hello.c' || echo './'`hello.c
+gcc  -g -O2   -o hello  hello.o
+make[1]: Leaving directory `/home/mroberto/programs/autotoolset/hello5'</pre>
+
+        <p>在老一点的automake/autoconf软件包中，可能会有error错误。
+          原因是autoheader是包含在autoconf分发中的，而不在automake分发中。
+          因些它不知道如何处理PACKAGE和VERSION这两个宏。
+          现在，使用新语法的AC_INIT宏已经解决了这个问题。
+          我们还在这里讨论的原因是：
+          1. 它还是有用的。
+          2. 为了兼容有些还在使用老版本的用户，或者说。
+          3. 用户可以使用一些老版本automake/autoconf的软件包。</p>
+
+        <p>当然，如果'configure'定义了宏，我们是不知道的。
+          另一方面，如果宏没有定义，至少下面两个宏会默认被定义：</p>
+        <pre class="code">#undef PACKAGE
+#define PACKAGE 0</pre>
+
+        <p>autoheader程序会抱怨它不知道PACKAGE和VERSION宏的默认值。
+        可以创建一个新文件acconfig.h来定义默认值：</p>
+
+        <p><b>acconfig.h</b></p>
+        <pre class="code">#undef PACKAGE
+#undef VERSION</pre>
+
+        <p>然后再次执行'autoheader'：</p>
+        <pre class="code">% autoheader</pre>
+
+        <p>这时需要再次律诗行autoconf，它就可以看到acconfig.h的存在了：</p>
+
+        <pre class="code">% aclocal
+% autoconf</pre>
+
+        <p>接下来就可以编译程序了：</p>
+        <pre class="code">% configure
+% make
+Computing dependencies for hello.c...
+echo > .deps/.P
+gcc -DHAVE_CONFIG_H -I. -I. -I.   -g -O2 -c hello.c
+gcc -g -O2  -o hello  hello.o</pre>
+
+
+        <p>可以注意到，现在没有多个-D选项了，只有一个：-DHAVE_CONFIG_H。
+          为了保证hello.c可以找到并包含config.h头文件，正确的-I选项也被传递进来了。
+          输入下面命令来测试要发：</p>
+        <pre class="code">% make distcheck
+......
+========================
+hello-1.0.tar.gz is ready for distribution
+========================</pre>
+
+        <p>这样，事情就全部搞定了。</p>
+
+        <p>config.h文件有很长的历史了。
+          过去，很多的软件包都需要用户手动编辑config.h文件，手动调整需要定义的宏。
+          这样就导致这些软件很难安装。因为它需要用户对他自己的操作系统很熟悉。
+          比如，这样的注释就很不常见：”如果你的系统有一个坏掉的vfork，定义这个宏。“。
+          用户需要知道他的系统里面是否有一个坏掉的vfork，这是多么痛苦的事情啊。
+          使用auto-configure软件凶，所有这些细节都自动被处理了。
+          它们把用户的负担转移到了原本就应该承担的开发者身上。</p>
+
+        <p><b>注意：</b>使用acconfig.h文件已经过时了，但还是在这里讨论，原因在上面已经解释过了。</p>
+
+        <p>一般来说，acconfig.h文件中应该放以下的声明：</p>
+        <pre class="code">#undef MACRO
+#define MACRO default</pre>
+
+        <p>这些值被复制到config.h.in文件中，并补充了C预处理器宏的其它默认值。
+          这些宏是由原生的autoconf宏定义的：如AC_CHECK_HEADERS， AC_CHECK_FUNCS，
+          AC_CHECK_SIZEOF， AC_CHECK_LIB。</p>
+
+        <p>
+          如果acconfig.h文件中包含@TOP@字符串，所有这个字符串之前的行都会被直接加入到config.h文件中（在自定义之前）。
+          同样的，如果acconfig.h文件包含@bottom@字符串，所有字符串之后的内容都会被直接加入到config.h文件中（在自定义之后）。
+          这就允许用户可以直接包含和配置相关的其它预处理指令。
+          一些指令可能会用于自定义，它们可以有条件的来定义更后面的指令（Some of these directives may be using the custom
+          definitions to conditionally issue further preprocessor directives.）。
+          由于一些版本的autoheader有bug，如果acconfig.h文件中的@TOP@或者@BOTTOM@字符出现时，请确保在@TOP@前和@BOTTOM@后，各有一个空白行。
+          即使前后有注释。
+          否则，autoheader可能工作不正常。
+        </p>
+
+        <p>使用'autotoolset'，我们要发了一个名为acconfig的实用程序。它可以自动构建acconfig.h文件。
+          默认情况下，它总是确保下面两句存在：
+        </p>
+        <pre class="code">#undef PACKAGE
+#undef VERSION</pre>
+
+        <p>另外，如果安装对acconfig友好的宏，'acconfig'也会为这些宏安装对应的项目。
+          acconfig程序在未来可能会被修改，它也许会被省略（事实上也确实如些。）。
+          Autoconf有一个非官方的patch，它可以自动维护acconfig.h文件，这样可以省略对一个独立的程序的需要。
+          我不是很确定这个patch会不会被下一个官方的版本合入，不过我到是很愿意它被合入（注意：我认为它已经被合入了。）。
+          如果有兴趣，可以看一下 http://www.clark.net/pub/dickey/autoconf/autoconf.html 。
+          我认为这个Autoconfpatch是一个很棒的解决方案。
+          但是由于我不是Autoconf的维护者，我没法做决定。
+          所认，现在来讲，如果限制自己只使用autoconf，automake和autotoolset提供的宏的话。
+          acconfig.h文件必须完全由于acconfig来处理。
+          未来，我希望acconfig.h文件可以被configure脚本直接生成，并且它应该只是Autoconf程序的责任。
+        </p>
+
+        <p>也许用户会考虑：在没有太多宏定义的程序中，config.h文件是否还值得使用？我个人还是推荐使用的。
+          使用config.h文件，因为可能在未来，你的configure脚本可能需要定义更多的宏。
+          所以，一开始就踏上正确的脚才是对的。
+          另外，使用config.h文件，也可以使得所有的配置指定的C预处理指令都放到一个位置。
+          事实上，如果你在写一个奇特的程序：你需要在每个源文件都包含20条同样的 #include 头文件，
+          那么你完全可以把这20条#include写到config.h中，然后只包含config.h就可以了。
+          下一章节，我们将介绍由autotoolset和本教程发发的LF宏。这个宏明确要求使用config.h宏。
+          底线就是：config.h是你的朋友。信任config.h文件。</p>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>

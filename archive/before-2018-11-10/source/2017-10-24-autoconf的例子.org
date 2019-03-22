@@ -1,0 +1,551 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-10-24-autoconf的例子
+
+* 目录                                                                  :toc_2_org:
+- [[autoconf example][autoconf example]]
+- [[libtool example][libtool example]]
+- [[后续补充][后续补充]]
+  - [[根目录中的 =config.h= 文件][根目录中的 =config.h= 文件]]
+- [[工具链][工具链]]
+  - [[autoscan][autoscan]]
+  - [[ifnames][ifnames]]
+  - [[autoconf][autoconf]]
+  - [[autoreconf][autoreconf]]
+  - [[libtool][libtool]]
+- [[参考资料][参考资料]]
+- [[MISC note][MISC note]]
+  - [[automake变量][automake变量]]
+
+* autoconf example
+  :PROPERTIES:
+  :CUSTOM_ID: autoconf-example
+  :END:
+  最开始的目录结构是这样的：
+  #+BEGIN_EXAMPLE
+.
+└── src
+    └── main.c
+
+1 directory, 1 file
+
+  #+END_EXAMPLE
+  
+  其中的 =main.c= 就是一个普通的 =hello,world= 程序：
+  #+BEGIN_SRC C :tangle /tmp/autoconf_example/src/main.c :mkdirp yes :main no
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int args,char *argv[])
+{
+    printf("test for autoconf\n");
+    return 0;
+}
+  #+END_SRC
+
+  在主目录下执行  =autoscan= 生成两个新文件：
+  #+BEGIN_EXAMPLE
+ ➜  temp tree
+.
+├── autoscan.log
+├── configure.scan
+└── src
+    └── main.c
+
+1 directory, 3 files 
+  #+END_EXAMPLE
+
+  把 =configure.scan= 改名为 =configure.ac=[fn:1:之前叫
+  =configure.in=] ， =mv configure.scan configure.ac= 当前文件长这样：
+  #+BEGIN_SRC autoconf
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_HEADERS([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_OUTPUT
+  
+  #+END_SRC
+
+  在这个文件的基础上进行下简单的修改：
+  #+BEGIN_SRC autoconf
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT([peng-test], [1.0], [pengpengxppri@sina.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_HEADERS([])
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_OUTPUT
+  
+  #+END_SRC
+
+  这个时候还 =autoconf= 只能生成 =configure= 文件，还不能生成
+  =Makefile= 文件，需要在根目录和src目录下都新建一个 =Makefile.am= 的
+  文件。根目录下的 =Makefile.am= 长这样：
+  #+BEGIN_SRC makefile :tangle /tmp/autoconf_example/Makefile.am :mkdirp yes
+AUTOMAKE_OPTIONS = foreign
+SUBDIRS = src
+  #+END_SRC
+  第一句表示文件目录和gnu标准的格式是不同的。第二句表示子目录包括当前
+  目录下的 =src= 目录。
+  
+  =src= 目录下的 =Makefile.am= 表这样：
+  #+BEGIN_SRC makefile :tangle /tmp/autoconf_example/src/Makefile.am :mkdirp yes
+# what flags you want to pass to the C compiler & linker
+AM_CFLAGS =
+AM_LDFLAGS =
+
+# this lists the binaries to produce, the (non-PHONY, binary) targets in
+# the previous manual Makefile
+bin_PROGRAMS = main
+main_SOURCES = main.c
+  #+END_SRC
+  这个文件是最关键的。它直接指定编译时需要的选项，文件等等。主要看下面
+  的 =bin_PROGRAMS= 和 =main_SOURCES= 。后面的大写我理解应该是已预定义
+  好的宏。 !bin_PROGRAMS= main! 表示最后生成的可执行文件名字为 =main=
+  ，使用 =make install= 安装后是安装到 =$PREFIX/bin= 目录下面。
+  !main_SOURCES = main.c! 表示编译可执行文件需要的源文件只有 =main.c=
+  。
+  
+  然后在修改根目录的 =configure.ac= ，在 =AC_INIT()= 的后面加入：
+  #+BEGIN_EXAMPLE
+AM_INIT_AUTOMAKE(pengtest, 1.0)
+  #+END_EXAMPLE
+  还需要在 =configure.ac= 中加入下面一句来生成期望生成的 =Makefile= ：
+  #+BEGIN_EXAMPLE
+AC_OUTPUT(Makefile src/Makefile)
+  #+END_EXAMPLE
+  
+  最后总的 =configure.ac= 看起来是这样的：
+  #+BEGIN_SRC autoconf :tangle /tmp/autoconf_example/configure.ac :mkdirp yes
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT([pengtest], [1.0], [pengpengxppub@sina.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AM_INIT_AUTOMAKE
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_OUTPUT(Makefile src/Makefile)
+  #+END_SRC
+
+  此时在根目录下执行 =aclocal= 命令，生成 =aclocal.m4= 文件。它包括了
+  =automake= 执行时需要用到的一些宏，比如 =AM_INIT_AUTOMAKE= 。
+  
+  最后在根目录下执行 =automake --add-missing= 。automake会读取
+  =configure.ac= 中的内容和顶层 =Makefile.am= 的内容，再后递归地读取到
+  每个子目录中的 =Makefile.am= ，为每个 =Makefile.am= 生成一个对应的
+  =Makefile.in= 文件。 =--add-missing= 选项告诉automake如果出错则使用
+  默认脚本来替代（忽略错误。）。此时的目录看起来是这样的了：
+  #+BEGIN_EXAMPLE
+  ➜  temp tree
+.
+├── aclocal.m4
+├── autom4te.cache
+│   ├── output.0
+│   ├── output.1
+│   ├── output.2
+│   ├── output.3
+│   ├── requests
+│   ├── traces.0
+│   ├── traces.1
+│   ├── traces.2
+│   └── traces.3
+├── autoscan.log
+├── compile -> /usr/share/automake-1.15/compile
+├── config.log
+├── config.status
+├── configure
+├── configure.ac
+├── depcomp -> /usr/share/automake-1.15/depcomp
+├── install-sh -> /usr/share/automake-1.15/install-sh
+├── Makefile.am
+├── Makefile.in
+├── missing -> /usr/share/automake-1.15/missing
+└── src
+    ├── main.c
+    ├── Makefile.am
+    └── Makefile.in
+
+2 directories, 24 files
+  #+END_EXAMPLE
+  
+  最后，执行一次 =autoconf= ，重新生成一下 =configure= 文件。
+
+  这样该软件的编译安装就直接 =./configure && make && make install= 就
+  可以了。
+
+  最后再写一个脚本从头搞一次：
+  #+BEGIN_SRC sh :tangle /tmp/autoconf_example/build.sh :mkdirp yes
+aclocal
+automake --add-missing
+autoconf
+
+# all the command above can be replaced by one line:
+# `autoreconf -i'
+  #+END_SRC
+
+  #+BEGIN_SRC org :tangle /tmp/autoconf_example/readme.org :mkdirp yes
+run command to build from source:
+,,#+BEGIN_SRC sh
+sh build.sh
+./configure
+make
+,,#+END_SRC
+  #+END_SRC
+* libtool example
+  #+BEGIN_SRC C :tangle /tmp/libtool_example/src/main.c :mkdirp yes :main no
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "fun.h"
+
+int main(int args,char *argv[])
+{
+    printf("test for autoconf\n");
+    fun();
+    return 0;
+}
+  #+END_SRC
+
+  #+BEGIN_SRC C :tangle /tmp/libtool_example/src/fun.c :mkdirp yes :main no
+#include "fun.h"
+
+int fun()
+{
+    printf("test for libtools\n");
+    return 0;
+}
+  #+END_SRC
+
+  #+BEGIN_SRC C :tangle /tmp/libtool_example/src/fun.h :mkdirp yes :main no
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int fun();
+  #+END_SRC
+
+  #+BEGIN_SRC makefile :tangle /tmp/libtool_example/Makefile.am :mkdirp yes
+AUTOMAKE_OPTIONS = foreign
+SUBDIRS = src
+
+ACLOCAL_AMFLAGS = -I m4
+  #+END_SRC
+
+  #+BEGIN_SRC makefile :tangle /tmp/libtool_example/src/Makefile.am :mkdirp yes
+# what flags you want to pass to the C compiler & linker
+AM_CFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+AM_LDFLAGS =
+
+# this lists the binaries to produce, the (non-PHONY, binary) targets in
+# the previous manual Makefile
+
+lib_LTLIBRARIES = libpeng.la
+libpeng_la_SOURCES = fun.c fun.h
+libpeng_la_LDFLAGS = -version-info 0:0:0
+
+bin_PROGRAMS = main
+main_SOURCES = main.c
+main_LDADD = libpeng.la
+  #+END_SRC
+  #+BEGIN_SRC autoconf :tangle /tmp/libtool_example/configure.ac :mkdirp yes
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT([pengtest], [1.0], [pengpengxppub@sina.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AM_INIT_AUTOMAKE
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h])
+
+LT_INIT
+
+AC_CONFIG_MACRO_DIRS([m4])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_OUTPUT(Makefile src/Makefile)
+  #+END_SRC
+  #+BEGIN_SRC sh :tangle /tmp/libtool_example/build.sh :mkdirp yes
+libtoolize
+aclocal
+automake --add-missing
+autoconf
+
+# all the command above can be replaced by one line:
+# `autoreconf -i'
+  #+END_SRC
+
+  #+BEGIN_SRC org :tangle /tmp/libtool_example/readme.org :mkdirp yes
+run command to build from source:
+,#+BEGIN_SRC sh
+sh build.sh
+./configure
+make
+,#+END_SRC
+  #+END_SRC
+
+** tips
+   在git仓库中， =libtoolize= 默认会在git的root目录创建一个
+   =ltmain.sh= 的文件，但是有我们把第三方库代码拿回来，不想以git
+   submodule的方式使用，直接copy源码到我们的仓库时，使用 =libtoolize=
+   生成的 =ltmain.sh= 就会出现在我们仓库的根目录而不是在对应第三方库的
+   当前目录。
+
+   解决这个问题，可以在 =configure.ac= 中加入下面这句这ok了，强制在当
+   前目录生成：
+   #+BEGIN_EXAMPLE
+AC_CONFIG_AUX_DIR([.])
+   #+END_EXAMPLE
+* 后续补充
+** TODO 根目录中的 =config.h= 文件
+   - State "TODO"       from              [2017-10-24 二 11:37]
+   默认使用 =autoscan= 扫描的时候生成的 =configure.scan= 中有一条：
+   #+BEGIN_EXAMPLE
+AC_CONFIG_HEADERS([config.h])
+   #+END_EXAMPLE
+  
+   上面的例子中为了简单我把其中的 =config.h= 删掉了。实际使用时，如果使
+   用 =autoreconf -i= 来自动进行上述过程，会报下面的错误：
+   #+BEGIN_EXAMPLE
+  ➜  temp autoreconf -i          
+autoheader: error: AC_CONFIG_HEADERS not found in configure.ac
+autoreconf: /usr/bin/autoheader failed with exit status: 1
+   #+END_EXAMPLE
+  
+   于是试着加回去，然后到 =automake= 的时候会报错，提示文件找不到：
+   #+BEGIN_EXAMPLE
+configure.ac:8: error: required file 'config.h.in' not found
+   #+END_EXAMPLE
+
+* 工具链
+** autoscan 
+   帮忙生成 =configure.scan= 。可以在其上改出 =configure.ac= 。
+** ifnames
+   可以扫出文件中所有使用的宏。 它的功能用洋文叫 =List Conditionals= 。
+   #+BEGIN_EXAMPLE
+➜  src cat main.c  
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "config.h"
+
+int main(int args, char *argv[])
+{
+#ifdef PENG
+        printf("yestest for autoconf\n");
+#else
+        printf("no\n");
+#endif
+        return 0;
+}
+➜  src ifnames main.c
+PENG main.c
+   #+END_EXAMPLE
+** autoconf
+   用于生成 =configure= 的工具。不带参数执行时，它会结合M4的宏处理器来
+   处理 =configure.ac= ，然后生成 =configure= 文件。如果后面指定某文件，
+   它会根据指定的文件来处理，并输出到标准输出。
+   
+   autoconf的宏没可能分布在不同的地方。 =acsite.m4= 和 =aclocal.m4= 等。
+   如果同一个宏在不同的地方定义，以最后一次定义为准。
+** autoreconf
+   autoconf, autoheader, aclocal, automake, libtoolize, autopoint这些工
+   具多次调用很烦， =autoreconf= 可以自动地来调用它们，来更新编译系统。
+** libtool
+   它解决库的问题。不同的环境上支持的不同，有的只支持共享库，有的只支
+   持静态库，有的两者都支持。它就是来解决这些问题的。
+
+   详细使用上可以参考官网 [[https://www.gnu.org/software/libtool/manual/libtool.html][Libtool]] 。
+   
+   我觉得就是在平时编译链接的gcc命令前面加入 =libtool= 就可以了：
+   #+BEGIN_EXAMPLE
+libtool --mode=compile gcc -g -O -c foo.c
+
+libtool --mode=link gcc -g -O -o libhello.la foo.o hello.o
+
+libtool --mode=link gcc -g -O -o hell main.o libhello.la
+   
+   #+END_EXAMPLE
+   
+* 参考资料
+  [[http://mij.oltrelinux.com/devel/autoconf-automake/][autoconf automake tutorial]]
+
+  [[https://www.gnu.org/software/autoconf/manual/autoconf.html][Autoconf Manual]]
+
+  [[https://www.gnu.org/software/libtool/manual/libtool.html][Libtool]]
+
+* MISC note
+** automake变量
+*** BUILT_SOURCES
+    假设一种场景， =foo.c= 中include了 =foo.h= 。正常情况下
+    =foo.c,foo.h= 都存在的情况下。从 =foo.c= 中编出 =foo.o= 是很容易的。
+    因为依赖关系是明确的且文件都是静态存在的。但是如果 =foo.h= 可能需
+    要的编译时通过脚本或者其它方式生成时，编译 =foo.o= 时可能因为缺少
+    =foo.h= 而失败。
+    
+    该变量就是为这种情形存在的。它包括的文件可以在 =make all= 和 =make
+    check= 中被生成。
+    
+    把下面两个文件保存到一个目录，然后执行 =autoreconf -i= 。然后
+    =./configure && make= 就会发现 =echo= 语句会在最开始运行。
+    
+    #+BEGIN_SRC makefile :tangle /tmp/build_sources_example/Makefile.am :mkdirp yes
+AUTOMAKE_OPTIONS = foreign
+
+ACLOCAL_AMFLAGS = -I m4
+
+BUILT_SOURCES = foo.h
+
+foo.h:
+	echo "xiepeng"
+    #+END_SRC
+
+    #+BEGIN_SRC autoconf :tangle /tmp/build_sources_example/configure.ac :mkdirp yes
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT([pengtest], [1.0], [pengpengxppub@sina.com])
+AC_CONFIG_SRCDIR([])
+AM_INIT_AUTOMAKE
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h])
+
+LT_INIT
+
+AC_CONFIG_MACRO_DIRS([m4])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_OUTPUT(Makefile)
+    #+END_SRC
+    
+    *需要注意的是* ：该变量只是遵循 =make all, make check, make
+     install= 这三个。也就是说如果最开始的时候直接指定编 =make foo= 可
+     能是通不过的。这时候可能需要先使用 =make all= 然后才能编过 =make
+     foo= 。
+*** AM_CPPFLAGS和AM_CFLAGS
+    AM_CPPFLAGS中的flag会传给调用预处理的每一次编译。
+    
+    AM_CFLAGS传递一些额外的编译参数。
+
+    以 [[#autoconf-example][autoconf example]] 中的例子来说，如果我们把src中的 =Makefile.am=
+    改一下：
+    #+BEGIN_SRC makefile
+# what flags you want to pass to the C compiler & linker
+AM_CPPFLAGS = -DXIEPENG1
+AM_CFLAGS = -D XIEPENG2
+AM_LDFLAGS =
+
+# this lists the binaries to produce, the (non-PHONY, binary) targets in
+# the previous manual Makefile
+bin_PROGRAMS = main
+main_SOURCES = main.c
+    #+END_SRC
+    编译输出如下：
+    #+BEGIN_EXAMPLE
+/tmp/autoconf_example $ make
+Making all in src
+make[1]: Entering directory '/tmp/autoconf_example/src'
+gcc -DPACKAGE_NAME=\"pengtest\" -DPACKAGE_TARNAME=\"pengtest\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"pengtest\ 1.0\" -DPACKAGE_BUGREPORT=\"pengpengxppub@sina.com\" -DPACKAGE_URL=\"\" -DPACKAGE=\"pengtest\" -DVERSION=\"1.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -I.  -DXIEPENG1  -DXIEPENG2 -g -O2 -MT main.o -MD -MP -MF .deps/main.Tpo -c -o main.o main.c
+mv -f .deps/main.Tpo .deps/main.Po
+gcc -DXIEPENG2 -g -O2   -o main main.o  
+make[1]: Leaving directory '/tmp/autoconf_example/src'
+make[1]: Entering directory '/tmp/autoconf_example'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/tmp/autoconf_example'
+/tmp/autoconf_example $ 
+    #+END_EXAMPLE
+    
+    上述两个参数都会被每个单独编译中的 =xxx_CPPFLAGS= 和 =xxx_CFLAGS=
+    覆盖。 还是以 [[#autoconf-example][autoconf example]] 中的例子来说，如果我们再把src中的
+    =Makefile.am= 改一下：
+    #+BEGIN_SRC makefile
+# what flags you want to pass to the C compiler & linker
+AM_CPPFLAGS = -DXIEPENG1
+AM_CFLAGS = -DXIEPENG2
+AM_LDFLAGS =
+
+# this lists the binaries to produce, the (non-PHONY, binary) targets in
+# the previous manual Makefile
+bin_PROGRAMS = main
+main_SOURCES = main.c
+main_CFLAGS = -DXIEPENG3
+main_CPPFLAGS = -DXIEPENG4
+    #+END_SRC
+    看下编译输出：
+    #+BEGIN_EXAMPLE
+/tmp/autoconf_example $ make
+Making all in src
+make[1]: Entering directory '/tmp/autoconf_example/src'
+gcc -DPACKAGE_NAME=\"pengtest\" -DPACKAGE_TARNAME=\"pengtest\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"pengtest\ 1.0\" -DPACKAGE_BUGREPORT=\"pengpengxppub@sina.com\" -DPACKAGE_URL=\"\" -DPACKAGE=\"pengtest\" -DVERSION=\"1.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -I.  -DXIEPENG4  -DXIEPENG3 -g -O2 -MT main-main.o -MD -MP -MF .deps/main-main.Tpo -c -o main-main.o `test -f 'main.c' || echo './'`main.c
+mv -f .deps/main-main.Tpo .deps/main-main.Po
+gcc -DXIEPENG3 -g -O2   -o main main-main.o  
+make[1]: Leaving directory '/tmp/autoconf_example/src'
+make[1]: Entering directory '/tmp/autoconf_example'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/tmp/autoconf_example'
+/tmp/autoconf_example $ 
+    #+END_EXAMPLE

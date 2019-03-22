@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>emacs在多个文件的多个位置跳转</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">emacs在多个文件的多个位置跳转</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org725a84e">1. 安装</a></li>
+<li><a href="#org62e54fc">2. 使用</a></li>
+</ul>
+</div>
+</div>
+<p>
+之前我写过一篇 <a href="2017-06-05-Emacs%E5%A6%82%E4%BD%95%E6%9A%82%E5%AD%98windows_layout.html">Emacs如何暂存windows_layout</a> 。可以保存窗口布局和位置。
+但是实际编程时，我可能会遇到很长的文件，如需要同时修改100行，888行，
+1500行。或者是一个功能需要修改同时多个文件的多个地方，常见的server和
+client编程时，如果修改了消息格式，那么client和server两端都需要修改。这
+个时候光记住窗口布局显然是有点不够了。
+</p>
+
+<p>
+这个插件这可以派上用场啦 <a href="https://github.com/joodland/bm">bm</a> 。
+</p>
+
+<div id="outline-container-org725a84e" class="outline-2">
+<h2 id="org725a84e"><span class="section-number-2">1</span> 安装</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+我是直接使用 package-install 安装的。如果网络不好，可以参考 <a href="2017-07-21-emacs%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0package%E6%9D%A5%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6.html">emacs使
+用本地package来安装软件</a> .
+</p>
+</div>
+</div>
+
+<div id="outline-container-org62e54fc" class="outline-2">
+<h2 id="org62e54fc"><span class="section-number-2">2</span> 使用</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+常用的函数有这些：
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">函数名</th>
+<th scope="col" class="org-left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">bm-toggle</td>
+<td class="org-left">在当前行标记或反标记一个tag</td>
+</tr>
+
+<tr>
+<td class="org-left">bm-bookmark-regexp</td>
+<td class="org-left">把满足regexp的行都打上tag</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">bm-next</td>
+<td class="org-left">跳到下一个tag</td>
+</tr>
+
+<tr>
+<td class="org-left">bm-previous</td>
+<td class="org-left">跳到上一个tag</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">bm-show-all</td>
+<td class="org-left">显示所有的tag</td>
+</tr>
+
+<tr>
+<td class="org-left">bm-show</td>
+<td class="org-left">显示当前buffer的tag</td>
+</tr>
+
+<tr>
+<td class="org-left">helm-bm</td>
+<td class="org-left">使用helm调出bm，可以通过输入来过滤</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">peng-bm-remove-all-all-buffers</td>
+<td class="org-left">删除所有的tag</td>
+</tr>
+
+<tr>
+<td class="org-left">peng-bm-remove-current-buffer</td>
+<td class="org-left">删除当前buffer的tag</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">bm-toggle-buffer-persistence</td>
+<td class="org-left">设置当前buffer中的tag为永久的</td>
+</tr>
+
+<tr>
+<td class="org-left">bm-save</td>
+<td class="org-left">保存所有设置为永久的tag到文件</td>
+</tr>
+
+<tr>
+<td class="org-left">bm-load-and-restore</td>
+<td class="org-left">从文件中加载tag到buffer</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+我使用hydra，所以这样定义一个：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (<span style="color: #a1db00;">defhydra</span> hydra-local-bookmark-menu (<span style="color: #d18aff;">:exit</span> t
+                                               <span style="color: #d18aff;">:columns</span> 3)
+      <span style="color: #ff4b4b;">"Local bookmark"</span>
+      (<span style="color: #ff4ea3;">"t"</span> bm-toggle <span style="color: #ff4ea3;">"toggle"</span>)
+      (<span style="color: #ff4ea3;">"P"</span> bm-toggle-buffer-persistence <span style="color: #ff4ea3;">"toggle buffer persistence"</span>)
+      (<span style="color: #ff4ea3;">"n"</span> bm-next <span style="color: #ff4ea3;">"next"</span> <span style="color: #d18aff;">:exit</span> nil)
+      (<span style="color: #ff4ea3;">"p"</span> bm-previous <span style="color: #ff4ea3;">"previours"</span> <span style="color: #d18aff;">:exit</span> nil)
+      (<span style="color: #ff4ea3;">"s"</span> bm-show-all <span style="color: #ff4ea3;">"show all"</span>)
+      (<span style="color: #ff4ea3;">"S"</span> bm-save <span style="color: #ff4ea3;">"save all bookmark to disk"</span>)
+      (<span style="color: #ff4ea3;">"L"</span> bm-load-and-restore <span style="color: #ff4ea3;">"load bookmark from disk"</span>)
+      (<span style="color: #ff4ea3;">"l"</span> bm-show <span style="color: #ff4ea3;">"show current file"</span>)
+      (<span style="color: #ff4ea3;">"d"</span> peng-bm-remove-all-all-buffers <span style="color: #ff4ea3;">"remove all"</span>)
+      (<span style="color: #ff4ea3;">"c"</span> peng-bm-remove-current-buffer <span style="color: #ff4ea3;">"remove current file"</span>)
+      (<span style="color: #ff4ea3;">"h"</span> helm-bm <span style="color: #ff4ea3;">"helm bm"</span>)
+      (<span style="color: #ff4ea3;">"RET"</span> nil <span style="color: #ff4ea3;">"cancel"</span>)
+      (<span style="color: #ff4ea3;">"&lt;return&gt;"</span> nil <span style="color: #ff4ea3;">"cancel"</span>)
+      )
+</pre>
+</div>
+<p>
+然后随便绑定到一个按键就是啦：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    (global-set-key (kbd <span style="color: #ff4ea3;">"C-c t"</span>) 'hydra-local-bookmark-menu/body)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

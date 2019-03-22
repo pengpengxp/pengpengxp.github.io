@@ -1,0 +1,96 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+
+#+TITLE: 2018-07-31-使用mutex互斥量和条件变量对线程进行同步的例子
+
+两个线程之前使用互斥量和条件变量进行同步。C代码如下：
+#+BEGIN_SRC C :tangle /tmp/mutex_and_cond_example/main.c :mkdirp yes
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+/* 互斥量 */
+pthread_mutex_t qlock = PTHREAD_MUTEX_INITIALIZER;
+/* 条件变量 */
+pthread_cond_t qready = PTHREAD_COND_INITIALIZER;
+
+/* 临界资源，两个线程都会访问 */
+int value = 0;
+
+void * thread2(void *arg)
+{
+    while (1)
+    {
+        pthread_mutex_lock(&qlock);
+
+        while(!value)
+        {
+            /* 我理解：thread2在这里等的时候，会对互斥qlock进行解锁。被
+             ,* thread1的signal唤醒后，它又会把互斥量qlock锁住 */
+            pthread_cond_wait(&qready, &qlock);
+        } 
+
+        printf("in thread 2: value = %d\n", value);
+        
+        value = 0;
+        
+        sleep(1);
+
+        pthread_mutex_unlock(&qlock);
+    }
+
+    return NULL;
+}
+
+int main(int argc, char *argv[])
+{
+    printf("Test for mutex and conf: \n");
+    
+    pthread_t tid;
+    int i = 1;
+
+    while(1)
+    {
+        pthread_create(&tid, NULL, &thread2, NULL);
+
+        /* thread2被唤醒正在进行处理，时，如果正在访问临界资源，这里就
+         ,* 是value。那该线程会在这里等待。 */
+        pthread_mutex_lock(&qlock);
+        
+        value = i;
+
+        pthread_mutex_unlock(&qlock);
+
+        printf("[%s:%d] main thread send signal %d\n", __FUNCTION__, __LINE__, value);
+
+        /* 这里就是通过条件变量把thread2唤醒 */
+        pthread_cond_signal(&qready);
+        
+        if (i == 2)
+        {
+            break;
+        }
+        
+        i++;
+    }
+
+    sleep(5);
+
+    return 0;
+}
+
+#+END_SRC
+
+Makefile如下：
+#+BEGIN_SRC makefile :tangle /tmp/mutex_and_cond_example/Makefile :mkdirp yes
+.PHONY:a.out
+a.out:
+	cc main.c -lpthread
+clean:
+	rm -rfv *~ a.out
+#+END_SRC

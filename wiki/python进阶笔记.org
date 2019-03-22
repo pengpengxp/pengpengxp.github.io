@@ -1,0 +1,1432 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+options: tangle:nil
+
+#+TITLE: python进阶笔记
+
+* Collections
+** TODO defaultdict [[defaultdict_no1][这儿没懂]]
+   它可以在初始化时设置数据的类型，感觉有点像 =C++= 中的 =<list>= 这些
+   容器一样。
+  #+BEGIN_SRC python :results output
+    from collections import defaultdict
+
+    colours = (
+        ('Yasoob', 'Yellow'),
+        ('Ali', 'Blue'),
+        ('Arham', 'Green'),
+        ('Ali', 'Black'),
+        ('Yasoob', 'Red'),
+        ('Ahmed', 'Silver'),
+    )
+
+    favourite_colours = defaultdict(list)
+
+    for name, colour in colours:
+        favourite_colours[name].append(colour)
+
+    print(favourite_colours)
+  #+END_SRC
+
+  #+RESULTS:
+  : defaultdict(<type 'list'>, {'Arham': ['Green'], 'Yasoob': ['Yellow', 'Red'], 'Ahmed': ['Silver'], 'Ali': ['Blue', 'Black']})
+
+  上面的例子用dict应该这样写：
+  #+BEGIN_SRC python :results output
+    from collections import defaultdict
+
+    colours = (
+        ('Yasoob', 'Yellow'),
+        ('Ali', 'Blue'),
+        ('Arham', 'Green'),
+        ('Ali', 'Black'),
+        ('Yasoob', 'Red'),
+        ('Ahmed', 'Silver'),
+    )
+
+    favourite_colours = dict()
+
+    favourite_colours['xie'] = []
+    favourite_colours['xie'].append('peng')
+
+    for name, colour in colours:
+        favourite_colours[name] = []
+        favourite_colours[name].append(colour)
+
+    print(favourite_colours)
+  #+END_SRC
+
+  #+RESULTS:
+  : {'Arham': ['Green'], 'Yasoob': ['Red'], 'Ahmed': ['Silver'], 'xie': ['peng'], 'Ali': ['Black']}
+
+  另外，对一个键进行嵌套赋值时，dict会出异常：
+  #+BEGIN_SRC python :results output
+    d = dict()
+    d['xie']['peng'] = 'hi'
+  #+END_SRC
+
+  #+RESULTS:
+
+  使用defaultdict可以解决。这个代码硬是没看懂。 <<defaultdict_no1>>
+  #+BEGIN_SRC python :results output :exports both
+    import collections
+    tree = lambda: collections.defaultdict(tree)
+    some_dict = tree()
+    some_dict['colours']['favourite'] = "yellow"
+    print some_dict
+  #+END_SRC
+
+  #+RESULTS:
+  : defaultdict(<function <lambda> at 0x10187cb18>, {'colours': defaultdict(<function <lambda> at 0x10187cb18>, {'favourite': 'yellow'})})
+
+** counter
+   我看reference，它是dict的一个子类。键对应的就是需要统计的元素，值就
+   是它的个数。迭代器中的元素可以使用counter来统计个数，counter还可以
+   用其它的 =mapping= 或者 =counter= 来初始化。
+   #+BEGIN_SRC python :results output :exports both
+     from collections import Counter
+
+     colours = (
+         ('Yasoob', 'Yellow'),
+         ('Ali', 'Blue'),
+         ('Arham', 'Green'),
+         ('Ali', 'Black'),
+         ('Yasoob', 'Red'),
+         ('Ahmed', 'Silver'),
+     )
+
+     favs = Counter(name for name, colour in colours)
+     print(favs)
+   #+END_SRC
+
+   #+RESULTS:
+   : Counter({'Yasoob': 2, 'Ali': 2, 'Arham': 1, 'Ahmed': 1})
+
+   统计一个文件中的行：
+   #+BEGIN_SRC python :results output :exports both
+     from collections import Counter
+     with open('/tmp/kk.txt', 'rb') as f:
+         line_count = Counter(f)
+     print(line_count)
+   #+END_SRC
+
+   #+RESULTS:
+   : Counter({'peng xie\n': 2, 'xie peng\n': 2, '\n': 1, 'peng\n': 1, 'xie peng \n': 1, 'xie\n': 1})
+
+   统计一个字符串：
+   #+BEGIN_SRC python :results output :exports both
+     from collections import Counter
+
+     c = Counter('xxxxxxie')
+     print c
+   #+END_SRC
+
+** deque
+   双端队列
+   #+BEGIN_SRC python :results output :exports both
+     from collections import deque
+
+     d = deque()
+     d.append(1)
+     d.append(2)
+     d.append(3)
+     print d
+
+     d = deque(range(5))
+     print(len(d))
+     print(d)
+
+     print d.popleft()
+     print d.pop()
+     print d
+   #+END_SRC
+
+   #+RESULTS:
+   : deque([1, 2, 3])
+   : 5
+   : deque([0, 1, 2, 3, 4])
+   : 0
+   : 4
+   : deque([1, 2, 3])
+
+   它可以限制队列的大小，超出限制大小时，队列的另一端的数据会被挤出去，
+   另外，还可以使用extend来用列表扩展队列：
+   #+BEGIN_SRC python :results output :exports both
+     from collections import deque
+
+     d = deque(maxlen=10)
+     for i in range(10):
+         d.append(i)
+
+     print d
+
+     d.append(11)
+     print d
+     d.appendleft(12)
+     print d
+
+     d.extend([8, 8, 8])
+     print d
+   #+END_SRC
+
+   #+RESULTS:
+   : deque([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+   : deque([1, 2, 3, 4, 5, 6, 7, 8, 9, 11], maxlen=10)
+   : deque([12, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+   : deque([3, 4, 5, 6, 7, 8, 9, 8, 8, 8], maxlen=10)
+
+** namedtuple
+   命名元组和元组一样，都是不可变的。但是你可以不用索引来访问其中的元
+   素，可以像字典一样去访问它。
+   #+BEGIN_SRC python :results output :exports both
+     from collections import namedtuple
+
+     Animal = namedtuple('Animal', 'name age type')
+     perry = Animal(name="perry", age=31, type="cat")
+
+     print(perry)
+     print perry.name
+     print perry.age
+
+     d = {'xie': 'peng'}
+     print d['xie']
+     print d.get('xie')
+   #+END_SRC
+
+   #+RESULTS:
+   : Animal(name='perry', age=31, type='cat')
+   : perry
+   : 31
+   : peng
+   : peng
+
+   元组的属性值是不可变的，下面的代码会出问题：
+   #+BEGIN_SRC python :results output
+     from collections import namedtuple
+
+     test = namedtuple('test', 'name age')
+     d = test(name='xiepeng', age=27)
+     d.age = 1
+   #+END_SRC
+
+   命名元组很轻量，和元组占用差不多的内存。它比字典更快。
+
+   它也可以通过索引来访问元素，所以它其实是向后兼容元组的。
+   #+BEGIN_SRC python :results output :exports both
+     from collections import namedtuple
+
+     Animal = namedtuple('Animal', 'name age type')
+     perry = Animal(name="perry", age=31, type="cat")
+     print(perry[0])
+     print(perry[1])
+   #+END_SRC
+
+   #+RESULTS:
+   : perry
+   : 31
+
+   命名元组还可以转换为字典：
+   #+BEGIN_SRC python :results output :exports both
+     from collections import namedtuple
+
+
+     test = namedtuple('test', 'name age')
+
+     a = test(name='xie', age=27)
+     print type(a)
+     print a
+     d = a._asdict()
+     print type(d)
+     print d
+
+   #+END_SRC
+
+   #+RESULTS:
+   : <class '__main__.test'>
+   : test(name='xie', age=27)
+   : <class 'collections.OrderedDict'>
+   : OrderedDict([('name', 'xie'), ('age', 27)])
+
+** enum.Enum
+   #+BEGIN_SRC python :results output :exports both
+     # -*- coding: utf-8; -*-
+     from collections import namedtuple
+     from enum import Enum
+
+     class Species(Enum):
+         cat = 1
+         dog = 2
+         horse = 3
+         aardvark = 4
+         butterfly = 5
+         owl = 6
+         platypus = 7
+         dragon = 8
+         unicorn = 9
+         # 依次类推
+
+         # 但我们并不想关心同一物种的年龄，所以我们可以使用一个别名
+         kitten = 1  # (译者注：幼小的猫咪)
+         puppy = 2   # (译者注：幼小的狗狗)
+
+     Animal = namedtuple('Animal', 'name age type')
+     perry = Animal(name="Perry", age=31, type=Species.cat)
+     drogon = Animal(name="Drogon", age=4, type=Species.dragon)
+     tom = Animal(name="Tom", age=75, type=Species.cat)
+     charlie = Animal(name="Charlie", age=2, type=Species.kitten)
+
+     print charlie.type == tom.type
+     print charlie.type
+
+     print Species(1)
+     print Species['cat']
+     print Species.cat
+
+   #+END_SRC
+
+   #+RESULTS:
+   : True
+   : Species.kitten
+   : Species.kitten
+   : Species.kitten
+   : Species.kitten
+   
+* lambda
+  和elisp一样，它就是匿名函数。其函数原型如下：
+  #+BEGIN_EXAMPLE
+    lambda 参数:操作(参数)
+  #+END_EXAMPLE
+
+  例子：
+  #+BEGIN_SRC python :results output :exports both
+    add = lambda x, y: x + y
+
+    print add(2, 3)
+  #+END_SRC
+
+  #+RESULTS:
+  : 5
+
+  排序时的key函数：
+  #+BEGIN_SRC python :results output :exports both
+    a = [(1, 2), (4, 1), (9, 10), (13, -3)]
+    a.sort(key=lambda x: x[1])
+    print a
+
+    a.sort(key=lambda x: x[0])
+    print a
+
+    print sorted(a, key=lambda x: x[1])
+
+
+  #+END_SRC
+
+  #+RESULTS:
+  : [(13, -3), (4, 1), (1, 2), (9, 10)]
+  : [(1, 2), (4, 1), (9, 10), (13, -3)]
+  : [(13, -3), (4, 1), (1, 2), (9, 10)]
+
+  #+BEGIN_SRC python :results output :exports both
+    list1 = [9, 7, 5]
+    list2 = [10, 8, 6]
+
+    data = zip(list1, list2)
+    print data
+    data.sort()
+    print data
+    print '================'
+    print zip(*data)
+    list1, list2 = map(lambda t: list(t), zip(*data))
+    print '################'
+    print list1
+    print list2
+  #+END_SRC
+
+  #+RESULTS:
+  : [(9, 10), (7, 8), (5, 6)]
+  : [(5, 6), (7, 8), (9, 10)]
+  : ================
+  : [(5, 7, 9), (6, 8, 10)]
+  : ################
+  : [5, 7, 9]
+  : [6, 8, 10]
+
+* 推导式
+  :PROPERTIES:
+  :CUSTOM_ID: tuidaoshi
+  :END:
+  集合推导式
+  #+BEGIN_SRC python :results output :exports both
+    squared = {x**2 for x in [1, 1, 2]}
+    print(squared)
+  #+END_SRC
+
+  列表推导式：
+  #+BEGIN_SRC python :results output :exports both
+    multiples = [i for i in range(30) if i % 3 is 0]
+    print(multiples)
+
+    squared = []
+    for x in range(10):
+        squared.append(x**2)
+    print squared
+
+    squared2 = [x**2 for x in range(10)]
+    print squared2
+  #+END_SRC
+
+  #+RESULTS:
+  : [0, 3, 6, 9, 12, 15, 18, 21, 24, 27]
+  : [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+  : [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+  字典推导式：
+  #+BEGIN_SRC python :results output :exports both
+    mcase = {'a': 10, 'b': 34, 'A': 7, 'Z': 3}
+
+    mcase_frequency = {
+        k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0)
+        for k in mcase.keys()
+    }
+    print mcase_frequency
+  #+END_SRC
+
+  #+RESULTS:
+  : {'a': 17, 'z': 3, 'b': 34}
+
+  可以使用来对换一个字典的键值：
+  #+BEGIN_SRC python :results output :exports both
+    d = {
+        'xie': 'peng',
+        'hi': 'hao'
+    }
+
+    print d
+    print {v: k for k, v in d.items()}
+  #+END_SRC
+
+  #+RESULTS:
+  : {'hi': 'hao', 'xie': 'peng'}
+  : {'peng': 'xie', 'hao': 'hi'}
+
+* 上下文管理
+  使用with进行上下文管理，非常方便：
+  #+BEGIN_SRC python :results output
+    with open('xxx', 'rb') as f:
+        f.read()
+        ...
+  #+END_SRC
+
+  可以自己定义上下文管理器：
+  #+BEGIN_SRC python :results output :exports both
+    class File(object):
+        def __init__(self, filename, method):
+            self.file_obj = open(filename, method)
+
+        def __enter__(self):
+            return self.file_obj
+
+        def __exit__(self, type, value, traceback):
+            self.file_obj.close()
+
+
+    with File('/tmp/kk.txt', 'r') as f:
+        print f.read()
+  #+END_SRC
+  它真的起作用了！
+  
+  大概的过程：
+  1. =with= 先暂存下 =__exit__= 方法。
+  2. 调用 =__enter__= 方法，把它的返回值赋给 =f= 。
+  3. 通过f执行对应的操作。
+  4. 最后 =with= 语句调用 =__exit__= 做后续处理，这里就是直接关闭文件
+     句柄。
+  
+  下面我们来看下 =__exit__= 的其它几个参数，如果在 =with= 执行的时候发
+  生了异常，它会将异常的 =type, value, traceback= 都传递给 =__exit__=
+  。让它来处理异常。两种情况：
+  1. 如果 =__exit__= 返回的是True，那么这个异常就被优雅地处理了。
+  2. 如果 =exit__= 返回的是True以外的任何东西，那么这个异常将被 =with=
+     语句抛出。
+
+  
+  下面这个例子我们就自己handle了错误：
+  #+BEGIN_SRC python :results output :exports both
+    class File(object):
+        def __init__(self, file_name, method):
+            self.file_obj = open(file_name, method)
+        def __enter__(self):
+            return self.file_obj
+        def __exit__(self, type, value, traceback):
+
+            print("Exception has been handled")
+            print type
+            print value
+            print traceback
+
+            self.file_obj.close()
+            return True
+
+    with File('demo.txt', 'w') as opened_file:
+        opened_file.undefined_function()
+  #+END_SRC
+
+  #+RESULTS:
+  : Exception has been handled
+  : <type 'exceptions.AttributeError'>
+  : 'file' object has no attribute 'undefined_function'
+  : <traceback object at 0x100762638>
+  
+  还可以使用生成器和装钸器来实现上下文管理。Python有个contextlib模块专
+  门用于这个目的。我们可以使用一个生成器函数来实现一个上下文管理器，而
+  不是使用一个类。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from contextlib import contextmanager
+
+    @contextmanager
+    def open_file(name):
+        f = open(name, 'w')
+        yield f
+        f.close()
+  #+END_SRC
+
+* 装钸器
+  在python中，函数是对象。可以进行赋值等操作：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    # -*- coding: utf-8; -*-
+    def hi(name="yasoob"):
+        return "hi " + name
+
+    print(hi())
+    # output: 'hi yasoob'
+
+    # 我们甚至可以将一个函数赋值给一个变量，比如
+    greet = hi
+    # 我们这里没有在使用小括号，因为我们并不是在调用hi函数
+    # 而是在将它放在greet变量里头。我们尝试运行下这个
+
+    print(greet())
+    # output: 'hi yasoob'
+
+    # 如果我们删掉旧的hi函数，看看会发生什么！
+    del hi
+    print(hi())
+    #outputs: NameError
+
+    print(greet())
+    #outputs: 'hi yasoob'
+
+  #+END_SRC
+  
+  函数中可以定义函数：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def out_fun():
+
+        def inter_fun1():
+            print 'in inter_fun1'
+
+        def inter_fun2():
+            print 'in inter_fun2'
+        
+        print 'begin out_fun'
+
+        inter_fun1()
+        inter_fun2()
+    
+        print 'end_out_fun'
+    
+    out_fun()
+  #+END_SRC
+
+  #+RESULTS:
+  : begin out_fun
+  : in inter_fun1
+  : in inter_fun2
+  : end_out_fun
+
+  内部的 =inter_fun1= 和 =inter_fun2= 在外部是不可见的。
+
+  函数也可以返回函数：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def re_fun():
+        print 'in re_fun'
+
+        def hi():
+            print 'hi this is the returned function'
+            return 'this is return value'
+
+        return hi
+
+
+    a = re_fun()
+
+    print a()
+  #+END_SRC
+
+  #+RESULTS:
+  : in re_fun
+  : hi this is the returned function
+  : this is return value
+
+  函数也可以做为参数传递给另一个函数：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a(fun):
+        print 'a will call function %s' % fun.__name__
+        fun()
+
+    def hi():
+        print 'hi'
+
+    def hello():
+        print 'hello,world'
+    
+    a(hi)
+    a(hello)
+  #+END_SRC
+
+  #+RESULTS:
+  : a will call function hi
+  : hi
+  : a will call function hello
+  : hello,world
+
+  装钸器就是让你能在你的函数的前后去执行代码：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a_new_decorator(a_func):
+
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+
+            a_func()
+
+            print("I am doing some boring work after executing a_func()")
+
+        return wrapTheFunction
+
+    def a_function_requiring_decoration():
+        print("I am the function which needs some decoration to remove my foul smell")
+
+    a_function_requiring_decoration()
+    #outputs: "I am the function which needs some decoration to remove my foul smell"
+
+    a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)
+    #now a_function_requiring_decoration is wrapped by wrapTheFunction()
+
+    a_function_requiring_decoration()
+    #outputs:I am doing some boring work before executing a_func()
+    #        I am the function which needs some decoration to remove my foul smell
+    #        I am doing some boring work after executing a_func()
+  #+END_SRC
+
+  #+RESULTS:
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work before executing a_func()
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work after executing a_func()
+
+  如果我们按照python中的语法来写的话，这个装钸器应该是这样的：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a_new_decorator(a_func):
+
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+
+            a_func()
+
+            print("I am doing some boring work after executing a_func()")
+
+        return wrapTheFunction
+
+    @a_new_decorator
+    def a_function_requiring_decoration():
+        """Hey you! Decorate me!"""
+        print("I am the function which needs some decoration to "
+              "remove my foul smell")
+
+    a_function_requiring_decoration()
+    #outputs: I am doing some boring work before executing a_func()
+    #         I am the function which needs some decoration to remove my foul smell
+    #         I am doing some boring work after executing a_func()
+
+    #the @a_new_decorator is just a short way of saying:
+    a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)
+  #+END_SRC
+
+  #+RESULTS:
+  : I am doing some boring work before executing a_func()
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work after executing a_func()
+
+  但是这样会有一个问题：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a_new_decorator(a_func):
+
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+
+            a_func()
+
+            print("I am doing some boring work after executing a_func()")
+
+        return wrapTheFunction
+
+    @a_new_decorator
+    def a_function_requiring_decoration():
+        """Hey you! Decorate me!"""
+        print("I am the function which needs some decoration to "
+              "remove my foul smell")
+
+    a_function_requiring_decoration()
+    a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)
+
+    print a_function_requiring_decoration.__name__
+  #+END_SRC
+
+  #+RESULTS:
+  : I am doing some boring work before executing a_func()
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work after executing a_func()
+  : wrapTheFunction
+
+  最后函数的 =__name__= 属性被覆盖了。这并不是我们想要的。python中有一
+  个 =functools.wraps= 可以用来解决这个问题，他可以保留被装钸的函数的
+  =__name__= 和 =__doc__= 属性。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def a_new_decorator(a_func):
+        @wraps(a_func)
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+            a_func()
+            print("I am doing some boring work after executing a_func()")
+        return wrapTheFunction
+
+    @a_new_decorator
+    def a_function_requiring_decoration():
+        """Hey yo! Decorate me!"""
+        print("I am the function which needs some decoration to "
+              "remove my foul smell")
+
+    print(a_function_requiring_decoration.__name__)
+    # Output: a_function_requiring_decoration
+  #+END_SRC
+
+  #+RESULTS:
+  : a_function_requiring_decoration
+
+  web应用认证的时候常用装钸器来这样写：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def requires_auth(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            auth = request.authorization
+            if not auth or not check_auth(auth.username, auth.password):
+                authenticate()
+            return f(*args, **kwargs)
+        return decorated
+  #+END_SRC
+
+  记录日志也是常使用的：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def logit(func):
+        @wraps(func)
+        def with_logging(*args, **kwargs):
+            print(func.__name__ + " was called")
+            return func(*args, **kwargs)
+        return with_logging
+
+    @logit
+    def addition_func(x):
+       """Do some math."""
+       return x + x
+
+
+    result = addition_func(4)
+    # Output: addition_func was called
+  #+END_SRC
+
+  #+RESULTS:
+  : addition_func was called
+  
+  如果需要定义带参数的装钸器：
+  #+name: nested_decorator
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def logit(logfile='out.log'):
+        def logging_decorator(func):
+            @wraps(func)
+            def wrapped_function(*args, **kwargs):
+                log_string = func.__name__ + " was called"
+                print(log_string)
+                # 打开logfile，并写入内容
+                with open(logfile, 'a') as opened_file:
+                    # 现在将日志打到指定的logfile
+                    opened_file.write(log_string + '\n')
+                return func(*args, **kwargs)
+            return wrapped_function
+        return logging_decorator
+
+    @logit()
+    def myfunc1():
+        pass
+
+    myfunc1()
+    # Output: myfunc1 was called
+    # 现在一个叫做 out.log 的文件出现了，里面的内容就是上面的字符串
+
+    @logit(logfile='func2.log')
+    def myfunc2():
+        pass
+
+    myfunc2()
+    # Output: myfunc2 was called
+    # 现在一个叫做 func2.log 的文件出现了，里面的内容就是上面的字符串
+  #+END_SRC
+  可以类似于这样来理解：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    logit(logfile='out.log')(myfunc1)
+    logit(logfile='func2.log')(myfunc2)
+  #+END_SRC
+  函数式编程，函数是第一类数据，可以做为参数传递，也可以做为返回值。所
+  以这种带参数的装钸器执行就是类似于上面这样。
+
+  装钸器还可以实现为一个类，这就更灵活啦。比如上面的记录日志的同时，还
+  想再发邮件给管理员。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+
+    class clogit(object):
+        """Documentation for clogit
+
+        """
+        def __init__(self, logfile):
+            super(clogit, self).__init__()
+            self.logfile = logfile
+
+        def __call__(self, func):
+            @wraps(func)
+            def wrapper(*args, **kargs):
+                logstring = 'function %s is called' % func.__name__
+                func(*args, **kargs)
+
+                with open(self.logfile, 'wb') as f:
+                    f.write(logstring)
+
+                self.notify(logstring)
+
+            return wrapper
+
+        def notify(self, s):
+            # clogit not notify
+            pass
+
+    @clogit('/tmp/logit')
+    def function_test():
+        print 'this is function'
+
+    function_test()
+  #+END_SRC
+  这个感觉有点像：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    clogit('/tmp/logit').__call__(function_test)
+  #+END_SRC
+  
+  它比 [[nested_decorator][嵌套函数的方式]] 更整洁一些。而且扩展也很方便啦，现在我们可以定义
+  一个可以发邮件的子类：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+
+    class clogit(object):
+        """Documentation for clogit
+
+        """
+        def __init__(self, logfile='/tmp/logit'):
+            super(clogit, self).__init__()
+            self.logfile = logfile
+
+        def __call__(self, func):
+            @wraps(func)
+            def wrapper(*args, **kargs):
+                logstring = 'function %s is called' % func.__name__
+                func(*args, **kargs)
+
+                with open(self.logfile, 'wb') as f:
+                    f.write(logstring)
+
+                self.notify(logstring)
+
+            return wrapper
+
+        def notify(self, s):
+            # clogit not notify
+            pass
+
+
+    class email_andlogit(clogit):
+        """Documentation for email_andlogit
+
+        """
+        def __init__(self, emailaddress='xxx@gmail.com', *args, **kargs):
+            super(email_andlogit, self).__init__(*args, **kargs)
+            self.emailaddress = emailaddress
+
+        def notify(self, s):
+            print 'I will email %s to %s' % (s, self.emailaddress)
+            # send email here
+
+    @email_andlogit('peng@gmail.com', '/tmp/emaillogit')
+    def test_email():
+        print 'this is function'
+    test_email()
+  #+END_SRC
+  这样， =email_andlogit= 不仅会写入日志，还会发送一封邮件给管理员啦。
+
+* 函数式编程
+** Map
+   把一个函数映射到一个列表中的每个元素。一般和匿名函数（lambda）结合
+   使用。先看看下面这段代码：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     items = [1, 2, 3, 4, 5]
+     squared = []
+     for i in items:
+         squared.append(i**2)
+     print squared
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 4, 9, 16, 25]
+
+   修改为map后可以这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     items = [1, 2, 3, 4, 5]
+     squared = list(map(lambda x: x**2, items))
+     print squared
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 4, 9, 16, 25]
+
+   map不仅可以应用到全是数据的列表，还可以应用到全是函数的列表上（因为
+   函数式编程可以把函数也理解为数据，所以其实这两种也没差）：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     # -*- coding: utf-8; -*-
+     def add(x):
+         return x + x
+
+     def multi(x):
+         return x * x
+
+     f = [add, multi]
+
+     # 这里的x分别就是上面的函数，一个一个进行调用罗
+     value = map(lambda x: x(3), f)
+
+     # 这里加了list转换，为了兼容，python2中map返回列表，3中map返回迭代器。
+     print list(value)
+   #+END_SRC
+
+   #+RESULTS:
+   : [6, 9]
+   
+   map写一个把所有list中字符串转换为首字母大写其它小写的形式：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def f(x):
+         a = x.lower()
+         return ''.join(a[0].upper()) + a[1:]
+
+     b = ['XIE', 'sd', 'PDFJAF', 'aaaaaaaasdfasDSFFDSAF']
+     print map(f, b)
+  #+END_SRC
+
+   #+RESULTS:
+   : ['Xie', 'Sd', 'Pdfjaf', 'Aaaaaaaasdfasdsffdsaf']
+
+** Filter
+   和map类似的用法，它可以过滤满足条件的元素出来。
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     num = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+     value = filter(lambda x: x < 0, num)
+     print(list(value))
+   #+END_SRC
+   filter是内置函数，它类似于for，但是更快。但是大部分情况下，还是 [[#tuidaoshi][推导式]]  更优雅一些。
+
+** Reduce
+   reduce把一个函数作用在一个序列[x1, x2, x3...]上，这个函数必须接收两
+   个参数，reduce把结果继续和序列的下一个元素做累积计算，其效果就是：
+   #+BEGIN_EXAMPLE
+     reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)
+   #+END_EXAMPLE
+   
+   这样的话写一个求和的函数可以这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     a = range(201)
+     print reduce((lambda x, y: x + y), a)
+   #+END_SRC
+
+   #+RESULTS:
+   : 20100
+   
+   reduce求积：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def fun(l):
+         return reduce((lambda x, y:x * y), l)
+
+     print fun(range(1, 5))
+   #+END_SRC
+
+   #+RESULTS:
+   : 24
+
+
+   把 =[1, 3, 5, 7, 9]= 转换为13579可以这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     a = [1, 3, 5, 7, 9]
+     def f(x, y):
+         return x * 10 + y
+
+     print reduce(f, a)
+   #+END_SRC
+
+   #+RESULTS:
+   : 13579
+
+   因为字符串也是一个序列，那么加上map我们可以这样搞一个字符串转换数字
+   的函数：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def fn(x, y):
+         return x * 10 + y
+
+     def char2num(s):
+         return {'0': 0,
+                 '1': 1,
+                 '2': 2,
+                 '3': 3,
+                 '4': 4,
+                 '5': 5,
+                 '6': 6,
+                 '7': 7,
+                 '8': 8,
+                 '9': 9,
+         }[s]
+
+     a = map(char2num, '13579')
+     b = reduce(fn, map(char2num, '13579'))
+     print a
+     print b
+     print type(b)
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 3, 5, 7, 9]
+   : 13579
+   : <type 'int'>
+
+   整合起来弄成一个函数就可以是这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def mystr2int(s):
+         def fn(x, y):
+             return x * 10 + y
+
+         def char2num(s):
+             return {'0': 0,
+                     '1': 1,
+                     '2': 2,
+                     '3': 3,
+                     '4': 4,
+                     '5': 5,
+                     '6': 6,
+                     '7': 7,
+                     '8': 8,
+                     '9': 9,
+             }[s]
+
+         return reduce(fn, map(char2num, s))
+
+     result = mystr2int('13579')
+     print type(result), result
+   #+END_SRC
+
+   #+RESULTS:
+   : <type 'int'> 13579
+
+* set 数据结构
+  它与列表类似，但是不能包括重复的值，它可以根据一个list来初始化：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    l = [1, 2, 3, 4, 1]
+    s = set(l)
+    print l
+    print s
+  #+END_SRC
+
+  #+RESULTS:
+  : [1, 2, 3, 4, 1]
+  : set([1, 2, 3, 4])
+
+  求交集：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    a = set([1, 2, 3, 4, 5])
+    b = set([3, 5])
+    print a.intersection(b)
+    print a & b
+  #+END_SRC
+
+  #+RESULTS:
+  : set([3, 5])
+  : set([3, 5])
+
+  差集：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    a = set([1, 2, 3, 4, 5])
+    b = set([3, 5])
+
+    print a - b
+  #+END_SRC
+
+  #+RESULTS:
+  : set([1, 2, 4])
+
+  并集：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    a = set([1, 2, 3, 4, 5])
+    b = set([3, 5, 7])
+
+    print a | b
+  #+END_SRC
+
+  #+RESULTS:
+  : set([1, 2, 3, 4, 5, 7])
+
+  
+  还可以使用符号来创建集合：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    a_set = {'red', 'blue'}
+    print type(a_set)
+  #+END_SRC
+
+  #+RESULTS:
+  : <type 'set'>
+
+* 三元运算符
+  看看下面的例子：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    a = True
+    b = 'yes' if a else 'no'
+    print b
+
+    a = False
+    b = 'yes' if a else 'no'
+    print b
+  #+END_SRC
+
+* Global
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def fun():
+        global s
+        print 'this is in fun'
+        s = range(10)
+
+    fun()
+    print s
+  #+END_SRC
+  在函数内部使用 =global= 来声明变量，可以使该变量在全局范围都能访问。
+  但是一般应该避免这样使用。
+
+* 可变对象和不可变对象
+  :PROPERTIES:
+  :CUSTOM_ID: mutable_or_unmutable
+  :END:
+  可变就是可以被改动，不可变就是常量的意思。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    foo = ['hi']
+    bar = foo
+    foo += ['xie']
+    print bar
+  #+END_SRC
+  其实这两个变量指向的只是同一个东西啦。再来看下下面的例子：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def add_to(num, target=[]):
+        target.append(num)
+        return target
+
+    print add_to(1)
+    # Output: [1]
+
+    print add_to(2)
+    # Output: [2]
+
+    print add_to(3)
+    # Output: [3]
+  #+END_SRC
+
+  #+RESULTS:
+  : [1]
+  : [1, 2]
+  : [1, 2, 3]
+
+  为什么这里还是一个累加的结果呢？因为在python中当函数被定义时，默认参
+  数只会被调用一次，而不是每次调用都会重新运算。 *应该永远不要定义一个
+  可变类型的默认参数，除非你知道你在做什么。* 上面的例子要实现不累加的
+  效果，需要这样做：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def addto(num, target=None):
+        if target == None:
+            target = []
+
+        target.append(num)
+        return target
+
+    print addto(1)
+    print addto(2)
+    print addto(3)
+  #+END_SRC
+
+  #+RESULTS:
+  : [1]
+  : [2]
+  : [3]
+
+** 总结可变类型和不可变类型
+   不可变类型：
+   1. 元组 =(1, 2)= 。
+   2. string ：可以发现s和d都是指向的同一块内存。但是使用切片后，c其实
+      是copy出来。
+      #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+        s = 'xiepeng'
+        d = 'xiepeng'
+        print id(s)
+        print id(d)
+
+        c = d[1:]
+        print id(s)
+        print id(d)
+        print id(c)
+      #+END_SRC
+
+      #+RESULTS:
+      : 4302740576
+      : 4302740576
+      : 4302740576
+      : 4302740576
+      : 4302740624
+   3. int和float。77在内存中是同一块地址，但是 =j+1= ，其实也是执行了
+      copy的动作。
+      #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+        def int_test(): 
+            i = 77
+            j = 77
+            print(id(77))                    #140396579590760
+            print('i id:' + str(id(i)))      #i id:140396579590760
+            print('j id:' + str(id(j)))      #j id:140396579590760
+            print i is j                     #True
+            j = j + 1
+            print('new i id:' + str(id(i)))  #new i id:140396579590760
+            print('new j id:' + str(id(j)))  #new j id:140396579590736
+            print i is j                     #False
+
+        if __name__ == '__main__':
+            int_test()
+      #+END_SRC
+
+      #+RESULTS:
+      : 4298165080
+      : i id:4298165080
+      : j id:4298165080
+      : True
+      : new i id:4298165080
+      : new j id:4298165056
+      : False
+
+   可变类型：
+   1. dict和list。因为是可变的，所以这里没有拷贝。都是在一块内存里搞事
+      情。
+      #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+        def dict_test():
+            a = {}
+            b = a
+            print(id(a))
+            a['a'] = 'hhhh'
+            print('id a:' + str(id(a)))
+            print('a:' + str(a))
+            print('id b:' + str(id(b)))
+            print('b:' + str(b))
+
+        if __name__ == '__main__':
+            dict_test()
+      #+END_SRC
+
+      #+RESULTS:
+      : 4302741864
+      : id a:4302741864
+      : a:{'a': 'hhhh'}
+      : id b:4302741864
+      : b:{'a': 'hhhh'}
+
+   python函数调用的时候都是传递的引用，也就是传给函数原变量实际指向的
+   内存空间。如果传递的是可变参数类型，在函数内部对该参数的修改会体现
+   到原变量上。这样会出问题的。应避免。
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def fun(x):
+         print 'inter x = %s before modify' % x
+         x.append(5)
+         print 'inter x = %s after modify' % x
+    
+
+     a = [1,2,3]
+     print 'outer before function a = %s' % a
+     fun(a)
+     print 'outer after function a = %s' % a
+   #+END_SRC
+
+   #+RESULTS:
+   : outer before function a = [1, 2, 3]
+   : inter x = [1, 2, 3] before modify
+   : inter x = [1, 2, 3, 5] after modify
+   : outer after function a = [1, 2, 3, 5]
+
+   换成不可变类型的string表现就正常了。
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def fun(x):
+         print 'inter x = [{s}] before modify'.format(s=x)
+         x = x + 'end'
+         print 'inter x = [{s}] after modify'.format(s=x)
+
+
+     a = 'xie'
+     print 'outer before function a = [{s}]'.format(s=a)
+     fun(a)
+     print 'outer after function a = [{s}]'.format(s=a)
+   #+END_SRC
+
+   #+RESULTS:
+   : outer before function a = [xie]
+   : inter x = [xie] before modify
+   : inter x = [xieend] after modify
+   : outer after function a = [xie]
+
+* python实用命令
+** 共享文件目录
+  直接进到目录这样：
+  #+BEGIN_SRC sh :results outputs :tangle /tmp/test_from_org_tangle.sh :exports code
+    # Python 2
+    python -m SimpleHTTPServer
+
+    # Python 3
+    python -m http.server
+  #+END_SRC
+** 脚本性能分析 
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     python -m cProfile main.py
+   #+END_SRC
+   备注：cProfile是一个比profile更快的实现，因为它是用c写的
+
+** CSV转换为json
+   #+BEGIN_SRC sh :results outputs :tangle /tmp/test_from_org_tangle.sh :exports both
+     python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
+   #+END_SRC
+
+** 列表辗平
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     import itertools
+
+     a_list = [[1, 2], [3, 4], [5, 6]]
+     print list(itertools.chain.from_iterable(a_list))
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 2, 3, 4, 5, 6]
+
+** 一行式的构造器
+   避免类初始化时大量重复的赋值语句:
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     # -*- coding: utf-8; -*-
+     class A(object):
+         def __init__(self, a, b, c, d, e, f):
+             self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+
+
+     # 上面语句可以工作请看下面：
+     class C(object):
+         """Documentation for C
+
+         """
+         def __init__(self, a, b, c=4):
+             print locals()
+             print self.__dict__
+             self.__dict__.update({'z': 15})
+             print self.__dict__
+             print self.z
+
+     c = C(2, 3)
+   #+END_SRC
+
+   #+RESULTS:
+   : {'a': 2, 'c': 4, 'b': 3, 'self': <__main__.C object at 0x100766490>}
+   : {}
+   : {'z': 15}
+   : 15
+
+** 命令行下编译py文件
+   #+BEGIN_SRC sh :results outputs :tangle /tmp/test_from_org_tangle.sh :exports code :mkdirp yes
+     python -m py_compile file.py file2.py
+   #+END_SRC
+
+
+* 对象自省
+  自省(introspection)，在计算机编程领域里，是指在运行时来判断一个对象
+  的类型的能力。它是Python的强项之一。Python中所有一切都是一个对象，而
+  且我们可以仔细勘察那些对象。
+
+** dir
+   它返回一个列表，列出了一个对象的所有属性和方法。
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     a = 2
+     print dir(a)
+   #+END_SRC
+
+   #+RESULTS:
+   : ['__abs__', '__add__', '__and__', '__class__', '__cmp__', '__coerce__', '__delattr__', '__div__', '__divmod__', '__doc__', '__float__', '__floordiv__', '__format__', '__getattribute__', '__getnewargs__', '__hash__', '__hex__', '__index__', '__init__', '__int__', '__invert__', '__long__', '__lshift__', '__mod__', '__mul__', '__neg__', '__new__', '__nonzero__', '__oct__', '__or__', '__pos__', '__pow__', '__radd__', '__rand__', '__rdiv__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rlshift__', '__rmod__', '__rmul__', '__ror__', '__rpow__', '__rrshift__', '__rshift__', '__rsub__', '__rtruediv__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', '__xor__', 'bit_length', 'conjugate', 'denominator', 'imag', 'numerator', 'real']
+
+   如果不传入参数，它可以返回当前作用域的所有名字：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     a = 2
+     b = a
+     print dir()
+   #+END_SRC
+
+   #+RESULTS:
+   : ['__builtins__', '__doc__', '__file__', '__name__', '__package__', 'a', 'b']
+
+** type和id
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     print(type(1))
+     print(type('xiepeng'))
+
+     print(id(7))
+     print(id(7))
+   #+END_SRC
+
+   #+RESULTS:
+   : <type 'int'>
+   : <type 'str'>
+   : 4298162808
+
+** inspect
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     import inspect
+     print(inspect.getmembers(str))
+     print(dir(str))
+   #+END_SRC
+
+   #+RESULTS:
+   : [('__add__', <slot wrapper '__add__' of 'str' objects>), ('__class__', <type 'type'>), ('__contains__', <slot wrapper '__contains__' of 'str' objects>), ('__delattr__', <slot wrapper '__delattr__' of 'object' objects>), ('__doc__', "str(object='') -> string\n\nReturn a nice string representation of the object.\nIf the argument is a string, the return value is the same object."), ('__eq__', <slot wrapper '__eq__' of 'str' objects>), ('__format__', <method '__format__' of 'str' objects>), ('__ge__', <slot wrapper '__ge__' of 'str' objects>), ('__getattribute__', <slot wrapper '__getattribute__' of 'str' objects>), ('__getitem__', <slot wrapper '__getitem__' of 'str' objects>), ('__getnewargs__', <method '__getnewargs__' of 'str' objects>), ('__getslice__', <slot wrapper '__getslice__' of 'str' objects>), ('__gt__', <slot wrapper '__gt__' of 'str' objects>), ('__hash__', <slot wrapper '__hash__' of 'str' objects>), ('__init__', <slot wrapper '__init__' of 'object' objects>), ('__le__', <slot wrapper '__le__' of 'str' objects>), ('__len__', <slot wrapper '__len__' of 'str' objects>), ('__lt__', <slot wrapper '__lt__' of 'str' objects>), ('__mod__', <slot wrapper '__mod__' of 'str' objects>), ('__mul__', <slot wrapper '__mul__' of 'str' objects>), ('__ne__', <slot wrapper '__ne__' of 'str' objects>), ('__new__', <built-in method __new__ of type object at 0x100187540>), ('__reduce__', <method '__reduce__' of 'object' objects>), ('__reduce_ex__', <method '__reduce_ex__' of 'object' objects>), ('__repr__', <slot wrapper '__repr__' of 'str' objects>), ('__rmod__', <slot wrapper '__rmod__' of 'str' objects>), ('__rmul__', <slot wrapper '__rmul__' of 'str' objects>), ('__setattr__', <slot wrapper '__setattr__' of 'object' objects>), ('__sizeof__', <method '__sizeof__' of 'str' objects>), ('__str__', <slot wrapper '__str__' of 'str' objects>), ('__subclasshook__', <built-in method __subclasshook__ of type object at 0x100187540>), ('_formatter_field_name_split', <method '_formatter_field_name_split' of 'str' objects>), ('_formatter_parser', <method '_formatter_parser' of 'str' objects>), ('capitalize', <method 'capitalize' of 'str' objects>), ('center', <method 'center' of 'str' objects>), ('count', <method 'count' of 'str' objects>), ('decode', <method 'decode' of 'str' objects>), ('encode', <method 'encode' of 'str' objects>), ('endswith', <method 'endswith' of 'str' objects>), ('expandtabs', <method 'expandtabs' of 'str' objects>), ('find', <method 'find' of 'str' objects>), ('format', <method 'format' of 'str' objects>), ('index', <method 'index' of 'str' objects>), ('isalnum', <method 'isalnum' of 'str' objects>), ('isalpha', <method 'isalpha' of 'str' objects>), ('isdigit', <method 'isdigit' of 'str' objects>), ('islower', <method 'islower' of 'str' objects>), ('isspace', <method 'isspace' of 'str' objects>), ('istitle', <method 'istitle' of 'str' objects>), ('isupper', <method 'isupper' of 'str' objects>), ('join', <method 'join' of 'str' objects>), ('ljust', <method 'ljust' of 'str' objects>), ('lower', <method 'lower' of 'str' objects>), ('lstrip', <method 'lstrip' of 'str' objects>), ('partition', <method 'partition' of 'str' objects>), ('replace', <method 'replace' of 'str' objects>), ('rfind', <method 'rfind' of 'str' objects>), ('rindex', <method 'rindex' of 'str' objects>), ('rjust', <method 'rjust' of 'str' objects>), ('rpartition', <method 'rpartition' of 'str' objects>), ('rsplit', <method 'rsplit' of 'str' objects>), ('rstrip', <method 'rstrip' of 'str' objects>), ('split', <method 'split' of 'str' objects>), ('splitlines', <method 'splitlines' of 'str' objects>), ('startswith', <method 'startswith' of 'str' objects>), ('strip', <method 'strip' of 'str' objects>), ('swapcase', <method 'swapcase' of 'str' objects>), ('title', <method 'title' of 'str' objects>), ('translate', <method 'translate' of 'str' objects>), ('upper', <method 'upper' of 'str' objects>), ('zfill', <method 'zfill' of 'str' objects>)]
+   : ['__add__', '__class__', '__contains__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__getnewargs__', '__getslice__', '__gt__', '__hash__', '__init__', '__le__', '__len__', '__lt__', '__mod__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__rmod__', '__rmul__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '_formatter_field_name_split', '_formatter_parser', 'capitalize', 'center', 'count', 'decode', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'index', 'isalnum', 'isalpha', 'isdigit', 'islower', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'partition', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
+
+  它和 =dir= 的区别是dir只返回 =name= ，而它返回 =(name, attribute)=
+  这样的元组。

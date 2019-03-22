@@ -1,0 +1,796 @@
+# -*- coding: utf-8-emacs-unix; word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+SETUPFILE: theme.setup
+
+#+Title: 记录安装ubuntu的Thinkpad T420s的笔记
+
+
+* 禁止触摸板
+  对于键盘党来说，触摸板很是碍事，可以这样禁用它 [[https://askubuntu.com/questions/65951/how-to-disable-the-touchpad][How to disable the
+  touchpad? - Ask Ubuntu]] ：
+  #+BEGIN_EXAMPLE
+    Run the following command in a terminal:
+
+    xinput list
+
+    You will get an output that looks like this:
+
+    ⎡ Virtual core pointer                          id=2    [master pointer  (3)]
+    ⎜   ↳ Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
+    ⎜   ↳ SynPS/2 Synaptics TouchPad                id=12   [slave  pointer  (2)]
+    ⎣ Virtual core keyboard                         id=3    [master keyboard (2)]
+        ↳ Virtual core XTEST keyboard               id=5    [slave  keyboard (3)]
+        ↳ Power Button                              id=6    [slave  keyboard (3)]
+        ↳ Video Bus                                 id=7    [slave  keyboard (3)]
+        ↳ Power Button                              id=8    [slave  keyboard (3)]
+        ↳ Sleep Button                              id=9    [slave  keyboard (3)]
+        ↳ Laptop_Integrated_Webcam_1.3M             id=10   [slave  keyboard (3)]
+        ↳ AT Translated Set 2 keyboard              id=11   [slave  keyboard (3)]
+        ↳ Dell WMI hotkeys                          id=13   [slave  keyboard (3)]
+
+    It displays all the input devices connected. Note that they all have an id. Since 12 is the id for my touchpad, running the following command will disable it.
+
+    xinput set-prop 12 "Device Enabled" 0
+
+    In Ubuntu versions >12.04 you can also directly disable via
+
+    xinput --disable 12
+
+    (and enable via a similar command)
+
+  #+END_EXAMPLE
+
+* =ubuntu16.04= 中亮度调节不起作用
+  [[https://askubuntu.com/questions/762764/cant-change-brightness-in-ubuntu-16-04-lts][screen - Can't change brightness in Ubuntu 16.04 LTS - Ask Ubuntu]]
+
+  这个答案有用。
+  #+BEGIN_EXAMPLE
+    Pre Ubuntu LTS 16.04
+
+    Under (X)Ubuntu 14.04 LTS, brightness control on my Panasonic Toughbook CF-52 used to work fine by adding acpi_osi=Linux to the GRUB_CMDLINE_LINUX_DEFAULT= line in /etc/default/grub:
+
+    GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_osi=Linux"
+
+    and issuing
+
+    $ sudo update-grub
+
+    after editing and before rebooting.
+    Since Ubuntu LTS 16.04
+
+    However, above solution stopped working after upgrading to (X)Ubuntu LTS 16.04. This appears to be typical for laptops with integrated Intel video graphics.
+
+    One can check this with the following command:
+
+    $ ls /sys/class/backlight/
+        intel_backlight  panasonic
+
+    At least intel_backlight should be mentioned, most probably in addition to an OEM name like for example panasonic, dell_backlight, etc.
+
+    If this is the case, proceed with creating the following file
+
+    $ sudo nano /usr/share/X11/xorg.conf.d/20-intel.conf
+
+    with contents:
+
+    Section "Device"
+            Identifier  "card0"
+            Driver      "intel"
+            Option      "Backlight"  "intel_backlight"
+            BusID       "PCI:0:2:0"
+    EndSection
+
+    Reboot, and enjoy your backlight buttons!
+  #+END_EXAMPLE
+
+  *不过我也按后面说的修改了grub，不知道有没有影响*
+  #+BEGIN_EXAMPLE
+    I use Lenovo Z570 and adding acpi_backlight=none to /etc/default/grub
+    and updating grub worked nicely with Fn key.
+  #+END_EXAMPLE
+
+* xfce4自带的截图工具
+  选择一个区域截图并放入剪切板：
+  #+BEGIN_SRC sh
+    xfce4-screenshooter -r -c
+  #+END_SRC
+
+  选择一个区域截图并用对应的程序打开，这样就可以截图然后马上编辑：
+  #+BEGIN_SRC sh
+    xfce4-screenshooter -r -s /command/to/open/screenshot
+    xfce4-screenshooter -r -s /usr/bin/gimp
+  #+END_SRC
+
+  选择一个区域截图并存入对应的目录：
+  #+BEGIN_SRC sh
+    xfce4-screenshooter -r -s /path/to/save/screenshot/
+  #+END_SRC
+
+* 使用shutter来截图
+  我需要可以标记截图文件。使用 =shutter= 来完成好一点。
+
+  配置一下 =shutter= 在截图完成后使用内置编辑器打开截图文件。然后把下
+  面的脚本绑定一个快捷键就好了：
+  #+BEGIN_SRC sh
+shutter -s -e -o '/path/to/you/screenshot/截图_%y-%m-%d_%T.png'
+  #+END_SRC
+  一定要加 =-e= ，使用每次截图后退出 =shutter= 。
+
+* 管理iphone
+  https://github.com/libimobiledevice/
+
+  使用这里面的一些工具可以管理iphone里的东西。
+
+  其中 ifuse 可以把iphone挂载到某个目录上。
+  #+BEGIN_SRC sh
+    mkdir /tmp/iphone;ifuse /tmp/iphone
+    ifuse -u /tmp/iphone
+  #+END_SRC
+
+* 使用ftp给iphone共享videos
+
+  我在iphone上使用nPlayer，它可以直接访问ftp server。
+
+  ubuntu上下载 =vsftpd= 然后配置。
+
+  其实默认配置就可以了，我开启了匿名访问：
+  #+BEGIN_EXAMPLE
+    # Allow anonymous FTP? (Disabled by default).
+    anonymous_enable=YES
+  #+END_EXAMPLE
+
+  默认的目录在 =/srv/ftp= 下面。把需要的东西copy到下面，然后nPlayer就
+  可以播放或者下载啦。
+
+  启动关闭vsftpd就是这样：
+  #+BEGIN_SRC sh
+    sudo service vsftpd start/restart/stop
+  #+END_SRC
+
+  整个的 =/etc/vsftpd.conf= 文件长这样：
+  #+BEGIN_EXAMPLE
+    # Example config file /etc/vsftpd.conf
+    #
+    # The default compiled in settings are fairly paranoid. This sample file
+    # loosens things up a bit, to make the ftp daemon more usable.
+    # Please see vsftpd.conf.5 for all compiled in defaults.
+    #
+    # READ THIS: This example file is NOT an exhaustive list of vsftpd options.
+    # Please read the vsftpd.conf.5 manual page to get a full idea of vsftpd's
+    # capabilities.
+    #
+    #
+    # Run standalone?  vsftpd can run either from an inetd or as a standalone
+    # daemon started from an initscript.
+    listen=NO
+    #
+    # This directive enables listening on IPv6 sockets. By default, listening
+    # on the IPv6 "any" address (::) will accept connections from both IPv6
+    # and IPv4 clients. It is not necessary to listen on *both* IPv4 and IPv6
+    # sockets. If you want that (perhaps because you want to listen on specific
+    # addresses) then you must run two copies of vsftpd with two configuration
+    # files.
+    listen_ipv6=YES
+    #
+    # Allow anonymous FTP? (Disabled by default).
+    anonymous_enable=YES
+    #
+    # Uncomment this to allow local users to log in.
+    local_enable=YES
+    #
+    # Uncomment this to enable any form of FTP write command.
+    #write_enable=YES
+    #
+    # Default umask for local users is 077. You may wish to change this to 022,
+    # if your users expect that (022 is used by most other ftpd's)
+    #local_umask=022
+    #
+    # Uncomment this to allow the anonymous FTP user to upload files. This only
+    # has an effect if the above global write enable is activated. Also, you will
+    # obviously need to create a directory writable by the FTP user.
+    #anon_upload_enable=YES
+    #
+    # Uncomment this if you want the anonymous FTP user to be able to create
+    # new directories.
+    #anon_mkdir_write_enable=YES
+    #
+    # Activate directory messages - messages given to remote users when they
+    # go into a certain directory.
+    dirmessage_enable=YES
+    #
+    # If enabled, vsftpd will display directory listings with the time
+    # in  your  local  time  zone.  The default is to display GMT. The
+    # times returned by the MDTM FTP command are also affected by this
+    # option.
+    use_localtime=YES
+    #
+    # Activate logging of uploads/downloads.
+    xferlog_enable=YES
+    #
+    # Make sure PORT transfer connections originate from port 20 (ftp-data).
+    connect_from_port_20=YES
+    #
+    # If you want, you can arrange for uploaded anonymous files to be owned by
+    # a different user. Note! Using "root" for uploaded files is not
+    # recommended!
+    #chown_uploads=YES
+    #chown_username=whoever
+    #
+    # You may override where the log file goes if you like. The default is shown
+    # below.
+    #xferlog_file=/var/log/vsftpd.log
+    #
+    # If you want, you can have your log file in standard ftpd xferlog format.
+    # Note that the default log file location is /var/log/xferlog in this case.
+    #xferlog_std_format=YES
+    #
+    # You may change the default value for timing out an idle session.
+    #idle_session_timeout=600
+    #
+    # You may change the default value for timing out a data connection.
+    #data_connection_timeout=120
+    #
+    # It is recommended that you define on your system a unique user which the
+    # ftp server can use as a totally isolated and unprivileged user.
+    #nopriv_user=ftpsecure
+    #
+    # Enable this and the server will recognise asynchronous ABOR requests. Not
+    # recommended for security (the code is non-trivial). Not enabling it,
+    # however, may confuse older FTP clients.
+    #async_abor_enable=YES
+    #
+    # By default the server will pretend to allow ASCII mode but in fact ignore
+    # the request. Turn on the below options to have the server actually do ASCII
+    # mangling on files when in ASCII mode.
+    # Beware that on some FTP servers, ASCII support allows a denial of service
+    # attack (DoS) via the command "SIZE /big/file" in ASCII mode. vsftpd
+    # predicted this attack and has always been safe, reporting the size of the
+    # raw file.
+    # ASCII mangling is a horrible feature of the protocol.
+    #ascii_upload_enable=YES
+    #ascii_download_enable=YES
+    #
+    # You may fully customise the login banner string:
+    #ftpd_banner=Welcome to blah FTP service.
+    #
+    # You may specify a file of disallowed anonymous e-mail addresses. Apparently
+    # useful for combatting certain DoS attacks.
+    #deny_email_enable=YES
+    # (default follows)
+    #banned_email_file=/etc/vsftpd.banned_emails
+    #
+    # You may restrict local users to their home directories.  See the FAQ for
+    # the possible risks in this before using chroot_local_user or
+    # chroot_list_enable below.
+    #chroot_local_user=YES
+    #
+    # You may specify an explicit list of local users to chroot() to their home
+    # directory. If chroot_local_user is YES, then this list becomes a list of
+    # users to NOT chroot().
+    # (Warning! chroot'ing can be very dangerous. If using chroot, make sure that
+    # the user does not have write access to the top level directory within the
+    # chroot)
+    #chroot_local_user=YES
+    #chroot_list_enable=YES
+    # (default follows)
+    #chroot_list_file=/etc/vsftpd.chroot_list
+    #
+    # You may activate the "-R" option to the builtin ls. This is disabled by
+    # default to avoid remote users being able to cause excessive I/O on large
+    # sites. However, some broken FTP clients such as "ncftp" and "mirror" assume
+    # the presence of the "-R" option, so there is a strong case for enabling it.
+    #ls_recurse_enable=YES
+    #
+    # Customization
+    #
+    # Some of vsftpd's settings don't fit the filesystem layout by
+    # default.
+    #
+    # This option should be the name of a directory which is empty.  Also, the
+    # directory should not be writable by the ftp user. This directory is used
+    # as a secure chroot() jail at times vsftpd does not require filesystem
+    # access.
+    secure_chroot_dir=/var/run/vsftpd/empty
+    #
+    # This string is the name of the PAM service vsftpd will use.
+    pam_service_name=vsftpd
+    #
+    # This option specifies the location of the RSA certificate to use for SSL
+    # encrypted connections.
+    rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+    rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+    ssl_enable=NO
+
+    #
+    # Uncomment this to indicate that vsftpd use a utf8 filesystem.
+    #utf8_filesystem=YES
+  #+END_EXAMPLE
+
+* xfce4当前自己就支持自建wifi热点
+  先需要到网络连接中配置一个 =Wi-Fi= 热点。
+
+  直接到网络那儿创建新的 =Wi-Fi= 网络就可以了。
+
+  总之很简单。
+
+* pppoe拨号（未实际测试过）
+  [[http://wiki.ubuntu.org.cn/ADSL%25EF%25BC%2588PPPOE%25EF%25BC%2589%25E6%258E%25A5%25E5%2585%25A5%25E6%258C%2587%25E5%258D%2597][ADSL（PPPOE）接入指南 - Ubuntu中文]]
+  #+BEGIN_EXAMPLE
+
+    导航
+
+        首页
+        最近更改
+        随机页面
+        页面分类
+        帮助
+
+    编辑
+
+        编辑指南
+        沙盒
+        新闻动态
+        字词处理
+
+    工具
+
+        链入页面
+        相关更改
+        特殊页面
+        打印版本
+        固定链接
+        页面信息
+
+    ADSL（PPPOE）接入指南
+
+    Ubuntu Linux是自带ADSL拨号网络（PPPOE调制解调器）支持的，但是没有Windows下拨号那么方便。其实Ubuntu下ADSL上网也并不是很难，目前在中国ADSL家庭用户居多，在此就介绍一下Ubuntu下ADSL（PPPOE）拨号的方法。
+
+    此文档也同时解决了，nm-applet图标消失的问题，也就是pppoeconf和NetworkManager之间的冲突问题。
+    配置 ADSL
+
+    方法一：使用“网络连接”图形界面配置
+
+    Ubuntu 里面已经自带了网络配置向导，在顶部菜单中进入系统->首选项->Network Configuration->DSL，进行设置，依次填写用户名，服务以及密码。
+
+    连接建立后，在桌面左键单击网络连接的图标，会列出所有的连接，其中在“有线网络”下就有刚才建立的ADSL连接，单击即可拨号上网。
+
+    方法二：使用pppoeconf命令拨号
+
+    启用有线连接：
+
+    sudo ifconfig eth0 up
+
+    在终端中输入:
+
+    sudo pppoeconf
+
+    一个基于文本菜单的程序会指导你进行下面的步骤：
+
+    1. 确认以太网卡已被检测到。
+
+    2. 输入你的用户名（由ISP所提供 注意：输入时请先清除输入框中的“username“，否则可能造成验证错误）。
+
+    3. 输入你的密码（由ISP所提供）。
+
+    4. 如果你已经配置了一个PPPoE的连接，会通知你这个连接将会被修改。
+
+    5. 弹出一个选项:你被询问是否需要'noauth'和'defaultroute'选项和去掉'nodetach',这里选择"Yes"。
+
+    6. Use peer DNS - 选择 "Yes".
+
+    7. Limited MSS problem - 选择 "Yes".
+
+    8. 当你被询问是否在需要在进入系统的时候自动连接，你可以选择"Yes"。
+
+    9. 最后，你会被询问是否马上建立连接。
+
+    在需要的时候启动ADSL连接，可以在终端中输入：
+
+    sudo pon dsl-provider
+
+    断开ADSL连接，可以在终端中输入：
+
+    sudo poff
+
+    如果你发现连接正常工作，尝试手动去调整你之前ADSL连接的配置（参考前一节）。
+
+    需要查看日志，可以在终端中输入：
+
+    plog
+
+    获得接口信息，可以在终端中输入：
+
+    ifconfig ppp0
+
+    使用pppoeconf拨号后，Network Manager显示设备未托管的解决办法：
+
+    在终端中输入以下命令，来配置网络连接管理文件：
+
+    sudo gedit /etc/NetworkManager/nm-system-settings.conf 打开后，找到 [ifupdown] managed=false 修改成： [ifupdown] managed=true
+
+    终端运行sudo gedit /etc/network/interfaces 只保留
+
+    auto lo iface lo inet loopback
+
+    删除dns设置 sudo mv /etc/resolv.conf /etc/resolv.conf_backup
+
+    之后重启 network-manager服务： sudo service network-manager restart
+
+    方法三：使用新版的NetworkManager
+
+    直接引用 lainme简洁明了的回复； http://forum.ubuntu.org.cn/viewtopic.php?f=48&t=239763&start=3
+
+    1、从PPA更新network-manager sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BC8EBFE8 在/etc/apt/sources.list最后加上 deb http://ppa.launchpad.net/network-manager/trunk/ubuntu karmic main deb-src http://ppa.launchpad.net/network-manager/trunk/ubuntu karmic main sudo aptitude update sudo aptitude safe-upgrade
+
+    2、解决pppoeconf和network-manager冲突 更改/etc/NetworkManager/nm-system-settings.conf中的managed＝true 更改/etc/network/interfaces，只保留 auto lo iface lo inet loopback 删除/etc/resolv.conf
+
+    然后sudo /etc/init.d/network-manager restart 如果面板没有nm图标，ALT+F2输入nm-applet，并添加自启动（我的安装时没有添加）
+
+    3、右击NM图标，编辑链接，切换到DSL，新建，输入用户名和密码。
+    ADSL命令
+
+    注意:以下命令不是设置步骤，只是教你如何进行adsl拨号的日常操作
+
+    拨号 ADSL
+
+    pon dsl-provider
+
+    断开 ADSL
+
+    poff dsl-provider
+
+    查看拨号日志
+
+    plog
+
+    对于 拨号 ADSL 和 断开 ADSL 可以在菜单编辑器中或面板中依照以上命令行建立相应的快捷方式以方便拨号。
+
+    在面板上右击，选择添加到面板 -> 自定义应用程序启动器 -> 添加
+
+    类型： 终端中的应用程序
+
+    名称： ADSL 拨号
+
+    命令：pon dsl-provider
+
+    注释： ADSL 拨号
+
+    以后需要连接ADSL拨号只需要点击该快捷方式，点击之后会弹出终端窗口提示用户输入密码，输入完成后即连接网络。
+
+    断开网络的快捷方式与此类似，只需将pon改为poff。
+
+    用户还可以更改拨号名称，将dsl-prvider改为自己想要的更简短的名字。
+
+    使用应用程序／附件／超级用户终端
+
+    cd /etc/ppp/peers
+
+    mv dsl-provider name
+
+    注：cd 目标路径 ；mv 原文件名 目标文件名。
+
+    若不确定/etc/ppp/peers中有哪些文件，可以使用命令
+
+    ls
+
+    显示文件夹中文件的文件名。
+    如何设置动态域名(可选)
+
+    #首先去 http://www.3322.org 申请一个动态域名
+    #然后修改 /etc/ppp/ip-up 增加拨号时更新域名指令
+    sudo gedit /etc/ppp/ip-up
+    #在最后增加如下行
+    w3m -no-cookie -dump 'http://username:password@members.3322.org/dyndns/update?system=dyndns&hostname=yourdns.3322.org'
+
+    将username:password按格式替换为你的用户名和密码 hostname替换为你的域名，其他不必更改。以上设置将在拨号时自动将动态域名解
+  #+END_EXAMPLE
+
+* networkmanager
+  xfce4中的gui的nm-applet有时会出点小问题。但是不影响使用的。不行的时
+  候可以重启一下试试：
+  #+BEGIN_SRC sh
+    killall nm-applet
+    nm-applet    2>&1 > /dev/null &
+  #+END_SRC
+
+  *推荐使用 =nmtui= 来玩。*
+
+  查询当前所有的wifi信号：
+  #+BEGIN_SRC sh
+    nmcli device wifi list
+  #+END_SRC
+
+  重新扫描wifi信号？
+  #+BEGIN_SRC sh
+    nmcli device wifi rescan
+  #+END_SRC
+
+  连接某个wifi信号：
+  #+BEGIN_SRC sh
+    nmcli device wifi connect "iPhone (3)" password "peng1234567890"
+  #+END_SRC
+
+  具体都可以通过查询它的帮助。
+  #+BEGIN_EXAMPLE
+    ➜  /tmp nmcli -h
+    Usage: nmcli [OPTIONS] OBJECT { COMMAND | help }
+
+    OPTIONS
+      -t[erse]                                   terse output
+      -p[retty]                                  pretty output
+      -m[ode] tabular|multiline                  output mode
+      -c[olors] auto|yes|no                      whether to use colors in output
+      -f[ields] <field1,field2,...>|all|common   specify fields to output
+      -e[scape] yes|no                           escape columns separators in values
+      -a[sk]                                     ask for missing parameters
+      -s[how-secrets]                            allow displaying passwords
+      -w[ait] <seconds>                          set timeout waiting for finishing operations
+      -v[ersion]                                 show program version
+      -h[elp]                                    print this help
+
+    OBJECT
+      g[eneral]       NetworkManager's general status and operations
+      n[etworking]    overall networking control
+      r[adio]         NetworkManager radio switches
+      c[onnection]    NetworkManager's connections
+      d[evice]        devices managed by NetworkManager
+      a[gent]         NetworkManager secret agent or polkit agent
+      m[onitor]       monitor NetworkManager changes
+
+    ➜  /tmp nmcli device -h
+    Usage: nmcli device { COMMAND | help }
+
+    COMMAND := { status | show | connect | reapply | disconnect | delete | monitor | wifi | lldp }
+
+      status
+
+      show [<ifname>]
+
+      set [ifname] <ifname> [autoconnect yes|no] [managed yes|no]
+
+      connect <ifname>
+
+      reapply <ifname>
+
+      disconnect <ifname> ...
+
+      delete <ifname> ...
+
+      monitor <ifname> ...
+
+      wifi [list [ifname <ifname>] [bssid <BSSID>]]
+
+      wifi connect <(B)SSID> [password <password>] [wep-key-type key|phrase] [ifname <ifname>]
+                             [bssid <BSSID>] [name <name>] [private yes|no] [hidden yes|no]
+
+      wifi hotspot [ifname <ifname>] [con-name <name>] [ssid <SSID>] [band a|bg] [channel <channel>] [password <password>]
+
+      wifi rescan [ifname <ifname>] [[ssid <SSID to scan>] ...]
+
+      lldp [list [ifname <ifname>]]
+  #+END_EXAMPLE
+
+  另外保存一些命令行使用例子：
+  #+BEGIN_EXAMPLE
+    命令行
+
+    下列应用程序可能对于没有X时配置和管理网络有帮助。
+    nmcli
+
+    命令行前端nmcli包括在networkmanager中。
+
+    对于使用信息，参考nmcli(1)。 例子:
+
+        连接 WiFi 网络:
+
+        nmcli dev wifi connect <name> password <password>
+
+        通过wlan1接口连接 WiFi 网络:
+
+        nmcli dev wifi connect <name> password <password> iface wlan1 [profile name]
+
+        断开一个接口:
+
+        nmcli dev disconnect iface eth0
+
+        重新连接一个标记为已断开的接口:
+
+        nmcli con up uuid <uuid>
+
+        获得 UUID 列表:
+
+        nmcli con show
+
+        查看网络设备及其状态列表:
+
+        nmcli dev
+
+        关闭 WiFi:
+
+        nmcli r wifi off
+
+    nmtui
+
+    "nmtui" 是一个基于curses的图形化前端，包括在networkmanager中。
+
+    使用信息参见nmtui(1)。
+
+    nmcli-dmenu
+
+    networkmanager-dmenu-gitAUR 是一个通过 dmenu 而不是 nm-applet 来管理 NetworkManager 连接的脚本。它提供了所有必要的特性, 例如连接到已有的 WiFi 或有线网络, 连接到新的 WiFi 网络, 在需要的时候询问密码, 连接到已有的 VPN, 启用/停用网络连接, 运行 nm-connection-editor 的图形界面。
+  #+END_EXAMPLE
+
+* 移动硬盘备份
+  可以尝试下这种办法。加速备份的办法：
+  #+BEGIN_EXAMPLE
+To save space, you can compress data produced by dd with gzip, e.g.:
+
+dd if=/dev/hdb | gzip -c  > /image.img
+
+You can restore your disk with:
+
+gunzip -c /image.img.gz | dd of=/dev/hdb
+
+To save even more space, defragment the drive/partition you wish to
+clone beforehand (if appropriate), then zero-out all the remaining
+unused space, making it easier for gzip to compress:
+
+mkdir /mnt/hdb
+mount /dev/hdb /mnt/hdb
+dd if=/dev/zero of=/mnt/hdb/zero
+
+Wait a bit, dd will eventually fail with a "disk full" message, then:
+
+rm /mnt/hdb/zero
+umount /mnt/hdb
+dd if=/dev/hdb | gzip -c  > /image.img
+
+Also, you can get a dd process running in the background to report
+status by sending it a signal with the kill command, e.g.:
+
+dd if=/dev/hdb of=/image.img &
+kill -SIGUSR1 1234
+
+Check your system - the above command is for Linux, OSX and BSD dd
+commands differ in the signals they accept (OSX uses SIGINFO - you can
+press Ctrl+T to report the status).
+
+  #+END_EXAMPLE
+
+* xfce4修改开始菜单中对应程序
+  我更新了firefox，下载到了 =/usr/local/firefox/= 目录。现在需要对应开
+  始菜单中图标对应调用它。
+
+  可以到 =/usr/share/applications/= 或者
+  =~/.local/share/applicatioins= 中找到对应项，然后修改其中的 =Exec=
+  项就可以了。
+
+  我当前生效是到 =/usr/share/applications/= 修改生效的。
+
+* install fcitx
+#+BEGIN_EXAMPLE
+# 1.安装
+sudo apt-get install fcitx-rime librime-data-wubi
+# 2.配置 fcitx 为默认. 然后重启
+im-config
+sudo reboot
+# 3.添加输入法
+fcitx-config-gtk3
+#+END_EXAMPLE
+
+* 添加字体
+  都copy到 =/usr/share/fonts= 目录。然后 =fc-cache -f -v= 就可以了。
+
+  我喜欢的英文字体 =ubuntu mono= 。
+
+* 挂载小米手机（可能android手机都适用）从android手机中copy文件
+  #+BEGIN_SRC sh
+mkdir /media/xiaomi/
+chmod 775 /media/xiaomi
+apt-get install go-mtpfs
+go-mtpfs -allow-other /media/xiaomi/
+go-mtpfs  -usb-timeout=60000 -allow-other /media/xiaomi/
+  #+END_SRC
+
+ 直接使用adb，比如下面命令可以直接把小米的录音拉出来：
+ #+BEGIN_SRC sh
+adb pull /sdcard/MIUI/sound_recorder/call_rec
+ #+END_SRC
+
+* debain装上默认不能控制声音
+  安装对应的软件（具体是啥忘了）。然后把下面的两句分别绑定到按键上就可
+  以了。
+#+BEGIN_SRC sh
+# To turn volume up 5%:
+amixer sset Master 5%+
+
+# To turn volume down 5%:
+amixer sset Master 5%-
+#+END_SRC
+
+* firefox全屏下一直显示tabbar
+  #+BEGIN_EXAMPLE
+Type about:config on Firefox address bar.
+Search for browser.fullscreen.autohide
+Set it to false
+
+There you go.
+  #+END_EXAMPLE
+
+* 笔记本台式机共享鼠标键盘
+** x2vnc
+   看到windows用户使用 =synergy= 来在win和linux中共享键盘和鼠标。但是这
+   个玩意儿是收费的。然后我找了一个免费的替代品 =x2vnc= 。
+
+   两个linux之前，直接参考的 [[http://hantslug.org.uk/2006/05/using-x2vnc/][这篇文章]] 。
+
+   #+BEGIN_EXAMPLE
+Install x2vnc on the workstation (Debian users: aptitude install
+x2vnc).
+
+Install a VNC server on the laptop that exports the current
+display. x11vnc is ideal for this (Debian users: aptitude install
+x11vnc).
+
+On the laptop, run: x11vnc -storepasswd <password> ~/.vncpasswd Copy
+~/.vncpasswd to the workstation.
+
+On the laptop, run: x11vnc -rfbauth ~/.vncpasswd -forever -bg -allow
+workstation_name
+
+On the workstation, run: x2vnc -passwdfile ~/.vncpasswd laptop_name:0
+
+(Note: In the above, workstation_name is the DNS name of the
+workstation. It could also be the IP address. The same applies for
+laptop_name)
+
+Now if you move your mouse to the far right of your screen and keep
+going, your mouse should appear on the laptop. The workstation’s
+keyboard will also “type” on to the laptop. It’s just as though
+your keyboard and mouse are connected to the same two machines.
+   #+END_EXAMPLE
+
+   总地来说，就是client和server。server这边需要开一个vnc。x2vnc就是基于
+   vnc搞的。server端启动vnc。然后client直接使用 =x2vnc= 连接上就可以了。
+** x2x
+   使用x2vnc有点卡，x2x感觉要好很多。
+
+   参考的 [[https://www.linuxjournal.com/content/share-keyboardmouse-between-multiple-computers-x2x][这里]] ，和 [[https://help.ubuntu.com/community/X2xHowto][这里]] 。
+
+   其实在server端直接使用安装好 =x2x= 后，使用下面的命令就可以了，这个
+   命令是从client登陆然后执行 =x2x= ：
+   #+BEGIN_SRC sh
+ssh -XC user@laptop  x2x -east -to :0.0
+   #+END_SRC
+
+   x2x的 Man Page 也写得很清楚：
+   #+BEGIN_EXAMPLE
+EXAMPLES
+       Calling the system whose keyboard is to be used "primary" and the other system "secondary", you need to specify either  -from  primary-x-display  or
+       -to  secondary-x-display.  The x2x program can be run on either system.  The easiest way to maintain security is to tunnel an X connection over ssh.
+       Since x2x can be run on either computer, it can be invoked in either of the following ways, where we assume the local display on each system is :0.
+
+       run indirectly on secondary:
+
+              primary $ ssh -X secondary x2x -to :0 -east
+
+       run indirectly on primary:
+
+              secondary $ ssh -X primary x2x -from :0 -west
+
+       run directly indirectly on primary:
+
+              primary $ ssh -A secondary env DISPLAY=:0.0 ssh -X primary x2x -from :0 -east
+   #+END_EXAMPLE
+
+* 笔记本台式机共享clipboard
+  用的 [[https://github.com/coralw/share-clipboard][share-clipboard]] 。
+
+  ubuntu上安装：
+  #+BEGIN_SRC sh
+sudo apt-get install nodejs-legacy
+npm install copy-paste
+  #+END_SRC
+
+  然后一个 =node share-clipboard.js= ，另一个机器 =node
+  share-clipboard.js <ip>= 。 这样两个

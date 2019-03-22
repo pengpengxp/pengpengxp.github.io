@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>两台电脑共享一套鼠标和键盘</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="linux_blog.html">Backto Linux Info</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <h1>两台电脑共享一套鼠标和键盘</h1>
+
+          <section>
+            <div class="peng-time">
+              <time>2018-11-28</time>
+            </div>
+
+            <p>工作时，我有两台电脑，两个显示器。有时用两台电脑时，经常需要两套键盘和鼠标进行切换。
+              用久后难免觉得麻烦。</p>
+
+            <p>我两台电脑在同一个局域网中，google了一下，找到 <a class="sorc" href="https://github.com/dottedmag/x2x" data-accessed="2018-11-28">x2x</a> 这个软件。</p>
+
+<pre class="code">
+ +-----------------------+                                           +-------------------+
+ |                       |                                           |                   |
+ |         client        | ssh -XC user@serverip  x2x -east -to :0.0 |     server        |
+ |                       |------------------------------------------>|    install x2x    |
+ |                       |                                           |                   |
+ +-----------------------+                                           +-------------------+
+
+</pre>
+
+            <p>使用很方便，在server端装好后，在client端执行一下下面这条命令就可以了。</p>
+
+            <pre class="bash">ssh -XC user@laptop  x2x -east -to :0.0 </pre>
+
+            <p>这样我的server就的屏幕就在client的east，也就是右边了。
+              鼠标移动到右边应该就可以操作server这台电脑了。再移动回来就是client电脑。</p>
+
+          </section>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

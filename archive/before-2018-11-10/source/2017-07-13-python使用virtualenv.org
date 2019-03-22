@@ -1,0 +1,58 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: python使用virtualenv
+
+* [[https://virtualenv.pypa.io/en/stable/][virtualenv]]
+  从源码安装 =python2.7.13= 到ubuntu 14.04。我们刚开始安装好后，没有对
+  应的pip等。
+
+  [[http://mbless.de/blog/2016/01/09/upgrade-to-python-2711-on-ubuntu-1404-lts.html][参考这里]] ，安装好后，可以使用virtualenv来弄出一个 =python2.7.13= 对
+  应的环境出来。它会把pip这些都设置好。
+  
+  virtualenv是一个独立的软件。它可以创建出一个完全独立的python环境，该
+  环境中安装好了 =pip, setuptools, wheel= 。
+  #+BEGIN_EXAMPLE
+    virtualenv needs to be installed separately, but supports Python 2.6+
+    and Python 3.3+, and pip, setuptools and wheel are always installed
+    into created virtual environments by default (regardless of Python
+    version).
+  #+END_EXAMPLE
+
+  它的基本用法如下：
+  #+BEGIN_SRC sh
+    cd /tmp/
+    [ -a testvirtual ] && rm -rfv testvirtual
+    mkdir testvirtual
+    virtualenv testvirtual
+  #+END_SRC
+  这样就创建了一个基本环境。可以这样使用：
+  #+BEGIN_EXAMPLE
+    root@rcs:/tmp# source testvirtual/bin/activate
+    (testvirtual) root@rcs:/tmp# pip list
+    pip (9.0.1)
+    pkg-resources (0.0.0)
+    setuptools (36.0.1)
+    wheel (0.30.0a0)
+  #+END_EXAMPLE
+  可以看到，这个环境中只有几个基础的包。其实 =activate= 脚本就只是改变
+  了 =PATH= 环境变量和shell的提示。它还在当前环境中新生成一个
+  =deactivate= 命令[fn:1:这个命令应该是在activate中定议的一个函数。]。
+  需要退出时，直接执行即可：
+  #+BEGIN_EXAMPLE
+    (testvirtual) root@rcs:/tmp# deactivate
+    root@rcs:/tmp#
+  #+END_EXAMPLE
+  
+  指定创建环境的 =python= 版本：
+  #+BEGIN_SRC sh
+    virtualenv --python=/usr/bin/python testvirtualenv
+  #+END_SRC
+
+  =--system-site-packages= 参数：
+  #+BEGIN_SRC sh
+    virtualenv --system-site-packages testvirtualenv
+  #+END_SRC
+  这样新建的环境会继承系统全局的 =site-packages= 。
+

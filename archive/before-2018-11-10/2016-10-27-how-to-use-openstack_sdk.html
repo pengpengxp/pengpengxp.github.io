@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>如何使用openstack的sdk</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">如何使用openstack的sdk</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge85307f">1. openstack对外提供的几种不同的接口</a></li>
+<li><a href="#org1240a9a">2. 具体方法</a>
+<ul>
+<li><a href="#openstack_sdk_install">2.1. install python sdk by pip</a></li>
+<li><a href="#org8367f8f">2.2. hello world example</a>
+<ul>
+<li><a href="#org8460450">2.2.1. 配置文件</a></li>
+<li><a href="#org1778cb9">2.2.2. 直接使用</a></li>
+<li><a href="#orgf5af51f">2.2.3. <span class="todo TODO">TODO</span> 环境变量</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge85307f" class="outline-2">
+<h2 id="orge85307f"><span class="section-number-2">1</span> openstack对外提供的几种不同的接口</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>REST full API</li>
+<li>openstack command line client</li>
+<li>openstack SDKs</li>
+</ul>
+
+<p>
+这里主要是使用openstack的python的sdk来实现类似hello world的功能。
+</p>
+</div>
+</div>
+<div id="outline-container-org1240a9a" class="outline-2">
+<h2 id="org1240a9a"><span class="section-number-2">2</span> 具体方法</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="http://docs.openstack.org/user-guide/sdk.html">openstack python sdk在这里</a> 。
+</p>
+
+<p>
+<a href="http://docs.openstack.org/user-guide/sdk-overview.html">Overview部分介绍了几种方式的区别。</a> 每个项目单独的sdk不推荐使用，所以我
+们这里直接使用的就是统一的 <code>openstacksdk</code> 。<a href="http://developer.openstack.org/sdks/python/openstacksdk/users/index.html">教程在这里</a> 。
+</p>
+
+<p>
+安装参考 <a href="#openstack_sdk_install">2.1</a> 。
+</p>
+</div>
+<div id="outline-container-org62553ec" class="outline-3">
+<h3 id="openstack_sdk_install"><a id="org62553ec"></a><span class="section-number-3">2.1</span> install python sdk by pip</h3>
+<div class="outline-text-3" id="text-openstack_sdk_install">
+<p>
+先得使用下面的命令来安装对应的lib。使用默认源的下载很慢，国内可以使
+用豆瓣的源来加速。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25351;&#23450;&#22269;&#20869;&#28304;&#23433;&#35013;&#36895;&#24230;&#26464;&#26464;&#30340;&#65292;</span>
+     pip install openstacksdk -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+</pre>
+</div>
+
+<p>
+下面这些单独的lib不推荐直接使用，下面这些是openstack的python SDKs，
+可以选择性的安装，不过这些库里也包含对应的command line client，需
+要使用对应command line client就需要安装。安装使用 <code>pip install
+     python-PROJECTclient</code> 这样的格式。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     pip install python-openstackclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-novaclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-glanceclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-neutronclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-swiftclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-heatclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+     pip install python-keystoneclient -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8367f8f" class="outline-3">
+<h3 id="org8367f8f"><span class="section-number-3">2.2</span> hello world example</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+sdk使用的时候，首先得完成和server进行认证的过程。openstack的python
+sdk都是使用的 <a href="http://docs.openstack.org/developer/os-client-config/">os-client-config</a> 这个lib来和server做认证的。
+</p>
+
+<p>
+os-client-config支持三种方式的认证：
+</p>
+<ol class="org-ol">
+<li>环境变量方式。</li>
+<li>配置文件方式。</li>
+<li>什么都没有，直接将认证写入代码中。</li>
+</ol>
+</div>
+
+<div id="outline-container-org8460450" class="outline-4">
+<h4 id="org8460450"><span class="section-number-4">2.2.1</span> 配置文件</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+默认的配置文件名为 <code>clouds.yaml</code> 。默认寻找的先后顺序是<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>：
+</p>
+
+<ol class="org-ol">
+<li>当前目录</li>
+<li>`USER_CONFIG_DIR`</li>
+<li>`SITE_CONFIG_DIR`</li>
+</ol>
+
+<p>
+后面两个不同的平台对应的地址不同：
+</p>
+<pre class="example">
+      `USER_CONFIG_DIR` is different on Linux, OSX and Windows.
+
+      * Linux: `~/.config/openstack`
+      * OSX: `~/Library/Application Support/openstack`
+      * Windows: `C:\\Users\\USERNAME\\AppData\\Local\\OpenStack\\openstack`
+
+      `SITE_CONFIG_DIR` is different on Linux, OSX and Windows.
+
+      * Linux: `/etc/openstack`
+      * OSX: `/Library/Application Support/openstack`
+      * Windows: `C:\\ProgramData\\OpenStack\\openstack`
+</pre>
+
+<p>
+所以在Linux下存寻找该文什的先后顺序是：
+</p>
+<ol class="org-ol">
+<li>Current Directory</li>
+<li>~/.config/openstack</li>
+<li>/etc/openstack</li>
+</ol>
+
+<p>
+最后该文件内容是这样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-yaml">         <span style="color: #ff8700;">clouds</span>:
+           <span style="color: #ff8700;">test_cloud</span>:
+             <span style="color: #ff8700;">region_name</span>: RegionOne
+             <span style="color: #ff8700;">auth</span>:
+               <span style="color: #ff8700;">project_domain_name</span>: default
+               <span style="color: #ff8700;">user_domain_name</span>: default
+               <span style="color: #ff8700;">project_name</span>: demo
+               <span style="color: #ff8700;">username</span>: demo
+               <span style="color: #ff8700;">password</span>: demo1703
+               <span style="color: #ff8700;">auth_url</span>: http://172.16.222.10:5000/v3
+               <span style="color: #ff8700;">identity_api_version</span>: 3
+               <span style="color: #ff8700;">image_api_version</span>: 2
+</pre>
+</div>
+<p>
+直接按照官方文档中的模版写，对于我们的cloud总是不行。但是我在
+os-client-config的manual里看到了这一句：
+</p>
+<pre class="example">
+       The keys are all of the keys you’d expect from OS_* - except lower
+       case and without the OS prefix. So, region name is set with
+       region_name.
+</pre>
+<p>
+意思就是说相对使用环境变量的方式，这个里面就是把前面的 <code>OS_</code> 去掉。
+看下之前使用command-line时的demo-openrc.sh：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_PROJECT_DOMAIN_NAME</span>=default
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_USER_DOMAIN_NAME</span>=default
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_PROJECT_NAME</span>=demo
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_USERNAME</span>=demo
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_PASSWORD</span>=demo1703
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_AUTH_URL</span>=http://172.16.222.10:5000/v3
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_IDENTITY_API_VERSION</span>=3
+       <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">OS_IMAGE_API_VERSION</span>=2
+</pre>
+</div>
+<p>
+于是我把这里所有的环境变量都设置到了clouds.yaml中，就成了前面的yaml
+文件。
+</p>
+
+<p>
+这样配置后，就可以按照官网教程来玩了，我在clouds.yaml所在目录新建一
+个python脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">         <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/local/bin/python</span>
+         <span style="color: #a1db00;">import</span> argparse
+         <span style="color: #a1db00;">import</span> os
+
+         <span style="color: #a1db00;">import</span> os_client_config
+
+         <span style="color: #a1db00;">from</span> openstack <span style="color: #a1db00;">import</span> connection
+         <span style="color: #a1db00;">from</span> openstack <span style="color: #a1db00;">import</span> profile
+         <span style="color: #a1db00;">from</span> openstack <span style="color: #a1db00;">import</span> utils
+         <span style="color: #a1db00;">import</span> sys
+
+         <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Opts</span>(<span style="color: #d18aff;">object</span>):
+             <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>, cloud_name=<span style="color: #ff4ea3;">'test_cloud'</span>, debug=<span style="color: #5fafd7;">False</span>):
+                 <span style="color: #a1db00;">self</span>.cloud = cloud_name
+                 <span style="color: #a1db00;">self</span>.debug = debug
+                 <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Use identity v3 API for examples.</span>
+                 <span style="color: #a1db00;">self</span>.identity_api_version = <span style="color: #ff4ea3;">'3'</span>
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">create_connection_from_config</span>():
+             <span style="color: #ff8700;">opts</span> = Opts()
+             <span style="color: #ff8700;">occ</span> = os_client_config.OpenStackConfig()
+             <span style="color: #ff8700;">cloud</span> = occ.get_one_cloud(opts.cloud)
+             <span style="color: #a1db00;">return</span> connection.from_config(cloud_config=cloud, options=opts)
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">create_connection_from_args</span>():
+             <span style="color: #ff8700;">parser</span> = argparse.ArgumentParser()
+             <span style="color: #ff8700;">config</span> = os_client_config.OpenStackConfig()
+             config.register_argparse_arguments(parser, sys.argv[1:])
+             <span style="color: #ff8700;">args</span> = parser.parse_args()
+             <span style="color: #a1db00;">return</span> connection.from_config(options=args)
+
+
+         <span style="color: #ff8700;">conn</span> = create_connection_from_config()
+         <span style="color: #a1db00;">print</span>(conn)
+
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">list_servers</span>(conn):
+             <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"List Servers:"</span>)
+
+             <span style="color: #a1db00;">for</span> server <span style="color: #a1db00;">in</span> conn.compute.servers():
+                 <span style="color: #a1db00;">print</span>(server)
+
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">list_images</span>(conn):
+             <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"List Images:"</span>)
+
+             <span style="color: #a1db00;">for</span> image <span style="color: #a1db00;">in</span> conn.compute.images():
+                 <span style="color: #a1db00;">print</span>(image)
+
+         list_images(conn)
+
+</pre>
+</div>
+<p>
+最后直接把conn拿来用就可以了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1778cb9" class="outline-4">
+<h4 id="org1778cb9"><span class="section-number-4">2.2.2</span> 直接使用</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+<a href="http://inaugust.com/posts/simple-openstack-clients.html">这篇博客也写得很不错</a>
+</p>
+
+<p>
+也是把demo-openrc.sh中的变量全部写过来：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">      <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/local/bin/python</span>
+      <span style="color: #a1db00;">import</span> argparse
+      <span style="color: #a1db00;">import</span> os
+      <span style="color: #a1db00;">import</span> os_client_config
+      <span style="color: #a1db00;">from</span> openstack <span style="color: #a1db00;">import</span> connection
+      <span style="color: #a1db00;">from</span> openstack <span style="color: #a1db00;">import</span> profile
+      <span style="color: #a1db00;">from</span> openstack <span style="color: #a1db00;">import</span> utils
+      <span style="color: #a1db00;">import</span> sys
+      <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">create_connection</span>():
+          <span style="color: #ff8700;">prof</span> = profile.Profile()
+          prof.set_region(profile.Profile.ALL, <span style="color: #ff4ea3;">"RegionOne"</span>)
+          <span style="color: #a1db00;">return</span> connection.Connection(
+              profile=prof,
+              user_agent=<span style="color: #ff4ea3;">'examples'</span>,
+              auth_url=<span style="color: #ff4ea3;">'http://172.16.222.10:5000/v3'</span>,
+              username=<span style="color: #ff4ea3;">'demo'</span>,
+              password=<span style="color: #ff4ea3;">'demo1703'</span>,
+              project_name=<span style="color: #ff4ea3;">'demo'</span>,
+              region_name=<span style="color: #ff4ea3;">'RegionOne'</span>,
+              project_domain_name=<span style="color: #ff4ea3;">'default'</span>,
+              user_domain_name=<span style="color: #ff4ea3;">'default'</span>,
+              identity_api_version=3,
+              image_api_version=2)
+
+
+      <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">list_servers</span>(conn):
+
+          <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"List Servers:"</span>)
+
+          <span style="color: #a1db00;">for</span> server <span style="color: #a1db00;">in</span> conn.compute.servers():
+              <span style="color: #a1db00;">print</span>(server)
+
+      <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">list_images</span>(conn):
+          <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"List Images:"</span>)
+
+          <span style="color: #a1db00;">for</span> image <span style="color: #a1db00;">in</span> conn.compute.images():
+              <span style="color: #a1db00;">print</span>(image)
+
+      <span style="color: #ff8700;">conn</span> = create_connection()
+
+      list_images(conn)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf5af51f" class="outline-4">
+<h4 id="orgf5af51f"><span class="section-number-4">2.2.3</span> <span class="todo TODO">TODO</span> 环境变量</h4>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">也可以
+设置OS_CLIENT_CONFIG_FILE这个环境变量直接指定，这个我没有尝试。</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

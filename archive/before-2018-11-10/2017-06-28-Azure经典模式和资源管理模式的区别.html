@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Azure经典模式和资源管理模式的区别</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Azure经典模式和资源管理模式的区别</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbb66971">1. 历史</a></li>
+<li><a href="#org4a58ba3">2. 区别</a></li>
+<li><a href="#org9e518b6">3. 两种模型的架构图</a>
+<ul>
+<li><a href="#orgff7ed64">3.1. arm</a></li>
+<li><a href="#org3c58513">3.2. asm</a></li>
+<li><a href="#org4439de5">3.3. 总结</a></li>
+</ul>
+</li>
+<li><a href="#org1fafa71">4. arm的优点</a></li>
+<li><a href="#org4dd585b">5. 相应资源可能出现几种情况</a></li>
+<li><a href="#org84875ce">6. 一些具体不兼容的情况（后面持续补充）</a></li>
+<li><a href="#org2a40f25">7. 参考文档</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgbb66971" class="outline-2">
+<h2 id="orgbb66971"><span class="section-number-2">1</span> 历史</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+最开始一直都是classic模型，它的模型中有service的概念，所以它也叫
+asm（Azure Service Manager）。2014年开始提出arm（Azure Resource
+Manager），其管理平台叫portal。2015年底arm发布。
+</p>
+
+<p>
+当前情况是微软正在将azure的所有功能往arm上迁移。以后都推荐使用arm。但
+是当前状况是arm不完全向后兼容asm，有些功能只有asm上才有，所以还有很多
+用户还是在使用classic。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4a58ba3" class="outline-2">
+<h2 id="org4a58ba3"><span class="section-number-2">2</span> 区别</h2>
+<div class="outline-text-2" id="text-2">
+<ol class="org-ol">
+<li>两个模型使用不同的api实现。</li>
+<li>这两个模型给用户提供是的两套不同的api集合。</li>
+<li>web管理界面的地址、UI不相同。</li>
+<li>不完全兼容。</li>
+</ol>
+
+<p>
+另外，Azure又分为Azure全球和Azure中国。对于我们来说，当前只需要Care微
+软中国就可以了。
+</p>
+
+<p>
+<a href="https://portal.azure.cn/">中国区arm登陆入口</a> 
+</p>
+
+<p>
+<a href="https://manage.windowsazure.cn/">中国区asm登陆入口</a>
+</p>
+
+<p>
+中国区Azure命令行登陆和登出应该这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">    azure login -e AzureChinaCloud
+    azure login -e AzureChinaCloud -u username@mail.com
+    azure logout username@mail.com
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9e518b6" class="outline-2">
+<h2 id="org9e518b6"><span class="section-number-2">3</span> 两种模型的架构图</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgff7ed64" class="outline-3">
+<h3 id="orgff7ed64"><span class="section-number-3">3.1</span> arm</h3>
+<div class="outline-text-3" id="text-3-1">
+
+<div class="figure">
+<p><img src="./images/azure_arm_model.png" alt="azure_arm_model.png" />
+</p>
+</div>
+
+<ol class="org-ol">
+<li>所有资源存在于一个资源组中。</li>
+<li>虚拟机依赖在存储资源提供程序中定义的具体存储帐户，在 Blob 存储中存
+储其磁盘（必需）。</li>
+<li>虚拟机引用在网络资源提供程序中定义的具体 NIC（必需）和在计算资源提
+供程序中定义的可用性集（可选）。</li>
+<li>NIC 引用虚拟机的指定 IP 地址（必需）、虚拟机的虚拟网络的子网（必需）
+和网络安全组（可选）。虚拟网络内的子网引用网络安全组（可选）。</li>
+<li>负载均衡器实例引用后端 IP 地址池，包括虚拟机的 NIC（可选），并引用
+负载均衡器的公共或专用 IP 地址（可选）。</li>
+</ol>
+
+<p>
+下面是一个具体的脚本例子，可以直观地看出它们之间的依赖关系：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36164;&#28304;&#32452;&#65306;</span>
+   azure group create TestRG -l chinaeast
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#23384;&#20648;&#24080;&#25143;&#65306;</span>
+   azure storage account create -g TestRG -l chinaeast --kind Storage --sku-name GRS pengsaccount
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#34394;&#25311;&#32593;&#32476;&#65306;</span>
+   azure network vnet create -g TestRG -n TestVNet -a 192.168.0.0/16 -l chinaeast
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#23376;&#32593;&#65306;</span>
+   azure network vnet subnet create -g TestRG -e TestVNet -n FrontEnd -a 192.168.1.0/24
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#19968;&#20010;&#20844;&#20849; IP&#65306;</span>
+   azure network public-ip create -g TestRG -n TestLBPIP -l chinaeast -d testlb -a static -i 4
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36127;&#36733;&#22343;&#34913;&#22120;&#65306;</span>
+   azure network lb create -g TestRG -n TestLB -l chinaeast
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36127;&#36733;&#22343;&#34913;&#22120;&#30340;&#21069;&#31471; IP &#27744;&#24182;&#20851;&#32852;&#20844;&#20849; IP&#65306;</span>
+   azure network lb frontend-ip create -g TestRG -l TestLB -n TestFrontEndPool -i TestLBPIP
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21019;&#24314;&#36127;&#36733;&#22343;&#34913;&#22120;&#30340;&#21518;&#31471; IP &#27744;&#65306;</span>
+   azure network lb address-pool create -g TestRG -l TestLB -n TestBackEndPool
+
+   azure network lb inbound-nat-rule create -g TestRG -l TestLB -n TEST1-SSH -p tcp -f 4991 -b 20160
+
+   azure network nic create -g TestRG -n TEST-NIC1 -l chinaeast --subnet-vnet-name TestVNet --subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+         -d <span style="color: #ff4ea3;">"/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/backendAddressPools/TestBackEndPool"</span> <span style="color: #ff4ea3;">\</span>
+         -e <span style="color: #ff4ea3;">"/subscriptions/5ef4723b-155a-4081-9dc5-d41c9a0130ab/resourceGroups/TestRG/providers/Microsoft.Network/loadBalancers/TestLB/inboundNatRules/TEST1-SSH"</span>
+
+   azure vm create <span style="color: #ff4ea3;">\</span>
+         --resource-group TestRG <span style="color: #ff4ea3;">\</span>
+         --name RasMasterVm <span style="color: #ff4ea3;">\</span>
+         --location chinaeast <span style="color: #ff4ea3;">\</span>
+         --os-type linux <span style="color: #ff4ea3;">\</span>
+         --availset-name TestAvailSet <span style="color: #ff4ea3;">\</span>
+         --nic-name TEST-NIC1 <span style="color: #ff4ea3;">\</span>
+         --vnet-name TestVnet <span style="color: #ff4ea3;">\</span>
+         --vnet-subnet-name FrontEnd <span style="color: #ff4ea3;">\</span>
+         --storage-account-name pengsaccount <span style="color: #ff4ea3;">\</span>
+         --admin-password <span style="color: #ff4ea3;">'password'</span> <span style="color: #ff4ea3;">\</span>
+         -Q <span style="color: #ff4ea3;">"https://pengsaccount.blob.core.chinacloudapi.cn/system/Microsoft.Compute/Images/vhds/rivertest1-osDisk.2d0ec9d8-7b65-47cb-8dbd-45ba6c0dadfe.vhd"</span> <span style="color: #ff4ea3;">\</span>
+         --admin-username username
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3c58513" class="outline-3">
+<h3 id="org3c58513"><span class="section-number-3">3.2</span> asm</h3>
+<div class="outline-text-3" id="text-3-2">
+
+<div class="figure">
+<p><img src="./images/azure_classic_model.png" alt="azure_classic_model.png" />
+</p>
+</div>
+
+<ol class="org-ol">
+<li>一项必不可少的云服务，用作宿主虚拟机的容器（计算）。虚拟机自动配备
+一个网络接口卡 (NIC) 以及由 Azure 分配的 IP 地址。此外，云服务包含
+一个外部负载均衡器实例、一个公共 IP 地址以及若干默认终结点，以支持
+远程桌面、针对 Windows 虚拟机的远程 PowerShell 流量和针对 Linux 虚
+拟机的 Secure Shell (SSH) 流量。</li>
+<li>一个必不可少的存储帐户，存储虚拟机的 VHD，包括操作系统、临时文件和
+附加的数据磁盘（存储）。</li>
+<li>一个可选的虚拟网络，用作额外的容器，可以在其中创建子网结构并指定虚
+拟机所在的子网（网络）。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org4439de5" class="outline-3">
+<h3 id="org4439de5"><span class="section-number-3">3.3</span> 总结</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+最开始的时候，asm使用service的模型，提出的是是一个cloud service
+“云服务”的概念。一个云服务包含虚拟机、ip地址等。其它比如网络，NSG
+（Network security group，网络安全组，其实就是防火墙）等东西。这些
+东西在asm中都是独立的。另外，例如load balance这样的设备，在asm中是
+隐式地创建的。
+</p>
+
+<p>
+而在arm中，它把虚拟机，public ip，vNet，subnet，nsg等都描述为资源
+（resource），而且这些相关联的资源都打包成了一个“组”，就成了”资
+源组“。在”资源组“中，arm把一些asm中隐式创建的设备都做成了”资源
+“（比如public ip，load balance这些）。arm这样做，一个资源组做为整
+体，增删方便。而把所有设备独立成资源，可配置性也更高。
+</p>
+
+<p>
+难道真的是两套pm？
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1fafa71" class="outline-2">
+<h2 id="org1fafa71"><span class="section-number-2">4</span> arm的优点</h2>
+<div class="outline-text-2" id="text-4">
+<ol class="org-ol">
+<li>classic的每个资源都是独立的。arm可以以一个组的概念来部署、管理和监
+控所有的服务。</li>
+<li>arm可以方便地重复布署用户的解决方案，同时还能保证其布署后的一致性。</li>
+<li>arm可以对资源组中的所有资源做访问控制，对应策略对后面新加入的资源也生
+效。arm的访问制控有三种基本权限。
+<ol class="org-ol">
+<li>owner：所有权限。</li>
+<li>contributor：有创建和管理资源的权限，但是不是付予别人访问权限。</li>
+<li>reader：只读。</li>
+</ol></li>
+<li>arm可以给用户的任何资源打tag，提供逻辑上组织资源的能力。</li>
+<li>可以使用资源模版（json）来定义解决方案的架构。支持导入导出功能。模
+版定义了一组资源的集合，可以一次性布署。</li>
+<li>可以定义各资源之间的依赖关系，使其按正确的顺序进行部署。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org4dd585b" class="outline-2">
+<h2 id="org4dd585b"><span class="section-number-2">5</span> 相应资源可能出现几种情况</h2>
+<div class="outline-text-2" id="text-5">
+<ol class="org-ol">
+<li>只支持arm。</li>
+<li>两个都支持如虚拟机、存储帐户和虚拟网络。</li>
+<li>只支持classic。</li>
+</ol>
+
+<p>
+第一种只能使用arm来进行操作，第三种只能使用classic来进行操作。第二种，
+使用arm创建的资源只能使用arm来操作，使用classic创建的资源只能使用
+classic来操作。因为这些资源在两种平台上支持的操作不同（使用的api集合
+应该都不同）。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org84875ce" class="outline-2">
+<h2 id="org84875ce"><span class="section-number-2">6</span> 一些具体不兼容的情况（后面持续补充）</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>arm中可以支持一个NIC多个private ip和public ip地址。</li>
+<li><a href="https://docs.microsoft.com/zh-cn/azure/virtual-network/virtual-network-ip-addresses-overview-classic#differences-between-resource-manager-and-classic-deployments">两种模式下Ip Address的区别</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2a40f25" class="outline-2">
+<h2 id="org2a40f25"><span class="section-number-2">7</span> 参考文档</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+<a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-deployment-model">Azure Resource Manager vs. classic deployment: Understand deployment models and the state of your resources</a>
+</p>
+
+<p>
+<a href="https://blog.kloud.com.au/2016/04/05/azure-classic-vs-azure-resource-manager/">Azure Classic vs Azure Resource Manager</a>
+</p>
+
+<p>
+<a href="https://www.datapipe.com/blog/2016/01/13/azure-portal-vs-azure-classic-portal-a-tale-of-two-apis/">Azure Classic vs Azure Resource Manager</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

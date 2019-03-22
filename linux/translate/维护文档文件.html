@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>维护文档文件</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>维护文档文件</h2>
+
+        <p>每一个软件工程都应该有它自己的目录。一个最小的“工程”就像我们在 <a href="Autoconf，和Automake的Hello_world例子.html">Autoconf，和 Automake 的Hello world例子</a> 中介绍的一样。一般情况下，即使是最小的工程都必须包含下面这些文件：
+        <pre class="code">README, INSTALL, AUTHORS, THANKS, NEWS, ChangeLog</pre></p>
+
+        <p>在分发你的源代码之前，勿必为这些文件添加上真正的内容。
+          这一节，我们简单介绍一下应当如何维护这些文件。
+          更加具体的细节请查阅发布在FSF上的 GNU coding standards 。</p>
+
+        <ol>
+          <li>
+            <p>
+              <b>README文件：</b> 每个一个分发都应该包含此文件。这个文件是用户在解开压缩包后必须全部阅读的。
+              你应该简洁地介绍一下这个分发的作用，然后给出所有文档的地址。
+              安装软件包的命令一般都在INSTALL文件中。
+              但是，如果你觉得有些内容需要安装者知道的，也可以写在这个文件中。
+            不要把配置和安装过程写得太复杂，这样会吓到用户的。
+          </p>
+
+            <p>对于预测试版本，你还可以给预测试的朋友们一个README-alpha文件，该文件可以包含一些特殊的注释。
+              如果你使用推荐的版本号机制（请参阅
+              <a href="%E5%A4%84%E7%90%86%E7%89%88%E6%9C%AC%E5%8F%B7.html%EF%BC%89">处理版本号.html）</a> ，
+              你还可以通过给configure.in文件添加下面的代码来自动化这个过程：</p>
+            <pre class="code">changequote(,)dnl
+case $VERSION in
+ [0-9]*.[0-9]*[a-z]) DIST_ALPHA="README-alpha";;
+ [0-9]*.[0-9]*.[0-9]*) DIST_ALPHA="README-alpha";;
+ *) DIST_ALPHA=;;
+esac
+changequote([, ])dnl
+AC_SUBST(DIST_ALPHA)</pre>
+
+            <p>在最上层的Makefile.Automake文件中加入一行：
+              <pre class="code">EXTRA_DIST = $(DIST_ALPHA)</pre></p>
+          </li>
+
+          <li><b>INSTALL文件：</b> 因为GNU的安装过程是被简化了的，Automake 会创建一个标准的INSTALL文件。
+            一些比较重要的话最好还是放到README文件里面。
+            INSTALL文件其实主要是为那些从来没有使用过GNU软件的人准备的。
+            然而，如果你的软件包是很特殊的，你也可以选择修改标准的INSTALL文件或者直接自己写一个。</li>
+
+          <li>
+            <p><b>AUTHORS文件：</b> 此文件应该收集你和指定包贡献者交换的法律文书。
+            这些信息对你注册软件的版权很有帮助。
+              该文件应该有一些大致类似于这样的内容：</p>
+<pre class="code">Authors of PACKAGE
+
+The following contributions warranted legal paper exchanges
+with [the Free Software Foundation | Your Name].
+Also see files ChangeLog and THANKS</pre>
+
+            <p>然后，列出贡献者和他们贡献过的文件。
+              说清楚是他们创建了文件还是修改了文件，比如：
+              <pre class="code">Random J. Hacker:
+entire files  -> foo1.c , foo2.c , foo3.c
+modifications -> foo4.c , foo5.c</pre></p>
+          </li>
+
+          <li>
+            <p><b>THANKS文件：</b> 每个软件包都应该包含一个THANKS文件。
+              该文件分两行列出贡献者的名字，每一行一个，以首字母顺序排序。
+              左边一列给出贡献者的名字，右边一列贡献者最新的gmail地址。应该使用如下措辞来描述：
+            <pre class="code">PACKAGE THANKS file
+
+PACKAGE has originally been written by ORIGINAL AUTHOR. Many
+people further contributed to PACKAGE by reporting problems,
+suggesting various improvements or submitting actual code.
+Here is a list of these people. Help me keep it complete and
+exempt of errors.</pre></p>
+
+            <p>最早的策略是感谢给项目做过贡献的所有人，而不管他们贡献的多与少。</p>
+
+            <p>不像AUTHORS文件，THANKS文件不是为了法律原因而存在的。
+              它是用来感谢那些给过你帮助的贡献者的。
+              因为一些类似于报告bug、提出想法和建议的这些贡献是不需要交换法律文件的。
+            </p>
+
+            <p> 你还可以在给THANKS文件添加一个名字时给他发出一个特殊的问侯语。
+              这样的话，在THANKS文件中存在名字也就表示你已经给他发送过问侯语了。
+            </p>
+          </li>
+
+          <li>
+            <p><b>NEWS文件：</b>* 列出一些该版本主要的新功能，用于标识它们属于哪个版本。
+              不要丢弃之前版本的内容。
+              把它们放到新内容的后面。
+              这样一个从旧版本升级上来的用户就能知道多了哪些新功能。</p>
+          </li>
+
+          <li>
+            <p><b>ChangeLog文件：</b> 用这个文件不记录你对所有源代码做的修改。
+              如果分发在新多子目录中，而又有足够的理由把每个子目录当作子软件包的话，请为每个子目录维护一个Changelog文件。
+              比如说，虽然为你的文档单独维护一个ChangeLog文件不是很常见。
+              但是，如果你决定这么做，这个ChangeLog文件就应该和你主要的ChangeLog文件区分出来。</p>
+
+            <p>GNU代码标准中说明了很多ChangeLog文件中的细节，推荐各位阅读一下。
+              基本思想就是记录你对文件的半永久性的修改。
+              如果你在实验性质的做某些事情，到时没有必要持续地记录到该文件中。
+              但是，一旦你觉得你的修改已经可以了，你就应当记录ChangeLog。
+              请一定要把版本号记录到ChangeLog文件的中央位置（参阅 <a href="处理版本号.html">处理版本号</a> ）。
+              这样才可能显示出来不同版本之间的改变。</p>
+
+            <p>你可以用emacs自动执行ChangeLog的维护工作。具体说参阅
+              <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Navigating-source-code" data-accessed="2018-12-19">Navigating-source-code</a>。
+              最近版本的emacs使用ISO 8601标准的时间：YYYY-MM-DD（年－月－日）。一个传统的ChangeLog项目应该长这个样子：
+<pre class="code">1998-05-17  Eleftherios Gkioulekas  <lf@amath.washington.edu>
+
+* src/acmkdir.sh: Now acmkdir will put better default content
+to the files README, NEWS, AUTHORS, THANKS</pre>
+            </p>
+
+            <p> 每一个项目记录你每天的修改。最新的修改放到最上面，旧一点的修改就向下顺移。
+              每天的工作变化按组来分组。</p>
+          </li>
+
+          <li>
+            <p><b>COPYING文件：</b> 该文件包含你的分发的版本信息，一般都是GPL（参阅
+              <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Licensing-Free-Software" data-accessed="2018-12-19">http://autotoolset.sourceforge.net/tutorial.html#Licensing-Free-Software</a> ）。
+            这个文件由 Automake 自动生成。
+              但是，开发者还是需要自己在源代中插入指向该文件的版本头信息。具体请参考 <a href="使用GPL.html">使用GPL</a> 。</p>
+
+            <p>如果你开发免费软件，版本是你需要注意的众多法律问题之一。
+              具体请参考 <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Legal-issues-with-Free-Software" data-accessed="2018-12-19">Legal-issues-with-Free-Software</a> 。
+              GNU项目的哲学理念是，软件应该是免费的，这对我们社区的未来很重要。
+              请参阅 <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Philosophical-issues" data-accessed="2018-12-19">Philosophical-issues</a> 中的Richard Stallman关于这一主题的论文。
+            </p>
+          </li>
+
+        </ol>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

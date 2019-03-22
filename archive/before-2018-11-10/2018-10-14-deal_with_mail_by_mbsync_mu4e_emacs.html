@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-11-01 Thu 22:07 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2018-10-14-deal_with_mail_by_mbsync_mu4e_emacs.org</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2018-10-14-deal_with_mail_by_mbsync_mu4e_emacs.org</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orga6c97b0">1. 下载邮件</a></li>
+<li><a href="#orgf228b24">2. 使用mu进行index</a></li>
+<li><a href="#orgbd09843">3. 使用mu4e</a></li>
+<li><a href="#org11782c9">4. MISC</a>
+<ul>
+<li><a href="#no_pem">4.1. <span class="todo TODO">TODO</span> 有些imap可能没有pem文件</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga6c97b0" class="outline-2">
+<h2 id="orga6c97b0"><span class="section-number-2">1</span> 下载邮件</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+下载邮件到本地，之前使用过 <code>offlineimap</code> 和 <code>fetchmail</code> 。这次换了电脑，
+折腾了一下 mbsync 。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-conf-space"><span style="color: #ff8700;">Expunge</span> None
+<span style="color: #ff8700;">Create</span> Slave               <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#21482;&#22312;Slave&#19978;&#21019;&#24314;&#26032;&#25991;&#20214;&#22841;, &#19981;&#23545;Master&#20570;&#25805;&#20316;</span>
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">--------------------------------------------------------------------</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">ACCOUNT INFORMATION</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">--------------------------------------------------------------------</span>
+<span style="color: #ff8700;">IMAPAccount</span> gmail
+<span style="color: #ff8700;">Host</span> imap.gmail.com
+<span style="color: #ff8700;">Timeout</span> 0                       <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">0&#34920;&#31034;&#19981;&#36229;&#26102;</span>
+<span style="color: #ff8700;">User</span> pengpengxpplay@gmail.com
+<span style="color: #ff8700;">PassCmd</span> <span style="color: #ff4ea3;">"security find-generic-password -s mail_gmail -w"</span>
+<span style="color: #ff8700;">AuthMechs</span> PLAIN <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">google&#37038;&#31665;&#24320;&#21551;&#20801;&#35768;&#23433;&#20840;&#24615;&#36739;&#20302;&#30340;&#24212;&#29992;&#30331;&#38470;&#26102;&#29992;&#36825;&#20010;&#36873;&#39033;&#21487;&#20197;&#25104;&#21151;&#30331;&#38470;</span>
+<span style="color: #ff8700;">SSLType</span> IMAPS   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">993&#31471;&#21475;&#29992;&#36825;&#20010;&#36873;&#39033;</span>
+
+<span style="color: #ff8700;">IMAPAccount</span> sinapub
+<span style="color: #ff8700;">Host</span> imap.sina.com
+<span style="color: #ff8700;">Port</span> 993
+<span style="color: #ff8700;">User</span> pengpengxppub@sina.com
+<span style="color: #ff8700;">PassCmd</span> <span style="color: #ff4ea3;">"security find-generic-password -s mail_sinapub -w"</span>
+<span style="color: #ff8700;">AuthMechs</span> LOGIN              <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26222;&#36890;&#30340;993&#31471;&#21475;&#30340;imap&#20351;&#29992;&#36825;&#20010;&#26041;&#24335;&#23601;&#21487;&#20197;&#20102;</span>
+<span style="color: #ff8700;">SSLType</span> IMAPS
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">CertificateFile /Users/pengpengxp/.pem/sina.pem</span>
+
+<span style="color: #ff8700;">IMAPAccount</span> sinapri
+<span style="color: #ff8700;">Host</span> imap.sina.com
+<span style="color: #ff8700;">Port</span> 993
+<span style="color: #ff8700;">User</span> pengpengxppri@sina.com
+<span style="color: #ff8700;">PassCmd</span> <span style="color: #ff4ea3;">"security find-generic-password -s mail_sinapri -w"</span>
+<span style="color: #ff8700;">AuthMechs</span> LOGIN
+<span style="color: #ff8700;">SSLType</span> IMAPS
+
+<span style="color: #ff8700;">IMAPAccount</span> qq
+<span style="color: #ff8700;">Host</span> imap.qq.com
+<span style="color: #ff8700;">Port</span> 993
+<span style="color: #ff8700;">Timeout</span> 0
+<span style="color: #ff8700;">User</span> 474364048@qq.com
+<span style="color: #ff8700;">PassCmd</span> <span style="color: #ff4ea3;">"security find-generic-password -s mail_qq -w"</span>
+<span style="color: #ff8700;">AuthMechs</span> LOGIN
+<span style="color: #ff8700;">SSLType</span> IMAPS
+
+<span style="color: #ff8700;">IMAPAccount</span> cdyq
+<span style="color: #ff8700;">Host</span> pop.yuqiinf.com
+<span style="color: #ff8700;">Port</span> 993
+<span style="color: #ff8700;">Timeout</span> 0
+<span style="color: #ff8700;">User</span> xiepeng@yuqiinf.com
+<span style="color: #ff8700;">PassCmd</span> <span style="color: #ff4ea3;">"security find-generic-password -s mail_cdyq -w"</span>
+<span style="color: #ff8700;">AuthMechs</span> LOGIN
+<span style="color: #ff8700;">SSLType</span> IMAPS
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ gmail store begin ################</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)</span>
+<span style="color: #ff8700;">IMAPStore</span> gmail-remote
+<span style="color: #ff8700;">Account</span> gmail
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p Maildir/gmail)</span>
+<span style="color: #ff8700;">MaildirStore</span> gmail-local
+<span style="color: #ff8700;">Path</span> ~/Maildir/gmail/     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#36825;&#20010;&#30446;&#24405;&#38656;&#35201;&#20808;&#29992; mkdir -p ~/Maildir/gmail/</span>
+<span style="color: #ff8700;">Inbox</span> ~/Maildir/gmail/inbox
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ gmail store end ################</span>
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ sinapub store begin ################</span>
+<span style="color: #ff8700;">IMAPStore</span> sinapub-remote
+<span style="color: #ff8700;">Account</span> sinapub
+
+<span style="color: #ff8700;">MaildirStore</span> sinapub-local
+<span style="color: #ff8700;">Path</span> ~/Maildir/sinapub/
+<span style="color: #ff8700;">Inbox</span> ~/Maildir/sinapub/inbox
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ sinapub store end ################</span>
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ sinapri store begin ################</span>
+<span style="color: #ff8700;">IMAPStore</span> sinapri-remote
+<span style="color: #ff8700;">Account</span> sinapri
+
+<span style="color: #ff8700;">MaildirStore</span> sinapri-local
+<span style="color: #ff8700;">Path</span> ~/Maildir/sinapri/
+<span style="color: #ff8700;">Inbox</span> ~/Maildir/sinapri/inbox
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ sinapri store end ################</span>
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ qq store begin ################</span>
+<span style="color: #ff8700;">IMAPStore</span> qq-remote
+<span style="color: #ff8700;">Account</span> qq
+
+<span style="color: #ff8700;">MaildirStore</span> qq-local
+<span style="color: #ff8700;">Path</span> ~/Maildir/qq/
+<span style="color: #ff8700;">Inbox</span> ~/Maildir/qq/inbox
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ qq store end ################</span>
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ cdyq store begin ################</span>
+<span style="color: #ff8700;">IMAPStore</span> cdyq-remote
+<span style="color: #ff8700;">Account</span> cdyq
+
+<span style="color: #ff8700;">MaildirStore</span> cdyq-local
+<span style="color: #ff8700;">Path</span> ~/Maildir/cdyq/
+<span style="color: #ff8700;">Inbox</span> ~/Maildir/cdyq/inbox
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">################ cdyq store end ################</span>
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">--------------------------------------------------------------------</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">1 "*" TO MATCH EVERYTHING</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">2 "!DIR" TO EXCLUDE "DIR"</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">3 "DIR" TO MATCH DIR</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">FOR INSTANCE IN THE SPECIFICATION BELOW:</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">gmail-inbox gets the folder INBOX, ARCHIVE, and everything under</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">"ARCHIVE*"</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">gmail-trash gets only the "[Gmail]/Trash" folder and stores it to</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">the local "trash" folder</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">--------------------------------------------------------------------</span>
+
+<span style="color: #ff8700;">Channel</span> gmail-inbox
+<span style="color: #ff8700;">Master</span> :gmail-remote:
+<span style="color: #ff8700;">Slave</span> :gmail-local:
+<span style="color: #ff8700;">Patterns</span> <span style="color: #ff4ea3;">"INBOX"</span> <span style="color: #ff4ea3;">"Arch*"</span>
+<span style="color: #ff8700;">Expunge</span> Slave
+<span style="color: #ff8700;">Sync</span> Pull
+<span style="color: #ff8700;">CopyArrivalDate</span> yes <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">&#23558;&#21407;&#37038;&#31665;&#30340;&#26102;&#38388;&#20449;&#24687;&#20063;&#21516;&#27493;&#36807;&#26469;, &#21542;&#21017;&#20197;&#25289;&#21462;&#30340;&#26102;&#21051;&#19978;&#20256;, &#19981;&#26041;&#20415;</span>
+
+<span style="color: #ff8700;">Channel</span> gmail-trash
+<span style="color: #ff8700;">Master</span> :gmail-remote:<span style="color: #ff4ea3;">"[Gmail]/Trash"</span>
+<span style="color: #ff8700;">Slave</span> :gmail-local:trash
+<span style="color: #ff8700;">Create</span> Both
+<span style="color: #ff8700;">Expunge</span> Both
+<span style="color: #ff8700;">SyncState</span> *
+
+<span style="color: #ff8700;">Channel</span> gmail-sent
+<span style="color: #ff8700;">Master</span> :gmail-remote:<span style="color: #ff4ea3;">"[Gmail]/Sent Mail"</span>
+<span style="color: #ff8700;">Slave</span> :gmail-local:sent
+<span style="color: #ff8700;">Create</span> Both
+<span style="color: #ff8700;">Expunge</span> Both
+<span style="color: #ff8700;">SyncState</span> *
+
+<span style="color: #ff8700;">Channel</span> sinapub-inbox
+<span style="color: #ff8700;">Master</span> :sinapub-remote:
+<span style="color: #ff8700;">Slave</span> :sinapub-local:
+<span style="color: #ff8700;">Patterns</span> <span style="color: #ff4ea3;">"INBOX"</span> <span style="color: #ff4ea3;">"Arch*"</span>
+<span style="color: #ff8700;">Expunge</span> Slave
+<span style="color: #ff8700;">Sync</span> Pull
+<span style="color: #ff8700;">CopyArrivalDate</span> yes
+
+<span style="color: #ff8700;">Channel</span> sinapri-inbox
+<span style="color: #ff8700;">Master</span> :sinapri-remote:
+<span style="color: #ff8700;">Slave</span> :sinapri-local:
+<span style="color: #ff8700;">Patterns</span> <span style="color: #ff4ea3;">"INBOX"</span> <span style="color: #ff4ea3;">"Arch*"</span>
+<span style="color: #ff8700;">Expunge</span> Slave
+<span style="color: #ff8700;">Sync</span> Pull
+<span style="color: #ff8700;">CopyArrivalDate</span> yes
+
+<span style="color: #ff8700;">Channel</span> qq-inbox
+<span style="color: #ff8700;">Master</span> :qq-remote:
+<span style="color: #ff8700;">Slave</span> :qq-local:
+<span style="color: #ff8700;">Patterns</span> <span style="color: #ff4ea3;">"INBOX"</span> <span style="color: #ff4ea3;">"Arch*"</span> <span style="color: #ff4ea3;">"Sent*"</span>
+<span style="color: #ff8700;">Expunge</span> Slave
+<span style="color: #ff8700;">Sync</span> Pull
+<span style="color: #ff8700;">CopyArrivalDate</span> yes
+
+<span style="color: #ff8700;">Channel</span> qq-sent
+<span style="color: #ff8700;">Master</span> :qq-remote:
+<span style="color: #ff8700;">Slave</span> :qq-local:sent
+<span style="color: #ff8700;">Patterns</span> <span style="color: #ff4ea3;">"Sent*"</span>
+<span style="color: #ff8700;">Expunge</span> Slave
+<span style="color: #ff8700;">Sync</span> Pull
+<span style="color: #ff8700;">CopyArrivalDate</span> yes
+
+<span style="color: #ff8700;">Channel</span> cdyq-inbox
+<span style="color: #ff8700;">Master</span> :cdyq-remote:
+<span style="color: #ff8700;">Slave</span> :cdyq-local:
+<span style="color: #ff8700;">Patterns</span> <span style="color: #ff4ea3;">"INBOX"</span> <span style="color: #ff4ea3;">"Arch*"</span>
+<span style="color: #ff8700;">Expunge</span> Slave
+<span style="color: #ff8700;">Sync</span> Pull
+<span style="color: #ff8700;">CopyArrivalDate</span> yes
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">--------------------------------------------------------------------</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">MBSYNC ON A GROUP TO SYNC ALL CHANNELS</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">FOR INSTANCE: "mbsync gmail" GETS MAIL FROM</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">"gmail-inbox", "gmail-sent", and "gmail-trash"</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">--------------------------------------------------------------------</span>
+
+<span style="color: #ff8700;">Group</span> gmail
+<span style="color: #ff8700;">Channel</span> gmail-inbox
+<span style="color: #ff8700;">Channel</span> gmail-sent
+<span style="color: #ff8700;">Channel</span> gmail-trash
+
+<span style="color: #ff8700;">Group</span> all-mail
+<span style="color: #ff8700;">Channel</span> qq-inbox
+<span style="color: #ff8700;">Channel</span> qq-sent
+<span style="color: #ff8700;">Channel</span> sinapub-inbox
+<span style="color: #ff8700;">Channel</span> sinapri-inbox
+<span style="color: #ff8700;">Channel</span> cdyq-inbox
+
+</pre>
+</div>
+
+<p>
+mbsync配置大体分三块：
+</p>
+<ol class="org-ol">
+<li>账户：这个区域设置用户的账户信息，就包括用户名密码。这里的选项很
+重要，设置正确才能登陆成功。这里主要配置了gmail和一个普通的imap邮
+箱。
+<ol class="org-ol">
+<li>gmail： <code>AuthMechs PLAIN</code> 这个选项设对后，在google账户中设置允
+许安全性较低的应用访问。就搞定啦。</li>
+<li>普通imap账户，我试了qq和新浪邮箱以及一个公司的邮箱，按照上面的
+配置都是可以的（都是登陆的993端口）。注意 <code>AuthMechs LOGIN</code> 这
+个选项。普通imap邮箱需要设置为这个才可以登陆。如果imap server
+没有对应的pem，可以参考 <a href="#no_pem">4.1</a> 。</li>
+</ol></li>
+<li>STORES： 我理解这里就是指定一对一对的remote和local。对于我们只需
+要拉邮件的用户用说，remote就直接设置为上面配置好的账户即可。local
+就是设置这些邮件拉下来对应存在本地哪个目录。</li>
+<li>channel: channel的名字可以直接供mbsync命令行使用，比如可以直接
+<code>mbsync gmail-inbox</code> 这个channel。它主要指定一个master和slave，这
+里其实就是一个remote和local。
+<ol class="org-ol">
+<li>patterns表示匹配， <code>Patterns "INBOX" "Arch*"</code> 表示匹配inbox和
+所有归档的邮件。</li>
+<li class="off"><code>[&#xa0;]</code> Sync:</li>
+<li class="off"><code>[&#xa0;]</code> Expunge:</li>
+</ol></li>
+<li>group:这个简单，把多个channel合到一个group，直接 <code>mbsync
+     &lt;group-name&gt;</code> 就可以执行到所有group下面的所有channel。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgf228b24" class="outline-2">
+<h2 id="orgf228b24"><span class="section-number-2">2</span> 使用mu进行index</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-sh">rm ~/.mu
+mu index --rebuild -m ~/Maildir
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbd09843" class="outline-2">
+<h2 id="orgbd09843"><span class="section-number-2">3</span> 使用mu4e</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+之前写过一篇 <a href="2017-08-24-emacs-use-mu4e.html">emacs-use-mu4e</a> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org11782c9" class="outline-2">
+<h2 id="org11782c9"><span class="section-number-2">4</span> MISC</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgb9c8dba" class="outline-3">
+<h3 id="no_pem"><a id="orgb9c8dba"></a><span class="section-number-3">4.1</span> <span class="todo TODO">TODO</span> 有些imap可能没有pem文件</h3>
+<div class="outline-text-3" id="text-no_pem">
+<p>
+这个pem文件现在我不知道是干啥的，默认安装好了openssl后，就有一个比
+较全的pem文件： <code>/usr/local/etc/openssl/cert.pem</code> 。
+</p>
+
+<p>
+如果对应imap的server不包括在上面这个pem文件中，可以用类似下面的命令
+查询对应的imap server。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">openssl s_client -showcerts -connect imap.qq.com:993
+</pre>
+</div>
+
+<p>
+结果可能如下：
+</p>
+<pre class="example">
+depth=1 C = US, O = DigiCert Inc, OU = www.digicert.com, CN = GeoTrust RSA CA 2018
+verify error:num=20:unable to get local issuer certificate
+verify return:0
+CONNECTED(00000006)
+---
+Certificate chain
+ 0 s:/C=CN/ST=Guangdong/L=Shenzhen/O=Tencent Technology (Shenzhen) Company Limited/OU=R&amp;D/CN=pop.qq.com
+   i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=GeoTrust RSA CA 2018
+-----BEGIN CERTIFICATE-----
+MIIHHTCCBgWgAwIBAgIQD29m716RhcHnqp5k3+rhyjANBgkqhkiG9w0BAQsFADBe
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMR0wGwYDVQQDExRHZW9UcnVzdCBSU0EgQ0EgMjAxODAe
+Fw0xODA5MTAwMDAwMDBaFw0xOTEyMTAxMjAwMDBaMIGPMQswCQYDVQQGEwJDTjES
+MBAGA1UECBMJR3Vhbmdkb25nMREwDwYDVQQHEwhTaGVuemhlbjE2MDQGA1UEChMt
+VGVuY2VudCBUZWNobm9sb2d5IChTaGVuemhlbikgQ29tcGFueSBMaW1pdGVkMQww
+CgYDVQQLDANSJkQxEzARBgNVBAMTCnBvcC5xcS5jb20wggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCiClbinsoiXxj/nrczA2W2uAobA/7GPcYhvhX+TVfG
+eGvdXMpcGTkXuMa5VsTtCaYZxbshk1FmisVRWSJEBp3krZS2hN73rxN8HXD3eztP
+K2fuRCz/q1cyfp/eiclgJldMCQycPsxMvMDOyCBK88I4ZEz4p3S2zDtu1gESxQJd
+0AloNliQlNeIz92h8Qq/o0vSRZyadEDccgDdgk6QxKxFCRYFq08N0DILxC1hjZb1
+nMsW9KseVd56a/xlQZE4pcUYp/UWn6xxK+9IjeJ1795TymfZ1uzLQKZErcUfwKdZ
+FmRdIeXNRZsOgpuDZntb39oShWUyQZhEHvzN6E5Qj0+bAgMBAAGjggOjMIIDnzAf
+BgNVHSMEGDAWgBSQWP+wnHWoUVR3se3yo0MWOJ5sxTAdBgNVHQ4EFgQUNoEqF2m6
+eVtIDmfipxxZ5oh+O/gwgZoGA1UdEQSBkjCBj4IKcG9wLnFxLmNvbYIKZGF2LnFx
+LmNvbYIJZXgucXEuY29tggtzbXRwLnFxLmNvbYIKbXgxLnFxLmNvbYILaW1hcC5x
+cS5jb22CCm14Mi5xcS5jb22CDW14Yml6Mi5xcS5jb22CDW14Yml6MS5xcS5jb22C
+DmNsb3VkbXgucXEuY29tggpteDMucXEuY29tMA4GA1UdDwEB/wQEAwIFoDAdBgNV
+HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwPwYDVR0fBDgwNjA0oDKgMIYuaHR0
+cDovL2NkcDEuZGlnaWNlcnQuY29tL0dlb1RydXN0UlNBQ0EyMDE4LmNybDBMBgNV
+HSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5k
+aWdpY2VydC5jb20vQ1BTMAgGBmeBDAECAjB0BggrBgEFBQcBAQRoMGYwJQYIKwYB
+BQUHMAGGGWh0dHA6Ly9vY3NwMS5kaWdpY2VydC5jb20wPQYIKwYBBQUHMAKGMWh0
+dHA6Ly9jYWNlcnRzLmdlb3RydXN0LmNvbS9HZW9UcnVzdFJTQUNBMjAxOC5jcnQw
+CQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYApLkJkLQYWBSH
+uxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFlwg5KwAAABAMARzBFAiAfsZKk2vNr
+O0D7r9q8HIEEC5huCFCUy5T8xjHlUNNw8QIhANNMcY634gUlvWJhytO6BfzIQWDP
+p0YdhcOUQ41/RGSBAHYAh3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8A
+AAFlwg5LoQAABAMARzBFAiEAxSyuhY1buGgibmi6FMoVzMj63eLGzLdOdxjhNPxO
+UFcCIGHNjFW7wwDkRuPz+BS7SwH3HwjFj5dRdTzdDo8rsfAKAHcAu9nfvB+KcbWT
+lCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFlwg5K7AAABAMASDBGAiEA8nL/Uv3j
+lMvPN/6kwlwHpqTcMesJLs/P4GJaqahea8sCIQDiUnlmrhx7eh8q9h9gcDYprv8l
+cl4m772jakApjrBJeTANBgkqhkiG9w0BAQsFAAOCAQEAck0fNQSZVfWymUBwSRXz
+mooSjmFXLU+GJ85/bQLPX8ipRYXNmX0JC0wiho5qNh9JqmAq6Ami+3dvKrZG4lh0
+WVdjOOX2qD8mmp27qUDKGyljA3RFuTyonBaYHI9bQ4H3pGoXzoYxrD4v0waQecmQ
+ahnd2tf4iO7arNxH3rHX3Ih+HeUSoq1rUBRv77QpVO3DVtbomovVWMEkX9O0T5IL
+iNm9BnAA3SjCbJJkMw42quB1+CqPlsvzgT07x8c0b2y9FrQE1NGOqqmbpap7+/NR
+rb9No1zt3v8/txh7kwk1C9oTxLftvX2qcQbcbzXdGEhhJGcYo4hgO0n7RXK6riYM
+mQ==
+-----END CERTIFICATE-----
+ 1 s:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=GeoTrust RSA CA 2018
+   i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert Global Root CA
+-----BEGIN CERTIFICATE-----
+MIIEizCCA3OgAwIBAgIQBUb+GCP34ZQdo5/OFMRhczANBgkqhkiG9w0BAQsFADBh
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
+QTAeFw0xNzExMDYxMjIzNDVaFw0yNzExMDYxMjIzNDVaMF4xCzAJBgNVBAYTAlVT
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
+b20xHTAbBgNVBAMTFEdlb1RydXN0IFJTQSBDQSAyMDE4MIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAv4rRY03hGOqHXegWPI9/tr6HFzekDPgxP59FVEAh
+150Hm8oDI0q9m+2FAmM/n4W57Cjv8oYi2/hNVEHFtEJ/zzMXAQ6CkFLTxzSkwaEB
+2jKgQK0fWeQz/KDDlqxobNPomXOMJhB3y7c/OTLo0lko7geG4gk7hfiqafapa59Y
+rXLIW4dmrgjgdPstU0Nigz2PhUwRl9we/FAwuIMIMl5cXMThdSBK66XWdS3cLX18
+4ND+fHWhTkAChJrZDVouoKzzNYoq6tZaWmyOLKv23v14RyZ5eqoi6qnmcRID0/i6
+U9J5nL1krPYbY7tNjzgC+PBXXcWqJVoMXcUw/iBTGWzpwwIDAQABo4IBQDCCATww
+HQYDVR0OBBYEFJBY/7CcdahRVHex7fKjQxY4nmzFMB8GA1UdIwQYMBaAFAPeUDVW
+0Uy7ZvCj4hsbw5eyPdFVMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEF
+BQcDAQYIKwYBBQUHAwIwEgYDVR0TAQH/BAgwBgEB/wIBADA0BggrBgEFBQcBAQQo
+MCYwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBCBgNVHR8E
+OzA5MDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRHbG9i
+YWxSb290Q0EuY3JsMD0GA1UdIAQ2MDQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxo
+dHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMA0GCSqGSIb3DQEBCwUAA4IBAQAw
+8YdVPYQI/C5earp80s3VLOO+AtpdiXft9OlWwJLwKlUtRfccKj8QW/Pp4b7h6QAl
+ufejwQMb455OjpIbCZVS+awY/R8pAYsXCnM09GcSVe4ivMswyoCZP/vPEn/LPRhH
+hdgUPk8MlD979RGoUWz7qGAwqJChi28uRds3thx+vRZZIbEyZ62No0tJPzsSGSz8
+nQ//jP8BIwrzBAUH5WcBAbmvgWfrKcuv+PyGPqRcc4T55TlzrBnzAzZ3oClo9fTv
+O9PuiHMKrC6V6mgi0s2sa/gbXlPCD9Z24XUMxJElwIVTDuKB0Q4YMMlnpN/QChJ4
+B0AFsQ+DU0NCO+f78Xf7
+-----END CERTIFICATE-----
+---
+Server certificate
+subject=/C=CN/ST=Guangdong/L=Shenzhen/O=Tencent Technology (Shenzhen) Company Limited/OU=R&amp;D/CN=pop.qq.com
+issuer=/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=GeoTrust RSA CA 2018
+---
+No client certificate CA names sent
+---
+SSL handshake has read 3299 bytes and written 632 bytes
+---
+New, TLSv1/SSLv3, Cipher is RC4-SHA
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : RC4-SHA
+    Session-ID: C37234B79C67AE088ADFC172A0C70D3B555E283E7E3BBA4C883B2FB598B70A9D
+    Session-ID-ctx:
+    Master-Key: F797C3AF87DD7A73B2DE29E37C6983B2492E01074FFA1EB7E44DE3B3F38999487F17AED89782912DEF7E0EE282360494
+    TLS session ticket lifetime hint: 1200 (seconds)
+    TLS session ticket:
+    0000 - 6d 87 b3 14 f8 c8 3c be-9d 32 b3 cf 4b 6b 5a 42   m.....&lt;..2..KkZB
+    0010 - 54 56 90 b6 d7 31 64 ba-03 78 ca b5 6a 6c a1 57   TV...1d..x..jl.W
+    0020 - 5f ef 4d 52 b8 ae 66 5e-14 fe df e4 4c 03 e1 8e   _.MR..f^....L...
+    0030 - b6 3b 20 5f 62 d9 83 ee-32 90 5b 7e 64 87 70 58   .; _b...2.[~d.pX
+    0040 - 6c 25 36 72 6c 1e c0 71-9b 8f a4 a1 52 22 ab e2   l%6rl..q....R"..
+    0050 - f3 f1 3b 92 83 2c 44 5d-97 fc 5e 68 ff c0 34 b1   ..;..,D]..^h..4.
+    0060 - 7c 72 d3 75 f4 5b 5d b9-ec 60 13 9a 90 1f 66 31   |r.u.[]..`....f1
+    0070 - 2f 20 0a ff 49 63 af f2-c6 d5 46 f2 f1 78 19 ad   / ..Ic....F..x..
+    0080 - c8 b1 69 af e8 be 07 0e-65 c5 8c 26 5c 91 af ac   ..i.....e..&amp;\...
+    0090 - dd c0 ea e7 b4 d0 4e 92-23 ec bf 78 e8 11 23 f5   ......N.#..x..#.
+
+    Start Time: 1539527304
+    Timeout   : 300 (sec)
+    Verify return code: 0 (ok)
+---
+ * OK [CAPABILITY IMAP4 IMAP4rev1 ID AUTH=LOGIN NAMESPACE] QQMail IMAP4Server ready
+</pre>
+
+<p>
+把包括 <code>BEGIN CERTIFICATE</code> 和 <code>END CERTIFICATE</code> 中间的内容分别存为文
+件，这里两个区域，存为两个文件 <code>qq-1.pem</code> 和 <code>qq-2.pem</code> 即可。文件可
+能就长这样：
+</p>
+<pre class="example">
+-----BEGIN CERTIFICATE-----
+MIIHHTCCBgWgAwIBAgIQD29m716RhcHnqp5k3+rhyjANBgkqhkiG9w0BAQsFADBe
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMR0wGwYDVQQDExRHZW9UcnVzdCBSU0EgQ0EgMjAxODAe
+Fw0xODA5MTAwMDAwMDBaFw0xOTEyMTAxMjAwMDBaMIGPMQswCQYDVQQGEwJDTjES
+MBAGA1UECBMJR3Vhbmdkb25nMREwDwYDVQQHEwhTaGVuemhlbjE2MDQGA1UEChMt
+VGVuY2VudCBUZWNobm9sb2d5IChTaGVuemhlbikgQ29tcGFueSBMaW1pdGVkMQww
+CgYDVQQLDANSJkQxEzARBgNVBAMTCnBvcC5xcS5jb20wggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCiClbinsoiXxj/nrczA2W2uAobA/7GPcYhvhX+TVfG
+eGvdXMpcGTkXuMa5VsTtCaYZxbshk1FmisVRWSJEBp3krZS2hN73rxN8HXD3eztP
+K2fuRCz/q1cyfp/eiclgJldMCQycPsxMvMDOyCBK88I4ZEz4p3S2zDtu1gESxQJd
+0AloNliQlNeIz92h8Qq/o0vSRZyadEDccgDdgk6QxKxFCRYFq08N0DILxC1hjZb1
+nMsW9KseVd56a/xlQZE4pcUYp/UWn6xxK+9IjeJ1795TymfZ1uzLQKZErcUfwKdZ
+FmRdIeXNRZsOgpuDZntb39oShWUyQZhEHvzN6E5Qj0+bAgMBAAGjggOjMIIDnzAf
+BgNVHSMEGDAWgBSQWP+wnHWoUVR3se3yo0MWOJ5sxTAdBgNVHQ4EFgQUNoEqF2m6
+eVtIDmfipxxZ5oh+O/gwgZoGA1UdEQSBkjCBj4IKcG9wLnFxLmNvbYIKZGF2LnFx
+LmNvbYIJZXgucXEuY29tggtzbXRwLnFxLmNvbYIKbXgxLnFxLmNvbYILaW1hcC5x
+cS5jb22CCm14Mi5xcS5jb22CDW14Yml6Mi5xcS5jb22CDW14Yml6MS5xcS5jb22C
+DmNsb3VkbXgucXEuY29tggpteDMucXEuY29tMA4GA1UdDwEB/wQEAwIFoDAdBgNV
+HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwPwYDVR0fBDgwNjA0oDKgMIYuaHR0
+cDovL2NkcDEuZGlnaWNlcnQuY29tL0dlb1RydXN0UlNBQ0EyMDE4LmNybDBMBgNV
+HSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5k
+aWdpY2VydC5jb20vQ1BTMAgGBmeBDAECAjB0BggrBgEFBQcBAQRoMGYwJQYIKwYB
+BQUHMAGGGWh0dHA6Ly9vY3NwMS5kaWdpY2VydC5jb20wPQYIKwYBBQUHMAKGMWh0
+dHA6Ly9jYWNlcnRzLmdlb3RydXN0LmNvbS9HZW9UcnVzdFJTQUNBMjAxOC5jcnQw
+CQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYApLkJkLQYWBSH
+uxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFlwg5KwAAABAMARzBFAiAfsZKk2vNr
+O0D7r9q8HIEEC5huCFCUy5T8xjHlUNNw8QIhANNMcY634gUlvWJhytO6BfzIQWDP
+p0YdhcOUQ41/RGSBAHYAh3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8A
+AAFlwg5LoQAABAMARzBFAiEAxSyuhY1buGgibmi6FMoVzMj63eLGzLdOdxjhNPxO
+UFcCIGHNjFW7wwDkRuPz+BS7SwH3HwjFj5dRdTzdDo8rsfAKAHcAu9nfvB+KcbWT
+lCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFlwg5K7AAABAMASDBGAiEA8nL/Uv3j
+lMvPN/6kwlwHpqTcMesJLs/P4GJaqahea8sCIQDiUnlmrhx7eh8q9h9gcDYprv8l
+cl4m772jakApjrBJeTANBgkqhkiG9w0BAQsFAAOCAQEAck0fNQSZVfWymUBwSRXz
+mooSjmFXLU+GJ85/bQLPX8ipRYXNmX0JC0wiho5qNh9JqmAq6Ami+3dvKrZG4lh0
+WVdjOOX2qD8mmp27qUDKGyljA3RFuTyonBaYHI9bQ4H3pGoXzoYxrD4v0waQecmQ
+ahnd2tf4iO7arNxH3rHX3Ih+HeUSoq1rUBRv77QpVO3DVtbomovVWMEkX9O0T5IL
+iNm9BnAA3SjCbJJkMw42quB1+CqPlsvzgT07x8c0b2y9FrQE1NGOqqmbpap7+/NR
+rb9No1zt3v8/txh7kwk1C9oTxLftvX2qcQbcbzXdGEhhJGcYo4hgO0n7RXK6riYM
+mQ==
+-----END CERTIFICATE-----
+</pre>
+
+<p>
+qq2:
+</p>
+<pre class="example">
+-----BEGIN CERTIFICATE-----
+MIIEizCCA3OgAwIBAgIQBUb+GCP34ZQdo5/OFMRhczANBgkqhkiG9w0BAQsFADBh
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
+QTAeFw0xNzExMDYxMjIzNDVaFw0yNzExMDYxMjIzNDVaMF4xCzAJBgNVBAYTAlVT
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
+b20xHTAbBgNVBAMTFEdlb1RydXN0IFJTQSBDQSAyMDE4MIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAv4rRY03hGOqHXegWPI9/tr6HFzekDPgxP59FVEAh
+150Hm8oDI0q9m+2FAmM/n4W57Cjv8oYi2/hNVEHFtEJ/zzMXAQ6CkFLTxzSkwaEB
+2jKgQK0fWeQz/KDDlqxobNPomXOMJhB3y7c/OTLo0lko7geG4gk7hfiqafapa59Y
+rXLIW4dmrgjgdPstU0Nigz2PhUwRl9we/FAwuIMIMl5cXMThdSBK66XWdS3cLX18
+4ND+fHWhTkAChJrZDVouoKzzNYoq6tZaWmyOLKv23v14RyZ5eqoi6qnmcRID0/i6
+U9J5nL1krPYbY7tNjzgC+PBXXcWqJVoMXcUw/iBTGWzpwwIDAQABo4IBQDCCATww
+HQYDVR0OBBYEFJBY/7CcdahRVHex7fKjQxY4nmzFMB8GA1UdIwQYMBaAFAPeUDVW
+0Uy7ZvCj4hsbw5eyPdFVMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEF
+BQcDAQYIKwYBBQUHAwIwEgYDVR0TAQH/BAgwBgEB/wIBADA0BggrBgEFBQcBAQQo
+MCYwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBCBgNVHR8E
+OzA5MDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRHbG9i
+YWxSb290Q0EuY3JsMD0GA1UdIAQ2MDQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxo
+dHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMA0GCSqGSIb3DQEBCwUAA4IBAQAw
+8YdVPYQI/C5earp80s3VLOO+AtpdiXft9OlWwJLwKlUtRfccKj8QW/Pp4b7h6QAl
+ufejwQMb455OjpIbCZVS+awY/R8pAYsXCnM09GcSVe4ivMswyoCZP/vPEn/LPRhH
+hdgUPk8MlD979RGoUWz7qGAwqJChi28uRds3thx+vRZZIbEyZ62No0tJPzsSGSz8
+nQ//jP8BIwrzBAUH5WcBAbmvgWfrKcuv+PyGPqRcc4T55TlzrBnzAzZ3oClo9fTv
+O9PuiHMKrC6V6mgi0s2sa/gbXlPCD9Z24XUMxJElwIVTDuKB0Q4YMMlnpN/QChJ4
+B0AFsQ+DU0NCO+f78Xf7
+-----END CERTIFICATE-----
+
+</pre>
+
+<p>
+然后在 mbsync 的配置文件中显示指定就可以了。应该配到账户中，比如上面
+的qq邮箱就可以这样指定：
+</p>
+<div class="org-src-container">
+<pre class="src src-conf-space"><span style="color: #ff8700;">IMAPAccount</span> qq
+<span style="color: #ff8700;">Host</span> imap.qq.com
+<span style="color: #ff8700;">Port</span> 993
+<span style="color: #ff8700;">Timeout</span> 0
+<span style="color: #ff8700;">User</span> 474364048@qq.com
+<span style="color: #ff8700;">PassCmd</span> <span style="color: #ff4ea3;">"yous command to get your password"</span>
+<span style="color: #ff8700;">AuthMechs</span> LOGIN
+<span style="color: #ff8700;">SSLType</span> IMAPS
+<span style="color: #ff8700;">CertificateFile</span> /Users/pengpengxp/.pem/qq-1.pem
+<span style="color: #ff8700;">CertificateFile</span> /Users/pengpengxp/.pem/qq-2.pem
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-11-01 Thu 22:07</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

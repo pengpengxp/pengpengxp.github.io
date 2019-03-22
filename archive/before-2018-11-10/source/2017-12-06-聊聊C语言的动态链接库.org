@@ -1,0 +1,161 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: C语言的动态链接库
+
+* 动态链接库例子
+
+  写一个 =lib.c= 函数：
+  #+BEGIN_SRC C
+    #include <stdio.h>
+
+    int from_lib()
+    {
+        printf("This is hello world from lib\n");
+        return 0;
+    }
+  #+END_SRC
+  
+  再写一个调用的 =main.c= 函数：
+  #+BEGIN_SRC C
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+
+
+    int main(int args,char *argv[])
+    {
+        from_lib();
+        return 0;
+    }
+  #+END_SRC
+  
+  对应的 =Makefile= ：
+  #+BEGIN_SRC makefile-gmake
+    .PHONY:libtest a.out
+    a.out:
+            echo "compile a.out"
+            gcc main.c -L. -ltest
+    libtest:
+            gcc lib.c -fPIC -shared -o libtest.so
+    clean:
+            rm -rfv libtest.so a.out
+  #+END_SRC
+
+  需要设置变量 =LD_LIBRARY_PATH= ，把当前路径加入其中然后执行：
+  #+BEGIN_SRC sh
+    export LD_LIBRARY_PATH="/tmp/dynamic"
+    ./a.out
+  #+END_SRC
+  
+  一行流执行应该这样：
+  #+BEGIN_SRC sh
+    LD_LIBRARY_PATH="." ./a.out
+  #+END_SRC
+
+* 一个更详细的例子和说明（翻译）
+  [[https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html][参考文档]]
+
+  有下面三个文件：
+  #+BEGIN_SRC C :tangle /tmp/lib_example/foo.h :mkdirp yes :main no
+#ifndef foo_h__                                                                                                                 
+#define foo_h__                                                                                                                 
+                                                                                                                                                
+extern void foo(void);                                                                                                          
+                                                                                                                                                
+#endif  // foo_h__                                                                                                              
+  #+END_SRC
+
+  #+BEGIN_SRC C :tangle /tmp/lib_example/foo.c :mkdirp yes :main no
+/* ##foo.c: */                                                                                                                        
+                                                                                                                                                
+#include <stdio.h>                                                                                                              
+
+void foo(void)                                                                                                                  
+{                                                                                                                               
+    puts("Hello, I'm a shared library");                                                                                        
+}                                                                                                                               
+  #+END_SRC
+
+  #+BEGIN_SRC C :tangle /tmp/lib_example/main.c :mkdirp yes :main no
+/* ##main.c: */                                                                                                                       
+                                                                                                                                                
+#include <stdio.h>                                                                                                              
+#include "foo.h"                                                                                                                
+                                                                                                                                                
+int main(void)                                                                                                                  
+{                                                                                                                               
+    puts("This is a shared library test...");                                                                                   
+    foo();                                                                                                                      
+    return 0;                                                                                                                   
+}                                                                                                                               
+  #+END_SRC
+
+  1. 编译出“位置无关”代码（Position Independent Code，PIC）：
+     #+BEGIN_EXAMPLE
+$ gcc -c -Wall -Werror -fpic foo.c
+     #+END_EXAMPLE
+  2. 基于目标文件创建一个动态链接库：
+     #+BEGIN_EXAMPLE
+     gcc -shared -o libfoo.so foo.o
+     #+END_EXAMPLE
+  3. 把动态库和程序链接起来：
+     #+BEGIN_EXAMPLE
+$ gcc -Wall -o test main.c -lfoo                                                                                                
+/usr/bin/ld: cannot find -lfoo                                                                                                  
+collect2: ld returned 1 exit status                                                                                             
+     #+END_EXAMPLE
+     报错表示编译器找不到对应的库文件。需要使用 =-L= 参数来告诉编译器
+     到哪儿找对应的动态库文件。
+     #+BEGIN_EXAMPLE
+$ gcc -L. -Wall -o test main.c -lfoo
+     #+END_EXAMPLE
+  4. 使运态库在运行时能被找到。
+     #+BEGIN_EXAMPLE
+$ ./test                                                                                                                        
+./test: error while loading shared libraries: libfoo.so: cannot open shared object file: No such file or directory     
+     #+END_EXAMPLE
+     出现该错误说明该动态库找不到。
+     1. 可以通过设置 =LD_LIBRARY_PATH= 变量解决该问题：
+        #+BEGIN_EXAMPLE
+   $ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH                                                                    
+   $ ./test                                                                                                                        
+   This is a shared library test...                                                                                                
+   Hello, I'm a shared library                                                                                                     
+        #+END_EXAMPLE
+     2. 还可以在编译的时候通 =-rpath= 指定一个固定的地址：
+        #+BEGIN_EXAMPLE
+$ unset LD_LIBRARY_PATH                                                                                                         
+$ gcc -L. -Wl,-rpath=. -Wall -o test main.c -lfoo                                             
+$ ./test                                                                                                                        
+This is a shared library test...                                                                                                
+Hello, I'm a shared library                                                                                                     
+        #+END_EXAMPLE
+     3. 还可以把编译生成的 =so= 文件放到系统动态库默认目录中
+        =/usr/lib= 和 =/usr/local/lib= 。然后更新一下动态库的cache即可。
+        #+BEGIN_EXAMPLE
+$ cp /home/username/foo/libfoo.so /usr/lib                                                                                      
+$ chmod 0755 /usr/lib/libfoo.so                                                                                                 
+$ ldconfig
+        #+END_EXAMPLE
+        检查一下cache里面有没有：
+        #+BEGIN_EXAMPLE
+$ ldconfig -p|grep foo        
+libfoo.so (libc6) => /usr/lib/libfoo.so                                                                                         
+        #+END_EXAMPLE
+        还可以再使用 =ldd= 来查看一下可执行文件 =test= 中依赖的是哪一个库：
+        #+BEGIN_EXAMPLE
+$ ldd test | grep foo                                                                                                           
+libfoo.so => /usr/lib/libfoo.so (0x00a42000)                                                                                    
+        #+END_EXAMPLE
+        这下再重新来试一次：
+        #+BEGIN_EXAMPLE
+$ unset LD_LIBRARY_PATH                                                                                                         
+$ gcc -Wall -o test main.c -lfoo                                                                                                
+$ ldd test | grep foo                                                                                                           
+libfoo.so => /usr/lib/libfoo.so (0x00a42000)                                                                                    
+$ ./test                                                                                                                        
+This is a shared library test...                                                                                                
+Hello, I'm a shared library                                                                                                     
+        #+END_EXAMPLE

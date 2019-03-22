@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>hello_world程序回顾</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>hello_world程序回顾</h2>
+        <p>让我们再来回顾一下最简单的例子，hello world程序：</p>
+
+        <ul>
+          <li>hello.c<br /><pre class="cpp"><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="function-name">main</span>()
+{
+    printf(<span class="string">"Howdy, world!\n"</span>);
+}
+</pre></li>
+
+          <li>Makefile.am<br /><pre class="code">bin_PROGRAMS = hello
+hello_SOURCES = hello.c</pre></li>
+
+          <li>configure.ac<br /><pre class="code">AC_INIT([Hello Program], [1.0],
+     [Author Of The Program <a href="mailto:aotp%40zxcv.com">&lt;aotp@zxcv.com&gt;</a>],
+     [hello])
+AM_INIT_AUTOMAKE
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT</pre></li>
+        </ul>
+
+        <p>Makefile.am文件里面是一种逻辑语言，里面没有可执行的声明。
+          它里面只有用于推断可执行文件关系的声明。
+          另一方面，configure.in中的语言是程序性的。
+          它里面的每一行都是一条可以执行的命令。</p>
+
+        <p>从这个角度上讲，这是configure.ac显示的内容：</p>
+
+        <ol>
+          <li>AC_INIT 命令初始化configure脚本。
+            它的参数是软件包名字、软件包版本号、软件作者的名字、作者的e-mail以及最后的tar包的名字（如果这个和软件包名字不一样的话。）。</li>
+
+          <li>由于我们使用'automake'，AM_INIT_AUTOMAKE命令是对此做一些进一步的初始化。如果你自己手动写Makefile.in文件，就可以不要这一行。 </li>
+
+          <li>AC_PROG_CC 命令检查你使用的哪种编译器。</li>
+
+          <li>AC_PROG_INSTALL检查你的系统是否有BSD兼容的install实用程序。
+            如果没有，automake会在你的顶层目录安装一个install-sh的脚本，后面就使用这个脚本。
+          </li>
+
+          <li>AC_CONFIG_FILES告诉configure哪些文件是必须从模板里面生成的。
+            在这个例子中，Makefile文件是必须从Makefile.in文件中生成的。
+            一定要记住，如果我们使用'automake'，Makefile.in文件从Makefile.am文件中生成的。
+            但是，其它的文件是可以在这个宏的参数中指定的。</li>
+
+          <li>AC_OUTPUT告诉configure脚本从模板（*.in文件）中生成在AC_CONFIG_FILES宏中指定的文件列表。 </li>
+        </ol>
+
+        <p>Makefile.am文件就很明显了。第一行指定我们编译的程序的名字。第二行指定组成程序的源代码。</p>
+
+        <p>现在，关于configure.ac你还需要知道下面的事实：</p>
+
+        <ol>
+          <li>如果你在编译一个库，configure脚本需要知道怎么处理'ranlib'。加一行AC_PROG_RANLIB命令就可以做到。</li>
+
+          <li>如果想要让makefile递归调用子目录中的makefile，也需要告诉configure脚本怎么做。
+            这需要在文件中加入AC_PROG_MAKE_SET命令。.</li>
+
+          <li>如果在子目录中的makefile文件，都必须把它们放到 AC_CONFIG_FILES 命令里面，就像这样：
+            <pre class="code">AC_CONFIG_FILES([
+      Makefile
+      dir1/Makefile
+      dir2/Makefile])</pre>
+          不要把最后的圆括号放入单独的一行，和结尾的中括号分开，这样可能会导致宏出错。</li>
+        </ol>
+
+        <p>正如之前我们解释的那样，在编译该软件之前，需要先执行下面的命令：</p>
+
+        <pre class="code">% aclocal
+% autoconf
+% touch README AUTHORS NEWS ChangeLog
+% automake -a
+configure.ac: installing `./install-sh'
+configure.ac: installing `./mkinstalldirs'
+configure.ac: installing `./missing'
+Makefile.am: installing `./INSTALL'
+Makefile.am: installing `./COPYING'
+Makefile.am: installing `./depcomp'
+% ./configure
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for gcc... gcc
+checking for C compiler default output... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+checking for style of include used by make... GNU
+checking dependency style of gcc... gcc3
+checking for a BSD-compatible install... /usr/bin/install -c
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing depfiles commands
+% make
+source='hello.c' object='hello.o' libtool=no \
+depfile='.deps/hello.Po' tmpdepfile='.deps/hello.TPo' \
+depmode=gcc3 /bin/sh ./depcomp \
+gcc -DPACKAGE_NAME=\"Hello\ Program\" -DPACKAGE_TARNAME=\"hello\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"Hello\ Program\ 1.0\" -DPACKAGE_BUGREPORT=\"Author\ Of\ The\ Program\ \&amp;amp;lt;aotp@zxcv.com\&amp;amp;gt;\" -DPACKAGE=\"hello\" -DVERSION=\"1.0\"  -I. -I.     -g -O2 -c `test -f 'hello.c' || echo './'`hello.c
+     gcc  -g -O2   -o hello  hello.o</pre>
+
+        <p>前面四个命令都只是软件包的维护者需要执行的。
+        用户在解开压缩包后，他直接可以从<code>./configure</code>开始执行。</p>
+
+        <ol>
+          <li>'aclocal'命令安装一个名为aclocal.m4的文件。
+            正常情况下，一些自己写的恰好会在configure.ac文件中被使用的'autoconf'宏可以放到这个文件中。
+            我们后面后面再介绍如何写'autoconf'宏。
+            'automake'实用程序使用AM_INIT_AUTOMAKE宏，这个宏不是标准的'autoconf'宏。
+            因些，需要把它的定义放到aclocal.m4中。
+            不带参数使用'aclocal'，它会生成正确的aclocal.m4文件。
+            后面，我们还会介绍如果使用'aclocal'来安装你自己的'autoconf'宏。
+          </li>
+
+          <li>‘autoconf’命令结合 aclocal.m4和configure.ac文件，生成configure脚本。现在我们可以营业了。</li>
+
+          <li>‘touch’命令让README等这些文件存在。
+            在调用 Automake 之前保证这些文件存在是很重要的。
+            因为 Automake 在执行的时候就会根据这些文件是否存在来决定是否在分发中包含这些文件。
+            Automake 必须决定包括这些文件，因为当你执行'make distcheck'时，要求这些文件存在。</li>
+
+          <li>'automake'命令从Makefile.am中编译生成Makefile.in文件。
+            如果不存在（这是不存在哪个文件？），GNU代码标准或者后面生成的makefile文件都需要的多种文件都由 'automake' 来安装。</li>
+
+        </ol>
+
+        <p>如果你感兴趣，你可以看看生成的Makefile文件。
+          它可能看起来不太好看，但至少可以让你知道它是怎么从Makefile.am中生成的。</p>
+
+        <p>'configure'脚本是一个信息收集器。它找出关于你的系统的信息。这些信息以两种方式呈现给你。
+          一种方式是通过定义C预处理宏，这些宏可以直接在源代码中通过预处理指令来测试。
+          这是通过给编译器传-D标志来完成的。
+          别一种试是在Makefile.am级别定义某些变量。
+          例如，通过这种方式，你可以让configure脚本可以找出某些库是如何链接的，将其导出为Makefile.am中的变量，并在Makefile.am中使用这个变量。
+          比如，通过一些特殊的变量，configure可以控制Makefile调用编译器的方式。</p>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>

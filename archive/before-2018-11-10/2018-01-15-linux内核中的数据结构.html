@@ -1,0 +1,1398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>linux内核中的数据结构</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">linux内核中的数据结构</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6fba906">1. Linked lists</a>
+<ul>
+<li><a href="#org932cab4">1.1. list.h</a></li>
+<li><a href="#org3403d27">1.2. main</a></li>
+<li><a href="#org026d702">1.3. Makefile</a></li>
+<li><a href="#orgb6ee252">1.4. more example</a></li>
+</ul>
+</li>
+<li><a href="#orge7004f0">2. <span class="todo TODO">TODO</span> Queues</a></li>
+<li><a href="#org57eb882">3. <span class="todo TODO">TODO</span> Maps</a></li>
+<li><a href="#org719db3c">4. <span class="todo TODO">TODO</span> Binary trees</a></li>
+</ul>
+</div>
+</div>
+<p>
+最近项目中需要使用链表，我们直接就把kernel中的链表拿来使用了。
+</p>
+
+<p>
+为了方便复用，内核把一些常用的数据结构都提取出来了。可以参考
+<a href="https://notes.shichao.io/lkd/ch6/">Chapter 6. Kernel Data Structures - Shichao's Notes</a> 。主要就是下面几种：
+</p>
+
+<ul class="org-ul">
+<li>Linked lists</li>
+<li>Queues</li>
+<li>Maps</li>
+<li>Binary trees</li>
+</ul>
+
+<div id="outline-container-org6fba906" class="outline-2">
+<h2 id="org6fba906"><span class="section-number-2">1</span> Linked lists</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org932cab4" class="outline-3">
+<h3 id="org932cab4"><span class="section-number-3">1.1</span> list.h</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * Copyright (C) 2017 Bei Jing Fu Hua Yu Qi Info Tech, Inc</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * This file porting from Linux kernel</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@file</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@author</span><span style="color: #ff4b4b;"> zhang jian ming</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@date</span><span style="color: #ff4b4b;"> 1/3/18</span>
+<span style="color: #ff4b4b;"> */</span>
+
+<span style="color: #d18aff;">#if</span><span style="color: #d18aff;">n</span><span style="color: #d18aff;">def</span> __FHOS_LIST_H__
+<span style="color: #d18aff;">#define</span> <span style="color: #ff8700;">__FHOS_LIST_H__</span>
+
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ff8700;">LIST_POISON1</span>  ((<span style="color: #00d7af;">void</span> *) 0xdeadbeef)
+<span style="color: #d18aff;">#define</span> <span style="color: #ff8700;">LIST_POISON2</span>  ((<span style="color: #00d7af;">void</span> *) 0xbaadf00d)
+
+<span style="color: #d18aff;">#if</span><span style="color: #d18aff;">n</span><span style="color: #d18aff;">def</span> offsetof
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">offsetof</span>(<span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) ((<span style="color: #00d7af;">size_t</span>) &amp;((<span style="color: #00d7af;">type</span> *)0)-&gt;member)
+<span style="color: #d18aff;">#endif</span>
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * container_of - cast a member of a structure out to the containing structure</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@ptr</span><span style="color: #ff4b4b;">:    the pointer to the member.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@type</span><span style="color: #ff4b4b;">:   the type of the container struct this is embedded in.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the member within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">container_of</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) ({                  \
+    <span style="color: #a1db00;">const</span> <span style="color: #a1db00;">typeof</span>( ((<span style="color: #00d7af;">type</span> *)0)-&gt;member ) *<span style="color: #ff8700;">__mptr</span> = (ptr);    \
+    (<span style="color: #00d7af;">type</span> *)( (<span style="color: #00d7af;">char</span> *)__mptr - offsetof(type,member) );})
+
+
+<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> {
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">next</span>, *<span style="color: #ff8700;">prev</span>;
+};
+
+<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_head</span> {
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">first</span>;
+};
+
+<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> {
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">next</span>, **<span style="color: #ff8700;">pprev</span>;
+};
+
+
+<span style="color: #6c6c6c; font-style: italic;">/*</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Simple doubly linked list implementation.</span>
+<span style="color: #6c6c6c; font-style: italic;"> *</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Some of the internal functions ("__xxx") are useful when</span>
+<span style="color: #6c6c6c; font-style: italic;"> * manipulating whole lists rather than single entries, as</span>
+<span style="color: #6c6c6c; font-style: italic;"> * sometimes we already know the next/prev entries and we can</span>
+<span style="color: #6c6c6c; font-style: italic;"> * generate better code by using them directly rather than</span>
+<span style="color: #6c6c6c; font-style: italic;"> * using the generic single-entry routines.</span>
+<span style="color: #6c6c6c; font-style: italic;"> </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">LIST_HEAD_INIT</span>(<span style="color: #ff8700;">name</span>) { &amp;(name), &amp;(name) }
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">LIST_HEAD</span>(<span style="color: #ff8700;">name</span>) \
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> <span style="color: #ff8700;">name</span> = LIST_HEAD_INIT(name)
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">INIT_LIST_HEAD</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>)
+{
+    list-&gt;next = list;
+    list-&gt;prev = list;
+}
+
+<span style="color: #6c6c6c; font-style: italic;">/*</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Insert a new entry between two known consecutive entries.</span>
+<span style="color: #6c6c6c; font-style: italic;"> *</span>
+<span style="color: #6c6c6c; font-style: italic;"> * This is only for internal list manipulation where we know</span>
+<span style="color: #6c6c6c; font-style: italic;"> * the prev/next entries already!</span>
+<span style="color: #6c6c6c; font-style: italic;"> </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+<span style="color: #d18aff;">#if</span><span style="color: #d18aff;">n</span><span style="color: #d18aff;">def</span> CONFIG_DEBUG_LIST
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_add</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new</span>,
+                              <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">prev</span>,
+                              <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">next</span>)
+{
+    next-&gt;prev = new;
+    new-&gt;next = next;
+    new-&gt;prev = prev;
+    prev-&gt;next = new;
+}
+<span style="color: #d18aff;">#else</span>
+<span style="color: #a1db00;">extern</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_add</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new</span>,
+                       <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">prev</span>,
+                       <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">next</span>);
+<span style="color: #d18aff;">#endif</span>
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_add - add a new entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@new</span><span style="color: #ff4b4b;">: new entry to be added</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: list head to add it after</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Insert a new entry after the specified head.</span>
+<span style="color: #ff4b4b;"> * This is good for implementing stacks.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_add</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new</span>, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    __list_add(new, head, head-&gt;next);
+}
+
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_add_tail - add a new entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@new</span><span style="color: #ff4b4b;">: new entry to be added</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: list head to add it before</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Insert a new entry before the specified head.</span>
+<span style="color: #ff4b4b;"> * This is useful for implementing queues.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_add_tail</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new</span>, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    __list_add(new, head-&gt;prev, head);
+}
+
+<span style="color: #6c6c6c; font-style: italic;">/*</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Delete a list entry by making the prev/next entries</span>
+<span style="color: #6c6c6c; font-style: italic;"> * point to each other.</span>
+<span style="color: #6c6c6c; font-style: italic;"> *</span>
+<span style="color: #6c6c6c; font-style: italic;"> * This is only for internal list manipulation where we know</span>
+<span style="color: #6c6c6c; font-style: italic;"> * the prev/next entries already!</span>
+<span style="color: #6c6c6c; font-style: italic;"> </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_del</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> * <span style="color: #ff8700;">prev</span>, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> * <span style="color: #ff8700;">next</span>)
+{
+    next-&gt;prev = prev;
+    prev-&gt;next = next;
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_del - deletes entry from list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@entry</span><span style="color: #ff4b4b;">: the element to delete from the list.</span>
+<span style="color: #ff4b4b;"> * Note: </span><span style="color: #5fafd7;">list_empty()</span><span style="color: #ff4b4b;"> on entry does not return true after this, the entry is</span>
+<span style="color: #ff4b4b;"> * in an undefined state.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#if</span><span style="color: #d18aff;">n</span><span style="color: #d18aff;">def</span> CONFIG_DEBUG_LIST
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_del_entry</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>)
+{
+    __list_del(entry-&gt;prev, entry-&gt;next);
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_del</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>)
+{
+    __list_del(entry-&gt;prev, entry-&gt;next);
+    entry-&gt;next = LIST_POISON1;
+    entry-&gt;prev = LIST_POISON2;
+}
+<span style="color: #d18aff;">#else</span>
+<span style="color: #a1db00;">extern</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_del_entry</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>);
+<span style="color: #a1db00;">extern</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_del</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>);
+<span style="color: #d18aff;">#endif</span>
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_replace - replace old entry by new one</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@old</span><span style="color: #ff4b4b;"> : the element to be replaced</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@new</span><span style="color: #ff4b4b;"> : the new element to insert</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * If </span><span style="color: #5fafd7;">@old</span><span style="color: #ff4b4b;"> was empty, it will be overwritten.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_replace</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">old</span>,
+                                <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new</span>)
+{
+    new-&gt;next = old-&gt;next;
+    new-&gt;next-&gt;prev = new;
+    new-&gt;prev = old-&gt;prev;
+    new-&gt;prev-&gt;next = new;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_replace_init</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">old</span>,
+                                     <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new</span>)
+{
+    list_replace(old, new);
+    INIT_LIST_HEAD(old);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_del_init - deletes entry from list and reinitialize it.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@entry</span><span style="color: #ff4b4b;">: the element to delete from the list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_del_init</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>)
+{
+    __list_del_entry(entry);
+    INIT_LIST_HEAD(entry);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_move - delete from one list and add as another's head</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the entry to move</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the head that will precede our entry</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_move</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    __list_del_entry(list);
+    list_add(list, head);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_move_tail - delete from one list and add as another's tail</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the entry to move</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the head that will follow our entry</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_move_tail</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                  <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    __list_del_entry(list);
+    list_add_tail(list, head);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_is_last - tests whether </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;"> is the last entry in list </span><span style="color: #5fafd7;">@head</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the entry to test</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the head of the list</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">list_is_last</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                               <span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">return</span> list-&gt;next == head;
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_empty - tests whether a list is empty</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the list to test.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">list_empty</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">return</span> head-&gt;next == head;
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_empty_careful - tests whether a list is empty and not being modified</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the list to test</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">Description</span><span style="color: #ff4b4b;">:</span>
+<span style="color: #ff4b4b;"> * tests whether a list is empty _and_ checks that no other CPU might be</span>
+<span style="color: #ff4b4b;"> * in the process of modifying either member (next or prev)</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * NOTE: using </span><span style="color: #5fafd7;">list_empty_careful()</span><span style="color: #ff4b4b;"> without synchronization</span>
+<span style="color: #ff4b4b;"> * can only be safe if the only activity that can happen</span>
+<span style="color: #ff4b4b;"> * to the list entry is </span><span style="color: #5fafd7;">list_del_init()</span><span style="color: #ff4b4b;">. Eg. it cannot be used</span>
+<span style="color: #ff4b4b;"> * if another CPU could re-</span><span style="color: #5fafd7;">list_add()</span><span style="color: #ff4b4b;"> it.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">list_empty_careful</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">next</span> = head-&gt;next;
+    <span style="color: #a1db00;">return</span> (next == head) &amp;&amp; (next == head-&gt;prev);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_rotate_left - rotate the list to the left</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the head of the list</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_rotate_left</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">first</span>;
+
+    <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>list_empty(head)) {
+        first = head-&gt;next;
+        list_move_tail(first, head);
+    }
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_is_singular - tests whether a list has just one entry.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the list to test.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">list_is_singular</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">return</span> <span style="color: #ff4b4b;">!</span>list_empty(head) &amp;&amp; (head-&gt;next == head-&gt;prev);
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_cut_position</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                                       <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>,
+                                       <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>)
+{
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">new_first</span> = entry-&gt;next;
+    list-&gt;next = head-&gt;next;
+    list-&gt;next-&gt;prev = list;
+    list-&gt;prev = entry;
+    entry-&gt;next = list;
+    head-&gt;next = new_first;
+    new_first-&gt;prev = head;
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_cut_position - cut a list into two</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: a new list to add all removed entries</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: a list with entries</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@entry</span><span style="color: #ff4b4b;">: an entry within head, could be the head itself</span>
+<span style="color: #ff4b4b;"> *  and if so we won't cut the list</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * This helper moves the initial part of </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">, up to and</span>
+<span style="color: #ff4b4b;"> * including </span><span style="color: #5fafd7;">@entry</span><span style="color: #ff4b4b;">, from </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;"> to </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">. You should</span>
+<span style="color: #ff4b4b;"> * pass on </span><span style="color: #5fafd7;">@entry</span><span style="color: #ff4b4b;"> an element you know is on </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">. </span><span style="color: #5fafd7;">@list</span>
+<span style="color: #ff4b4b;"> * should be an empty list or a list you do not care about</span>
+<span style="color: #ff4b4b;"> * losing its data.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_cut_position</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                                     <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>,
+                                     <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">entry</span>)
+{
+    <span style="color: #a1db00;">if</span> (list_empty(head))
+        <span style="color: #a1db00;">return</span>;
+    <span style="color: #a1db00;">if</span> (list_is_singular(head) &amp;&amp;
+        (head-&gt;next != entry &amp;&amp; head != entry))
+        <span style="color: #a1db00;">return</span>;
+    <span style="color: #a1db00;">if</span> (entry == head)
+        INIT_LIST_HEAD(list);
+    <span style="color: #a1db00;">else</span>
+        __list_cut_position(list, head, entry);
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__list_splice</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                                 <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">prev</span>,
+                                 <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">next</span>)
+{
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">first</span> = list-&gt;next;
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">last</span> = list-&gt;prev;
+
+    first-&gt;prev = prev;
+    prev-&gt;next = first;
+
+    last-&gt;next = next;
+    next-&gt;prev = last;
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_splice - join two lists, this is designed for stacks</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the new list to add.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the place to add it in the first list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_splice</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                               <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>list_empty(list))
+        __list_splice(list, head, head-&gt;next);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_splice_tail - join two lists, each list being a queue</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the new list to add.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the place to add it in the first list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_splice_tail</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                                    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>list_empty(list))
+        __list_splice(list, head-&gt;prev, head);
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_splice_init - join two lists and reinitialise the emptied list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the new list to add.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the place to add it in the first list.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * The list at </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;"> is reinitialised</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_splice_init</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                                    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>list_empty(list)) {
+        __list_splice(list, head, head-&gt;next);
+        INIT_LIST_HEAD(list);
+    }
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_splice_tail_init - join two lists and reinitialise the emptied list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;">: the new list to add.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">: the place to add it in the first list.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Each of the lists is a queue.</span>
+<span style="color: #ff4b4b;"> * The list at </span><span style="color: #5fafd7;">@list</span><span style="color: #ff4b4b;"> is reinitialised</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">list_splice_tail_init</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">list</span>,
+                                         <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">head</span>)
+{
+    <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>list_empty(list)) {
+        __list_splice(list, head-&gt;prev, head);
+        INIT_LIST_HEAD(list);
+    }
+}
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_entry - get the struct for this entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@ptr</span><span style="color: #ff4b4b;">:    the &amp;struct list_head pointer.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@type</span><span style="color: #ff4b4b;">:   the type of the struct this is embedded in.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_entry</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) \
+    container_of(ptr, type, member)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_first_entry - get the first element from a list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@ptr</span><span style="color: #ff4b4b;">:    the list head to take the element from.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@type</span><span style="color: #ff4b4b;">:   the type of the struct this is embedded in.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Note, that list is expected to be not empty.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_first_entry</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) \
+    list_entry((ptr)-&gt;next, type, member)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_last_entry - get the last element from a list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@ptr</span><span style="color: #ff4b4b;">:    the list head to take the element from.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@type</span><span style="color: #ff4b4b;">:   the type of the struct this is embedded in.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Note, that list is expected to be not empty.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_last_entry</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) \
+    list_entry((ptr)-&gt;prev, type, member)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_first_entry_or_null - get the first element from a list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@ptr</span><span style="color: #ff4b4b;">:    the list head to take the element from.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@type</span><span style="color: #ff4b4b;">:   the type of the struct this is embedded in.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Note that if the list is empty, it returns NULL.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_first_entry_or_null</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) \
+    (<span style="color: #ff4b4b;">!</span>list_empty(ptr) ? list_first_entry(ptr, type, member) : <span style="color: #5fafd7;">NULL</span>)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_next_entry - get the next element in list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to cursor</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_next_entry</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">member</span>) \
+    list_entry((pos)-&gt;member.next, <span style="color: #a1db00;">typeof</span>(*(pos)), member)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_prev_entry - get the prev element in list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to cursor</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_prev_entry</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">member</span>) \
+    list_entry((pos)-&gt;member.prev, <span style="color: #a1db00;">typeof</span>(*(pos)), member)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each    -   iterate over a list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the &amp;struct list_head to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>) \
+    <span style="color: #a1db00;">for</span> (pos = (head)-&gt;next; pos != (head); pos = pos-&gt;next)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_prev   -   iterate over a list backwards</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the &amp;struct list_head to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_prev</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>) \
+    <span style="color: #a1db00;">for</span> (pos = (head)-&gt;prev; pos != (head); pos = pos-&gt;prev)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_safe - iterate over a list safe against removal of list entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the &amp;struct list_head to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another &amp;struct list_head to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_safe</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>)                   \
+    <span style="color: #a1db00;">for</span> (pos = (head)-&gt;next, n = pos-&gt;next; pos != (head); \
+        pos = n, n = pos-&gt;next)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the &amp;struct list_head to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another &amp;struct list_head to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_prev_safe</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>) \
+    <span style="color: #a1db00;">for</span> (pos = (head)-&gt;prev, n = pos-&gt;prev;   \
+         pos != (head);                       \
+         pos = n, n = pos-&gt;prev)
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry  -   iterate over list of given type</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>)               \
+    <span style="color: #a1db00;">for</span> (pos = list_first_entry(head, <span style="color: #a1db00;">typeof</span>(*pos), member); \
+         &amp;pos-&gt;member != (head);                             \
+         pos = list_next_entry(pos, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_reverse - iterate backwards over list of given type.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_reverse</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>)      \
+    <span style="color: #a1db00;">for</span> (pos = list_last_entry(head, <span style="color: #a1db00;">typeof</span>(*pos), member); \
+         &amp;pos-&gt;member != (head);                            \
+         pos = list_prev_entry(pos, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_prepare_entry - prepare a pos entry for use in </span><span style="color: #5fafd7;">list_for_each_entry_continue()</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a start point</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head of the list</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Prepares a pos entry for use as a start point in </span><span style="color: #5fafd7;">list_for_each_entry_continue()</span><span style="color: #ff4b4b;">.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_prepare_entry</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>) \
+    ((pos) ? : list_entry(head, <span style="color: #a1db00;">typeof</span>(*pos), member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_continue - continue iteration over list of given type</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Continue to iterate over list of given type, continuing after</span>
+<span style="color: #ff4b4b;"> * the current position.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_continue</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>) \
+    <span style="color: #a1db00;">for</span> (pos = list_next_entry(pos, member);            \
+         &amp;pos-&gt;member != (head);                        \
+         pos = list_next_entry(pos, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_continue_reverse - iterate backwards from the given point</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Start to iterate over list of given type backwards, continuing after</span>
+<span style="color: #ff4b4b;"> * the current position.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_continue_reverse</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>) \
+    <span style="color: #a1db00;">for</span> (pos = list_prev_entry(pos, member);                    \
+         &amp;pos-&gt;member != (head);                                \
+         pos = list_prev_entry(pos, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_from - iterate over list of given type from the current point</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Iterate over list of given type, continuing from current position.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_from</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>) \
+    <span style="color: #a1db00;">for</span> (; &amp;pos-&gt;member != (head);                  \
+         pos = list_next_entry(pos, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_safe - iterate over list of given type safe against removal of list entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another type * to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_safe</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>)          \
+    <span style="color: #a1db00;">for</span> (pos = list_first_entry(head, <span style="color: #a1db00;">typeof</span>(*pos), member),    \
+         n = list_next_entry(pos, member);                      \
+         &amp;pos-&gt;member != (head);                                \
+         pos = n, n = list_next_entry(n, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_safe_continue - continue list iteration safe against removal</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another type * to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Iterate over list of given type, continuing after current point,</span>
+<span style="color: #ff4b4b;"> * safe against removal of list entry.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_safe_continue</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>) \
+    <span style="color: #a1db00;">for</span> (pos = list_next_entry(pos, member),                    \
+         n = list_next_entry(pos, member);                      \
+         &amp;pos-&gt;member != (head);                                \
+         pos = n, n = list_next_entry(n, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_safe_from - iterate over list from current point safe against removal</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another type * to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Iterate over list of given type from current point, safe against</span>
+<span style="color: #ff4b4b;"> * removal of list entry.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_safe_from</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>) \
+    <span style="color: #a1db00;">for</span> (n = list_next_entry(pos, member);                  \
+         &amp;pos-&gt;member != (head);                            \
+         pos = n, n = list_next_entry(n, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_for_each_entry_safe_reverse - iterate backwards over list safe against removal</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another type * to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * Iterate backwards over list of given type, safe against removal</span>
+<span style="color: #ff4b4b;"> * of list entry.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_for_each_entry_safe_reverse</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>)  \
+    <span style="color: #a1db00;">for</span> (pos = list_last_entry(head, <span style="color: #a1db00;">typeof</span>(*pos), member),     \
+         n = list_prev_entry(pos, member);                      \
+         &amp;pos-&gt;member != (head);                                \
+         pos = n, n = list_prev_entry(n, member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * list_safe_reset_next - reset a stale list_for_each_entry_safe loop</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the loop cursor used in the list_for_each_entry_safe loop</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      temporary storage used in list_for_each_entry_safe</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the list_head within the struct.</span>
+<span style="color: #ff4b4b;"> *</span>
+<span style="color: #ff4b4b;"> * list_safe_reset_next is not safe to use in general if the list may be</span>
+<span style="color: #ff4b4b;"> * modified concurrently (eg. the lock is dropped in the loop body). An</span>
+<span style="color: #ff4b4b;"> * exception to this is if the cursor element (pos) is pinned in the list,</span>
+<span style="color: #ff4b4b;"> * and list_safe_reset_next is called after re-taking the lock and before</span>
+<span style="color: #ff4b4b;"> * completing the current iteration of the loop body.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">list_safe_reset_next</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">member</span>)    \
+    n = list_next_entry(pos, member)
+
+<span style="color: #6c6c6c; font-style: italic;">/*</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Double linked lists with a single pointer list head.</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Mostly useful for hash tables where the two pointer list head is</span>
+<span style="color: #6c6c6c; font-style: italic;"> * too wasteful.</span>
+<span style="color: #6c6c6c; font-style: italic;"> * You lose the ability to access the tail in O(1).</span>
+<span style="color: #6c6c6c; font-style: italic;"> </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ff8700;">HLIST_HEAD_INIT</span> { .first = <span style="color: #5fafd7;">NULL</span> }
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">HLIST_HEAD</span>(<span style="color: #ff8700;">name</span>) <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_head</span> <span style="color: #ff8700;">name</span> = {  .first = <span style="color: #5fafd7;">NULL</span> }
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">INIT_HLIST_HEAD</span>(<span style="color: #ff8700;">ptr</span>) ((ptr)-&gt;first = <span style="color: #5fafd7;">NULL</span>)
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">INIT_HLIST_NODE</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">h</span>)
+{
+    h-&gt;next = <span style="color: #5fafd7;">NULL</span>;
+    h-&gt;pprev = <span style="color: #5fafd7;">NULL</span>;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">hlist_unhashed</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">h</span>)
+{
+    <span style="color: #a1db00;">return</span> <span style="color: #ff4b4b;">!</span>h-&gt;pprev;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">hlist_empty</span>(<span style="color: #a1db00;">const</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_head</span> *<span style="color: #ff8700;">h</span>)
+{
+    <span style="color: #a1db00;">return</span> <span style="color: #ff4b4b;">!</span>h-&gt;first;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">__hlist_del</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>)
+{
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">next</span> = n-&gt;next;
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> **<span style="color: #ff8700;">pprev</span> = n-&gt;pprev;
+    *pprev = next;
+    <span style="color: #a1db00;">if</span> (next)
+        next-&gt;pprev = pprev;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_del</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>)
+{
+    __hlist_del(n);
+    n-&gt;next = LIST_POISON1;
+    n-&gt;pprev = LIST_POISON2;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_del_init</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>)
+{
+    <span style="color: #a1db00;">if</span> (<span style="color: #ff4b4b;">!</span>hlist_unhashed(n)) {
+        __hlist_del(n);
+        INIT_HLIST_NODE(n);
+    }
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_add_head</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_head</span> *<span style="color: #ff8700;">h</span>)
+{
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">first</span> = h-&gt;first;
+    n-&gt;next = first;
+    <span style="color: #a1db00;">if</span> (first)
+        first-&gt;pprev = &amp;n-&gt;next;
+    h-&gt;first = n;
+    n-&gt;pprev = &amp;h-&gt;first;
+}
+
+<span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">next must be != NULL </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_add_before</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>,
+                                    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">next</span>)
+{
+    n-&gt;pprev = next-&gt;pprev;
+    n-&gt;next = next;
+    next-&gt;pprev = &amp;n-&gt;next;
+    *(n-&gt;pprev) = n;
+}
+
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_add_behind</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>,
+                                    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">prev</span>)
+{
+    n-&gt;next = prev-&gt;next;
+    prev-&gt;next = n;
+    n-&gt;pprev = &amp;prev-&gt;next;
+
+    <span style="color: #a1db00;">if</span> (n-&gt;next)
+        n-&gt;next-&gt;pprev  = &amp;n-&gt;next;
+}
+
+<span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">after that we'll appear to be on some hlist and hlist_del will work </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_add_fake</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_node</span> *<span style="color: #ff8700;">n</span>)
+{
+    n-&gt;pprev = &amp;n-&gt;next;
+}
+
+<span style="color: #6c6c6c; font-style: italic;">/*</span>
+<span style="color: #6c6c6c; font-style: italic;"> * Move a list from one list head to another. Fixup the pprev</span>
+<span style="color: #6c6c6c; font-style: italic;"> * reference of the first entry if it exists.</span>
+<span style="color: #6c6c6c; font-style: italic;"> </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+<span style="color: #a1db00;">static</span> <span style="color: #a1db00;">inline</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">hlist_move_list</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_head</span> *<span style="color: #ff8700;">old</span>,
+                                   <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">hlist_head</span> *<span style="color: #ff8700;">new</span>)
+{
+    new-&gt;first = old-&gt;first;
+    <span style="color: #a1db00;">if</span> (new-&gt;first)
+        new-&gt;first-&gt;pprev = &amp;new-&gt;first;
+    old-&gt;first = <span style="color: #5fafd7;">NULL</span>;
+}
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_entry</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>) container_of(ptr,type,member)
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_for_each</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>) \
+    <span style="color: #a1db00;">for</span> (pos = (head)-&gt;first; pos ; pos = pos-&gt;next)
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_for_each_safe</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>)                    \
+    <span style="color: #a1db00;">for</span> (pos = (head)-&gt;first; pos &amp;&amp; ({ n = pos-&gt;next; 1; });\
+         pos = n)
+
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_entry_safe</span>(<span style="color: #ff8700;">ptr</span>, <span style="color: #ff8700;">type</span>, <span style="color: #ff8700;">member</span>)                 \
+    ({ <span style="color: #a1db00;">typeof</span>(ptr) <span style="color: #ff8700;">____ptr</span> = (ptr);                         \
+        ____ptr ? hlist_entry(____ptr, type, member) : <span style="color: #5fafd7;">NULL</span>;\
+    })
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * hlist_for_each_entry - iterate over list of given type</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the hlist_node within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_for_each_entry</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>)                        \
+    <span style="color: #a1db00;">for</span> (pos = hlist_entry_safe((head)-&gt;first, <span style="color: #a1db00;">typeof</span>(*(pos)), member);\
+         pos;                                                          \
+         pos = hlist_entry_safe((pos)-&gt;member.next, <span style="color: #a1db00;">typeof</span>(*(pos)), member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * hlist_for_each_entry_continue - iterate over a hlist continuing after current point</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the hlist_node within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_for_each_entry_continue</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">member</span>)                          \
+    <span style="color: #a1db00;">for</span> (pos = hlist_entry_safe((pos)-&gt;member.next, <span style="color: #a1db00;">typeof</span>(*(pos)), member);\
+         pos;                                                               \
+         pos = hlist_entry_safe((pos)-&gt;member.next, <span style="color: #a1db00;">typeof</span>(*(pos)), member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * hlist_for_each_entry_from - iterate over a hlist continuing from current point</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the hlist_node within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_for_each_entry_from</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">member</span>)              \
+    <span style="color: #a1db00;">for</span> (; pos;                                             \
+         pos = hlist_entry_safe((pos)-&gt;member.next, <span style="color: #a1db00;">typeof</span>(*(pos)), member))
+
+<span style="color: #ff4b4b;">/**</span>
+<span style="color: #ff4b4b;"> * hlist_for_each_entry_safe - iterate over list of given type safe against removal of list entry</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@pos</span><span style="color: #ff4b4b;">:    the type * to use as a loop cursor.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@n</span><span style="color: #ff4b4b;">:      another &amp;struct hlist_node to use as temporary storage</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@head</span><span style="color: #ff4b4b;">:   the head for your list.</span>
+<span style="color: #ff4b4b;"> * </span><span style="color: #5fafd7;">@member</span><span style="color: #ff4b4b;">: the name of the hlist_node within the struct.</span>
+<span style="color: #ff4b4b;"> */</span>
+<span style="color: #d18aff;">#define</span> <span style="color: #ffd700;">hlist_for_each_entry_safe</span>(<span style="color: #ff8700;">pos</span>, <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">head</span>, <span style="color: #ff8700;">member</span>)              \
+    <span style="color: #a1db00;">for</span> (pos = hlist_entry_safe((head)-&gt;first, <span style="color: #a1db00;">typeof</span>(*pos), member);\
+         pos &amp;&amp; ({ n = pos-&gt;member.next; 1; });                      \
+         pos = hlist_entry_safe(n, <span style="color: #a1db00;">typeof</span>(*pos), member))
+
+<span style="color: #d18aff;">#endif</span>
+   
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3403d27" class="outline-3">
+<h3 id="org3403d27"><span class="section-number-3">1.2</span> main</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+头文件：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">&lt;stdio.h&gt;</span>
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">&lt;stdlib.h&gt;</span>
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">"list.h"</span>
+</pre>
+</div>
+
+<p>
+内核中不是把结构串成一个链。而是在结构中嵌入一个链表。
+</p>
+<pre class="example">
+The common pattern for storing this structure in a linked list is to
+embed the list pointer in the structure. For example, to describe
+that member of the Canidae family:
+
+struct fox {
+    unsigned long tail_length; /* length in centimeters of tail */
+    unsigned long weight; /* weight in kilograms */
+    bool is_fantastic; /* is this fox fantastic? */
+    struct fox *next; /* next fox in linked list */
+    struct fox *prev; /* previous fox in linked list */
+};
+
+The Linux kernel approach is different. Instead of turning the
+structure into a linked list, the Linux approach is to "embed a
+linked list node in the structure".
+
+The Linked List Structure¶
+
+The linked-list code is declared in the header file &lt;linux/list.h&gt; (
+include/linux/list.h#L19) and the data structure is simple:
+
+struct list_head {
+    struct list_head *next
+    struct list_head *prev;
+};
+
+The utility is in how the list_head structure is used:
+
+struct fox {
+    unsigned long tail_length; /* length in centimeters of tail */
+    unsigned long weight; /* weight in kilograms */
+    bool is_fantastic; /* is this fox fantastic? */
+    struct list_head list; /* list of all fox structures */
+};
+
+With this, list.next in fox points to the next element, and list.prev
+in fox points to the previous.
+</pre>
+
+<p>
+把结构串定义的结构体中需要加一个 <code>list_head</code> 成员，其实查看代码就知
+道，是通过这个成员的偏移来查找的结构体的首指针：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a1db00;">typedef</span> <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">test_node_s</span>
+{
+    <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">a</span>;
+    <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">b</span>;
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> <span style="color: #ff8700;">list_t</span>;
+} <span style="color: #00d7af;">test_node_t</span>;
+</pre>
+</div>
+
+<p>
+使用时需要先声明一个链表头：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a1db00;">static</span> <span style="color: #ffd700;">LIST_HEAD</span>(test_list);
+</pre>
+</div>
+
+<p>
+声明一些我自定义的函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #00d7af;">int</span> <span style="color: #ffd700;">add</span>(<span style="color: #00d7af;">int</span> <span style="color: #ff8700;">a</span>, <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">b</span>);
+<span style="color: #00d7af;">int</span> <span style="color: #ffd700;">loop</span>();
+<span style="color: #00d7af;">int</span> <span style="color: #ffd700;">del</span>();
+</pre>
+</div>
+
+<p>
+向链表中添加成员：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #00d7af;">int</span> <span style="color: #ffd700;">add</span>(<span style="color: #00d7af;">int</span> <span style="color: #ff8700;">a</span>, <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">b</span>)
+{
+    <span style="color: #00d7af;">test_node_t</span> *<span style="color: #ff8700;">t1</span> = (<span style="color: #00d7af;">test_node_t</span> *)malloc(<span style="color: #a1db00;">sizeof</span>(test_node_t));
+
+    t1-&gt;a = a;
+    t1-&gt;b = b;
+    INIT_LIST_HEAD(&amp;(t1-&gt;list_t));
+
+    list_add(&amp;t1-&gt;list_t, &amp;test_list);
+
+    <span style="color: #a1db00;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+从链表中删除成员，需要注意的是，把成员从链表中的删除后，成员对应的
+空间是没有被释放的，需要使用者自己释放：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #00d7af;">int</span> <span style="color: #ffd700;">del</span>()
+{
+    <span style="color: #00d7af;">test_node_t</span> *<span style="color: #ff8700;">t1</span> = (<span style="color: #00d7af;">test_node_t</span> *)malloc(<span style="color: #a1db00;">sizeof</span>(test_node_t));
+
+    t1-&gt;a = 30;
+    t1-&gt;b = 40;
+    INIT_LIST_HEAD(&amp;(t1-&gt;list_t));
+
+    list_add(&amp;t1-&gt;list_t, &amp;test_list);
+
+    loop();
+
+    list_del(&amp;t1-&gt;list_t);
+
+    loop();
+
+    <span style="color: #a1db00;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+遍历整个链表：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #00d7af;">int</span> <span style="color: #ffd700;">loop</span>()
+{
+    printf(<span style="color: #ff4ea3;">"========================== Loop ======================\n"</span>);
+    <span style="color: #00d7af;">test_node_t</span> *<span style="color: #ff8700;">pointer</span>;
+
+    list_for_each_entry(pointer, &amp;test_list, list_t)
+    {
+        printf(<span style="color: #ff4ea3;">"in loop--------&gt; a= %d\n"</span>, pointer-&gt;a);
+    }
+    
+    <span style="color: #a1db00;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+main函数来调用：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #00d7af;">int</span> <span style="color: #ffd700;">main</span>(<span style="color: #00d7af;">int</span> <span style="color: #ff8700;">args</span>,<span style="color: #00d7af;">char</span> *<span style="color: #ff8700;">argv</span>[])
+{
+
+    add(1, 2);
+
+    add(3, 4);
+
+    loop();
+
+    del();
+
+    <span style="color: #a1db00;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org026d702" class="outline-3">
+<h3 id="org026d702"><span class="section-number-3">1.3</span> Makefile</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #ffd700;">all</span>: list
+
+<span style="color: #ffd700;">list</span>:main.c
+        cc -o list main.c
+        cc -o example example.c
+
+<span style="color: #ffd700;">clean</span>:
+        rm -rfv *.o list a.out
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb6ee252" class="outline-3">
+<h3 id="orgb6ee252"><span class="section-number-3">1.4</span> more example</h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">&lt;stdio.h&gt;</span>
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">"list.h"</span>
+
+
+<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span>
+{
+    <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">to</span>;
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> <span style="color: #ff8700;">list</span>;
+    <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">from</span>;
+};
+
+<span style="color: #00d7af;">int</span> <span style="color: #ffd700;">main</span>(<span style="color: #00d7af;">int</span> <span style="color: #ff8700;">argc</span>, <span style="color: #00d7af;">char</span> **<span style="color: #ff8700;">argv</span>)
+{
+
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span> *<span style="color: #ff8700;">tmp</span>;
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">list_head</span> *<span style="color: #ff8700;">pos</span>, *<span style="color: #ff8700;">q</span>;
+    <span style="color: #00d7af;">unsigned</span> <span style="color: #00d7af;">int</span> <span style="color: #ff8700;">i</span>;
+
+    <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span> <span style="color: #ff8700;">mylist</span>;
+    INIT_LIST_HEAD(&amp;mylist.list);
+    <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">or you could have declared this with the following macro</span>
+<span style="color: #6c6c6c; font-style: italic;">     * LIST_HEAD(mylist); which declares and initializes the list</span>
+<span style="color: #6c6c6c; font-style: italic;">     </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+
+    <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">adding elements to mylist </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+    <span style="color: #a1db00;">for</span>(i=5; i!=0; --i)
+    {
+        tmp= (<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span> *)malloc(<span style="color: #a1db00;">sizeof</span>(<span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span>));
+        
+        <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">INIT_LIST_HEAD(&amp;tmp-&gt;list); </span>
+<span style="color: #6c6c6c; font-style: italic;">         *</span>
+<span style="color: #6c6c6c; font-style: italic;">         * this initializes a dynamically allocated list_head. we</span>
+<span style="color: #6c6c6c; font-style: italic;">         * you can omit this if subsequent call is add_list() or </span>
+<span style="color: #6c6c6c; font-style: italic;">         * anything along that line because the next, prev</span>
+<span style="color: #6c6c6c; font-style: italic;">         * fields get initialized in those functions.</span>
+<span style="color: #6c6c6c; font-style: italic;">         </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+        printf(<span style="color: #ff4ea3;">"enter to and from:"</span>);
+        scanf(<span style="color: #ff4ea3;">"%d %d"</span>, &amp;tmp-&gt;to, &amp;tmp-&gt;from);
+
+        <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">add the new item 'tmp' to the list of items in mylist </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+        list_add(&amp;(tmp-&gt;list), &amp;(mylist.list));
+        <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">you can also use list_add_tail() which adds new items to</span>
+<span style="color: #6c6c6c; font-style: italic;">         * the tail end of the list</span>
+<span style="color: #6c6c6c; font-style: italic;">         </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+    }
+    printf(<span style="color: #ff4ea3;">"\n"</span>);
+
+
+    <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">now you have a circularly linked list of items of type struct kool_list.</span>
+<span style="color: #6c6c6c; font-style: italic;">     * now let us go through the items and print them out</span>
+<span style="color: #6c6c6c; font-style: italic;">     </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+
+
+    <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">list_for_each() is a macro for a for loop. </span>
+<span style="color: #6c6c6c; font-style: italic;">     * first parameter is used as the counter in for loop. in other words, inside the</span>
+<span style="color: #6c6c6c; font-style: italic;">     * loop it points to the current item's list_head.</span>
+<span style="color: #6c6c6c; font-style: italic;">     * second parameter is the pointer to the list. it is not manipulated by the macro.</span>
+<span style="color: #6c6c6c; font-style: italic;">     </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+    printf(<span style="color: #ff4ea3;">"traversing the list using list_for_each()\n"</span>);
+    list_for_each(pos, &amp;mylist.list)
+    {
+
+        <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">at this point: pos-&gt;next points to the next item's 'list' variable and </span>
+<span style="color: #6c6c6c; font-style: italic;">         * pos-&gt;prev points to the previous item's 'list' variable. Here item is </span>
+<span style="color: #6c6c6c; font-style: italic;">         * of type struct kool_list. But we need to access the item itself not the </span>
+<span style="color: #6c6c6c; font-style: italic;">         * variable 'list' in the item! macro list_entry() does just that. See "How</span>
+<span style="color: #6c6c6c; font-style: italic;">         * does this work?" below for an explanation of how this is done.</span>
+<span style="color: #6c6c6c; font-style: italic;">         </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+        tmp= list_entry(pos, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span>, list);
+
+        <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">given a pointer to struct list_head, type of data structure it is part of,</span>
+<span style="color: #6c6c6c; font-style: italic;">         * and it's name (struct list_head's name in the data structure) it returns a</span>
+<span style="color: #6c6c6c; font-style: italic;">         * pointer to the data structure in which the pointer is part of.</span>
+<span style="color: #6c6c6c; font-style: italic;">         * For example, in the above line list_entry() will return a pointer to the</span>
+<span style="color: #6c6c6c; font-style: italic;">         * struct kool_list item it is embedded in!</span>
+<span style="color: #6c6c6c; font-style: italic;">         </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+
+        printf(<span style="color: #ff4ea3;">"to= %d from= %d\n"</span>, tmp-&gt;to, tmp-&gt;from);
+
+    }
+
+    printf(<span style="color: #ff4ea3;">"\n"</span>);
+    <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">since this is a circularly linked list. you can traverse the list in reverse order</span>
+<span style="color: #6c6c6c; font-style: italic;">     * as well. all you need to do is replace 'list_for_each' with 'list_for_each_prev'</span>
+<span style="color: #6c6c6c; font-style: italic;">     * everything else remain the same!</span>
+<span style="color: #6c6c6c; font-style: italic;">     *</span>
+<span style="color: #6c6c6c; font-style: italic;">     * Also you can traverse the list using list_for_each_entry() to iterate over a given</span>
+<span style="color: #6c6c6c; font-style: italic;">     * type of entries. For example:</span>
+<span style="color: #6c6c6c; font-style: italic;">     </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+    printf(<span style="color: #ff4ea3;">"traversing the list using list_for_each_entry()\n"</span>);
+    list_for_each_entry(tmp, &amp;mylist.list, list)
+        printf(<span style="color: #ff4ea3;">"to= %d from= %d\n"</span>, tmp-&gt;to, tmp-&gt;from);
+    printf(<span style="color: #ff4ea3;">"\n"</span>);
+    
+
+    <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">now let's be good and free the kool_list items. since we will be removing items</span>
+<span style="color: #6c6c6c; font-style: italic;">     * off the list using list_del() we need to use a safer version of the list_for_each() </span>
+<span style="color: #6c6c6c; font-style: italic;">     * macro aptly named list_for_each_safe(). Note that you MUST use this macro if the loop </span>
+<span style="color: #6c6c6c; font-style: italic;">     * involves deletions of items (or moving items from one list to another).</span>
+<span style="color: #6c6c6c; font-style: italic;">     </span><span style="color: #6c6c6c; font-style: italic;">*/</span>
+    printf(<span style="color: #ff4ea3;">"deleting the list using list_for_each_safe()\n"</span>);
+    list_for_each_safe(pos, q, &amp;mylist.list)
+    {
+        tmp= list_entry(pos, <span style="color: #a1db00;">struct</span> <span style="color: #00d7af;">kool_list</span>, list);
+        printf(<span style="color: #ff4ea3;">"freeing item to= %d from= %d\n"</span>, tmp-&gt;to, tmp-&gt;from);
+        list_del(pos);
+        free(tmp);
+    }
+
+    <span style="color: #a1db00;">return</span> 0;
+}
+
+  
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orge7004f0" class="outline-2">
+<h2 id="orge7004f0"><span class="section-number-2">2</span> <span class="todo TODO">TODO</span> Queues</h2>
+</div>
+<div id="outline-container-org57eb882" class="outline-2">
+<h2 id="org57eb882"><span class="section-number-2">3</span> <span class="todo TODO">TODO</span> Maps</h2>
+</div>
+<div id="outline-container-org719db3c" class="outline-2">
+<h2 id="org719db3c"><span class="section-number-2">4</span> <span class="todo TODO">TODO</span> Binary trees</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

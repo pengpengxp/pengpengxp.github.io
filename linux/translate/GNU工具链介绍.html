@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>GNU工具链介绍</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div> 
+      </div>
+
+      <div class="article">
+        <h2>GNU工具链介绍</h2>
+
+        <p>说到GNU构建系统时，主要涉及到下面四个工具：</p>
+
+        <ol>
+          <li>
+            Autoconf提供了一个用于配置的shell脚本，名叫configure。
+            它可以探测安装系统，找到定制makefiles、头文件或者其它一些应用指定的文件可能需要的信息。
+            然后，它从通用的模版文件中生成这些文件的自定义版本。
+            这样用户就可以不需要再自己定义这些文件了。 </li>
+
+          <li>
+            Automake可以从一个非常高级别的规范（抽象？）的文件Makefile.am中，生成一个供Autoconf使用的makefile模版文件Makefile.in。
+            Automake生成的makefiles都遵循GNU的makefile标准，免得再花大力气手动去写这些文件。
+            Automake需要Autoconf才能正常工作。</li>
+
+          <li>
+            Libtool 可以编译位置无关的代码，也可以以可移植的方式编译共享库。
+            它可以独立使用，不依赖于 Autoconf 或者 Automake 。
+            但是， Automake 支持 Libtool 并且可以和以无缝结合。</li>
+
+          <li>
+            Autotoolset可以开发遵循GNU代码标准的可移植的源代码。
+            它可以生成各种各样的模版，开发者可以直接从这些模版开始开发自己的软件。</li>
+        </ol>
+
+        <p>GNU构建系统可以简化一些工作，包括：</p>
+
+        <ol>
+          <li>
+            编译多目录的软件。
+            直接递归地使用make是很难的。
+            简化后这一步骤后，可以鼓励开发都把每个源代码文件放到有层次结构的目录树中，而不是直接把所有东西都放到同一个目录。
+            直接使用原始make的开发者不太能找到递归make的不便之处，他们倾向于不组织他们的源码。
+            使用GNU工具，这些都不再是问题。</li>
+
+          <li>
+            自动配置。开发者不再需要要求用户修改Makefile文件。
+            无论是来回切换代码版本，还是把代码移到不同的机器上，开发者也不需要修改Makefile文件。</li>
+
+          <li>
+            自动生成makefile。编写makefile涉及到大量的重复性工作，而用在大型的工程中是很容易出错的。
+            另外，在一些写的比较好的makefile中，'install'或者'uninstall'这些部分是很重要的，因为它们一般都是由超级用户来执行的。
+            它们必须没有任何bugs！
+            GNU构建系统自动生成makefile。
+            开发者只需要写Makefile.am即可，这样更简洁，也更易于维护。
+          </li>
+
+          <li>
+            支持测试用例。开发者可以很简单地书写测试用例的代码。
+            只需要在 Makefile.am 文件中额外加一行，最后生成的makefile中就会有一个check的目标。
+            这样就可以通过执行make check来直接编译和执行所有的测试用例。
+
+          </li>
+
+          <li>
+            自动分发构建（不太明白？）。GNU编译工具旨在开发自由软件。
+            因此，如果在你的程序中有一个可以工作的构建系统，可以通过执行make distcheck来创建源代码分发。
+          </li>
+
+          <li>
+            动态编接库。编译动态编接库就像编译静态链接库一样简单。
+          </li>
+
+        </ol>
+
+        <p>
+          只有当你在开发一个需要分发的程序的时候，才需要安装GNU构建系统。
+          从一个分发的源代码编译程序，安装程序只需要一个make，一个编译器，一个shell和一些标准的Unix工具，比如sed、awk、yacc、lex。
+          目的都是为了使安装程序在安装过程中尽量地简单和自动化。
+          此外，通过设置GNU构建系统， 它可认生成在安装时不需要构建系统的程序。
+          这使得构建系统可以引导它自己（没看懂）。
+        </p>
+
+
+      </div>
+      
+    </div>
+
+  </body>
+
+</html> 

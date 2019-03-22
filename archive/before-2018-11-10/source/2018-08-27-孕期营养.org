@@ -1,0 +1,44 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-08-27-孕期营养
+
+* [[https://www.ozfarmroyal.com.au/products/pregnant-mother-formula-boxed-6-cans-900g-each][Oz farm奶粉]]
+  每天吃6勺50g奶粉：
+  #+name: naifen
+  |------+------+----------+--------|
+  | 项目 | 单位 | 奶粉含量 | 参考值 |
+  |------+------+----------+--------|
+  | 钙   | mg   |      400 |   1000 |
+  | DHA  | mg   |       40 |    400 |
+  | 铁   | mg   |      4.5 |        |
+  | 锌   | mg   |      3.0 |        |
+  |------+------+----------+--------|
+
+* 钙
+  孕妇钙需求量变化情况：
+
+  |--------+---------------------|
+  | 阶段   | 适宜摄入量AI(mg/日) |
+  |--------+---------------------|
+  | 孕前   |                 800 |
+  | 孕早期 |                 800 |
+  | 孕中期 |                1000 |
+  | 孕晚期 |                1200 |
+  | 哺乳期 |                1200 |
+  |--------+---------------------|
+
+  + 钙片一个333.3mg
+  + [[naifen][奶粉]] 400mg，
+
+  总共733.3mg。
+
+* DNA
+  [[https://baike.pcbaby.com.cn/qzbd/480.html#ldjc4ta=baby_tbody6][DNA介绍在这里]]
+
+  建议每天不少于400mg。
+
+  后期吃DHA：bioisland的每片210mg。一天可以吃两片左右。
+
+* [[https://baike.pcbaby.com.cn/qzbd/939841.html#ldjc4ta=baby_tbody6][补铁参考这里]]

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>在子目录中组织你的工程</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>在子目录中组织你的工程</h2>
+        <p>如果你的程序很小，你可以把所有文件都放到最上层目录，就像前面Hello World的例子一样（参阅 <a href="Autoconf，和Automake的Hello_world例子.html">Autoconf，和 Automake 的Hello world例子</a> ）。
+        这样的包叫做“浅”（Such packages are called shallow？没懂）。</p>
+
+        <p>一般来说，建议把你的软件组织为“深”的软件包。在“深”软件包中，文件文件：
+        <pre class="code">README, INSTALL, AUTHORS, THANKS, ChangeLog, COPYING</pre>
+        以及编译产生的东西（build cruft）都放到最上层目录，而其它文件都放到子目录中。
+        标准做法是使用以下子目录：</p>
+
+        <ul>
+          <li>'src'<br />
+            <p>会被编译的代码实际放置的目录。
+              每个库都应该有它们自己的子目录。可执行文件也应该有它们自己的目录。
+              如果可执行文件只是和一到两个文件相关，把它们放到同一个目录也是可以的。
+              如果可执行文件需要很多的源代码，或者说它们可以根据不同的功能分开，最好是重新组织下把它们放入不同的目录中。
+              当然，你可以根据你的判断来决定怎么放置最好。
+              最简单的作法是，把库的测试用例放到和库的源码相同的目录。
+              然而如果对你来说这样作不好，你可以把对应测试用例放入该库的目录下的子目录中。
+              把不同库的测试用例都放入同一个目录是极为不正确的。</p>
+          </li>
+
+          <li>'lib'<br />
+            <p>这是一个可选目录，里面放置与可移植性相关的源代码。
+              这里主要就是在一些系统中不存在的系统调用的替换实现。
+              也可以把一些常用于不同软件包的简单的工具放到这里。
+              这些工具太简单了，完全没必要为它们再单独创建一个库。
+              这里主要的文件就是替换一些私有C库不存在的GNU C库系统调用。
+            </p>
+          </li>
+
+          <li>'doc'<br />
+            <p>包含软件包文档的目录。
+              开发者有完全的自由以任何有效的方式在这里来呈现你的文档。
+              但是，推荐的方式是使用Texinfo来写软件文档。
+              Texinfo的优势在于，从同一份源文件中，即可以提供在线帮助文档，也可以提供不错的可打印的书籍。
+              文档相关的更多细节请参考
+              <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Maintaining-Documentation" data-accessed="2018-12-19">Maintaining-Documentation</a> 。</p>
+          </li>
+
+          <li>'m4'<br />
+            <p>一个包含软件包需要安装的'm4'文件的目录。
+              这些文件定义了新的'autoconf'宏。你应当把这些宏提供给其它想使用你的库的其它开发者。
+              这些更细节的讨论在 FIXME: cross reference 中。</p>
+          </li>
+
+          <li>'intl'<br />
+            <p>包含支持多种人类语言的可移植性源代码模版。
+              这个目录中的内容由'gettext'程序自动维护。（FIXME: cross reference）</p>
+          </li>
+
+          <li>'po'<br />
+            <p>一个包含软件包消息目录的目录。这是维护者放置每个软件多种人类语言翻译的地方。（FIXME: cross reference）</p>
+          </li>
+        </ul>
+
+        <p>Automake 让维护多目录的代码的工作变得很简单。所以，尽量使用这一优势。
+          多目录软件包对于大多数工程来说都是更方便的选择。</p>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

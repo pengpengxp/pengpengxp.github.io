@@ -1,0 +1,336 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-06-python中的functools
+
+* partial
+   我觉得就是给了一些默认参数:
+   #+BEGIN_SRC python :results output
+     import functools
+
+     def add(a, b):
+         print '[a = %s,b = %s]' % (a, b) 
+
+     add(4, 2)
+
+     plus3 = functools.partial(add, 3)
+     plus5 = functools.partial(add, 5)
+
+     plusplus = functools.partial(add, 5, 8)
+     plus3(4)
+     plus3(7)
+     plus5(10)
+     plusplus()
+
+   #+END_SRC
+
+   #+RESULTS:
+   : [a = 4,b = 2]
+   : [a = 3,b = 4]
+   : [a = 3,b = 7]
+   : [a = 5,b = 10]
+   : [a = 5,b = 8]
+   
+   它的定义应该是像这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def partial(func, *args, **keywords):
+         def newfunc(*fargs, **fkeywords):
+             newkeywords = keywords.copy()
+             newkeywords.update(fkeywords)
+             return func(*(args + fargs), **newkeywords)
+         newfunc.func = func
+         newfunc.args = args
+         newfunc.keywords = keywords
+         return newfunc
+   #+END_SRC
+   
+   *仔细看下下面这个代码的输出就知道它到底对这些函数都做了啥了：*
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def add(a, b, *args, **kargs):
+         print '[a = %s,b = %s]' % (a, b) 
+         if args:
+             print 'really add args = {f}'.format(f=args)
+
+         if kargs:
+             print 'really add kargs = %s' % kargs
+
+     add(4, 2)
+
+     def my_partial(func, *args, **keywords):
+         print 'in my_partial: args = %s, keywords = %s' % (args, keywords)
+
+         def newfunc(*fargs, **fkeywords):
+             newkeywords = keywords.copy()
+             newkeywords.update(fkeywords)
+             print 'fkeywords in newfunc = %s' % fkeywords
+             print 'fargs in newfunc = {f}'.format(f=fargs)
+             print 'args in newfunc = {f}'.format(f=args)
+             print 'keywords in newfunc = {f}'.format(f=keywords)
+
+             print '[test] input args = {f}'.format(f=(args + fargs))
+             return func(*(args + fargs), **newkeywords)
+
+         newfunc.func = func
+         newfunc.args = args
+
+         newfunc.keywords = keywords
+         return newfunc
+
+     plus3 = my_partial(add, 3, 12, name='peng')
+     plus3(10, 11, name='xiepeng')
+   #+END_SRC
+   #+RESULTS:
+   #+begin_example
+   [a = 4,b = 2]
+   in my_partial: args = (3, 12), keywords = {'name': 'peng'}
+   fkeywords in newfunc = {'name': 'xiepeng'}
+   fargs in newfunc = (10, 11)
+   args in newfunc = (3, 12)
+   keywords in newfunc = {'name': 'peng'}
+   [test] input args = (3, 12, 10, 11)
+   [a = 3,b = 12]
+   really add args = (10, 11)
+   really add kargs = {'name': 'xiepeng'}
+#+end_example
+
+   可以看到，通过它装钸过的函数，实际传给它的 =*args= 是装钸时的和实际
+   调用的之和，例子中实际传进来的就是 =(3, 12, 10, 11)= 。给到add函数
+   时，3和12分别给了a和b参数。剩下才放在 =args= 中（倒数第二句）。而
+   =**kargs= 这种，会在实际调用函数的时候覆盖装钸时的值，其实就是那个
+   =newkeywords.update= 做的事情。这里是 ={'name': 'peng'}= 被
+   ={'name': 'xiepeng'}= 替代。
+
+* update_wrapper
+  :PROPERTIES:
+  :CUSTOM_ID: update_wrapper
+  :END:
+   默认partial对象没有__name__和__doc__, 这种情况下，对于装饰器函数非
+   常难以debug.使用update_wrapper(),从原始对象拷贝或加入现有partial对
+   象。
+   
+   直接使用 wrap ，原来的 hello的 =__name__= 和 =__doc__= 被wrap中的
+   call_it函数覆盖了。wrap2中使用updatea_wrapper，可以把原来的函数的这
+   两个属性搞回去。
+   #+BEGIN_SRC python :results output 
+     #!/usr/local/bin/python
+     def wrap(func):
+         def call_it(*args, **kwargs):
+             """wrap func: call_it"""
+             print 'before call'
+             return func(*args, **kwargs)
+         return call_it
+
+     @wrap
+     def hello():
+         """say hello"""
+         print 'hello world'
+
+     from functools import update_wrapper
+     def wrap2(func):
+         def call_it(*args, **kwargs):
+             """wrap func: call_it2"""
+             print 'before call'
+             return func(*args, **kwargs)
+         return update_wrapper(call_it, func)
+
+     @wrap2
+     def hello2():
+         """test hello"""
+         print 'hello world2'
+
+     if __name__ == '__main__':
+         hello()
+         print hello.__name__
+         print hello.__doc__
+
+         print
+         hello2()
+         print hello2.__name__
+         print hello2.__doc__
+
+   #+END_SRC 
+
+   #+RESULTS:
+   : before call
+   : hello world
+   : call_it
+   : wrap func: call_it
+   : 
+   : before call
+   : hello world2
+   : hello2
+   : test hello
+
+* cmp_to_key
+   对于python 2.X，支持一种叫 =cmp= 函数来排序：
+   #+BEGIN_EXAMPLE
+     >>> def numeric_compare(x, y):
+     ...     return x - y
+     >>> sorted([5, 2, 4, 1, 3], cmp=numeric_compare) 
+     [1, 2, 3, 4, 5]
+
+     Or you can reverse the order of comparison with:
+
+     >>> def reverse_numeric(x, y):
+     ...     return y - x
+     >>> sorted([5, 2, 4, 1, 3], cmp=reverse_numeric) 
+     [5, 4, 3, 2, 1]
+   #+END_EXAMPLE
+   
+   python 2.4之后[fn:2:之前的版本，没有内置的sorted函数，list.sort()函
+   数也不能接收key argument。]，包括python 3都支持一种 =key= 的函数来
+   排序：
+   #+BEGIN_EXAMPLE
+     >>> sorted("This is a test string from Andrew".split(), key=str.lower)
+     ['a', 'Andrew', 'from', 'is', 'string', 'test', 'This']
+
+     >>> student_tuples = [
+     ...     ('john', 'A', 15),
+     ...     ('jane', 'B', 12),
+     ...     ('dave', 'B', 10),
+     ... ]
+     >>> sorted(student_tuples, key=lambda student: student[2])   # sort by age
+     [('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+   #+END_EXAMPLE
+   但是在python 3的时候，为了代码的简化，删除了sorted对于 =cmd= 函数的
+   支持。所以对于python 3来说，可以使用 =functools.cmp_to_key()= 来把
+   一个 =cmd= 函数转为一个 =key= 函数。
+
+* total_ordering
+   一个class如果自定义比较函数的一个或者几个，这个装钸器可以帮你定义其
+   它的。但是注意：
+   #+BEGIN_EXAMPLE
+     The class must define one of __lt__(), __le__(), __gt__(), or 
+     __ge__(). In addition, the class should supply an __eq__()
+     method.
+
+     For example:
+
+     @total_ordering
+     class Student:
+         def __eq__(self, other):
+             return ((self.lastname.lower(), self.firstname.lower()) ==
+                     (other.lastname.lower(), other.firstname.lower()))
+         def __lt__(self, other):
+             return ((self.lastname.lower(), self.firstname.lower()) <
+                     (other.lastname.lower(), other.firstname.lower()))
+   #+END_EXAMPLE
+   
+   #+BEGIN_SRC python :results output :exports both
+     from functools import total_ordering
+     @total_ordering
+     class Student:
+         def __init__(self, firstname, lastname):
+             self.firstname = firstname
+             self.lastname = lastname
+
+         def __eq__(self, other):
+             return ((self.lastname.lower(), self.firstname.lower()) ==
+                     (other.lastname.lower(), other.firstname.lower()))
+
+         def __lt__(self, other):
+             return ((self.lastname.lower(), self.firstname.lower()) <
+                     (other.lastname.lower(), other.firstname.lower()))
+
+     a = Student('A', 'C')
+     b = Student('b', 'd')
+     c = Student('b', 'c')
+     d = Student('b', 'c')
+
+
+     print a > b
+     print a <= b
+     print d >= c
+
+   #+END_SRC
+
+   #+RESULTS:
+   : False
+   : True
+   : True
+
+   感觉amazing。
+* wraps
+  它是 [[#update_wrapper][update_wrapper]] 的一个更加方便的形式，可以这样使用：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+    def my_decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwds):
+            print 'Calling decorated function'
+            return f(*args, **kwds)
+        return wrapper
+
+    @my_decorator
+    def example():
+        """Docstring"""
+        print 'Called example function'
+
+    example()
+    print example.__name__
+    print example.__doc__
+  #+END_SRC
+
+  #+RESULTS:
+  : Calling decorated function
+  : Called example function
+  : example
+  : Docstring
+
+ 可以看到，函数的name还是原来定义的，而不是里面wrapper函数的内容。
+
+* TODO partial创建的对象 [[暂时没有找到合适的例子][暂时没有找到合适的例子]]
+  partial对象是在调用 =partial()= 函数后就创建的，它们有下面这三种只读
+  的属性：
+  1. partial.func ：这一定是一个可以被调用的对象或者函数，对partial对
+     象的调用实际就是调用它。
+  2. partial.args ：定义partial函数时所有最左边的不是赋值的参数
+  3. partial.keywords ：定义partial函数时所有赋值传进来的参数
+     
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import partial
+
+    def add(x, y, name=None):
+        print 'result = %s' % (x + y)
+
+    plus = partial(add, 3, 4, name='test')
+
+    print add
+    print plus
+
+    print plus.func
+    print plus.args
+    print plus.keywords
+    plus()
+
+  #+END_SRC
+
+  #+RESULTS:
+  : <function add at 0x10076cb18>
+  : <functools.partial object at 0x10075c788>
+  : <function add at 0x10076cb18>
+  : (3, 4)
+  : {'name': 'test'}
+  : result = 7
+
+
+  partial对象和函数对象差不多：能被调用，弱引用的，可以有属性。不过也
+  有一些重要的区别：
+  1. 没有 =__name__= 和 =__doc__= 属性。
+     #+BEGIN_SRC python :results output :tangle /tmp/test_from_org_tangle.py
+       from functools import partial
+
+       def add(x, y, name=None):
+           print 'result = %s' % (x + y)
+
+       plus = partial(add, 3, 4, name='test')
+
+       print plus.__name__
+       print plus.__doc__
+     #+END_SRC
+
+     #+RESULTS:
+
+  2. 在类中定义的partial对象有点象静态方法，它在实例属性查询期间，不能
+     转换为绑定的方法。 <<暂时没有找到合适的例子>> 。

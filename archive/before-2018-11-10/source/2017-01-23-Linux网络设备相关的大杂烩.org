@@ -1,0 +1,300 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: align
+#+STARUP: hideblocks
+
+# #+OPTIONS: toc:nil 
+# #+BEGIN_HTML
+# ---
+# layout: post
+# title: 2017-01-23-Linux网络设备相关的大杂烩
+# excerpt: "介绍下Linux下一些网络设备"
+# modified: 2017-01-23
+# tags: [Linux, Network, Bridge, Namespace]
+# categories: Linux Network
+# ---
+
+# #+END_HTML
+
+
+# #+TOC: headlines 1 local
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+#+Title: Linux网络设备相关的大杂烩
+
+* 一个网卡上的多个ip
+   之前在网络上看到过可以这样就可以在ubuntu上使用“虚拟网卡”：
+  #+BEGIN_SRC sh
+    ifconfig eth0:1 192.168.56.2 netmask 255.255.255.0
+  #+END_SRC
+  其实这样添加的不是虚拟网卡。只是在eth0网卡上多设置了一个ip。现在已经
+  不推荐这样使用啦。使用ifconfig是查不出来的。需要使用 =ip address= 才
+  可以查询出来：
+  #+BEGIN_EXAMPLE
+    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+        link/ether 08:00:27:80:4f:6d brd ff:ff:ff:ff:ff:ff
+        inet 192.168.56.2/24 brd 192.168.56.255 scope global eth0
+           valid_lft forever preferred_lft forever
+        inet 192.168.56.119/24 brd 192.168.56.255 scope global secondary eth0:1
+           valid_lft forever preferred_lft forever
+        inet6 fe80::a00:27ff:fe80:4f6d/64 scope link 
+           valid_lft forever preferred_lft forever
+  #+END_EXAMPLE
+  你看，这是在eth0上整了两个ip。理解了这种方式的原理后就知道了，名字还
+  不能随便取，必须以 =ifconfig <interface>:<number>= 这样的形式。如果
+  interface是 =eth0= ，取 =hello:0= 这样的名字肯定就是不可以的。
+ 
+* veth
+   :PROPERTIES:
+   :CUSTOM_ID: veth
+   :END:
+  veth是另一种类型的“网络设备”。它总是成对出现的。有点类似于管道。数据
+  从一个口进来，一定从另一个口出去。可以看下英文解释：
+  #+BEGIN_EXAMPLE
+    Virtual Ethernet interfaces are an interesting construct; they always
+    come in pairs, and they are connected like a tube—whatever comes in
+    one veth interface will come out the other peer veth interface・.
+  #+END_EXAMPLE
+
+  它们的作用体现在不同的namespace中。关于namespace可以参考 [[http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/][这篇文章]] 。
+  就像管道可以用来连接两个进程一样，veth可以用来连接两个
+  namespace[fn:1:两个namespace之间现在我只知道这种方式来通信。]。对应
+  的两个veth，一个放在namespace1一个放在namespace2。然后就可以搞事情啦。
+  
+  有时候需要查询与一个veth相对应的另一个veth，可以这样先查对应的peer在
+  namespace中的index：
+  #+BEGIN_SRC sh
+    # 打印veth0对应的peer在其namespace中的`ip link'命令的索引
+    ethtool -S veth0
+  #+END_SRC
+  然后再到对应的namespace中去 =ip link= 一下。对应索引号的就是它的peer
+  啦 。假设上面一个命令输出结果：
+  #+BEGIN_EXAMPLE
+    NIC statistics:
+         peer_ifindex: 9
+  #+END_EXAMPLE
+  说明在veth0的peer对应的namespace中使用`ip link'查出来的索引号是9。
+ 
+* vlan
+  vlan也是一种网络设备，可以这样来增加一个：
+  #+BEGIN_SRC sh
+    ip link add name eth0.110 link eth0 type vlan id 110
+  #+END_SRC
+  然后要以查询它的id等内容：
+  #+BEGIN_EXAMPLE
+    root@rcs:/home/riversec/dist#ip -d link show eth0.110
+    3: eth0.110@eth0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+        link/ether fa:16:3e:2a:e7:6a brd ff:ff:ff:ff:ff:ff promiscuity 0
+        vlan protocol 802.1Q id 110 <REORDER_HDR> addrgenmode eui64
+  #+END_EXAMPLE
+
+  使用上面的方法配置好vlan后，需要把设置 =up= 起来，然后再配一个ip：
+  #+BEGIN_SRC sh
+    ip link set eth0.110 up
+    ip address add 192.168.56.23/24 dev eth0.110
+  #+END_SRC
+
+  这样，另一台机器如果也是配置了一个id为110的vlan设备，那么这两个网卡
+  之前通信就会走vlan啦。具体的说，A机器的vlan给B机器的vlan发消息时，会
+  在数据链路帧的源Mac后加入32位的数据。前16位为 =0x8100= 。后面12位为
+  设置的id。接改方收到后，由内核802.1q模块判断该id。如果是本机的vlan。
+  再上送。
+  
+  如果想要使用tcpdump来抓取报文查看出去的报文是否是携带VLAN的id的，需
+  要抓取 *eth0* 的报文，使用 =-e= 选项就可以看到对应的 =802.1Q= 的VLAN
+  id ：
+  #+BEGIN_SRC sh
+tcpdump -i eth0 -en vlan 
+  #+END_SRC
+
+* 一个具体的使用bridge示例
+  bridge就是一个傻瓜交换机。
+  
+  当前很多虚拟环境，比如openstack、docker等都会使用这种技术来解决虚拟
+  机和宿主机以及虚拟机和虚拟机之间的网络连接问题。如下图所示，docker中
+  默认是这样使用网桥的：
+  #+BEGIN_EXAMPLE
+    +------------------------------------------------------------------------+
+    |                             Host                                       |
+    |                                                                        |
+    |     +------------------+                     +------------------+      |
+    |     |                  |                     |                  |      |
+    |     |                  |                     |                  |      |
+    |     |    Container1    |                     |    Container2    |      |
+    |     |                  |                     |                  |      |
+    |     |    +--------+    |                     |    +--------+    |      |
+    |     |    |  eth0  |    |                     |    |  eth0  |    |      |
+    |     +----+---+----+----+                     +----+----+---+----+      |
+    |              ^  172.17.42.2                            ^  172.17.42.3  |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              v                                         v               |
+    |          +---+-----+                              +----+----+          |
+    |          |         |                              |         |          |
+    |     +----+ vethXX  +------------------------------+ vethYY  +----+     |
+    |     |    |         |                              |         |    |     |
+    |     |    +---------+           docker0            +---------+    |     | 
+    |     |                       +------------+                       |     |
+    |     +-----------------------+  docker0   +-----------------------+     |
+    |                             +-----+------+ 172.17.42.1/16              |
+    |                                                                        |
+    |                       +--------------------------+                     |
+    +-----------------------|         eth0             |---------------------+
+                            +--------------------------+
+                                                 10.10.10.1
+  #+END_EXAMPLE
+  图中的 =Container1= 和 =Container2= 就是拉起的虚拟机。默认情况下会新
+  建一个名叫 `docker0` 的网桥。可以理解为 `docker0` 就是Linux在内部使
+  用软件虚拟出了一个交换机。拉起的容器中的 `eth0` 都通过前文提到的
+  [[#veth]] 连接在这个交换机上，172网段上的报文到了bridge后会“交换”到连
+  在这个交换机的其它“端口”，这样宿主机和容器以及容器和容器之间都可以
+  相互通信。
+  
+  但是这样会导致宿主机以外的机器不能访问到容器。为了实现“外部”也可以
+  访问容器。我们可以这样设计：
+  #+BEGIN_EXAMPLE
+    +------------------------------------------------------------------------+
+    |                             Host                                       |
+    |                                                                        |
+    |     +------------------+                     +------------------+      |
+    |     |                  |                     |                  |      |
+    |     |                  |                     |                  |      |
+    |     |    Container1    |                     |    Container2    |      |
+    |     |                  |                     |                  |      |
+    |     |    +--------+    |                     |    +--------+    |      |
+    |     |    |  eth0  |    |                     |    |  eth0  |    |      |
+    |     +----+---+----+----+                     +----+----+---+----+      |
+    |              ^  10.10.10.2                             ^  10.10.10.3   |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              v                                         v               |
+    |          +---+-----+                              +----+----+          |
+    |          |         |                              |         |          |
+    |     +----+ vethXX  +------------------------------+ vethYY  +----+     |
+    |     |    |         |                              |         |    |     |
+    |     |    +---------+         bridge-eth0          +---------+    |     | 
+    |     |                     +---------------+                      |     |
+    |     +---------------------+  bridge-eth0  +----------------------+     |
+    |                           +---------------+                            |
+    |                                   ^   10.10.10.1                       |
+    |                                   |                                    |
+    |                                   v                                    |
+    |                       +-----------+--------------+                     |
+    +-----------------------|         eth0             |---------------------+
+                            +--------------------------+                   
+  #+END_EXAMPLE
+  1. 把宿主机上的eth0网卡用的ip地址“移”到网桥上 =bridge-eth0= 。
+  2. 设置宿主机中的eth0网卡也连到 =bridge-eth0= 上。
+  3. 配置docker服务使用名为 =bridge-eth0= 的网桥。
+     
+  下面的脚本接受一个 =<interface>= 参数。实现如下功能：
+  1. 新建一个名为 =bridge-<interface-name>= 的网桥。
+  2. 把原来 =<interface>= 的ip地址分配给了 =bridge-<interface-name>= 。
+  3. 把原来 =<interface>= 的连到 =bridge-<interface-name>= 网桥。
+     
+  #+BEGIN_SRC sh
+    #!/bin/bash
+    moveHostIntf(){
+        IFINDEX=$1
+        BRIDGE=bridge-$IFINDEX
+
+        bridge link show|cut -d\  -f 2|grep "^$IFINDEX\$"
+        #brctl show $BRIDGE | grep "\<$IFINDEX\>" >/dev/null
+        if [ $? = 0 ];then
+            echo "host interface $IFINDEX already in bridge $BRIDGE"
+            return 1
+        fi
+
+        #save route table related to this interface
+        myRoute=$(ip route show scope global dev $IFINDEX | while read dst via gw;do if [ "$via" = "via" ]; then echo "route add -net $dst gw $gw";fi;done;)
+
+        #save IP of this interface
+        myIp=$(getIpAddr $IFINDEX)
+
+
+        # 新建网桥
+        brctl addbr $BRIDGE
+        # 清空原来网卡上的ip
+        ip addr flush dev $IFINDEX
+        # 把原网卡接到新建的网桥上
+        brctl addif $BRIDGE $IFINDEX
+
+        # 把原来网卡的ip设置到新建的网桥上
+        ifconfig $BRIDGE $myIp
+
+        #restore route table related to this interface
+        for r in "$myRoute";do
+            $r
+        done
+
+    }
+
+    getIpAddr(){
+        ip addr show $1|grep -o "inet [^[:space:]]*"|cut -d\  -f2
+    }
+
+
+    moveHostIntf $1
+
+  #+END_SRC
+
+  最后配置docker使用名为 =bridge-<interface-name>= 网桥，需要先停止
+  docker服务：
+  #+BEGIN_SRC sh
+    sudo service docker stop
+  #+END_SRC
+  
+  修改docker配置文件 =/etc/default/docker= ，加入这句：
+  #+BEGIN_EXAMPLE
+    DOCKER_OPTS="-b=bridge-eth0"
+  #+END_EXAMPLE
+  
+  最后该文件可能看起来像这样：
+  #+BEGIN_EXAMPLE
+    # Here in Debian, this file is sourced by:
+    #   - /etc/init.d/docker (sysvinit)
+    #   - /etc/init/docker (upstart)
+    #   - systemd's docker.service
+
+    # Use of this file for configuring your Docker daemon is discouraged.
+
+    # The recommended alternative is "/etc/docker/daemon.json", as described in:
+    #   https://docs.docker.com/v1.11/engine/reference/commandline/daemon/#daemon-configuration-file
+
+    # If that does not suit your needs, try a systemd drop-in file, as described in:
+    #   https://docs.docker.com/v1.11/engine/admin/systemd/#custom-docker-daemon-options
+    DOCKER_OPTS="-b=bridge-eth0"
+  #+END_EXAMPLE
+
+  这样拉起的容器，就可以分到10网段的ip地址。它们也就暴露在外部网络中了。
+
+* 查询设备的类型
+  使用 =ip link= 可以查出来当前namespace中的所有的网络设备。可以这样来
+  查同一类型的设备：
+  #+BEGIN_SRC sh
+    # 查询所有网桥设备
+    ip link show bridge
+    # ubuntu还可以需要安装bridge-utils来查询桥
+    sudo apt install bridge-utils
+    brctl show
+
+    # 查询所有vlan设备 
+    ip link show vlan
+  #+END_SRC
+* TODO tap和tun
+  tap就可以理解为一个网卡了，可以使用 =ip tuntap= 来查询所有的tap。
+  tuntap分为tun和tap。tap是二层概念。tun是三层概念。
+
+  一个使用tap的例子：
+  使用kvm拉起的虚拟机，在发送报文前其实已经在协议栈中处理过了。如果再
+  给host中的网卡，下去的时候还得走一次协议栈。这是没必要的。可以新建一
+  个tap，然后在kvm拉起虚拟机的时候传入这个tap。这样虚拟机发送时，直接
+  把做好的报文写入这个tap就可以了。它直接就下送了，不再过协议栈。
+  
+  tap和tun的概念理解还不是很深。先挖个坑在这～
+

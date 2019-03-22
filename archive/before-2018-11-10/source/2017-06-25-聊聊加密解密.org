@@ -1,0 +1,205 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: align
+#+STARTUP: showall
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+
+
+#+Title: 聊聊加密解密
+
+这两天搞一个包的加密解密，大概了解了一下对应的算法。这里面的学问太大啦。
+我准备先记录个笔记在这里。后面再来完善它。
+
+* 哈希算法（摘要算法）
+  [[http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868328251266d86585fc9514536a638f06b41908d44000][廖雪峰有一篇很棒的文章]]
+  
+  常见的有md5和SHA等。就是一个函数f()，它通过一个函数，把任意长度的数
+  据转换为一个长度固定的数据串（通常用16进制的字符串表示）。单向的，计
+  算f(data)很容易，但通过digest反推data却非常困难。
+  
+  比SHA1更安全的算法是SHA256和SHA512，不过越安全的算法越慢，而且摘要长
+  度更长。
+
+  有没有可能两个不同的数据通过某个摘要算法得到了相同的摘要？完全有可能，
+  因为任何摘要算法都是把无限多的数据集合映射到一个有限的集合中。这种情
+  况称为碰撞，比如Bob试图根据你的摘要反推出一篇文章'how to learn
+  hashlib in python - by Bob'，并且这篇文章的摘要恰好和你的文章完全一
+  致，这种情况也并非不可能出现，但是非常非常困难。
+  
+  在后端数据库中，一般不存用户的明文密码，这样可能系统管理员能看到所有
+  的密码。而是存它的密码的摘要，也就是hash之后的值。用户登陆时，过程应
+  该是先计算它的密码的摘要，然后对比库中的。这样的好处是即使运维人员能
+  访问数据库，也无法获知用户的明文口令。
+  
+  python中使用SHA是比较简单的：
+  #+BEGIN_SRC python :results output
+    import hashlib
+
+    sha1 = hashlib.sha1()
+    sha1.update('how to use sha1 in ')
+    sha1.update('python hashlib?')
+    print sha1.hexdigest()
+  #+END_SRC
+
+  #+RESULTS:
+  : 2c76b57293ce30acef38d98f6046927161b46a44
+
+* 数字签名
+  结合摘要算法，python中有一种RSA数字签名协议 [[https://www.dlitz.net/software/pycrypto/api/2.6/Crypto.Signature.PKCS1_v1_5-module.html][PKCS1_v1_5]] ，它可以用私
+  钥来签名，公钥来验证。[[https://en.wikipedia.org/wiki/PKCS][PKCS(Public Key Cryptography Standards)]]。  发
+  送方可能使用私钥来签名经过SHA-1后的消息：
+  #+BEGIN_EXAMPLE
+    >>> from Crypto.Signature import PKCS1_v1_5
+    >>> from Crypto.Hash import SHA
+    >>> from Crypto.PublicKey import RSA
+    >>>
+    >>> message = 'To be signed'
+    >>> key = RSA.importKey(open('privkey.der').read())
+    >>> h = SHA.new(message)
+    >>> signer = PKCS1_v1_5.new(key)
+    >>> signature = signer.sign(h)
+  #+END_EXAMPLE
+  
+  接收方可以使用对应的公钥来进行验证：
+  #+BEGIN_EXAMPLE
+    >>> key = RSA.importKey(open('pubkey.der').read())
+    >>> h = SHA.new(message)
+    >>> verifier = PKCS1_v1_5.new(key)
+    >>> if verifier.verify(h, signature):
+    >>>    print "The signature is authentic."
+    >>> else:
+    >>>    print "The signature is not authentic."
+  #+END_EXAMPLE
+
+* AES加密解密
+  一种对称加密的算法。
+
+  [[http://www.cnblogs.com/cmsd/p/3838269.html][在这里看到一些AES的讲解]]
+  #+BEGIN_EXAMPLE
+    高级加密标准（Advanced Encryption Standard，AES），在密码学中又称
+    Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代
+    原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级
+    加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS
+    PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为
+    对称密钥加密中最流行的算法之一。AES只是个基本算法，实现AES有若干模式。
+    其中的CBC模式因为其安全性而被TLS（就是https的加密标准）和IPSec（win采
+    用的）作为技术标准。简单地说，CBC使用密码和salt（起扰乱作用）按固定算
+    法（md5）产生key和iv。然后用key和iv（初始向量，加密第一块明文）加密
+    （明文）和解密（密文）。
+  #+END_EXAMPLE
+
+  对称加密，我使用的是AES对称加密：
+  #+BEGIN_SRC python :results output
+    from Crypto.Cipher import AES
+    obj = AES.new('This is a key123', AES.MODE_CBC, 'tttttttttttttttt')
+    message = "yyyyyyyyyyyyyyyy"
+    ciphertext = obj.encrypt(message)
+    obj2 = AES.new('This is a key123', AES.MODE_CBC, 'tttttttttttttttt')
+    print obj2.decrypt(ciphertext)
+  #+END_SRC
+
+  #+RESULTS:
+  : yyyyyyyyyyyyyyyy
+
+  AES加密有下面的要求：
+  1. 密码必须是16、24、32位的
+     #+BEGIN_EXAMPLE
+       ValueError: AES key must be either 16, 24, or 32 bytes long
+     #+END_EXAMPLE
+  2. 加密的数据必须是16字节的倍数的
+     #+BEGIN_EXAMPLE
+       ValueError: Input strings must be a multiple of 16 in length
+     #+END_EXAMPLE
+  3. iv也必须是16位的 
+     #+BEGIN_EXAMPLE
+        ValueError: IV must be 16 bytes long
+     #+END_EXAMPLE
+     
+  由于上面的这些要求，重写一下示例脚本，支持任何长度的数据加密：
+  #+BEGIN_SRC python :results output
+    import base64
+    from Crypto import Random
+    from Crypto.Cipher import AES
+
+    password = base64.b64encode(Random.new().read(24))
+    buf = "any lentgh data haha"
+
+    padding_length = 16 - (len(buf) % 16)
+    padded_buf = buf + chr(padding_length) * padding_length
+
+    IV = Random.new().read(16)
+    aes = AES.new(password, AES.MODE_CFB, IV)
+
+    encrypt_buf = aes.encrypt(padded_buf)
+
+    decrypt_aes = AES.new(password, AES.MODE_CFB, IV)
+    out = decrypt_aes.decrypt(encrypt_buf)
+    out_padding_len = ord(out[-1])
+    print 'padding data len = %s' % out_padding_len
+    out_plaintext = out[:-out_padding_len]
+    print out_plaintext
+  #+END_SRC
+
+  #+RESULTS:
+  : padding data len = 13
+  : any lentgh datahaha
+  
+  可以看到，解密时，除了需要加密时使用的 =password= 外，还需要对应的
+  =iv= 值。有的做法是直接把ivy的值放到加密数据的后面。解密的时候先读出
+  最后的16位的 =iv= 值。然后再用来解密前面的数据。
+
+* https认证过程
+  现在使用https比较多。阮一峰的这个博客讲得很形像：[[http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html][图解SSL/TLS协议]] 。
+
+  爱丽丝是client，鲍勃是server。
+  
+  1. 第一步，爱丽丝给出协议版本号、一个客户端生成的随机数（Client
+     random），以及客户端支持的加密方法。
+  2. 第二步，鲍勃确认双方使用的加密方法，并给出数字证书、以及一个服务
+     器生成的随机数（Server random）。
+  3. 第三步，爱丽丝确认数字证书有效，然后生成一个新的随机数（Premaster
+     secret），并使用数字证书中的公钥，加密这个随机数，发给鲍勃。
+  4. 第四步，鲍勃使用自己的私钥，获取爱丽丝发来的随机数（即Premaster
+     secret）。
+  5. 第五步，爱丽丝和鲍勃根据约定的加密方法，使用前面的三个随机数，生
+     成"对话密钥"（session key），用来加密接下来的整个对话过程。
+     
+  握手阶段有三点需要注意。
+  1. 生成对话密钥一共需要三个随机数。
+  2. 握手之后的对话使用"对话密钥"加密（对称加密），服务器的公钥和私钥
+     只用于加密和解密"对话密钥"（非对称加密），无其他作用。
+  3. 服务器公钥放在服务器的数字证书之中。
+     
+  其中第三步client确认证书有效，一般应该是去一个权威地第三方证书认证机
+  构询问。
+  
+  我个人理解：证书中应该是已经包含公钥的信息了，客户在取得证书后，可以
+  从中提取出publickey，如果验证证书是有效的情况下。就可以使用publickey
+  来加密client random key了。
+  
+  证书生成的时候是需要私钥的（因为其实证书中有公钥信息了嘛），并且还含
+  有公司信息，对应的url等信息。证书还可以参考 [[http://kb.cnblogs.com/page/194742/][数字证书及CA的扫盲介绍]] 。
+
+  可以参考这里手动自己生成证书： [[http://www.barretlee.com/blog/2015/10/05/how-to-build-a-https-server/][HTTPS证书生成原理和部署细节]] 。
+
+* 公钥私钥
+  维基百科上写得很清楚：[[https://zh.wikipedia.org/wiki/%25E5%2585%25AC%25E5%25BC%2580%25E5%25AF%2586%25E9%2592%25A5%25E5%258A%25A0%25E5%25AF%2586][公开密钥加密]] 。
+  
+  如果加密密钥是公开的，这用于客户给私钥所有者上传加密的数据，这被称作
+  为公开密钥加密（狭义）。例如，网络银行的客户发给银行网站的账户操作的
+  加密数据。
+
+  如果解密密钥是公开的，用私钥加密的信息，可以用公钥对其解密，用于客户
+  验证持有私钥一方发布的数据或文件是完整准确的，接收者由此可知这条信息
+  确实来自于拥有私钥的某人，这被称作数字签名，公钥的形式就是数字证书。
+  例如，从网上下载的安装程序，一般都带有程序制作者的数字签名，可以证明
+  该程序的确是该作者（公司）发布的而不是第三方伪造的且未被篡改过（身份
+  认证/验证）。
+
+  常见的公钥加密算法有：RSA、ElGamal、背包算法、Rabin（RSA的特例）、迪
+  菲－赫尔曼密钥交换协议中的公钥加密算法、椭圆曲线加密算法（英语：
+  Elliptic Curve Cryptography, ECC）。使用最广泛的是RSA算法（由发明者
+  Rivest、Shmir和Adleman姓氏首字母缩写而来）是著名的公开秘钥加密算法，
+  ElGamal是另一种常用的非对称加密算法。

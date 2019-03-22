@@ -1,0 +1,2511 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: Mac wiki
+
+* MSIC
+** 不能识别家里的wifi信号
+   是信道的原因，按照网上的教程，设置信道为1~11之间都行。
+
+** DONE .bashrc
+   在mac中不用.bashrc。而是使用.bash_profile
+
+** 直接从terminal中启动emacs
+  系统默认安装了emacs22,我下载了一个emacs24,安装好后就在`/Applications/Emacs.app/Contents/MacOS'下有Emacs可执行程序，在`.bash_profile'中加入一个alia要
+就行了：
+#+BEGIN_EXAMPLE
+  alias em='/Applications/Emacs.app/Contents/MacOS/Emacs'
+#+END_EXAMPLE
+** DONE [#A] gpg
+     去官网上下载来安装好了。
+** DONE mac下unzip，gunzip在终端下都没有用
+   使用port重新安装了一下unzip就能使用了。
+** DONE [#A] texlive/latex				 :latex:texlive:font:
+   已经安装完毕，就是字体没有设置好，还不能支持中文pdf。
+
+   只要设置好中文字体，使用xelatex编译就行了。如下所示：
+   #+BEGIN_EXAMPLE
+     \documentclass[utf8]{amsart}
+     \usepackage{xeCJK}
+     \setCJKmainfont[BoldFont = Hiragino Sans GB W6]{Hiragino Sans GB W3}
+
+     \begin{document}
+     我爱中国
+     \end{document}
+   #+END_EXAMPLE
+*** fontconfig
+    用来配置字体文件的程序。mac上默认没有安装。可以使用brew来安装。这个安装上以后就可以使用fc-list来查询mac上可以使用的字体了。
+*** mac上安装新字体
+    如果是单个字体，直接用鼠标双击就行了。可以使用mac中自代的字体册程序来卸载。
+**** TODO 可以使用类似于mkfontscale,mkfontdir,fc-cache这样的程序来安装多个字体吗？
+*** 网上找到的为整个系统设置字体
+    和texlive差不多，实际上就是修改`/usr/local/texlive/2014/texmf-dist/tex/latex/ctex/fontset/ctex-xecjk-winfonts.def'这个文件。
+
+    参考了一下这里：
+    #+BEGIN_EXAMPLE
+      Reload Original PagePrint PageEmail Page
+      MacTex 2010 XeLatex中文支持
+
+      【2011年8月12日更新】
+
+      在Mac OS X 上安装MacTex后，需要修改文件 /usr/local/texlive/2009/texmf-dist/tex/latex/ctex/fontset/ctex-xecjk-winfonts.def 中的字体设置，
+
+      才能使用XeLatex来编译中文文件。该文件的内容为：
+
+      % ctex-xecjk-winfonts.def: Windows 的 xeCJK 字体设置，默认为六种中易字体
+
+      % vim:ft=tex
+
+      \setCJKmainfont[BoldFont={SimHei},ItalicFont={[simkai.ttf]}]{SimSun}
+
+      \setCJKsansfont{SimHei}
+
+      \setCJKmonofont{[simfang.ttf]}
+
+      \setCJKfamilyfont{zhsong}{SimSun}
+
+      \setCJKfamilyfont{zhhei}{SimHei}
+
+      \setCJKfamilyfont{zhkai}{[simkai.ttf]}
+
+      \setCJKfamilyfont{zhfs}{[simfang.ttf]}
+
+      \newcommand*{\songti}{\CJKfamily{zhsong}} % 宋体
+
+      \newcommand*{\heiti}{\CJKfamily{zhhei}}   % 黑体
+
+      \newcommand*{\kaishu}{\CJKfamily{zhkai}}  % 楷书
+
+      \newcommand*{\fangsong}{\CJKfamily{zhfs}} % 仿宋
+
+      \newcommand*{\lishu}{\CJKfamily{zhli}}    % 隶书
+
+      \newcommand*{\youyuan}{\CJKfamily{zhyou}} % 幼圆
+
+      \endinput
+
+      直接运行XeLatex编译中文文档，会出现如下错误：
+
+      ! fontspec error: "font-not-found"
+
+      !
+
+      ! The font "[SIMKAI.TTF]" cannot be found.
+
+      !
+
+      即字体"[SIMKAI.TTF]"无法找到。
+
+      利用fc-list命令，可以查到系统中已经安装的楷体字体的名称，即在终端执行：
+
+	  sudo fc-list :lang=zh-cn
+
+      可以查到与楷体对应的行为：
+
+	  楷体_GB2312,KaiTi_GB2312:style=Regular
+
+      也就是说，系统中楷体字的名称为“KaiTi_GB2312”，因此需将"[SIMKAI.TTF]"改为“KaiTi_GB2312”，即将第一行改为
+
+	  \setCJKmainfont[BoldFont={SimHei},ItalicFont={KaiTi_GB2312}]{SimSun}
+    #+END_EXAMPLE
+    字体改为自己需要的就行了。
+
+    我自己下载了simsun,simhei这两个免费的字体。然后提示我找不到Simkai。
+
+    这里参考 [[http://homepage.fudan.edu.cn/guqun/zh/2012/11/27/chinese-font-missing-problem-in-mactex-2012/][这里]] 说的就行了：
+    #+BEGIN_EXAMPLE
+      Chinese Font Missing Problem in MacTeX 2012 on Mac OS X 10.8
+      Posted on 2012年11月27日 by Qun Gu
+
+      If you install MacTeX and then use xelatex to compile a ctexart file,
+      an error that font file SIMKAI.TTF is missing will pop up. Here is the
+      cure for this problem.
+
+      sudo vi /usr/local/texlive/2012/texmf-dist/tex/latex/ctex/fontset/ctex-xecjk-winfonts
+
+      Then replace all [SIMKAI.TTF] into STKaiti.
+
+      Be careful: It is possible to have TWO PLACES to be modified!
+
+      If you want to use Fang Song font, change [SIMFANG] into STFangsong.
+
+      Enjoy!
+
+      Q.
+    #+END_EXAMPLE
+
+    这样就修改成了华文仿宋和华文楷体。
+
+    修改后的`/usr/local/texlive/2014/texmf-dist/tex/latex/ctex/fontset/ctex-xecjk-winfonts.def'如下所示：
+    #+BEGIN_EXAMPLE
+      % ctex-xecjk-winfonts.def: Windows 的 xeCJK 字体设置，默认为六种中易字体
+
+      % vim:ft=tex
+
+      \setCJKmainfont[BoldFont={SimHei},ItalicFont={STKaiti}]{SimSun}
+
+      \setCJKsansfont{SimHei}
+
+      \setCJKmonofont{STFangsong}
+
+      \setCJKfamilyfont{zhsong}{SimSun}
+
+      \setCJKfamilyfont{zhhei}{SimHei}
+
+      \setCJKfamilyfont{zhkai}{STKaiti}
+
+      \setCJKfamilyfont{zhfs}{STFangsong}
+
+      \newcommand*{\songti}{\CJKfamily{zhsong}} % 宋体
+
+      \newcommand*{\heiti}{\CJKfamily{zhhei}}   % 黑体
+
+      \newcommand*{\kaishu}{\CJKfamily{zhkai}}  % 楷书
+
+      \newcommand*{\fangsong}{\CJKfamily{zhfs}} % 仿宋
+
+      \newcommand*{\lishu}{\CJKfamily{zhli}}    % 隶书
+
+      \newcommand*{\youyuan}{\CJKfamily{zhyou}} % 幼圆
+
+      \endinput
+
+    #+END_EXAMPLE
+*** 为某个文章单独设置字体						 :有用:
+    安装好texlive或者mactex这些套件后，可以不修改其配置文件。直接在每个tex文件中使用xeCJK显示的指定就行了。这样就可以不使用ctexart了。但是这样样式就完全需要自己来做，这是很不好的。不是很推荐。但是这样可以对latex如何处理中文字体有更好的理解。
+
+    模版如下：
+    #+BEGIN_LaTeX
+      \documentclass{article}
+
+      \usepackage{xeCJK}
+
+      % 下面这些字体一定要是系统有的
+      \setCJKmainfont[BoldFont={SimHei},ItalicFont={STKaiti}]{SimSun}
+      \setCJKsansfont{SimHei}
+      \setCJKmonofont{STFangsong}
+      \setCJKfamilyfont{zhsong}{SimSun}
+      \setCJKfamilyfont{zhhei}{SimHei}
+      \setCJKfamilyfont{zhkai}{STKaiti}
+      \setCJKfamilyfont{zhfs}{STFangsong}
+
+      % 重新定义一些中文拼音命令方便使用
+      \newcommand*{\songti}{\CJKfamily{zhsong}} % 宋体
+      \newcommand*{\heiti}{\CJKfamily{zhhei}}   % 黑体
+      \newcommand*{\kaishu}{\CJKfamily{zhkai}}  % 楷书
+      \newcommand*{\fangsong}{\CJKfamily{zhfs}} % 仿宋
+      \newcommand*{\lishu}{\CJKfamily{zhli}}    % 隶书
+      \newcommand*{\youyuan}{\CJKfamily{zhyou}} % 幼圆
+
+      \begin{document}
+      你好，TeX Live 2009！
+
+      \lishu{这是隶书}
+
+      \fangsong{这是仿宋}
+
+      \songti{这是宋体}
+
+      \heiti{这是黑体}
+
+      \kaishu{这是楷书}
+
+      \youyuan{这是幼圆}
+      \end{document}
+    #+END_LaTeX
+** DONE F1这些就是F1
+   - State "DONE"       from "TODO"       [2015-02-15 日 22:27] \\
+     可以直接在键盘中设置。
+** DONE find不能像使用linux那样
+   - State "DONE"       from "TODO"       [2015-02-16 一 08:56]
+   应该是一样的。只是可能格式上要求更严格了一点。
+** DONE finder不能使用键盘打开文件
+   - State "DONE"       from "TODO"       [2015-02-15 日 22:22]
+   C-o
+
+** iterm2中的修改按键
+   可以直接在preference中的keys中修改option和command的功能。我把left-command和right-option映射为control。
+
+   但是没有alt功能。我在preference中的profiles的keys中把option映射为esc。然后把右command键映射为option。基本能用了。
+
+   最后我把control设置成了command。
+** 安装go2shell
+   可以在finder中的任意位置打开终端。
+
+   1、订阅者推荐：Go2Shell，我们通过Finder浏览文件的时候，常常需要在浏
+   览的文件目录中打开终端进行操作，Go2Shell就能自动做到这一点。从App
+   Store下载这个免费软件
+   （https://itunes.apple.com/us/app/go2shell/id445770608?mt=12 ）。下载完
+   成后从应用程序文件夹把Go2Shell拖到Finder工具栏上，然后随便进入一个目录，
+   点击Go2Shell图标，即可打开终端进入该目录。  Go2Shell支持原生终端、
+   iTerm2和xterm，比我之前用过的>cd to ...app方便。在终端输入open -a
+   Go2Shell --args config即可进入配置界面，选择你喜欢的终端。
+
+   测试了一下，Yosemite下面需要按往command键才能拖入。
+** mac下的包管理器					  :homebrew:macports:
+   主要有：homebrew,macports,fink。一般情况下优先使用homebrew。
+*** homebrew
+**** DONE [#A] install homebrew
+     - State "DONE"       from "TODO"       [2015-02-13 五 15:14]
+       #+BEGIN_EXAMPLE
+       	 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+       #+END_EXAMPLE
+
+       在使用brew search <XXX>时，会很慢，我的方法是直接使用brew search|grep。
+
+       brew doctor和brew update需要经常使用。一个是检查brew有没有出现错误。一个是对brew和通过brew安装的软件进行升级。
+
+       还有一个brew-cask。用于套件的安装。如QQ，迅雷这些。
+**** 使用中可能出现的问题
+     可能出现下面的问题：
+     #+BEGIN_EXAMPLE
+       error: Your local changes to the following files would be overwritten by merge:
+     #+END_EXAMPLE
+
+     执行了下面几句话就行了：
+     #+BEGIN_EXAMPLE
+       cd `brew --prefix`
+       git fetch origin
+       git reset --hard origin/master
+     #+END_EXAMPLE
+
+     最后一句是使用sudo才成功的。
+
+     据说就下面这样就行了：
+     #+BEGIN_EXAMPLE
+       cd `brew --prefix`; git reset --hard
+     #+END_EXAMPLE
+
+*** DONE macports没有安装好，估计是墙的问题
+    - State "DONE"       from "TODO"       [2015-02-17 二 09:16]
+    在yemosite中现在还没有默认安装port。
+
+    从源码安成功了。
+
+    但是因为网络原因。没有port -v selfupdate成功。错误信息如下：
+    #+BEGIN_EXAMPLE
+       	Error: Failed to verify signature for MacPorts source!
+      To report a bug, follow the instructions in the guide:
+	  http://guide.macports.org/#project.tickets
+      Error: /opt/local/bin/port: port selfupdate failed: Failed to verify signature for MacPorts source!
+      pengpengxp@pengpengxpdeMacBook-Air:~$ man port
+    #+END_EXAMPLE
+    原因是没有使用sudo来update。
+
+    homebrew可以安装一些简单的程序。很多lib包这些还是在port中才有，比如：libpcap这样的。
+** 自动跳转的工具
+   [[https://skyline75489.github.io/post/2014-12-13_j-z-and-fasd.html][这里]] 讲得很详细
+*** autojump
+**** DONE 安装autojump						   :autojump:
+     - State "DONE"       from "TODO"       [2015-02-17 二 09:54]
+     可以使用j来简单代替autojump命令。
+
+     j -a <dir>来添加目录。这里设置的时候dir最好是绝对路径。
+
+     然后使用j <something>就可以进行跳转了。something里面包括了将要跳转去的目录名字中的一部分就行了。
+**** TODO autojump在bash能使用但是不能跳转
+     - State "TODO"       from ""           [2015-02-17 二 09:57]
+     jo是可以工作的。就是j不能跳转。
+**** TODO eshell中使用autojump
+     - State "TODO"       from ""           [2015-02-16 一 09:48]
+     暂时没有弄eshell中的。下载了一个eshell-z来用着。
+*** fasd
+    git仓库在 [[https://github.com/clvv/fasd][这里]] 。
+
+    可能是因为功能太多，terminal的反应都变慢了很多。
+*** z
+    使用shell-script写的。据说是更好的autojump。我使用起来感觉确实比较快。
+
+    我需要使用zo来打开一个目录。自己写了一个函数：
+    #+BEGIN_SRC sh
+      function zo() {
+	  z $1;
+	  open ./
+      }
+    #+END_SRC
+
+    需要的功能就是最简单的这两个。我最后选择了z。
+**** eshell中使用z
+     自己下载了一个eshell-z来用。感觉还不错。
+
+** 创建智能文件夹						     :finder:
+   #+BEGIN_EXAMPLE
+     Finder提供了智能文件夹的功能，简单来说就是固化你的搜索条件，并形成文件夹存放在左侧边栏。
+   例如你想建一个文件大小大于1G的智能文件夹，使用快捷键option+command+n呼出新建智能文件夹界面，点击最右侧的加号，在条件选择第一栏选择大小，第二栏选择大于，第三栏输入1G，你就可以看到你的Mac上文件大于1G的列表，点击存储，命名后该文件夹就会出现在左侧边栏。随时点击随时动态监控自己的硬盘上有哪些超过1G的大文件。试试其他搜索条件吧！
+   #+END_EXAMPLE
+
+** DONE 免费的Finder增强工具：XtraFinder			 :xtrafinder:
+   - State "DONE"       from "TODO"       [2015-02-18 三 10:56]
+   - State "TODO"       from ""           [2015-02-18 三 00:29]
+
+   这个插件具备和TotalFinder类似的功能，支持tab、文件夹置顶、多窗口、剪切、全局热键等功能，重要的是这是一个完全免费的自由软件，而TotalFinder要18刀。
+   下载网址：http://www.trankynam.com/xtrafinder/
+
+   还不会使用。
+
+   好像直接安装好后需要重启一下。
+
+   它都有从这里启动的功能。可以代替go2shell的。
+
+** pmset
+    如果你想离开电脑一段时间，又不想让电脑进入睡眠状态，有个简单的命令 可以帮助你做到这一点。在终端中输入：pmset noidle，即可。只要该命令 一直运行，Mac就不会进入睡眠状态。关掉终端或ctrl+c可以取消该命令。
+
+    pmset是OS X提供的命令行管理电源的工具，其功能远不止于此。
+
+    pmset -g，查看当前电源的使用方案
+
+    sudo pmset -b displaysleep 5，设置电池供电时，显示器5分钟内进入睡眠
+
+    sudo pmset schedule wake "02/01/13 20:00:00"，设置电脑在2013年2月1日 晚8点唤醒电脑
+** DONE 输入法问题
+   - State "DONE"       from "TODO"       [2015-02-18 三 10:57]
+   原生输入法不能据不同的程序调整出不同的状态。
+
+   安装了搜狗输入法。将就用着。
+
+   更推荐使用Rime
+** Caffene
+   可以使电有脑不自动休眠。个人感觉在下载大文件的时候比较有用。
+** yesomite下U盘的默认的挂载目录
+   #+BEGIN_EXAMPLE
+   /Volumes/
+   #+END_EXAMPLE
+** DONE 一些gnu套件
+   - State "DONE"       from "TODO"       [2015-02-24 二 11:24]
+   使用brew安装coreutils。据说就是GNU套件。
+
+   使用下面的命令来安装。
+   #+BEGIN_EXAMPLE
+     brew install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt
+   #+END_EXAMPLE
+
+   还可以使用brew search gnu这些查看有什么东西。
+** DONE 挂载的U盘不在/dev/sd*
+   - State "DONE"       from "TODO"       [2015-02-24 二 15:54]
+   linux才在/dev/sd*中。mac的磁盘在/dev/disk*。
+
+   可以使用dd命令，通过输出到/dev/disk*来制作启动U盘。不过只是理论上可以，我还没有测试成功。
+
+   测试windows xp失败。
+** linux中的mkfs可以使用newfs_*来替代
+** 使用reeder来查看rss
+   据说是付费软件。先用着再说。
+** 识别小米手机
+   连上以后，可以直接安装AndroidFileTransfer.dmg。launchpad上显示名字叫android文件传输。
+
+   然后可以使用它来访问小米手机中的数据了。
+*** TODO 可以试试其它android设备
+*** TODO android-adb for mac
+** 开机就需要启动的程序						       :开机启动:
+   | 名称       | 作用       |
+   |------------+------------|
+   | alfred     | 快捷键     |
+   | 坚果云     | 同步       |
+   | antirsi    | 保护身体   |
+   | caffeine   | 一直不休眠 |
+   | reeder     | 读rss      |
+   | xtrafinder |            |
+   | f.lux      | 调节色温   |
+
+** gcc									:gcc:
+   默认是安装了gcc的。但是是苹果版本的。
+
+   现在[2015-02-25 三]
+
+   可以使用homebrew来安装gcc-4.9。安装完成后，直接使用gcc-4.9来调用。
+** DONE 虚拟机							    :virtual:
+   - State "DONE"       from "TODO"       [2015-02-20 五 10:32]
+   vmware fusion要收费。
+
+   暂时先使用virtualbox。
+** 挂载虚拟光驱
+   使用下面的命令可以把some.iso挂载到`/Volumes/'下面：
+   #+BEGIN_EXAMPLE
+       hdiutil mount some.iso
+   #+END_EXAMPLE
+** dia在yesomite中闪退，capitan中也启动不起来
+   需要安装 [[https://xquartz.macosforge.org/landing/][XQuatz]]--> A version of the X.Org X Window System that runs on OS X
+
+   [[http://navkirats.blogspot.com.ar/2014/10/dia-diagram-mac-osx-yosemite-fix-i-use.html][here]] 找到的答案
+
+   这样就可以了：
+   #+BEGIN_EXAMPLE
+     Goto your Applications directory where Dia.app exists (mine was located at: /Applications)
+     Right click the icon and click on Show Package Contents
+     Goto the directory Dia.app/Contents/Resources/bin
+     Edit the file dia, in your favourite text editor.
+     After line 39, add the line: export DISPLAY=:0
+     Save and exit.
+     Close XQuartz if its running.
+     Now Dia should come up.
+     If it does not come up, try restarting your computer.
+   #+END_EXAMPLE
+
+   其实这个dia是一个脚本文件，闪退就是因为环境变量的问题。直接在其中加
+   入就行了。
+   我修改后的dia文件是这样的：
+   #+BEGIN_SRC sh
+     #!/bin/sh
+     #
+     # Author: Aaron Voisine <aaron@voisine.org>
+     # Modifications:
+     #	Michael Wybrow <mjwybrow@users.sourceforge.net>
+     #	Jean-Olivier Irisson <jo.irisson@gmail.com>
+     #       Steffen Macke <sdteffen@sdteffen.de>
+
+     CWD="`(cd \"\`dirname \\\"$0\\\"\`\"; echo \"$PWD\")`"
+     # e.g. /Applications/Dia.app/Contents/Resources/bin
+     TOP="`dirname \"$CWD\"`"
+     # e.g. /Applications/Dia.app/Contents/Resources
+
+     # Brutally add many things to the PATH. If the directories do not exist, they won't be used anyway.
+     # People should really use ~/.macosx/environment.plist to set environment variables as explained by Apple:
+     #	http://developer.apple.com/qa/qa2001/qa1067.html
+     # but since no one does, we correct this by making the 'classic' PATH additions here:
+     #	/usr/local/bin which, though standard, doesn't seem to be in the PATH
+     # 	newer python as recommended by MacPython http://www.python.org/download/mac/
+     #	Fink
+     #	MacPorts (former DarwinPorts)
+     #	LaTeX distribution for Mac OS X
+     #export PATH="/usr/texbin:/opt/local/bin:/sw/bin/:/Library/Frameworks/Python.framework/Versions/Current/bin:/usr/local/bin:$CWD:$PATH"
+
+     # Check for X11
+     if [[ "" == $DISPLAY ]]; then
+       export DISPLAY=:0
+     fi
+     startx=`which startx`
+     if [[ "" == $startx ]]; then
+      if [[ ! -e /opt/X11/bin/startx ]]; then
+        osascript -e 'tell app "System Events" to display dialog "X11 (XQuartz) is not installed or not running. Would you like to visit xquartz.macosforge.org now in order to download and install XQuartz?" with icon 0'
+        if [[ $? -eq 0 ]]; then
+          open http://xquartz.macosforge.org
+          exit
+        fi
+       fi
+     fi
+
+     export DISPLAY=:0
+
+     osascript -e 'tell app "XQuartz" to launch'
+     for i in `seq 1 30`; do
+       if [[ `ps aux | grep -v grep | grep startx | wc -l` -lt 1 ]]; then
+         sleep 1
+       fi
+     done
+     if [[ "$DISPLAY" =~ "/tmp" ]]; then
+       if [[ ! -e $DISPLAY ]]; then
+         export DISPLAY=:0
+       fi
+     fi
+
+     # Setup PYTHONPATH to use python modules shipped with Dia
+     ARCH=`arch`
+     PYTHON_VERS=`python -V 2>&1 | cut -c 8-10`
+     export PYTHONPATH="$TOP/python/site-packages/$ARCH/$PYTHON_VERS"
+     # NB: we are only preprending some stuff to the default python path so if the directory does not exist it should not harm the rest
+
+     # No longer required if path rewriting has been conducted.
+     export DYLD_FALLBACK_LIBRARY_PATH="$TOP/lib"
+
+     export DIA_BASE_PATH="$TOP"
+     export DIA_LIB_PATH="$TOP/dia"
+     export DIA_SHEET_PATH="$TOP/sheets"
+     export DIA_SHAPE_PATH="$TOP/shapes"
+     export DIA_XSLT_PATH="$TOP/xslt"
+     export DIA_SHAREDIR="$TOP"
+     export DIA_LOCALE_PATH="$TOP/share/locale"
+
+     mkdir -p "${HOME}/.dia-etc"
+
+     export FONTCONFIG_PATH="$TOP/etc/fonts"
+     export PANGO_RC_FILE="$HOME/.dia-etc/pangorc"
+     export GTK_IM_MODULE_FILE="$HOME/.dia-etc/gtk.immodules"
+     export GDK_PIXBUF_MODULE_FILE="$HOME/.dia-etc/gdk-pixbuf.loaders"
+     export GTK_DATA_PREFIX="$TOP"
+     export GTK_EXE_PREFIX="$TOP"
+     export XDG_DATA_DIRS="$TOP/share"
+
+     # Handle the case where the directory storing Dia has special characters
+     # ('#', '&', '|') in the name.  These need to be escaped to work properly for
+     # various configuration files.
+     ESCAPEDTOP=`echo "$TOP" | sed 's/#/\\\\\\\\#/' | sed 's/&/\\\\\\&/g' | sed 's/|/\\\\\\|/g'`
+
+     # Set GTK theme (only if there is no .gtkrc-2.0 in the user's home)
+     if [[ ! -e "$HOME/.gtkrc-2.0" ]]; then
+             # Appearance setting
+             aquaStyle=`defaults read "Apple Global Domain" AppleAquaColorVariant 2>/dev/null`
+             # 1 for aqua, 6 for graphite, inexistant if the default color was never changed
+             if [[ "$aquaStyle" == "" ]]; then
+                     aquaStyle=1		# set aqua as default
+             fi
+
+             # Highlight Color setting
+             hiliColor=`defaults read "Apple Global Domain" AppleHighlightColor 2>/dev/null`
+             # a RGB value, with components between 0 and 1, also inexistant if it was not changed
+             if [[ "$hiliColor" == "" ]]; then
+                     hiliColor="0.709800 0.835300 1.000000"	# set blue as default
+             fi
+
+             # Menu items color
+             if [[ aquaStyle -eq 1 ]]; then
+                     menuColor="#4a76cd"	# blue
+             else
+                     menuColor="#7c8da4"	# graphite
+             fi
+             # Format highlight color as a GTK rgb value
+             hiliColorFormated=`echo $hiliColor | awk -F " " '{print "\\\{"$1","$2","$3"\\\}"}'`
+
+             # echo $menuColor
+             # echo $hiliColorFormated
+
+             # Modify the gtkrc
+             #	- with the correct colors
+             #	- to point to the correct scrollbars folder
+             sed 's/OSX_HILI_COLOR_PLACEHOLDER/'$hiliColorFormated'/g' "$DIA_SHAREDIR/themes/CL/gtk-2.0/pre_gtkrc" | sed 's/OSX_MENU_COLOR_PLACEHOLDER/\"'$menuColor'\"/g' | sed 's/AQUASTYLE_PLACEHOLDER/'$aquaStyle'/g' | sed 's|${THEMEDIR}|'"$ESCAPEDTOP/themes/CL/gtk-2.0|g" > "${HOME}/.dia-etc/gtkrc"
+
+             export GTK2_RC_FILES="$HOME/.dia-etc/gtkrc"
+     fi
+
+     # If the AppleCollationOrder preference doesn't exist, we fall back to using
+     # the AppleLocale preference.
+     LANGSTR=`defaults read .GlobalPreferences AppleCollationOrder 2>/dev/null`
+     if [ "x$LANGSTR" == "x" ]
+     then
+         echo "Warning: AppleCollationOrder setting not found, using AppleLocale." 1>&2
+         LANGSTR=`defaults read .GlobalPreferences AppleLocale 2>/dev/null | \
+                 sed 's/_.*//'`
+     fi
+
+     # NOTE: Have to add ".UTF-8" to the LANG since omitting causes Dia
+     #       to crash on startup in locale_from_utf8().
+     export LANG="$LANGSTR.UTF8"
+     echo "Setting Language: $LANG" 1>&2
+
+     sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "${HOME}/.dia-etc/pangorc"
+     sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
+         > "${HOME}/.dia-etc/pango.modules"
+     cp -f "$TOP/etc/pango/pangox.aliases" "${HOME}/.dia-etc/"
+     sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gtk.immodules" \
+         > "${HOME}/.dia-etc/gtk.immodules"
+     sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gdk-pixbuf.loaders" \
+         > "${HOME}/.dia-etc/gdk-pixbuf.loaders"
+
+     exec "$CWD/dia-bin" --integrated
+
+   #+END_SRC
+
+** 安装和使用gnuplot
+
+   直接使用`brew install gnuplot'后使用plot命令会出现`unknown terminal'的问题。
+
+   [[http://apple.stackexchange.com/questions/103814/cant-plot-with-gnuplot-on-my-mac][here]] 找到了答案。
+
+   使用下面的命令来使用`X11'作为terminal。但是这需要安装上 [[https://xquartz.macosforge.org/landing/][XQuatz]]。
+   #+BEGIN_EXAMPLE
+   brew install gnuplot --with-x11
+   #+END_EXAMPLE
+
+   上面还说可以这样：
+   #+BEGIN_EXAMPLE
+     You can also save the output to a file and use qlmanage -p:
+
+     gnuplot -e 'set term png; set output "/tmp/plot.png"; plot sin(x)'; qlmanage -p /tmp/plot.png
+
+     qlmanage -p shows a sandboxing error in 10.9 and prints some unnecessary text to STDOUT, so I use a function like ql() { qlmanage -p "$@"&>/dev/null; } in shells.
+
+     A third option is to use set term dumb for plain text output.
+   #+END_EXAMPLE
+** DONE 没有使用默认的邮箱
+    - State "DONE"       from "TODO"       [2015-03-13 五 16:16]
+    因为它对新浪邮箱支持不是很好，以后有机会再试吧。
+** DONE dmg文件安装完成后在桌面上还有残留
+    - State "DONE"       from "TODO"       [2015-03-13 五 16:21]
+    其实就是挂载了它。在桌面或者finder中推出就好了。
+
+** 在mac中修改按键设定				       :change_key:karabiner:
+   :PROPERTIES:
+   :keyword:  karabiner
+   :END:
+*** Karabiner
+    <<karabiner>>
+    是主要改键的。请查看pdf来改键。不只可以remap。还可以修改按键重复的快慢等。功能很强大，有待进一步使用发掘功能。
+
+*** seil
+    主要是使用来修改capslock按键的。我也不知道为什么capslock需要一个单独的程序来修改它。
+
+    * 注意 *
+
+    修改capslock时 [[file:Seil%20-%20Software%20for%20OS%20X.pdf][file:~/Downloads/mac_change_key/Seil - Software for OS X.pdf]] 中也说了。需要在设置->键盘中修改一下修饰键，将capslock修改为无操作。
+
+*** 使用CapsLock一个按键打开alfred
+    <<alfred-karabiner>>
+
+    从 [[http://computers.tutsplus.com/tutorials/how-to-make-better-use-of-the-caps-lock-key--mac-56350][这里]] 看到的。
+
+    间单讲，就是用seil把CapsLock remap到一个不存在的按键`f19'，keycode是80.
+
+    然后在alfred的设置中选择这个键就行了。
+
+*** 通过karabiner使用我的filco键盘
+    使用mac自带的键盘打久了手还是痛，换成filco。
+
+    在karabiner中把`swap command_l and option_L *** filco ***'打开。然后就基本可以使用了。
+** DONE 控制mac的剪切板
+   - State "DONE"       from "TODO"       [2015-03-13 五 21:47]
+     使用了clipmenu。将就用着。
+
+     据说还有clyppan。没有用成。
+   <2015-03-13 五 20:56>
+
+** 使用鼠标					 :mouse:鼠标:reverse:scrolling:
+   黙认鼠标滚动是和win是相反的。用起来很不习惯。在system设置反过来吧，触摸板又反了。很不好用。
+
+   结果使用了reverse scrolling这款软件行可以调整过来。
+
+   *注意*
+   --------------------------------------------------------------------------------
+   1) 这个软件会让三个手头查字典的功能变没有了。
+   --------------------------------------------------------------------------------
+
+** 截图						      :jietu:capture_picture:
+   看的网上的
+   #+BEGIN_EXAMPLE
+      baifeng.me
+     如何在Mac OS X上截图 - 柏枫 | baifeng 博客 苹果 mac iphone ipad ipod os web html css javascript 网页 平面 设计
+     1 min read  original
+     如何在Mac OS X上截图 - 柏枫苹果为Mac OS X提供了丰富的截图工具，但大部分用户很少会用到甚至也都不知道，今天摘出一部分方便易用的截图小技巧。
+
+     Mac OS X自带的截图工具名叫Grab，在[应用程序] – [实用工具]里，但我们先来看点基本的。
+
+     1. 同时按下快捷键Command+Shift+3可以将整个屏幕以.png格式图片保存到桌面上，如果不想直接保存成文件，就按Command+Control+Shift+3，把桌面保存到剪切板。
+
+     2. 如果不想保存整个桌面，而是想像QQ截图那样自选一块区域，当然你可以用QQ，Mac版QQ也有这个功能。或者按下快捷键Command+Shift+4，光标就会变成一个准星，选择一个区域然后就会以.png保存到桌面，同样如果想保存到剪切板就按Command+Control+Shift+4。不过在10.3以前，这个操作是保存成PDF的。
+
+     3. 如果想保存某个窗口，也不必谨小慎微地画框框，按按Command+(Control)+Shift+4，然后按空格，小准星就会变成一架相机，然后点你想截图的窗口即可，保存下来的仍是24位无损透明背景的.png图片，最妙的是带阴影的。
+
+     4. 如果想要更多控制选项的话，就要借助软件了，首先就是自带的Grab。比如你想在截图中保留鼠标指针、菜单，都可以用Grab。打开Grab之后，点Grab菜单名-首选项，然后选择你需要的鼠标状态。设置好了以后点击，Capture(抓图)菜单下的区域、窗口、屏幕和计时截图。计时就是按下截图之后，系统会给你10秒钟的时间准备，比如开启某些菜单或窗口，玩过自拍的都知道。
+
+     如果觉得上面这些还不能满足你的需要，那么就要借助第三方的软件了，这里推荐4款比较有代表性的。
+
+     LittleSnapper
+     正版售价: $39
+     开发团队: Realmac Software
+     系统需求: Mac OS X 10.5+
+
+     LittleSnapper不仅可以截取桌面图片还可以截取整个网页，并提供了实用的编辑工具。
+
+     SnapzProX
+     4款推荐中最贵的，但也是唯一支持视频录制的截图软件，当然在截取静态图片方面也有不俗的表现。
+
+     正版: $69
+     开发团队: Ambrosia Software
+     系统需求: Mac OS X 10.3.9+
+
+     Layers
+     顾名思义，Layers可以将你屏幕上的所有内容截取成Photoshop的PSD图层文件，每一个图层都表示不同的应用程序和界面元素，同时你也可以自行定义一些选项。
+
+     正版售价: $19.95
+     开发团队: Wuonm
+     系统需求: Mac OS X 10.5+
+
+     Voila
+     Voila允许你抓取多种来源的内容，添加各种炫酷效果。然后一键发送电子右键、上传Flickr、保存iPhoto等等。
+
+     正版售价: $39.95
+     开发团度: Global Delight
+     系统需求: Mac OS X 10.5.2+
+   #+END_EXAMPLE
+
+** hyperswitch
+   在同一个程序中切换不同的窗口。比如preview中窗口太多了，用原生的`command + ~'不太爽。使用hyperswitch可以配置成用`option+Tab'切换。还不错。
+
+** 突然不能打开 网络设置 的面板
+   这样解决的：
+   #+BEGIN_EXAMPLE
+      1.打开Finder 前往以下地址：
+     /Library/Preferences/SystemConfiguration
+     2.删除
+     com.apple.airport.preferences.plist
+     com.apple.network.eapolclient.configuration.plist
+     com.apple.wifi.message-tracer.plist
+     NetworkInterfaces.plist
+     preferences.plist
+     注：机型不同，自行删除network配置
+     3.重启进入recoveryHD 全盘权限修复
+     重启应该可以配置了
+   #+END_EXAMPLE
+
+   可以直接使用下面的命令（整成脚本运行）：
+   #+BEGIN_SRC sh
+     cd      /Library/Preferences/SystemConfiguration
+     sudo mv com.apple.airport.preferences.plist com.apple.network.eapolclient.configuration.plist\\
+     com.apple.wifi.message-tracer.plist NetworkInterfaces.plist preferences.plist /tmp/
+   #+END_SRC
+
+** 窗口管理					     :manage:windows:maxmize:
+*** 最大化窗口
+    默认mac中的最大化叫缩放（服了）。在键盘->应用程序快捷键下添加一快捷键：名字就叫缩放。自己弄个快捷键就行了。
+*** 使用了slate来管理窗口					      :slate:
+    我发现我只需要其中的`command+alt+<up,down,left,right>'这些操作。而且其中有些和emacs中的操作冲突了。所以在配置文件中都注释掉了。只留下几句有用的：
+    #+BEGIN_EXAMPLE
+      config defaultToCurrentScreen true
+      config nudgePercentOf screenSize
+      config resizePercentOf screenSize
+
+      # Push Bindings
+      bind right:ctrl;cmd  push right bar-resize:screenSizeX/3
+      bind left:ctrl;cmd   push left  bar-resize:screenSizeX/3
+      bind up:ctrl;cmd     push up    bar-resize:screenSizeY/2
+      bind down:ctrl;cmd   push down  bar-resize:screenSizeY/2
+    #+END_EXAMPLE
+
+    但是slate在我的机器上操作finder的时候可能产生出黑色的东西。bug!
+*** TODO moom 该软件还没有使用过
+** 禁止了cnnic证书
+   在钥匙串访问->系统根证书->证书中找到了cnnic证书。设置为了永不信任。
+
+** 从源码编译emacs						      :emacs:
+   下载源码。
+
+   查看INSTALL。mac下需要查看netxstep/INSTALL。里面提示使用下面的命令：
+   #+BEGIN_EXAMPLE
+     ./configure --with-ns
+     make install
+   #+END_EXAMPLE
+
+   第一个`--with-ns'使emacs成为一个standalone的程序。
+
+   `make install'不会进行安装。这是在`nextstep/'下生成了一个Emacs.app。可以直接使用的。可以拷贝它到任何地方了。
+
+   在mac上编译emacs只能说是简单得令人发紫。只依赖`autoconf,automake'这些，而这些工具在安装`xcode'的时候就已经安装上了。
+
+   另外，默认的`emacsclient'是针对mac中自代的emacs-22的。从源码编译后，在`bin'文件夹中会有`emacsclient'。自民做一个软链接就行罗。
+
+** mac中的gdb
+   mac中使用lldb来代替了gdb。但是有时候还是需要使用gdb。可以使用Macport来安装。
+
+   #+BEGIN_EXAMPLE
+     sudo port install gdb-apple
+   #+END_EXAMPLE
+
+   然后可以使用`gdb-apple'来调试。但是使用mac默认的编译器编出来的，貌似只能使用lldb来调试了。使用`apple-gcc'编译的应该可以。不过我的apple-gcc没有下载下来，就没有尝试。
+
+** 在mac中使用swift编程						      :swift:
+   可以在xcode中建立工程。但是我喜欢这种方法。可以使用terminal的方式。如下：
+
+   使用`xcrun swift'可以进行一个交互式的swift解释器，然后可以`println("Hello,world");'。
+
+   可以把`println("Hello,world")'写入一个文件`hello.swift'中，然后使用`scrun swift hello.swift'运行。
+
+   还可以把`hello,swift'写成一个脚本，在开关加入`/usr/bin/xcrun swift'。修改权限可以运行的。这里`xcrun'是通过`which'查出来的。
+
+   其实是可以直接使用`swift'命令的。这个的作用就和`xcrun swift'是一样的。
+
+   也有`swift'的编译器->`swiftc'。可以`swiftc hello.swift -o hello'编译出来执行。（默认编译出来就是hello，使用`-o'选项可以控制下）。
+** DONE 对ntfs的磁盘只读
+   可以使用`mount_ntfs'命令来做。我不知道这个命令是mac自带的还是我下载了什么`ntfs*'软件给我的。
+
+   可以使用`diskutil info'已挂载的磁盘的信息。比如我就用`diskutil info /Volumes/win7'。查出来我的是`/dev/disk3s2'。
+
+   使用`diskutil eject /dev/disk3s2'来先推出。使用只有一个分驱的u盘时
+   不能用eject推出了，推出就找不到了磁盘了。需要使用`diskutil umount
+   /dev/disk3s2'卸载。
+
+   然后使用`sudo mount_ntfs -o rw,nobrowse /dev/disk3s2 /tmp'将其挂载到`/tmp'下。现在就可读也可写了。
+
+   这个解决办法不是最理想的。可不可以有更好的？
+** macbook合住盖子而不进入待机
+   InsomniaX 一个插件可以做到
+** 录制Gif图片
+   licecap录制gif图片，很方便。
+** cdto
+   可以在finder中添加一个icon，实现在当前文件夹中打开iTerm2或者terminal的功能。
+
+** just focus 番茄工作法加定时锁屏，常用软件
+** TODO 待办
+*** TODO 从源码安装了wget后，从bash中启动emacs可以找到，但是从launchpad中启动还是提示找不到wget
+
+*** TODO 查字典
+    sdcv在brew中直接就有。可以直接安装。安装过程中还安装了依赖cmake。
+*** TODO 通过zip安装的软件
+    从zip解压直接点击用的，还不知道怎么完全弄到电脑上来用。iterm2,opera都是这样的。
+*** TODO 不断网锁屏
+*** TODO 连接各种外设
+*** TODO microsoft-office使用brew没有下载下来。不行不装了。就用iwork。
+*** TODO 禁用触摸板
+    我发现如果手掌放到触摸板上鼠标是不会动的。苹果设计的很好哦。
+*** TODO 把下载中的内容归类。软件这些都保存起来。
+*** TODO finder中使用`/'来进入某一文件夹
+    默认是使用`shift+command+G'。我觉得很不方便。但是没有找到合适的办法。
+*** TODO mou可以用来写markdown
+    不过没有使用过。
+*** TODO jitouch功能更强大的多点触控软件
+    没有使用；
+*** TODO 不像linux一样可以使用fdisk直接对U盘这些进行分区
+*** TODO 文档查看器
+**** dash
+     收费，试用阶段。不付费每次打开会有8秒钟等待时间。
+
+**** TODO zeal
+     - State "TODO"       from ""           [2015-02-18 三 01:06]
+     mac上默认没有。需要从源码中安装。还没有安装。
+
+     [[https://www.google.com/url?sa%3Dt&rct%3Dj&q%3D&esrc%3Ds&source%3Dweb&cd%3D2&ved%3D0CCgQFjAB&url%3Dhttp%253A%252F%252Fwww.hjue.me%252Fpost%252FCompile-Zear-on-Mac-OS-X&ei%3DdnPjVOrlFoKmoQSinYDQCw&usg%3DAFQjCNGKoLPfKnDimO4sYw-Vah8dDCBBxg&sig2%3DVSHZlix7MF17GAoD8ipORw&bvm%3Dbv.85970519,d.cGU&cad%3Drjt][这里]] 看到的。
+
+**** TODO emacs-dash？
+     也有这样的功能？
+
+*** TODO mount和route命令和linux上不同
+
+*** TODO clamAV for mac
+    安装好了但是还没有配置。
+*** TODO jabref
+    可不可以直接从chrome中使用jabref打开就直接导入进去了。这样很方便？
+*** TODO wireshark
+    通过brew cask安装好了。但是每次都要问X11安装在哪儿了。找到了又不能点击。
+*** TODO 不从terminal启动emacs，则一些环境变量没有设置正确
+
+** calibre管理书籍
+   使用 =calibre= 。可以导出epub拱ibooks使用。
+* apple-script学习笔记
+  这里存一个`hello-world'的例子：
+
+  可以直接在命令行下执行
+  #+BEGIN_SRC sh
+    osascript -e 'display dialog "hello,world"'
+  #+END_SRC
+
+  写入脚本可以样写。
+  #+BEGIN_SRC sh
+    #!/bin/bash
+
+    osascript - << END
+    display dialog "hello,world"
+    END
+  #+END_SRC
+
+  还可以直接把`display dialog "hello, world"'写入mac系统中默认的脚本编辑器中，就可以直接执行了。
+* 键盘效率工具
+** splotlight
+   默认安装了的。使用`Ctrl+SPC'就可以调用出来。
+** alfred
+   配置得还不行。
+
+   最后我直接购买了。使用非常不错。已经做为我很多东西的入口。切换程序也是用的它。
+
+   使用 [[karabiner]] 来氢capslock设置成了f19。单独用来打开alfred。效果良好。 [[alfred-karabiner][这里]]
+
+   在file search这个设置中的nivigation中将`use <enter> to open folder in Finder'打开。可以快速打开目录了。
+
+*** Quicksilver
+   一个类似于Alfred的软件但是是开源的而且可以自己写一些插件，使它更加的符合自己的习惯。还没有使用过。
+** 资料
+   [[http://wellsnake.com/jekyll/update/2014/06/15/001/][这里]] 有教程。
+
+   [[http://www.zhihu.com/question/20656680][here]]
+
+   [[https://github.com/zenorocha/alfred-workflows][workflow]]
+
+   [[https://github.com/hzlzh/Best-App][best-app]]
+** 我的配置过程
+   可以设置search scope。我直接点了一下reset就把brew这些安装的程序路径自动设定好了。
+** karabiner配置
+   打开 =Misc & uninstall= ， =Open private.xml= ，然后把下面的内容写入
+   就可以了。下面这个是教程上写的。启动或切换其它应该程序照着写就可以了。
+   #+BEGIN_EXAMPLE
+     <?xml version="1.0"?>
+     <root>
+       <!-- generic URL -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_WEB_karabiner</name>
+         <url>https://pqrs.org/osx/karabiner/</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Calculator</name>
+         <url type="file">/Applications/Calculator.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Emacs</name>
+         <url type="file">/Applications/Emacs.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_iTerm2</name>
+         <url type="file">/Users/pengpengxp/Application/iTerm.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Chrome</name>
+         <url type="file">/Applications/Google Chrome.app</url>
+       </vkopenurldef>
+
+       <!-- shell commands -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_SHELL_date_pbcopy</name>
+         <url type="shell">
+           <![CDATA[    /bin/date | /usr/bin/pbcopy    ]]>
+         </url>
+       </vkopenurldef>
+
+       <item>
+         <name>Change right-command + w to open https://pqrs.org/osx/karabiner/</name>
+         <identifier>private.right_command_w</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::W, ModifierFlag::COMMAND_R,
+           KeyCode::VK_OPEN_URL_WEB_karabiner,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + c to launch calculator</name>
+         <identifier>private.right_left_command_c</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::C, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Calculator,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + e to launch Emacs</name>
+         <identifier>private.right_left_command_e</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::E, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Emacs,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + i to launch iTerm2</name>
+         <identifier>private.right_left_command_i</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::I, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_iTerm2,
+         </autogen>
+       </item>
+       <item>
+         <name>Change right-command + left-command + k to launch Chrome</name>
+         <identifier>private.right_left_command_k</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::K, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Chrome,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + d to execute /bin/date | /usr/bin/pbcopy</name>
+         <identifier>private.right_command_d</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::D, ModifierFlag::COMMAND_R,
+           KeyCode::VK_OPEN_URL_SHELL_date_pbcopy,
+         </autogen>
+       </item>
+     </root>
+   #+END_EXAMPLE
+
+   使用 launch mode v2可以达到更好的效果，下面把它原始的xml搞到下面：
+   #+BEGIN_SRC xml
+     <?xml version="1.0"?>
+     <root>
+       <item>
+         <name>Launcher Mode</name>
+
+         <item>
+           <name>Launcher Mode v2</name>
+           <appendix>Open apps by shortcut keys.</appendix>
+           <appendix></appendix>
+           <appendix>Usage:</appendix>
+           <appendix></appendix>
+           <appendix>Enable launcher mode by O key. (Remember as "O"pen apps.)</appendix>
+           <appendix><![CDATA[  * Open "Activity Monitor" by "O down -> A down -> A up".  ]]></appendix>
+           <appendix><![CDATA[  * Open "Mail" by "O down -> M down -> M up".  ]]></appendix>
+           <appendix>And you can open other apps by similar way.</appendix>
+           <appendix></appendix>
+           <appendix>You can also open apps by holding O+A keys down.</appendix>
+           <appendix>(You can adjust timeout by "__BlockUntilKeyUp__ Timeout" in Parameters tab.</appendix>
+           <appendix></appendix>
+           <appendix>List:</appendix>
+           <appendix></appendix>
+           <appendix>* Activity Monitor: O+A key</appendix>
+           <appendix>* Search a selected text by Dictionary: O+Q key</appendix>
+           <appendix>* Dictionary: O+Q,Q (press Q twice)</appendix>
+           <appendix>* Show desktop: O+D key</appendix>
+           <appendix>* DigitalColor Meter: O+D,D (press D twice)</appendix>
+           <appendix>* Launchpad: O+Space key</appendix>
+           <appendix>* Mail: O+M key</appendix>
+           <appendix>* Mission Control: O+Tab key</appendix>
+           <appendix>* Finder: O+F key</appendix>
+           <appendix>* Open Desktop by Finder: O+F,D key</appendix>
+           <appendix>* Open the home folder by Finder: O+F,F (press F twice)</appendix>
+           <appendix>* Safari: O+S key</appendix>
+           <appendix>* Stickies: O+S,S (press S twice)</appendix>
+           <appendix>* Terminal: O+T key</appendix>
+           <appendix>* TextEdit: O+E key</appendix>
+           <appendix>* Xcode: O+X key</appendix>
+           <appendix>* iPhone Simulator: O+X,X (press X twice)</appendix>
+
+           <identifier>remap.launcher_mode_v2</identifier>
+
+           {{ LAUNCHER_MODE_V2_CONDITION }}
+
+           <autogen>
+             __KeyOverlaidModifier__
+             {{ LAUNCHER_MODE_V2_KEY }},
+
+             <!--
+                 Use notsave.launcher_mode_v2 in order to be higher priority.
+                 Use ModifierFlag::LAUNCHER_MODE_V2 for __DropAllKeys__.
+             -->
+             @begin
+             KeyCode::VK_CONFIG_SYNC_KEYDOWNUP_notsave_launcher_mode_v2, ModifierFlag::LAUNCHER_MODE_V2,
+             @end
+
+             @begin
+             {{ LAUNCHER_MODE_V2_KEY }},
+             @end
+           </autogen>
+         </item>
+
+         <item hidden="true">
+           <identifier vk_config="true">notsave.launcher_mode_v2</identifier>
+
+           {{ LAUNCHER_MODE_V2_EXTRA }}
+
+           <autogen>
+             __BlockUntilKeyUp__ {{ LAUNCHER_MODE_V2_KEY }}
+           </autogen>
+
+           <autogen>__KeyDownUpToKey__ KeyCode::A, KeyCode::VK_OPEN_URL_APP_Activity_Monitor</autogen>
+           <autogen>
+             __KeyToKey__
+             KeyCode::Q,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             KeyCode::C, ModifierFlag::COMMAND_L,
+             KeyCode::VK_WAIT_100MS,
+             KeyCode::VK_OPEN_URL_APP_Dictionary,
+             KeyCode::VK_WAIT_100MS,
+             KeyCode::VK_WAIT_100MS,
+             KeyCode::V, ModifierFlag::COMMAND_L,
+             KeyCode::A, ModifierFlag::COMMAND_L,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::Q,
+             KeyCode::VK_OPEN_URL_APP_Dictionary,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+           </autogen>
+           <autogen>
+             __KeyToKey__
+             KeyCode::D,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             KeyCode::MISSION_CONTROL, ModifierFlag::COMMAND_L,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::D,
+             KeyCode::VK_OPEN_URL_APP_DigitalColor_Meter,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+           </autogen>
+           <autogen>__KeyDownUpToKey__ KeyCode::SPACE, KeyCode::VK_OPEN_URL_APP_Launchpad</autogen>
+           <autogen>__KeyDownUpToKey__ KeyCode::M, KeyCode::VK_OPEN_URL_APP_Mail</autogen>
+           <autogen>__KeyDownUpToKey__ KeyCode::TAB, KeyCode::VK_OPEN_URL_APP_Mission_Control</autogen>
+           <autogen>
+             __KeyToKey__
+             KeyCode::F,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             KeyCode::VK_OPEN_URL_APP_Finder,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::D,
+             KeyCode::VK_OPEN_URL_FILE_Desktop,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::F,
+             KeyCode::VK_OPEN_URL_FILE_Home,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+           </autogen>
+           <autogen>
+             __KeyToKey__
+             KeyCode::S,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             KeyCode::VK_OPEN_URL_APP_Safari,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::S,
+             KeyCode::VK_OPEN_URL_APP_Stickies,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+           </autogen>
+           <autogen>__KeyDownUpToKey__ KeyCode::T, KeyCode::VK_OPEN_URL_APP_Terminal</autogen>
+           <autogen>__KeyDownUpToKey__ KeyCode::E, KeyCode::VK_OPEN_URL_APP_TextEdit</autogen>
+           <autogen>
+             __KeyToKey__
+             KeyCode::X,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             KeyCode::VK_OPEN_URL_APP_Xcode,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::X,
+             KeyCode::VK_OPEN_URL_APP_iPhoneSimulator,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+           </autogen>
+
+           <autogen>
+             __DropAllKeys__
+             ModifierFlag::LAUNCHER_MODE_V2,
+
+             Option::DROPALLKEYS_DROP_KEY,
+           </autogen>
+         </item>
+
+       </item>
+     </root>
+   #+END_SRC
+
+   保存一下我自己的private.xml：
+   #+BEGIN_SRC xml
+     <?xml version="1.0"?>
+     <root>
+
+       <item>
+         <name>disable command + h</name>
+         <identifier>private.disable_command_h</identifier>
+         <autogen>__KeyToKey__ KeyCode::H, VK_COMMAND | ModifierFlag::NONE, KeyCode::VK_NONE</autogen>
+       </item>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_SHELL_switchprofile_space</name>
+         <url type="shell">
+           <![CDATA[    /Applications/Karabiner.app/Contents/Library/bin/karabiner select_by_name space ]]>
+         </url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_SHELL_switchprofile_nospace</name>
+         <url type="shell">
+           <![CDATA[    /Applications/Karabiner.app/Contents/Library/bin/karabiner select_by_name nospace ]]>
+         </url>
+       </vkopenurldef>
+
+       <item>
+         <name>Switch Profile to space with lcommand + rcommand + 1</name>
+         <identifier>private.switchspace</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::1, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_SHELL_switchprofile_space
+         </autogen>
+       </item>
+
+       <item>
+         <name>Switch Profile to nospace with lcommand + rcommand + 2</name>
+         <identifier>private.switchnospace</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::2, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_SHELL_switchprofile_nospace
+         </autogen>
+       </item>
+
+       <!-- generic URL -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_WEB_karabiner</name>
+         <url>https://pqrs.org/osx/karabiner/</url>
+       </vkopenurldef>
+
+       <!-- shell commands -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_SHELL_date_pbcopy</name>
+         <url type="shell">
+           <![CDATA[    /bin/date | /usr/bin/pbcopy    ]]>
+         </url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Firefox</name>
+         <url type="file">/Applications/Firefox.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Postman</name>
+         <url type="file">/Applications/Postman.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Finder</name>
+         <url type="file">/Users/pengpengxp</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Pycharm</name>
+         <url type="file">/Applications/PyCharm CE.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Dash</name>
+         <url type="file">/Applications/Dash.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_DoubleCommander</name>
+         <url type="file">/Applications/Double Commander.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Foxmail</name>
+         <url type="file">/Applications/Foxmail.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Newton</name>
+         <url type="file">/Applications/Newton.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Ibook</name>
+         <url type="file">/Applications/iBooks.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Excel</name>
+         <url type="file">/Applications/Microsoft Excel.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Xmind</name>
+         <url type="file">/Applications/XMind.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Thunder</name>
+         <url type="file">/Applications/Thunder.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Terminal</name>
+         <url type="file">/Applications/Utilities/Terminal.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_QQ</name>
+         <url type="file">/Applications/QQ.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Safari</name>
+         <url type="file">/Applications/Safari.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Skim</name>
+         <url type="file">/Applications/Skim.app</url>
+       </vkopenurldef>
+
+       <!-- for remote terminal -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshcontroller</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/controller.command</url>
+       </vkopenurldef>
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshobject1</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/object1.command</url>
+       </vkopenurldef>
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshobject2</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/object2.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshb</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/b.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshop1</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/op1.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshop2</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/op2.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshop3</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/op3.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshop4</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/op4.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshpt</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/pt.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sshup</name>
+         <url type="file">/Users/pengpengxp/bin/ssh/up.command</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Qianniu</name>
+         <url type="file">/Applications/AliWorkBench.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Wireshark</name>
+         <url type="file">/Applications/Wireshark.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Map</name>
+         <url type="file">/Applications/Maps.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Ouludict</name>
+         <url type="file">/Applications/Eudb_en_free.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_WangyiMusic</name>
+         <url type="file">/Applications/NeteaseMusic.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Sublime</name>
+         <url type="file">/Applications/Sublime Text.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Calendar</name>
+         <url type="file">/Applications/Calendar.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_BeyondCompare</name>
+         <url type="file">/Applications/Beyond Compare.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Preview</name>
+         <url type="file">/Applications/Preview.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Numbers</name>
+         <url type="file">/Applications/Numbers.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_VirtualBox</name>
+         <url type="file">/Applications/VirtualBox.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_karabiner</name>
+         <url type="file">/Applications/Karabiner.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Maps</name>
+         <url type="file">/Applications/Maps.app</url>
+       </vkopenurldef>
+
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_FaceTime</name>
+         <url type="file">/Applications/FaceTime.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Calculator</name>
+         <url type="file">/Applications/Calculator.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Emacs25mac</name>
+         <url type="file">/Applications/Emacs.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Opera</name>
+         <url type="file">/Applications/Opera.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_iTerm2</name>
+         <url type="file">/Applications/iTerm.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_weChat</name>
+         <url type="file">/Applications/WeChat.app</url>
+       </vkopenurldef>
+
+       <!-- file path -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_APP_Chrome</name>
+         <url type="file">/Applications/Google Chrome.app</url>
+       </vkopenurldef>
+
+       <item>
+         <name>Change right-command + w to open https://pqrs.org/osx/karabiner/</name>
+         <identifier>private.right_command_w</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::W, ModifierFlag::COMMAND_R,
+           KeyCode::VK_OPEN_URL_WEB_karabiner,
+         </autogen>
+       </item>
+
+       <!-- <item> -->
+       <!--   <name>Change right-command +left-command + c to launch calculator</name> -->
+       <!--   <identifier>private.right_left_command_c</identifier> -->
+       <!--   <autogen> -->
+       <!--     __KeyToKey__ -->
+       <!--     KeyCode::C, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L, -->
+       <!--     KeyCode::VK_OPEN_URL_APP_Calculator, -->
+       <!--   </autogen> -->
+       <!-- </item> -->
+
+       <item>
+         <name>Change right-command +left-command + m to launch Foxmail</name>
+         <identifier>private.right_left_command_m</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::M, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Newton,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + l to launch virtualbox</name>
+         <identifier>private.right_left_command_l</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::L, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_VirtualBox,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + v to launch virtualbox</name>
+         <identifier>private.right_left_command_v</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::V, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_VirtualBox,
+         </autogen>
+       </item>
+
+       <item>
+         <!-- <name>Change right-command +left-command + f to launch DoubleCommander</name> -->
+         <name>Change right-command +left-command + f to launch Finder</name>
+         <identifier>private.right_left_command_f</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::F, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Finder,
+           <!-- KeyCode::VK_OPEN_URL_APP_DoubleCommander, -->
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + x to launch Xmind</name>
+         <identifier>private.right_left_command_x</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::X, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Xmind,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + s to launch Firefox</name>
+         <identifier>private.right_left_command_s</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::S, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Firefox,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + RETURN to launch iTerm2 and Emacs</name>
+         <identifier>private.right_left_command_return</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::RETURN, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_iTerm2,
+           KeyCode::VK_OPEN_URL_APP_Emacs25mac,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + DELETE to launch iTerm2 and Chrome</name>
+         <identifier>private.right_left_command_delete</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::DELETE, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_iTerm2,
+           KeyCode::VK_OPEN_URL_APP_Chrome,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command +left-command + k to launch karabiner</name>
+         <identifier>private.right_left_command_k</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::K, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_karabiner,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + e to launch Emacs</name>
+         <identifier>private.right_left_command_e</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::E, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Emacs25mac,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + j to launch iTerm2 and Emacs</name>
+         <identifier>private.right_left_command_j</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::J, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_iTerm2,
+           KeyCode::VK_OPEN_URL_APP_Emacs25mac,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + r to launch wireshark</name>
+         <identifier>private.right_left_command_r</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::R, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Wireshark,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + c to launch iTerm2 and Chrome</name>
+         <identifier>private.right_left_command_c</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::C, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_iTerm2,
+           KeyCode::VK_OPEN_URL_APP_Chrome,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + w to launch weChat</name>
+         <identifier>private.right_left_command_w</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::W, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_weChat,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + left-command + i to launch iTerm2</name>
+         <identifier>private.right_left_command_i</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::I, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_iTerm2,
+         </autogen>
+       </item>
+       <item>
+         <name>Change right-command + left-command + g to launch Chrome</name>
+         <identifier>private.right_left_command_g</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::G, ModifierFlag::COMMAND_R, ModifierFlag::COMMAND_L,
+           KeyCode::VK_OPEN_URL_APP_Chrome,
+         </autogen>
+       </item>
+
+       <item>
+         <name>Change right-command + d to execute /bin/date | /usr/bin/pbcopy</name>
+         <identifier>private.right_command_d</identifier>
+         <autogen>
+           __KeyToKey__
+           KeyCode::D, ModifierFlag::COMMAND_R,
+           KeyCode::VK_OPEN_URL_SHELL_date_pbcopy,
+         </autogen>
+       </item>
+
+       <!-- for virtualbox -->
+       <item>
+         <name>Pengpengxp's irtualBox</name>
+
+         <item>
+           <name>Change Command_L to Control_L</name>
+           <identifier>remap.app_vm_commandL2controlL</identifier>
+           <only>VIRTUALMACHINE</only>
+           <autogen>__KeyToKey__ KeyCode::COMMAND_L, KeyCode::CONTROL_L</autogen>
+         </item>
+
+       </item>
+
+       <!-- use launch mode v2 to switch app -->
+       <!-- for finder -->
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_FILE_Src</name>
+         <url type="file">/Users/pengpengxp/src</url>
+       </vkopenurldef>
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_FILE_Tmp</name>
+         <url type="file">/tmp</url>
+       </vkopenurldef>
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_FILE_Documents</name>
+         <url type="file">/Users/pengpengxp/Documents</url>
+       </vkopenurldef>
+       <vkopenurldef>
+         <name>KeyCode::VK_OPEN_URL_FILE_Downloads</name>
+         <url type="file">/Users/pengpengxp/Downloads</url>
+       </vkopenurldef>
+
+     <!-- use launch mode v2 to switch app -->
+       <!-- switch prefixkeys -->
+       <replacementdef>
+         <replacementname>LAUNCHER_MODE_V2_KEY</replacementname>
+         <replacementvalue>KeyCode::SPACE</replacementvalue>
+         <!-- <replacementvalue>KeyCode::F19</replacementvalue> -->
+       </replacementdef>
+
+       <replacementdef>
+
+         <replacementname>LAUNCHER_MODE_V2_EXTRA</replacementname>
+         <replacementvalue>
+           <![CDATA[
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::E,
+               KeyCode::VK_OPEN_URL_APP_Emacs25mac,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::P,
+               KeyCode::VK_OPEN_URL_APP_Postman,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::RETURN,
+               KeyCode::VK_OPEN_URL_APP_iTerm2,
+               KeyCode::VK_OPEN_URL_APP_Emacs25mac,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::DELETE,
+               KeyCode::VK_OPEN_URL_APP_iTerm2,
+               KeyCode::VK_OPEN_URL_APP_Chrome,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::I,
+               KeyCode::VK_OPEN_URL_APP_iTerm2,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::G,
+               KeyCode::VK_OPEN_URL_APP_Chrome,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::V,
+               KeyCode::VK_OPEN_URL_APP_VirtualBox,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::K,
+               KeyCode::VK_OPEN_URL_APP_karabiner,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::U,
+               KeyCode::VK_OPEN_URL_APP_Excel,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::W,
+               KeyCode::VK_OPEN_URL_APP_weChat,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::N,
+               KeyCode::VK_OPEN_URL_APP_Excel,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::B,
+               KeyCode::VK_OPEN_URL_APP_BeyondCompare,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::C,
+               KeyCode::VK_OPEN_URL_APP_iTerm2,
+               KeyCode::VK_OPEN_URL_APP_Chrome,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::L,
+               KeyCode::VK_OPEN_URL_APP_VirtualBox,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::J,
+               KeyCode::VK_OPEN_URL_APP_iTerm2,
+               KeyCode::VK_OPEN_URL_APP_Emacs25mac,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::X,
+               KeyCode::VK_OPEN_URL_APP_Xmind,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::R,
+               KeyCode::VK_OPEN_URL_APP_Wireshark,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::M,
+               KeyCode::VK_OPEN_URL_APP_Newton,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::F1,
+               KeyCode::VK_OPEN_URL_APP_WangyiMusic,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::F2,
+               KeyCode::VK_OPEN_URL_APP_Map,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::F3,
+               KeyCode::VK_OPEN_URL_APP_Ouludict,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::S,
+               KeyCode::VK_OPEN_URL_APP_Opera,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::D,
+               KeyCode::VK_OPEN_URL_APP_Safari,
+             </autogen>
+     <!-- O for open external program -->
+           <autogen>
+             __KeyToKey__
+             KeyCode::O,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::W,
+             KeyCode::VK_OPEN_URL_APP_WangyiMusic,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::N,
+             KeyCode::VK_OPEN_URL_APP_Qianniu,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::O,
+             KeyCode::VK_OPEN_URL_APP_Ouludict,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::M,
+             KeyCode::VK_OPEN_URL_APP_Map,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::C,
+             KeyCode::VK_OPEN_URL_APP_Calendar,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::Q,
+             KeyCode::VK_OPEN_URL_APP_QQ,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::X,
+             KeyCode::VK_OPEN_URL_APP_Thunder,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::J,
+             KeyCode::VK_OPEN_URL_APP_Calculator,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::K,
+             KeyCode::VK_OPEN_URL_APP_Skim,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::I,
+             KeyCode::VK_OPEN_URL_APP_Ibook,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::D,
+             KeyCode::VK_OPEN_URL_APP_Dash,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::P,
+             KeyCode::VK_OPEN_URL_APP_Pycharm,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+           </autogen>
+
+     <!-- H for terminal -->
+           <autogen>
+             __KeyToKey__
+             KeyCode::H,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             KeyCode::VK_OPEN_URL_APP_Terminal,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::T,
+             KeyCode::VK_OPEN_URL_APP_Sshpt,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::U,
+             KeyCode::VK_OPEN_URL_APP_Sshup,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::O,
+             KeyCode::VK_OPEN_URL_APP_Sshop1,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::1,
+             KeyCode::VK_OPEN_URL_APP_Sshop1,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::2,
+             KeyCode::VK_OPEN_URL_APP_Sshop2,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::3,
+             KeyCode::VK_OPEN_URL_APP_Sshop3,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::4,
+             KeyCode::VK_OPEN_URL_APP_Sshop4,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::B,
+             KeyCode::VK_OPEN_URL_APP_Sshb,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+           </autogen>
+
+     <!-- numbers for openstack remote terminal -->
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::1,
+               KeyCode::VK_OPEN_URL_APP_Sshop1,
+             </autogen>
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::2,
+               KeyCode::VK_OPEN_URL_APP_Sshop2,
+             </autogen>
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::3,
+               KeyCode::VK_OPEN_URL_APP_Sshop3,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::4,
+               KeyCode::VK_OPEN_URL_APP_Sshcontroller,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::5,
+               KeyCode::VK_OPEN_URL_APP_Sshobject1,
+             </autogen>
+
+             <autogen>
+               __KeyDownUpToKey__
+               KeyCode::6,
+               KeyCode::VK_OPEN_URL_APP_Sshobject2,
+             </autogen>
+
+     <!-- F for finder -->
+             <autogen>
+             __KeyToKey__
+             KeyCode::F,
+             KeyCode::VK_NONE,
+
+             Option::KEYTOKEY_DELAYED_ACTION,
+             <!-- KeyCode::VK_OPEN_URL_APP_Finder, -->
+             KeyCode::VK_OPEN_URL_APP_Finder,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::D,
+             KeyCode::VK_OPEN_URL_FILE_Desktop,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::F,
+             KeyCode::VK_OPEN_URL_FILE_Home,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::S,
+             KeyCode::VK_OPEN_URL_FILE_Src,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::T,
+             KeyCode::VK_OPEN_URL_FILE_Tmp,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::W,
+             KeyCode::VK_OPEN_URL_FILE_Downloads,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+             Option::KEYTOKEY_DELAYED_ACTION_CANCELED_BY, KeyCode::C,
+             KeyCode::VK_OPEN_URL_FILE_Documents,
+             KeyCode::VK_KEYTOKEY_DELAYED_ACTION_DROP_EVENT,
+
+           </autogen>
+           ]]>
+         </replacementvalue>
+
+       </replacementdef>
+
+     </root>
+   #+END_SRC
+
+   在virtualbox等虚拟中修改按键，下面这个可以把左command改为左control：
+   #+BEGIN_SRC xml
+
+       <!-- for virtualbox -->
+       <item>
+         <name>Pengpengxp's irtualBox</name>
+
+         <item>
+           <name>Change Command_L to Control_L</name>
+           <identifier>remap.app_vm_commandL2controlL</identifier>
+           <only>VIRTUALMACHINE</only>
+           <autogen>__KeyToKey__ KeyCode::COMMAND_L, KeyCode::CONTROL_L</autogen>
+         </item>
+
+       </item>
+   #+END_SRC
+
+** slate [[http://www.jianshu.com/p/AyoRZC][中文指导]]
+   保存配置好的 =~/.slate= 文件：
+   #+BEGIN_SRC js
+     # quakex 的 slate 配置文件
+
+     # Global Configs 全局配置
+     config defaultToCurrentScreen true
+     # show icons & letters on all windows w/ Window Hints
+     config windowHintsShowIcons true
+     config windowHintsIgnoreHiddenWindows false
+     config windowHintsSpread true
+
+     # General aliases
+     alias hyper cmd;ctrl            # 组合键
+     alias sox screenOriginX
+     alias soy screenOriginY
+     alias ssx screenSizeX
+     alias ssy screenSizeY
+
+     # Show a positioning grid for each monitor
+     bind g:cmd;ctrl grid padding:5 0:2,2 1:2,1       #将第一个窗口分成4份，第二分成两份
+
+     # Monitor Aliases
+     alias mon-left 0                # 外接左边的显示器
+     alias mon-macbook 1             # 笔记本屏幕
+
+     # Abstract positions  相对位置
+     alias centered           ${sox}+${ssx}/8;${soy}+${ssy}/8 ${ssx}/8*6;${ssy}/8*6
+     alias fullscreen         ${sox};${soy} ${ssx};${ssy}
+     alias leftHalf           ${sox};${soy} ${ssx}/2;${ssy}
+     alias bottomHalf         ${sox};${soy}+${ssy}/2 ${ssx};${ssy}/2
+     alias topHalf            ${sox};${soy} ${ssx};${ssy}/2
+     alias rightHalf          ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}
+     alias topLeftQuarter     ${sox};${soy} ${ssx}/2;${ssy}/2
+     alias topRightQuarter    ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}/2
+     alias bottomLeftQuarter  ${sox};${soy}+${ssy}/2 ${ssx}/2;${ssy}/2
+     alias bottomRightQuarter ${sox}+${ssx}/2;${soy}+${ssy}/2 ${ssx}/2;${ssy}/2
+     alias topThird           ${sox};${soy} ${ssx};${ssy}/3
+     alias leftThird          ${sox};${soy} ${ssx}/3;${ssy}
+     alias bottomThird        ${sox};${soy}+${ssy}/3 ${ssx};${ssy}/3
+     alias rightThird         ${sox}+${ssx}/3*2;${soy} ${ssx}/3;${ssy}
+
+     # Concrete positions  具体位置
+     alias 1-full        move ${sox};${soy} ${ssx};${ssy}                ${mon-macbook}
+     alias 1-left        move ${sox};${soy} ${ssx}/2;${ssy}              ${mon-macbook}
+     alias 1-right       move ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}     ${mon-macbook}
+     alias 1-rightThird  move ${sox}+${ssx}/3*2;${soy} ${ssx}/3;${ssy}   ${mon-macbook}
+     alias 2-left        move ${sox};${soy} ${ssx}/2;${ssy}              ${mon-left}
+     alias 2-right       move ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}     ${mon-left}
+     alias 2-righttop    move ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}/2   ${mon-left}
+     alias 2-rightbottom move ${sox}+${ssx}/2;${soy}+${ssy}/2 ${ssx}/2;${ssy}/2       ${mon-left}
+     alias 2-rightThird  move ${sox}+${ssx}/3*2;${soy} ${ssx}/3;${ssy}   ${mon-left}
+
+     # 2 Monitor layout  两个显示器时的 layout
+     layout 2monitors 'iTerm':REPEAT             ${2-rightbottom} | ${1-left}
+     layout 2monitors 'Safari':REPEAT            ${1-full}
+     layout 2monitors 'Sublime Text 2':REPEAT    ${2-right}
+     layout 2monitors 'MacVim':REPEAT            ${2-left} | ${2-right}
+     layout 2monitors 'Mail':REPEAT              ${2-left}
+     layout 2monitors 'Finder':REPEAT            ${2-righttop}
+     layout 2monitors 'Xcode':REPEAT             ${1-full}
+     layout 2monitors 'iTunes':REPEAT            ${1-full}
+     layout 2monitors 'Skim':REPEAT              ${2-right}
+     layout 2monitors 'nvALT':REPEAT             ${2-rightThird}
+
+     # 1 Monitor layout 一个显示器时的布局
+     layout 1monitor 'iTerm':REPEAT              ${1-right}
+     layout 1monitor 'Sublime Text 2':REPEAT     ${1-left}
+     layout 1monitor 'MacVim':REPEAT             ${1-left} | ${1-right}
+     layout 1monitor 'Safari':REPEAT             ${1-full}
+     layout 1monitor 'Mail':REPEAT               ${1-full}
+     layout 1monitor 'Finder':REPEAT             ${1-full}
+     layout 1monitor 'Xcode':REPEAT              ${1-full}
+     layout 1monitor 'iTunes':REPEAT             ${1-full}
+     layout 1monitor 'Skim':REPEAT               ${1-full}
+     layout 1monitors 'nvALT':REPEAT             ${1-rightThird}
+
+     # Default Layouts
+     default 2monitors resolutions:1680x1050;2560x1600
+     default 1monitor  resolutions:2560x1600
+
+     bind 1:${hyper} layout 1monitor
+     bind 2:${hyper} layout 2monitors
+
+     # Bindings 模拟 Vim 控制窗口位置
+     bind g:${hyper} move ${centered}            #ctrl+cmd+g 将窗口居中
+     bind o:${hyper} move ${fullscreen}          #ctrl+cmd+o 全屏
+     bind h:${hyper} move ${leftHalf}
+     bind j:${hyper} move ${bottomHalf}
+     bind k:${hyper} move ${topHalf}
+     bind l:${hyper} move ${rightHalf}
+     bind u:${hyper} move ${topLeftQuarter}
+     bind i:${hyper} move ${topRightQuarter}
+     bind n:${hyper} move ${bottomLeftQuarter}
+     bind m:${hyper} move ${bottomRightQuarter}
+     bind y:${hyper} move ${leftThird}
+     bind p:${hyper} move ${rightThird}
+
+     # Resize Bindings
+     bind right:alt;ctrl       resize +10% +0
+     bind left:alt;ctrl        resize -10% +0
+     bind up:alt;ctrl          resize +0   -10%
+     bind down:alt;ctrl        resize +0   +10%
+
+     # Nudge Bindings
+     bind right:shift;alt        nudge +10% +0
+     bind left:shift;alt         nudge -10% +0
+     bind up:shift;alt           nudge +0   -10%
+     bind down:shift;alt         nudge +0   +10%
+
+     # Throw Bindings
+     bind [:${hyper} throw 0 resize:${ssx};${ssy}
+     bind ]:${hyper} throw 1 resize:${ssx};${ssy}
+
+     # Window Hints
+     bind esc:cmd hint ASDFGQWERTZXCVBN
+
+     # relaunch .slate
+     bind s:${hyper} relaunch
+
+     # Focus Bindings
+     bind right:${hyper}    focus right
+     bind left:${hyper}     focus left
+     bind up:${hyper}       focus up
+     bind down:${hyper}     focus down
+
+     # undo
+     bind z:${hyper} undo
+
+     ## App bindings
+     #alias hyperApp alt;ctrl
+     #alias editor 'MacVim'
+     #alias browser 'Safari'
+     #bind e:${hyperApp} focus ${browser}
+     #bind v:${hyperApp} focus ${editor}
+     #bind x:${hyperApp} focus 'Xcode'
+     #bind g:${hyperApp} focus 'GitHub'
+     #bind m:${hyperApp} focus 'Mail'
+     #bind i:${hyperApp} focus 'iTerm'
+     #bind f:${hyperApp} focus 'Finder'
+
+   #+END_SRC
+** catchMouse可以用来在多显示器是切换鼠标焦点
+   可以满足当前我的需求。
+** Spectacle可以实现slate大部分的功能。 *最重要的是：它可以把一个windows从一个显示器通过快捷键发送到另一个里面*
+** shortcat 可以使用快捷键来选择
+* 和原生Terminal打交道
+  默认的Terminal在 =/Applications/Utilities/Terminal.app= 这里。可以使
+  用open打开。
+
+  可以把shell脚本重命名为 =XXX.command= ，然后使用 =open XXX.command=
+  ，系统会自动打开一个Terminal并执行对应的脚本。
+
+  也可以使用 =open -b com.apple.terminal /tmp/main.sh= 这样的方式来打
+  开一个Terminal并执行对应的脚本。
+* open
+  =-a= 选项可以指定打开的应用，：
+  #+BEGIN_SRC sh
+    open -a /Applications/iTerm.app /tmp/
+  #+END_SRC
+  不过这样打开的iTerm2是新的标签页，如果需要打开新的窗口呢？
+
+* workspace
+  Mac上的workspace简直无语，开了多个desktop，但是`command + tab'还是在
+  几十个应用程序里面切换。
+
+  有一些使用技巧在 [[http://apple.stackexchange.com/questions/8191/tricks-and-usages-of-spaces][这里]] 。
+
+  [[https://raamdev.com/2007/replace-os-x-commandtab-with-witch/][这里]] 还有一篇使用wtich。wtich可以大概实现只切换一个desktop中的窗口。
+  但是，如果我想把`command + tab'绑定到witch上，需要把原生的绑定先干掉。
+  这又需要下载额外的两个软件。麻烦，PASS。
+** 试试xmonad
+   这个需要在X11中使用，所以需要在mac上先安装一个X11。
+
+   [[https://wiki.haskell.org/Xmonad/Using_xmonad_on_Apple_OSX][按照这篇文章来的]] ：
+
+   #+BEGIN_EXAMPLE
+     Home Log in
+
+       Go   Search
+     Page Discussion View source History
+     Xmonad/Using xmonad on Apple OSX
+     < Xmonad
+     xmonad runs well under X11 on Apple OSX machines, and needs little work to be useful. This page collects advice and information on using xmonad successfully with OSX.
+
+     (thumbnail)
+     Apple OSX Tiger
+
+     (thumbnail)
+     Apple OSX Leopard
+
+     (thumbnail)
+     Apple OSX Leopard Fullscreen
+
+     (thumbnail)
+     Expose
+
+     If you're using xmonad on a mac, add details about your configuration here!
+
+     Contents [hide]
+     1 Modern installation instructions
+     1.1 Configuring X11 to run xmonad
+     1.2 XMonad configuration
+     2 Installing on OSX Tiger
+     2.1 Installing XMonad
+     2.2 Configuring Your .xinitrc to Run XMonad
+     2.3 Configuring Xmonad for OS X
+     2.4 Full screen mode
+     2.5 Does Not Replace Quartz, Silly
+     2.6 Fitting Other Bits For Use With xmonad on OS X
+     2.6.1 dmenu
+     2.7 Potential Configuration Problems
+     3 OLD Installing on OSX Leopard
+     3.1 Installing xmonad
+     3.1.1 Installing GHC
+     3.2 Configuring Your .profile
+     3.2.1 Installing Cabal
+     3.3 Install dmenu (optional but recommended)
+     3.4 Updating X11
+     3.5 Configuring Your .xinitrc to Run XMonad
+     3.6 Configuring Your Keyboard
+     3.7 Further Configuring
+     3.8 Discussion
+     4 OLD Installing on Snow Leopard
+     1 Modern installation instructions
+     Any machine running Leopard or later should use these instructions. I am keeping the older ones below for historical reasons, but they are largely incorrect and can cause problems in various configurations and should not be used.
+
+     Use the Haskell Platform installer for your platform. I may be able to dig up a Haskell Platform for Leopard PPC (G4, ppc7450) if needed, although it will not be the latest version because my PPC machine died.
+     Either X11.app (standard install on Leopard and up) or MacOSForge XQuartz.app should work. Some releases of these have bugs related to the Command key; see below.
+     Full-screen mode is a good idea (to the extent that it ever is; it does not interact nicely with Exposé/Mission Control or Alt-Tab application switching) because XMonad cannot manage Aqua windows.
+     Please note, that last is not a bug. Native Aqua windows do not support any kind of window manager mechanism; Apple scattered the functionality around within Core Graphics, WindowServer, and the application frameworks and didn't make any part of it replaceable. Neither XMonad nor any other X11 window manager will ever be able to manage native windows.
+
+     1.1 Configuring X11 to run xmonad
+     Create a file ~/.xinitrc.d/90-xmonad.sh:
+
+     #! /bin/sh
+     # "chmod +x ~/.xinitrc.d/90-xmonad.sh" to activate
+     # this assumes you used the Haskell Platform and cabal-install to install xmonad
+     USERWM=$HOME/Library/Haskell/bin/xmonad
+     Adjust the USERWM line to point to your xmonad binary; the one above assumes you used the official Haskell Platform installer for OS X and used cabal install xmonad to install XMonad.
+
+     chmod +x ~/.xinitrc.d/90-xmonad.sh will activate XMonad; chmod -x ~/.xinitrc.d/90-xmonad.sh will switch back to using quartz-wm.
+
+     You may want to go into X11.app Preferences, and on the Input panel select "Option keys send Alt_L and Alt_R", since neither XMonad nor most X11 programs understand Mode_shift. There is a tradeoff here: the default means Option gets you international characters, while toggling this allows you to use Alt-keys in X11 applications and XMonad.
+
+     If you want to use xmodmap to alter X11 key bindings, be sure to go into the X11.app preferences as above and toggle "Follow system keyboard layout"; if that is enabled, it will override xmodmap settings.
+
+     1.2 XMonad configuration
+     It is a good idea to use modMask = mod4Mask to define the mod key as Command on OS X, since not only do many programs use Option as Alt, X11 itself also does (Option-Shift-Enter toggles between the Aqua desktop and X11 full-screen mode, making it useless for launching a terminal).
+
+     You may want to go into X11.app Preferences, Input panel, and turn off "Enable key equivalents under X11" if you do this so X11 does not intercept Command-c etc. Note that this will also disable any hotkeys you defined on the X11.app Applications menu.
+
+     2 Installing on OSX Tiger
+     2.1 Installing XMonad
+     ghc: You can get from haskell.org/ghc, MacPorts, or Fink. Fink has an older version of ghc -- one that will work with xmonad (for now?), but will make baby xmonad cry.
+     X11 lib: Get from hackage.haskell.org, build using the standard Cabal steps. Make sure that Xinerama gets detected in the configure step. If you see a "present but not compiled" warning, that might be okay (it worked for me).
+     xmonad and xmonad-contrib: Get from hackage.haskell.org, build using the standard Cabal steps.
+     I installed into my home directory by adding "--user --prefix=$HOME/usr" to the configure steps. The default is /usr/local.
+
+     2.2 Configuring Your .xinitrc to Run XMonad
+     Build and install XMonad like you would any other Haskell library.
+     do the following on the Terminal:
+          $ cp /private/etc/X11/xinit/xinitrc ~/.xinitrc
+          $ chmod +w ~/.xinitrc
+          $ vim ~/.xinitrc
+          #comment out the line 'exec quartz-wm' and add PATH-TO-XMONAD/xmonad after it.
+     You may want to add quartz-wm --only-proxy & to your xinitrc, which synchronizes X11/OSX clipboards.
+     Open X11. XMonad should be running now.
+     2.3 Configuring Xmonad for OS X
+     You probably don't have a numlock key. Set numlockMask to 0. (The default is mod2Mask, which happens to be Apple's default for the command key.)
+     You may use the defaultGaps to make xmonad not clash with the dock. As the dock size is configurable and may vary depending on the number of icons in the dock you will have to measure your dock yourself. Before 0.7 defaultGaps are in xmonad, since 0.7 these should be in xmonad-contrib.
+     2.4 Full screen mode
+     I highly recommend running X11 in full-screen mode. To enable this, open the Preferences dialog for the X11 app, check the checkbox, and restart X11. This way, you don't have to worry about stupid things like the dock / menubar / OS X apps getting in your way.
+
+     2.5 Does Not Replace Quartz, Silly
+     You won't be able to use xmonad to manage normal OS X apps. X11 will just be another OS X application sitting in your dock that you can switch to. However, it is pretty easy to install a decent set of X11 apps. If you have MacPorts installed you can install the packages firefox-x11, rxvt-unicode, unclutter, and 'vim +gtk2' (the +gtk2 variant for PRIMARY/CLIPBOARD support) to get started.
+
+     2.6 Fitting Other Bits For Use With xmonad on OS X
+     2.6.1 dmenu
+     dmenu can be built on OS X without problems but it is invisible unless you run X11 in full-screen. Unlike xmonad it does not detect the OS X top menu bar and is completely hidden by it. You can also make it display at the bottom (behind the dock :).
+
+     Since I do not know how to detect the top menubar either I just patched dmenu to add support for gaps. Unfortunately the dmenu authors do not seem very responsive so I attach the patch here.
+
+     Media:Dmenu-gap.patch
+
+     You can then run dmenu -g 22 to work around the OS X top menu.
+
+     2.7 Potential Configuration Problems
+     You may have problems with configuring XMonad under OSX - if you see the "error detected while loading xmonad configuration" error message but with no error output, it could be because the PATH inherited by XMonad doesn't include ghc (eg by default it won't include /usr/local/bin).
+
+     Possible solutions:
+
+     http://forums.macosxhints.com/showthread.php?s=&threadid=12382
+     http://forums.macosxhints.com/showthread.php?t=14279
+     Or just hardwire the path into xmonad itself - change "ghc" -> "/usr/local/bin/ghc" (or whatever) in Core.hs before building XMonad.
+     3 OLD Installing on OSX Leopard
+     These instructions have been tested on a blank but fully updated system (04/04/09).
+
+     3.1 Installing xmonad
+     3.1.1 Installing GHC
+     Install xcode, this can be found on the OSX install disk; it can also be downloaded from apple (you will have to sign upto a free developer account).
+     Download and install ghc.
+     3.2 Configuring Your .profile
+     Insert the following into your ~/.profile
+
+     export PATH=$PATH:~/.cabal/bin:/usr/local/bin
+     export USERWM=`which xmonad`
+     Much of this isn't needed until later, but it's good to get it out the way now.
+
+     3.2.1 Installing Cabal
+     Download and extract Cabal install from http://www.haskell.org/cabal/download.html
+     In a terminal:
+     $ cd ''Cabal install directory''; ./bootstrap.sh
+     Update cabal
+     $ cabal update
+     Install xmonad
+     $ cabal install xmonad
+     3.3 Install dmenu (optional but recommended)
+     Download and extract dmenu from http://tools.suckless.org/dmenu
+     $ cd ''dmenu directory''; sudo make install
+     3.4 Updating X11
+     The version of X11 shipped with Leopard (04/04/09) does not support going fullscreen. I recommend updating X11. It is likely that a Leopard update will eventually make this step unnecessary. Download and install the latest version from macosforge.
+
+     3.5 Configuring Your .xinitrc to Run XMonad
+     write:
+
+     source ~/.profile
+     exec /usr/X11/lib/X11/xinit/xinitrc
+     to ~/.xinitrc
+
+     Alternatively, if this doesn't work (because you haven't updated X11): write:
+
+     source ~/.profile
+     exec $USERWM
+     to ~/.xinitrc
+
+     3.6 Configuring Your Keyboard
+     I can't find the meta key (xmonad is unusable without it) in the default configuration. I followed this guide (write
+     clear Mod1
+     clear Mod2
+     keycode 63 = Mode_switch
+     keycode 66 = Meta_L
+     add Mod1 = Meta_L
+     add Mod2 = Mode_switch
+     to ~/.Xmodmap) and now the meta key is the left alt.
+     3.7 Further Configuring
+     The menu bar shouldn't get in the way (fullscreen or otherwise, updated or standard X11). The Dock however will, I recommend hiding the Dock or always working in fullscreen mode.
+     You can start X11 (and Xmonad) by running any program that uses X, or by running X11.app. If you run X11.app a default program is started. You can configure this program by running
+      $ defaults write org.x.X11 "app_to_run" "gnome-terminal"
+     (replace gnome-terminal with a program of your choice). or
+     $ defaults write org.x.X11 "app_to_run" ""
+     to have no application run by default.
+     There shouldn't be anything unusual about configuring ~/.xmonad/xmonad.hs.
+     3.8 Discussion
+     XMonad and Vimperator (Firefox 3 extension) make a powerful combination on Linux. I cannot achieve this on OSX because the newest X11 version of Firefox I can install is version 2. If anyone has any hints on installing Firefox 3 X11 please share them.
+     Amethyst [1] mimics Xmonad, but works with non-X11 Mac programs. This allows one to use the regular Mac version of Firefox along with Vimperator. Along with Amethyst I use Honer [2] to put a red border around the active window as Xmonad does.
+     XMonad only works with X11 software- a package manager such as:
+     Nix http://nixos.org/nix/ .
+     Port is helpful http://www.macports.org/ .
+     Fink http://www.finkproject.org/ .
+     Homebrew http://mxcl.github.com/homebrew/ .
+     4 OLD Installing on Snow Leopard
+     Xmonad 0.9.1 compiles on Snow leopard with ghc 6.12, on a clean snow leopard installation and the X11 version provided with it. Since xterm has been modified, the configuration now needs to be :
+
+     in ~/.profile :
+
+     export PATH=/Users/me/.cabal/bin:$PATH
+     export USERWM=`which xmonad`
+     in ~/.xinitrc :
+
+     source ~/.profile
+     exec $USERWM
+     in ~/.Xmodmap :
+
+     clear Mod1
+     keycode 63 = Meta_L
+     add Mod1 = Meta_L
+     This maps the left apple key to the meta key expected by xmonad, since xterm no allows to type accented characters on american keyboards with the option key (as in cocoa applications).
+
+     Alternatively, you can use the left Alt key (keycode 66 = Alt_L) that doesn't conflict with OS X default shortcuts bound on the left Command (Apple / Meta) key.
+
+     Category:
+     XMonad
+     Navigation
+     Haskell
+     Wiki community
+     Recent changes
+     Random page
+     Tools
+     What links here
+     Related changes
+     Special pages
+     Printable version
+     Permanent link
+     This page was last modified on 5 November 2014, at 17:07. Recent content is available under a simple permissive license. Privacy policy About HaskellWiki Disclaimers
+   #+END_EXAMPLE
+
+* 多个远程终端登陆的配置
+  常登陆多个机器时，ip不好记。可以修改 =/etc/hosts= 文件，为ip取“名
+  字”，比如我的host文件可能长这样：
+  #+BEGIN_EXAMPLE
+    ##
+    # Host Database
+    #
+    # localhost is used to configure the loopback interface
+    # when the system is booting.  Do not change this entry.
+    ##
+    127.0.0.1       localhost
+    255.255.255.255 broadcasthost
+    ::1             localhost
+
+    192.168.56.2 pt
+    192.168.57.3 up
+    192.168.56.111 b
+    192.168.56.100 b1
+    192.168.56.4 es
+    192.168.56.121 do
+  #+END_EXAMPLE
+
+  但是有些机器可能ssh端口号不是22,用户名和当前主机登陆的用户名不同。这
+  时候可以通过修改 =~/.ssh/config= 来解决。我的可能长这样：
+  #+BEGIN_EXAMPLE
+    # default
+    Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa
+    # https://github.com/RiverSecurity/Products/wiki/setup_proxy
+    # for proxy
+    ProxyCommand nc -x 10.16.16.100:1080 %h %p
+
+    # two
+    Host pengpengxp.github.com  # 前缀名可以任意设置
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa_pengpengxp
+
+    Host rs250
+            Hostname 192.168.2.250
+            User antibot
+            Port 22
+
+    Host b
+            Hostname 192.168.56.111
+            User root
+            Port 20160
+
+  #+END_EXAMPLE
+
+* archmage
+  可以把chm文件弄成http的server，然后我可以使用任何browser来查看。
+
+  安装好后，配合emacs来使用的话，可以直接安装 =chm-view= 。配置很简单：
+  #+BEGIN_SRC elisp
+    (require 'chm-view)
+    (setq chm-view-delay 3)
+  #+END_SRC
+  然后 =M-x chm-view-file= 就可以啦。
+
+* 修改键盘的速率
+  Mac上可以使用下面的命令来修改。使用一次就可以了。不过设置后需要重新
+  登陆。参考的 [[https://ksearch.wordpress.com/2017/06/20/increase-the-key-repeat-rate-in-os-x-sierra/][这里]] 。
+  #+BEGIN_SRC sh
+defaults write -g InitialKeyRepeat -int 10
+defaults write -g KeyRepeat -int 1  
+  #+END_SRC

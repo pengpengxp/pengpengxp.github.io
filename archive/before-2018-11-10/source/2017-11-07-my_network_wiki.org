@@ -1,0 +1,11 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: network wiki
+
+* 交换机vlan的几种模式
+  1. access模式：出去的报文一定是没有tag的。把vlan的tag都剥离了的。
+  2. trunk模式：出去的报文一定要有tag。
+  3. hybrid模式：出去的报文可以有也可以没有tag。根据对应端口是否有tag
+     来决定。

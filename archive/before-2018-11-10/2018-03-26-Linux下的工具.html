@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2018-03-26-Linux下的工具</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2018-03-26-Linux下的工具</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf122d80">1. 发包</a>
+<ul>
+<li><a href="#org6de3754">1.1. sendip</a></li>
+<li><a href="#org2f2a0f0">1.2. Mausezahn</a></li>
+<li><a href="#org397ade1">1.3. scapy</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Linux是好用，但是软件太多，同一个功能经常是有很多工具可以实现。本文记
+录一些我用过觉得不错的工具的名字或者使用方法，以供后面查阅。
+</p>
+
+<div id="outline-container-orgf122d80" class="outline-2">
+<h2 id="orgf122d80"><span class="section-number-2">1</span> 发包</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org6de3754" class="outline-3">
+<h3 id="org6de3754"><span class="section-number-3">1.1</span> sendip</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+This is a test tool, which make special header of tcp/ip packet.
+</p>
+
+<p>
+测试工具，可以自己定制发包的ip地址，等头部信息。
+</p>
+
+<p>
+通常执行格式如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     sendip &#8211;v &#8211;d r64 &#8211;p ipv4 &#8211;iv 4 &#8211;ih 5 &#8211;il 128 &#8211;is 10.0.0.1 &#8211;id 30.0.0.1 &#8211;p tcp &#8211;ts 1379 &#8211;td 23 &#8211;tt 8 30.0.0.1
+     sendip &#8211;v &#8211;d r64 &#8211;p ipv4 &#8211;iv 4 &#8211;ih 5 &#8211;il 128 &#8211;is 10.0.0.1 &#8211;id 192.168.57.109 &#8211;p tcp &#8211;ts 1379 &#8211;td 8080 &#8211;tt 8 192.168.56.108
+</pre>
+</div>
+
+<p>
+-v：运行时输出详细运行信息，如不指定，运行时不输出信息
+–d r64：用64 字节的随机数值填充IP包中的数据段
+–p ipv4：指定协议类型为IP 协议（IP 协议有自己的相应参数，以i 开头）
+–iv 4：协议版本为4，即IPV4
+–ih 5：指定IP 头的长度为5×4＝20 字节
+–il 128：指定IP 包的总长度为128 字节
+–is 10.0.0.1：指定IP 包的源地址
+–id 30.0.0.1：指定IP 包的目的地址
+–p tcp：指定IP 包中封装的包的协议类型（TCP 协议有自己的相应参数，以t 开头）
+–ts 1379：指定TCP 包的源端口1379
+–td 23：指定TCP 包的目的端口为23
+-tt 8：指定TCP 包的偏移量即TCP 头的长度，没有TCP 选项时为5，即20 字节，有TCP 选项时需要增加。
+30.0.0.1：指定发包的目的主机
+</p>
+
+<p>
+sendip –v –d r64 –p ipv4 –iv 4 –ih 5 –il 128 –is 10.0.0.1 –id 192.168.57.109 –p tcp –ts 1379 –td 8080 –tt 8 192.168.56.108
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2f2a0f0" class="outline-3">
+<h3 id="org2f2a0f0"><span class="section-number-3">1.2</span> <a href="http://www.perihel.at/sec/mz/">Mausezahn</a></h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+发组播的数据包：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">mz eth0 -c 0 -d 10msec -B 230.1.1.1 -t udp <span style="color: #ff4ea3;">"dp=32000,dscp=46"</span> -P <span style="color: #ff4ea3;">"Multicast test packet"</span>  
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org397ade1" class="outline-3">
+<h3 id="org397ade1"><span class="section-number-3">1.3</span> scapy</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+这是一个python库，我用它来发一些igmp的query包，
+</p>
+
+<p>
+发送report：
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/bin/python</span>
+
+<span style="color: #a1db00;">from</span> scapy.<span style="color: #d18aff;">all</span> <span style="color: #a1db00;">import</span> *
+<span style="color: #a1db00;">from</span> scapy.contrib.igmp <span style="color: #a1db00;">import</span> IGMP
+<span style="color: #a1db00;">import</span> random
+
+
+<span style="color: #ff8700;">src_ip</span> = <span style="color: #ff4ea3;">"192.168.1.1"</span>
+<span style="color: #ff8700;">multicast_ip</span> = <span style="color: #ff4ea3;">"239.255.12.45"</span>
+<span style="color: #ff8700;">interface</span> = <span style="color: #ff4ea3;">"eth0"</span>
+
+<span style="color: #a1db00;">def</span> <span style="color: #ffd700;">send_igmp_report</span>(dst):
+        <span style="color: #ff8700;">a</span>=Ether(src=<span style="color: #ff4ea3;">"94:c6:91:02:56:d6"</span>)
+        <span style="color: #ff8700;">b</span>=IP(src=src_ip)
+        <span style="color: #ff8700;">c</span>=IGMP(<span style="color: #d18aff;">type</span>=0x16, gaddr=dst)
+        c.igmpize(b, a)
+        <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Joining IP "</span> + c.gaddr + <span style="color: #ff4ea3;">" MAC "</span> + a.dst
+        sendp(a/b/c, iface=interface)
+
+send_igmp_report(multicast_ip)
+   
+</pre>
+</div>
+
+<p>
+发送leave：
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/bin/python</span>
+
+<span style="color: #a1db00;">from</span> scapy.<span style="color: #d18aff;">all</span> <span style="color: #a1db00;">import</span> *
+<span style="color: #a1db00;">from</span> scapy.contrib.igmp <span style="color: #a1db00;">import</span> IGMP
+<span style="color: #a1db00;">import</span> random
+
+<span style="color: #ff8700;">src_ip</span> = <span style="color: #ff4ea3;">"192.168.1.1"</span>
+<span style="color: #ff8700;">src_mac</span> = <span style="color: #ff4ea3;">"94:c6:91:02:56:d6"</span>
+<span style="color: #ff8700;">interface</span> = <span style="color: #ff4ea3;">"eth0"</span>
+<span style="color: #ff8700;">multicast_ip</span> = <span style="color: #ff4ea3;">"224.239.12.45"</span>
+
+
+<span style="color: #a1db00;">def</span> <span style="color: #ffd700;">send_igmp_leave</span>(dst):
+        <span style="color: #ff8700;">a</span>=Ether(src=src_mac)
+        <span style="color: #ff8700;">b</span>=IP(src=src_ip)
+        <span style="color: #ff8700;">c</span>=IGMP(<span style="color: #d18aff;">type</span>=0x17, gaddr=dst)
+        c.igmpize(b, a)
+        <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Joining IP "</span> + c.gaddr + <span style="color: #ff4ea3;">" MAC "</span> + a.dst
+        sendp(a/b/c, iface=interface)
+
+
+send_igmp_leave(multicast_ip);
+</pre>
+</div>
+
+<p>
+发送普通查询：
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/bin/python</span>
+
+<span style="color: #a1db00;">from</span> scapy.<span style="color: #d18aff;">all</span> <span style="color: #a1db00;">import</span> *
+<span style="color: #a1db00;">from</span> scapy.contrib.igmp <span style="color: #a1db00;">import</span> IGMP
+<span style="color: #a1db00;">import</span> random
+
+
+<span style="color: #ff8700;">src_ip</span> = <span style="color: #ff4ea3;">"192.168.1.1"</span>
+<span style="color: #ff8700;">interface</span> = <span style="color: #ff4ea3;">"eth0"</span>
+<span style="color: #ff8700;">multicast_ip</span> = <span style="color: #ff4ea3;">"224.0.0.1"</span>
+
+
+<span style="color: #a1db00;">def</span> <span style="color: #ffd700;">send_igmp_ordinary_query</span>():
+        <span style="color: #ff8700;">a</span>=Ether(src=<span style="color: #ff4ea3;">"94:c6:91:02:56:d6"</span>)
+        <span style="color: #ff8700;">b</span>=IP(src=src_ip, dst=multicast_ip)
+        <span style="color: #ff8700;">c</span>=IGMP(<span style="color: #d18aff;">type</span>=0x11)
+        c.igmpize(b, a)
+        sendp(a/b/c, iface=interface)
+
+send_igmp_ordinary_query()
+</pre>
+</div>
+
+<p>
+发送特定组查询：
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/bin/python</span>
+
+<span style="color: #a1db00;">from</span> scapy.<span style="color: #d18aff;">all</span> <span style="color: #a1db00;">import</span> *
+<span style="color: #a1db00;">from</span> scapy.contrib.igmp <span style="color: #a1db00;">import</span> IGMP
+<span style="color: #a1db00;">import</span> random
+
+
+<span style="color: #ff8700;">src_ip</span> = <span style="color: #ff4ea3;">"192.168.1.1"</span>
+<span style="color: #ff8700;">interface</span> = <span style="color: #ff4ea3;">"eth0"</span>
+<span style="color: #ff8700;">multicast_ip</span> = <span style="color: #ff4ea3;">"239.255.12.45"</span>
+
+
+<span style="color: #a1db00;">def</span> <span style="color: #ffd700;">send_igmp_specified_query</span>(dst):
+        <span style="color: #ff8700;">a</span>=Ether(src=<span style="color: #ff4ea3;">"94:c6:91:02:56:d6"</span>)
+        <span style="color: #ff8700;">b</span>=IP(src=src_ip)
+        <span style="color: #ff8700;">c</span>=IGMP(<span style="color: #d18aff;">type</span>=0x11, gaddr=dst)
+        c.igmpize(b, a)
+        sendp(a/b/c, iface=interface)
+
+
+send_igmp_specified_query(multicast_ip)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

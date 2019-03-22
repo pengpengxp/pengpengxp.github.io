@@ -1,0 +1,101 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+TITLE: Nginx wiki
+
+
+* nginx打印ngx_str_t到日志
+  因为ngx_str_t默认不是以 =\0= 结尾的。所以不能直接使用printf来打印。
+  不过nginx打印日志接口默认提供了一种 =%V= 的方式。
+  #+BEGIN_SRC C
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0, "[Test]: big v %V", &(r->method_name));
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0, "[Test]: big v uri = %V", &(r->uri));
+  #+END_SRC
+  
+  *注意这里需要的是ngx_str_t的地址。*
+
+* 4层和7层load-balance
+  https://www.nginx.com/resources/glossary/layer-4-load-balancing/
+
+  https://www.nginx.com/resources/glossary/layer-7-load-balancing/
+  
+  有4层和7层之分。
+
+  4层以前用得多，因为7层对计算性能要求较高。
+
+  4层就是直接看ip和port，在第四层就开始均衡。不看content的。
+  
+  7层会看到content，可以根据数据来玩。
+  #+BEGIN_EXAMPLE
+    They manage and manipulate traffic based on a full understanding of
+    the transaction between the client and the application server.
+  #+END_EXAMPLE
+
+  7层的好处，举个例子：
+  #+BEGIN_EXAMPLE
+    Let’s look at a simple example. A user visits a high-traffic
+    website. Over the course of the user’s session, he or she might
+    request static content such as images or video, dynamic content such
+    as a news feed, and even transactional information such as order
+    status. Layer 7 load balancing allows the load balancer to route a
+    request based on information in the request itself, such as what kind
+    of content is being requested. So now a request for an image or video
+    can be routed to the servers that store it and are highly optimized to
+    serve up multimedia content. Requests for transactional information
+    such as a discounted price can be routed to the application server
+    responsible for managing pricing. With Layer 7 load balancing, network
+    and application architects can create a highly tuned and optimized
+    server infrastructure or application delivery network that is both
+    reliable and efficiently scales to meet demand.
+  #+END_EXAMPLE
+  比如图片个视频的请求可以负载到一个对此优化过的机器上。关于price的请
+  求可能负载到一个专门处理price的机器上。
+
+* nginx四层lb的配置
+  自己手动编译的 =1.11.3= 版本。编译时需要加入 =--with-stream= 选项。
+  #+BEGIN_SRC sh
+    ./configure --with-stream
+  #+END_SRC
+
+  配置如下，把本地的80代理到后端的多个80：
+  #+BEGIN_EXAMPLE
+  #+END_EXAMPLE
+  #+BEGIN_SRC conf-space
+    user  root;
+    worker_processes  40;
+
+    events {
+        worker_connections  1024;
+    }
+
+    stream {
+            upstream backend {
+                #least_conn;
+                #hash $remote_addr;
+                server 172.16.2.172:80;
+                server 172.16.2.171:80;
+                server 172.16.2.7:80;
+
+            }
+
+            server {
+                listen        0.0.0.0:80;
+                proxy_pass    backend;
+
+                #proxy_bind $remote_addr  transparent;
+                #proxy_timeout 3s;
+                #proxy_connect_timeout 1s;
+                #proxy_set_header X-Forwarded-For $remote_addr;
+            }
+        }
+
+  #+END_SRC
+
+* nginx编译的顺序和模块选择
+  configure中进来。有些模块需要根据来决定是否启用（如
+  ngx_http_gunzip_filter_module模块）。
+
+  configure会调用到 =auto/modules= ，这个里面是实际加载哪些模块和模块
+  调用顺序的。它主要生成了 =ngx_modules.c= 文件。该文件中定义了
+  =ngx_modules= 数组。它指明nginx运行时有哪些模块需要参与，以及它们之
+  间的顺序是什么。
+
+  我们的代码中，是从 =txsafe-configure.sh= 中进入到configure的。

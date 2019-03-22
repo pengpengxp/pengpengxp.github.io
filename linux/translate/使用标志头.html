@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>使用标志头</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+       <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div> 
+      </div>
+
+       <div class="article">
+         <h2>使用标志头</h2>
+         <p>如果在执行make编译hello world程序的时候查看它的输出，可以看到生成的Makefile会通过'-D'把定义的PACKAGE和VERSION宏传递给编译器。
+           这些宏被作为参数传递给configure.in文件中的AM_INIT_AUTOMAKE。
+           configure脚本根据指定的平台来定制源代码的一种方式就是定义这样的C预处理宏。
+           这样的定义需要在configure.in中使用正确的命令。AM_INIT_AUTOMAKE就是这条正确的命令。</p>
+
+         <p>默认情况下，GNU构建系统实现的C预处理的宏都是通过'-D'选项来传递给编译器的。
+           如果这种标志太多，会带来两种问题：一是make的输出很难读。
+           第二种问题更严重，这样可能是冒着超过一些braindead Unix（这不知道怎么翻译）实现的缓冲区限制。
+           为了解决这个问题，可以设置 Autoconf使用其它方法：把所有这些宏都定义在一个特殊的头文件中，所有的源代码都include这个特殊的头文件。
+           这个特殊的头文件就叫配置头。</p>
+
+         <p>一个hello world的程序使用这种方法的例子是这样的：</p>
+
+         <ul>
+           <li>configure.in<br /><pre class="code">AC_INIT(hello.c)
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(hello,0.1)
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_OUTPUT(Makefile)</pre></li>
+
+           <li>Makefile.am<br /><pre class="code">bin_PROGRAMS = hello
+hello_SOURCES = hello.c</pre></li>
+
+           <li>hello.c<br /><pre class="cpp"><span class="preprocessor">#ifdef</span> HAVE_CONFIG_H
+<span class="preprocessor">#include</span> <span class="string">&lt;config.h&gt;</span>
+<span class="preprocessor">#endif</span>
+              
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="function-name">main</span>()
+{
+    printf(<span class="string">"Howdy, pardner!\n"</span>);
+}
+</pre></li>
+         </ul>
+
+         <p>使用AM_CONFIG_HEADER命令就可以要求使用配置头。
+           配置头需要用下面的三条命令来有条件地进行加载：
+<pre class="cpp"><span class="preprocessor">#if</span> HAVE_CONFIG_H
+<span class="preprocessor">#include</span> <span class="string">&lt;config.h&gt;</span>
+<span class="preprocessor"><span class="hl-line">#endif</span></span></pre></p>
+
+         <p>重要的是要保证config.h文件是在最前面被include。接下来输入下面的命令来autoconfiscate（伪装）源代码：
+<pre class="code">% aclocal
+% autoconf
+% touch NEWS README AUTHORS ChangeLog
+% autoheader
+% automake -a</pre></p>
+
+         <p>一定要按照顺序执行这些代码。
+           和之前hello world的例子不同的是，我们执行了新的命令'autoheader'。
+           该程序扫描configure.in文件，生成一个模版文件config.h。
+           config.h中列出了所有需要被定义的C预处理宏以及描述宏的注释。
+           当你执行configure时，它会加载config.h，然后在它的基础上生成最后的config.h，它可以在编译时被源代码直接使用。</p>
+
+         <p>现在可以开始编译了：
+         <pre class="code">% configure
+% make
+gcc -DHAVE_CONFIG_H -I. -I. -I.   -g -O2 -c hello.c
+gcc -g -O2  -o hello  hello.o</pre></p>
+
+         <p>可以看到，现在没有再传递很多的'-D'标志了，只有一个标志传递进来了：'-DHAVE_CONFIG_H'。
+           另外，正确的'-I'参数也被传递进来，以便hello.c文件可以找到config.h文件。测试分发，可以这样：
+         <pre class="code">% make distcheck
+......
+========================
+hello-0.1.tar.gz is ready for distribution
+========================</pre></p>
+         <p>它就该可以解决全部的事情。</p>
+
+         <p>config.h文件有一个很长的历史。
+           在之前，有些软件里面需要开发者手动去编辑config.h文件，手动修改里面的宏定义。
+           这让软件很难安装，因为这需要用户对自己的操作系统很熟悉。
+           比如，你现在很难看到这样的注释：“如果你的系统有一个坏的vfork，则定义这个宏。”
+           用户会很沮丧，因为他们根本不知道如果来配置config.h文件中这些神秘的细节。
+           使用自动配置的源码，所有这些事情都能被自动处理。
+           可以把这些配置的负担从用户身上转移到开发者身上，这其实也是开发者需要考虑的事情。</p>
+
+      </div>
+       
+    </div>
+
+  </body>
+
+</html> 

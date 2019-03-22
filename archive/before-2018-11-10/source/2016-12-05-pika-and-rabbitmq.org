@@ -1,0 +1,160 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+SETUPFILE: theme.setup
+#+Title: 使用python的pika库来操作rabbitmq
+
+
+rabbitmq是一个消息队列的实现，python可以使用pika这个模块来操作。这里就
+记录几个例子。
+
+* [[https://www.rabbitmq.com/tutorials/tutorial-one-python.html][基本示例]]
+  send.py
+  #+BEGIN_SRC sh :tangle (prog1 "/tmp/temp/s.py" (make-directory "temp" "/tmp"))
+    #!/usr/bin/env python
+    import pika
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue='hello')
+
+    channel.basic_publish(exchange='',
+                          routing_key='hello',
+                          body='Hello World!')
+    print(" [x] Sent 'Hello World!'")
+    connection.close()
+  #+END_SRC
+  
+  receive.py
+  #+BEGIN_SRC sh :tangle (prog1 "/tmp/temp/r.py" (make-directory "temp" "/tmp"))
+    #!/usr/bin/env python
+    import pika
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue='hello')
+
+    def callback(ch, method, properties, body):
+        print(" [x] Received %r" % body)
+
+    channel.basic_consume(callback,
+                          queue='hello',
+                          no_ack=True)
+
+    print(' [*] Waiting for messages. To exit press CTRL+C')
+    channel.start_consuming()
+  #+END_SRC
+
+* [[https://www.rabbitmq.com/tutorials/tutorial-three-python.html][发布和订阅模型]]
+  基本票例中发送者发送一个消息后，只能有一个接收者。发布订阅模型就是一
+  个发送者，多个接收者的例子。
+  
+  其中 =exchange= 的名字可以随便取，但是 =type= 只有那么几种。固名思义，
+  exchange就是send把消息发给它，它来决定息怎么处理消息的“东西”。可以
+  这样来查询：
+  #+BEGIN_EXAMPLE
+    root@compile:/tmp# rabbitmqctl list_exchanges
+    Listing exchanges ...
+            direct
+    amq.direct      direct
+    amq.fanout      fanout
+    amq.headers     headers
+    amq.match       headers
+    amq.rabbitmq.log        topic
+    amq.rabbitmq.trace      topic
+    amq.topic       topic
+    fanout  fanout
+    logs    fanout
+    logsxie fanout
+    xiepeng direct
+    ...done.
+  #+END_EXAMPLE
+  
+  send.py
+  #+BEGIN_SRC python :tangle (prog1 "/tmp/temp/s.py" (make-directory "temp" "/tmp"))
+    #!/usr/bin/env python
+    import pika
+    import sys
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+    channel = connection.channel()
+
+    channel.exchange_declare(exchange='logs',
+                             type='fanout')
+
+    message = ' '.join(sys.argv[1:]) or "info: Hello World!"
+    channel.basic_publish(exchange='logs',
+                          routing_key='',
+                          body=message)
+    print(" [x] Sent %r" % message)
+    connection.close()
+
+  #+END_SRC
+  
+  receive1.py
+  #+BEGIN_SRC python :tangle (prog1 "/tmp/temp/r1.py" (make-directory "temp" "/tmp"))
+    #!/usr/bin/env python
+    import pika
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+    channel = connection.channel()
+
+    channel.exchange_declare(exchange='logs',
+                             type='fanout')
+
+    # 这样可以生成一个随机名字的队列
+    result = channel.queue_declare(exclusive=True)
+    queue_name = result.method.queue
+
+    # 完成随机生成的队列和exchange的绑定
+    channel.queue_bind(exchange='logs',
+                       queue=queue_name)
+
+    print(' [*] Waiting for logs. To exit press CTRL+C')
+
+    def callback(ch, method, properties, body):
+        print(" [x] %r" % body)
+
+    channel.basic_consume(callback,
+                          queue=queue_name,
+                          no_ack=True)
+
+    channel.start_consuming()
+
+  #+END_SRC
+
+  receive2.py
+  #+BEGIN_SRC python :tangle (prog1 "/tmp/temp/r2.py" (make-directory "temp" "/tmp"))
+    #!/usr/bin/env python
+    import pika
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+    channel = connection.channel()
+
+    channel.exchange_declare(exchange='logs',
+                             type='fanout')
+
+    result = channel.queue_declare(exclusive=True)
+    queue_name = result.method.queue
+
+    channel.queue_bind(exchange='logs',
+                       queue=queue_name)
+
+    print(' [*] Waiting for logs. To exit press CTRL+C')
+
+    def callback(ch, method, properties, body):
+        print(" [x] %r" % body)
+
+    channel.basic_consume(callback,
+                          queue=queue_name,
+                          no_ack=True)
+
+    channel.start_consuming()
+
+  #+END_SRC

@@ -1,0 +1,45 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-08-01-使用orgtable的计算功能
+
+使用org table来统计的时候，经常是需要统计某一行或者某一列的和等等。org
+table可以使用公式来计算的。比如下面我统计葡萄总数和金额，每斤葡萄6元：
+
+#+BEGIN_SRC org
+|-------+------------+------------+------|
+| 姓名  | 数量（斤） | 金额（元） | 付款 |
+|-------+------------+------------+------|
+| nameA |         15 |         90 | done |
+| nameA |         10 |         60 | done |
+| nameA |          5 |         30 | done |
+| nameA |          5 |         30 | done |
+| nameA |         25 |        150 | done |
+| nameA |          5 |         30 | done |
+| nameA |         10 |         60 | done |
+| nameA |         10 |         60 | done |
+| nameA |          5 |         30 | done |
+| nameA |          5 |         30 | done |
+| nameA |          5 |         30 | done |
+| nameA |         15 |         90 | done |
+| nameA |         10 |         60 | done |
+| nameA |          5 |         30 | done |
+| nameA |          5 |         30 | done |
+| nameA |         35 |        210 | done |
+| nameA |         25 |        150 |      |
+| nameA |         10 |         60 |      |
+|-------+------------+------------+------|
+| total |        205 |       1230 |      |
+|-------+------------+------------+------|
+,#+TBLFM: @>$2=vsum(@2..@-1)::$3=$2 * 6::@>$3=vsum(@2..@-1)
+
+#+END_SRC
+
++ =@2$3= ：第二行第三列，和 =C2= 相同
++ =$5= ：  当前行的第五列c和 =E&= 相同
++ =@2= ：当前列的第二行
++ =@-1$-3= ：上一行的左边第三列
++ =@-I$2= ： 当前行的上面的hline的下面一行，第2列。 field just under
+  hline above current row, column 2.
++ =@>$5= ：最后一行的第5列 field in the last row, in column 5.

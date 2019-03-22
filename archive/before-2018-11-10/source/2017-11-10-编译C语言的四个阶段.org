@@ -1,0 +1,136 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 编译C语言的四个阶段
+
+*本文是从 [[https://www.calleerlandsson.com/the-four-stages-of-compiling-a-c-program/][The Four Stages of Compiling a C Program]] 直接翻译过来的。*
+
+了解编译是如何工作的，对写代码和调试都颇有用处。
+
+编译C程序有几个过程。总的来说，这可以分为四个独立的过程：预处理，编译，
+汇编，链接。传统的C编译器调用其它程序分别来处理不同的过程。
+
+本文中，我将以下面的源代码为例为说明编译的每个阶段：
+#+BEGIN_SRC C :tangle /tmp/hello_world.c
+/*
+ ,* "Hello, World!": A classic.
+ ,*/
+
+#include <stdio.h>
+
+int
+main(void)
+{
+        puts("Hello, World!");
+        return 0;
+}
+#+END_SRC
+
+* 预处理
+  编译的第一个阶段叫预处理。这个阶段中，以 =#= 开头的行都将被预处理器
+  当做预处理命令来解释。这些命令就是一个有自己语法和语义的宏语言。它就
+  是来减少源代码中的重复的。它通过提供内联文件的功能，定义宏和有条件的
+  省略代码来完成减少重复的功能。
+
+  在解释命令前，预处理器会提前做一些处理工作。包括合并连续行（以 =\=
+  结尾的行）和跳过注释。
+  
+  打印预处理阶段的结果，给 =cc= 传 =-E= 参数就行了。
+  #+BEGIN_SRC sh
+cc -E hello_world.c
+  #+END_SRC
+
+  对于前面“Hello,world”的例子来说，预处理器会生成头文件 =stdio.h= 的
+  内容，并与 =hello_world.c= 文件相结合，把它从开头解析出来：
+  
+  #+BEGIN_EXAMPLE
+[lines omitted for brevity]
+
+extern int __vsnprintf_chk (char * restrict, size_t,
+       int, size_t, const char * restrict, va_list);
+# 493 "/usr/include/stdio.h" 2 3 4
+# 2 "hello_world.c" 2
+
+int
+main(void) {
+ puts("Hello, World!");
+ return 0;
+}
+  #+END_EXAMPLE
+
+* 编译
+第二个阶段就叫编译是很让人疑惑的。在这个阶段，根据目标处理器的架构，预
+处理器生成的代码将被转化为对应的汇编指令。它还是一种人可读懂的语言。
+
+因为这个步骤的存在，使用C语言可以包括一些内联汇编指令，也可以选择不同
+的汇编器。
+
+一些编译器直接就集成了汇编器，这些汇编器可以直接生成机器码，避免了成在
+中间的汇编指令，再调用汇编译来汇编的过程。
+
+可以给cc传 =-S= 选项来保存汇编的结果：
+#+BEGIN_SRC sh
+cc -S hello_world.c
+#+END_SRC
+这就可以生成一个名为 =hello_world.s= 的文件，它包含了生成的汇编指令。
+在 =Ubuntu 16.04.3 LTS= 中是这样的：
+#+BEGIN_EXAMPLE
+	.file	"hello_world.c"
+	.section	.rodata
+.LC0:
+	.string	"Hello, World!"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	$.LC0, %edi
+	call	puts
+	movl	$0, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.5) 5.4.0 20160609"
+	.section	.note.GNU-stack,"",@progbits
+#+END_EXAMPLE
+
+* 汇编 
+汇编阶段，汇编器把汇编指令转化为机器码或者目标文件。输出就是真实的将会
+被目标处理器执行的指令。
+
+给cc传递 =-c= 选项可以保存汇编阶段的结果：
+#+BEGIN_SRC sh
+cc -c hello_world.c
+#+END_SRC
+
+执行上面指令可以生成一个名为 =hello_world.o= 的文件，它包括程序的目标
+码。该文件的内容是二进制格式的，可以由 =hexdump= 或者 =od= 来查看：
+#+BEGIN_SRC sh
+hexdump hello_world.o
+od -c hello_world.o
+#+END_SRC
+
+* 链接
+汇编阶段生成的目标码是由机器能读懂的指令组成的。但是，该程序的有些部分
+是缺失或者乱序的。要生成最后可以执行的程序，当前生成的结果需要重新整理、
+填补上缺失的部分。这个过程就叫链接。
+
+链接器会重新整理目标码，让某个部分的函数可以成功地调用到另一个部分的函
+数。它也会加入程序需要使用的库函数中的指令。在这个"Hello, World"程序中，
+链接器需要为目标码添加 =puts= 函数。
+
+该阶段的输出就是最后可以执行的程序了。当没有使用任何参数调用时，cc默认
+把它取名为 =a.out= 。可以使用 =-o= 选项来命名为其它名字：
+#+BEGIN_SRC sh
+cc -o hello_world hello_world.c
+#+END_SRC

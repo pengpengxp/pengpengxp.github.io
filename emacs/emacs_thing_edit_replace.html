@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>thing-edit新功能介绍</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="emacs_blog.html">Emacs Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <div class="peng-time">
+          <time>2018-12-21</time>
+        </div>
+
+        <h1>thing-edit新功能介绍</h1>
+
+        <p>有朋友在微信群里面提了这样一个问题：</p>
+        <pre class="code">evi-mode 中，ciw （删除一个text-object），能否只删除不拷贝？
+
+比如，我经常的操作：
+================
+先复制一块，然后找到需要粘贴的地方，比如（...）中，
+
+可是用了 ciw, 虽然删除了（）里面的内容，
+但是我原先的粘贴板的内容也变掉了，不得不回到原来的位置重新拷贝一下
+
+有什么好的方法？</pre>
+
+        <p>我想了想，其实我有也有相同的需求。我之前写过一个小函数专门来做这个事情。</p>
+        <pre class="emacs-lisp">(<span class="keyword">defun</span> peng-replace-current-symbol-with-kill-ring ()
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">let*</span> ((begin (<span class="keyword">progn</span>
+                  (beginning-of-thing 'symbol)
+                  (<span class="function-name">point</span>)))
+         (end (<span class="keyword">progn</span>
+                (end-of-thing 'symbol)
+                (<span class="function-name">point</span>))))
+
+    (<span class="keyword">progn</span>
+      (beginning-of-thing 'symbol)
+      (<span class="xah-elisp-command">delete-char</span> (<span class="function-name">-</span> end begin))
+      (<span class="xah-elisp-command">yank</span>))
+<span class="hl-line">    ))</span></pre>
+
+        <p>函数功能很简单，其实就是替换当前光标下的symbol为kill-ring里面的东西。</p>
+
+        <p>在没有这个函数前，我如果需要把一个symbolA替换成symbolB。需要做下面的操作（先拷贝，再替换）：
+          <ol>
+            <li>移动到symbolB，copy symbolB。</li>
+            <li>移动到symbolA，删除symbolA。</li>
+            <li>yank symbolB。</li>
+          </ol>
+        </p>
+
+        <p>这样可能的问题是，在删除symbolA的时候，如果调用一些功能函数来删（比如这位朋友在evil中的ciw操作），可能又把symbolA复制到kill-ring里面去了（或者是其它地方，反正就是把之前复制的东西给覆盖掉了）。
+          这时执行第三步可能就比较麻烦，可能需要两次C-y，或者其它麻烦的操作。</p>
+
+        <p>当然，可以改一下执行顺序：
+          <ol>
+            <li>移动到symbolA，删除symbolA。</li>
+            <li>移动到symbolB，copy symbolB。</li>
+            <li>移动到symbolA，yank symbolB。</li>
+          </ol>
+        </p>
+
+        <p>但是，这样又会多一次移动。
+          而且说实话，当我们有这种需求的时候，比较多的情况就是先拷贝好内容，然后到要修改的地方用刚拷贝的内容替换掉原来的内容。</p>
+
+        <p>所以我写了一个这样的小函数，流程就成了：
+          <ol>
+            <li>移动到symbolB，copy symbolB。</li>
+            <li>移动到symbolA，执行小函数。</li>
+          </ol>
+        </p>
+
+        <p>本来这是一个小函数，但是我现在发现，每天我使用它的次数竟然多得吓人！
+          以至于我把它绑定到command模式下的2键，只需要按一次就执行。</p>
+
+        <p>但是，它只是针对symbol而言的。
+          如果有其它复杂点的，比如想针对括号内的内容来做此类操作就没有办法了。</p>
+
+        <p>之前使用 <a class="sorc" href="https://www.emacswiki.org/emacs/thing-edit.el" data-accessed="2018-12-21">EmacsWiki: thing-edit.el</a> 。
+          底层使用 <a class="sorc" href="https://www.emacswiki.org/emacs/ThingAtPoint" data-accessed="2018-12-21">ThingAtPoint</a> 。它几乎可以涵盖所有我需要的copy动作。
+          我想能不能把这个小功能也加入到里面去呢？这样针对不同的"thing"，我都可以两步完成这类操作。</p>
+
+        <p>其实不麻烦，完成后的代码 <a class="sorc" href="https://github.com/pengpengxp/thing-edit" data-accessed="2018-12-21">thing-edit</a> 。</p>
+
+        <p>我新增了几个thing-replace-xxx函数。比如我想现在想把一个文件中的函数A换成另一个文件中的函数B。现在需要的操作就是：
+
+          <ol>
+            <li>移动到函数B，使用thing-copy-defun拷贝函数B。</li>
+            <li>移动到函数A，使用thing-replace-defun直接就完成了。</li>
+          </ol>
+
+        </p>
+
+        <p>其它对应的thing都是一样的操作。比较有用的是：
+
+          <ul>
+            <li>thing-copy-list：括号内的内容，包括括号。</li>
+            <li>thing-copy-parentheses：括号内的内容，不包括括号。</li>
+            <li>thing-copy-defun：整个函数。</li>
+            <li>thing-copy-symbol：单个symbol。</li>
+            <li>thing-copy-word：单个word。</li>
+            <li>thing-copy-line：一行。</li>
+            <li>thing-copy-email：email地址。</li>
+            <li>thing-copy-url：url地址。</li>
+          </ul>
+        </p>
+
+        <p>这些函数都有对应的replace。操作是一样的。</p>
+
+        <p>最后可以为它定义一个map：</p>
+
+<pre class="emacs-lisp">(<span class="keyword">defvar</span> peng-thing-edit-map (<span class="function-name">make-sparse-keymap</span>)
+  <span class="string">"Keybinding for `thing-edit'"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Copy.
+</span>(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"w"</span>) 'thing-copy-word)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"s"</span>) 'thing-copy-symbol)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"m"</span>) 'thing-copy-email)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"f"</span>) 'thing-copy-filename)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"u"</span>) 'thing-copy-url)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"x"</span>) 'thing-copy-sexp)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"t"</span>) 'thing-copy-page)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"g"</span>) 'thing-copy-sentence)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"o"</span>) 'thing-copy-whitespace)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"i"</span>) 'thing-copy-list)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"c"</span>) 'thing-copy-comment)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"h"</span>) 'thing-copy-defun)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"p"</span>) 'thing-copy-parentheses)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"a"</span>) 'thing-copy-to-line-beginning)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"e"</span>) 'thing-copy-to-line-end)
+
+<span class="comment-delimiter">;; </span><span class="comment">Replace
+</span>(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"W"</span>) 'thing-replace-word)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"S"</span>) 'thing-replace-symbol)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"M"</span>) 'thing-replace-email)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"F"</span>) 'thing-replace-filename)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"U"</span>) 'thing-replace-url)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"X"</span>) 'thing-replace-sexp)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"T"</span>) 'thing-replace-page)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"G"</span>) 'thing-replace-sentence)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"O"</span>) 'thing-replace-whitespace)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"I"</span>) 'thing-replace-list)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"C"</span>) 'thing-replace-comment)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"H"</span>) 'thing-replace-defun)
+(<span class="function-name">define-key</span> peng-thing-edit-map (<span class="function-name">kbd</span> <span class="string">"P"</span>) 'thing-replace-parentheses)
+</pre>
+
+        <p>然后为它绑定一个按键：</p>
+
+<pre class="emacs-lisp">
+<span class="hl-line">(</span><span class="xah-elisp-command"><span class="hl-line">global-set-key</span></span><span class="hl-line"> (</span><span class="function-name"><span class="hl-line">kbd</span></span><span class="hl-line"> </span><span class="string"><span class="hl-line">"your-keys"</span></span><span class="hl-line">) peng-thing-edit-map)</span></pre>
+
+        <section>
+          <div>
+            <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> </b></p>
+          </div>
+        </section>
+
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+      clientID: '3c74db23d6478d210434',
+      clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+      repo: 'pengpengxp.github.io',
+      owner: 'pengpengxp',
+      admin: ['pengpengxp'],
+      id: 'emacs/emacs_thing_edit_replace.html',
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

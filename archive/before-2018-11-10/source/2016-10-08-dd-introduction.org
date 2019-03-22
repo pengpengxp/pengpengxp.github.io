@@ -1,0 +1,192 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: content
+#+STARTUP: align
+#+STARUP: hideblocks
+
+# #+OPTIONS: toc:nil 
+# #+BEGIN_HTML
+# ---
+# layout: post
+# title: 介绍一个古老的工具dd
+# excerpt: "使用dd用来安装、备份操作系统以及制作启动U盘"
+# modified: 2016年10月 8日 星期六 16时23分43秒 CST
+# tags: [Linux, OS]
+# comments: true
+# categories: Linux
+# ---
+
+# #+END_HTML
+
+
+# #+TOC: headlines 1 local
+
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+#+Title: 介绍一个古老的工具dd
+
+* dd是什么
+dd是一个古老的命令，Wikipedia上这样解释：
+#+BEGIN_EXAMPLE
+dd是一个Unix和类Unix系统上的命令，主要功能为转换和复制文件。
+#+END_EXAMPLE
+
+* dd可以做什么
+  + 制做启动U盘
+  + 备份系统
+  + 直接安装系统
+
+* 使用dd制作linux启动U盘
+  假设对应的镜像文件放在 =/mnt/linux.iso= ，U盘为 =/dev/sdb= ，一条命令就可以搞定：
+  #+BEGIN_SRC sh
+    sudo dd if=/mnt/linux.iso of=/dev/sdb
+  #+END_SRC
+  
+* 使用dd制作windows启动盘
+  :PROPERTIES:
+  :CUSTOM_ID: win
+  :END:
+  假设对应的镜像文件放在 =/mnt/win7.iso= ，U盘为 =/dev/sdb= 。
+  
+  + 使用fdisk给U盘分区，需要把partition type改为7并打上bootable标志。
+    #+BEGIN_EXAMPLE
+      openstack@object2:~$ sudo fdisk /dev/sdb
+      [sudo] password for openstack: 
+
+      Welcome to fdisk (util-linux 2.27.1).
+      Changes will remain in memory only, until you decide to write them.
+      Be careful before using the write command.
+
+      Command (m for help): p
+      Disk /dev/sdb: 3.7 GiB, 4002910208 bytes, 7818184 sectors
+      Units: sectors of 1 * 512 = 512 bytes
+      Sector size (logical/physical): 512 bytes / 512 bytes
+      I/O size (minimum/optimal): 512 bytes / 512 bytes
+      Disklabel type: dos
+      Disk identifier: 0x4187fea2
+
+      Command (m for help): n
+      Partition type
+         p   primary (0 primary, 0 extended, 4 free)
+         e   extended (container for logical partitions)
+      Select (default p): 
+
+      Using default response p.
+      Partition number (1-4, default 1): 
+      First sector (2048-7818183, default 2048): 
+      Last sector, +sectors or +size{K,M,G,T,P} (2048-7818183, default 7818183): 
+
+      Created a new partition 1 of type 'Linux' and of size 3.7 GiB.
+
+      Command (m for help): p
+      Disk /dev/sdb: 3.7 GiB, 4002910208 bytes, 7818184 sectors
+      Units: sectors of 1 * 512 = 512 bytes
+      Sector size (logical/physical): 512 bytes / 512 bytes
+      I/O size (minimum/optimal): 512 bytes / 512 bytes
+      Disklabel type: dos
+      Disk identifier: 0x4187fea2
+
+      Device     Boot Start     End Sectors  Size Id Type
+      /dev/sdb1        2048 7818183 7816136  3.7G 83 Linux
+
+      Command (m for help): t
+      Selected partition 1
+      Partition type (type L to list all types): 7
+      Changed type of partition 'Linux' to 'HPFS/NTFS/exFAT'.
+
+      Command (m for help): a
+      Selected partition 1
+      The bootable flag on partition 1 is enabled now.
+
+      Command (m for help): p
+      Disk /dev/sdb: 3.7 GiB, 4002910208 bytes, 7818184 sectors
+      Units: sectors of 1 * 512 = 512 bytes
+      Sector size (logical/physical): 512 bytes / 512 bytes
+      I/O size (minimum/optimal): 512 bytes / 512 bytes
+      Disklabel type: dos
+      Disk identifier: 0x4187fea2
+
+      Device     Boot Start     End Sectors  Size Id Type
+      /dev/sdb1  *     2048 7818183 7816136  3.7G  7 HPFS/NTFS/exFAT
+
+      Command (m for help): 
+    #+END_EXAMPLE
+  + 创建文件系统
+    #+BEGIN_EXAMPLE
+      mkfs.ntfs -f /dev/sdb1
+    #+END_EXAMPLE
+  + 使用dd先把mbr写入[fn:1:不同系统的mbr.bin位置可能有差异，有的可能还需要先安装syslinux。]：
+    #+BEGIN_EXAMPLE
+      dd if=/usr/lib/syslinux/bios/mbr.bin of=/dev/sdb 
+    #+END_EXAMPLE
+  + 最后把win7的iso挂载上，将其中的内容全部拷贝到制作好的分驱中就行了：
+    #+BEGIN_EXAMPLE
+      sudo mkdir /mnt/iso /mnt/usb
+      sudo mount -o loop /mnt/win7.iso /mnt/iso
+      sudo mount /dev/sdb1 /mnt/usb
+      sudo cp -r /mnt/iso/* /mnt/usb/
+    #+END_EXAMPLE
+      
+  这样就制作好了一个win7的启动U盘[fn:2:win10也可以这样制作，XP没试过。]。
+
+* 备份操作系统[fn:3:其实备份磁盘更加准确一些。]
+  备份前面[[#win]]制作好的启动盘：
+  #+BEGIN_SRC sh
+     dd if=/dev/sdb of=/tmp/win7.img
+  #+END_SRC
+
+* TODO 加速备份 （这个方法我还没有试过）
+  我需要备份我的系统盘，整个盘有120G，如果完整备份的话，就一定需要120G
+  的空间才行。可以通过下面这样的来压缩一下，恢复时解压再恢复：
+  #+BEGIN_SRC sh
+# To save space, you can compress data produced by dd with gzip, e.g.:
+dd if=/dev/hdb | gzip -c  > /image.img
+
+# You can restore your disk with:
+
+gunzip -c /image.img.gz | dd of=/dev/hdb
+  #+END_SRC
+  这样应该占用的空间可以少一些。
+
+  更进一步，可以把需要备份磁盘上没有使用的空间都完全写为 =0= 。然后使
+  用 gzip压缩效果就很好，进行一下如下操作：
+  #+BEGIN_SRC sh
+mkdir /mnt/hdb
+mount /dev/hdb /mnt/hdb
+dd if=/dev/zero of=/mnt/hdb/zero
+
+# Wait a bit, dd will eventually fail with a "disk full" message,
+# then:
+
+rm /mnt/hdb/zero
+umount /mnt/hdb
+dd if=/dev/hdb | gzip -c  > /image.img
+  #+END_SRC
+  我理解就是使用 =dd= ，把对应磁盘没有使用的空间都用0（也就是
+  =/dev/zero= ）填满。生成的这个 =zero= 文件应该全都是0。然后再删掉，
+  磁盘未使用空间都是0啦。这个时候使用gzip来压缩效果应该是非常好的。
+  
+* 直接安装操作系统 
+  想像一下在黑客们直接使用网线连接两台电脑后安装操作系统的画面 :) 。可
+  以使用dd来完成。基本思路是这样的：
+
+  + 首先制作好对应的img文件。可以在virtualbox等虚拟机中把系统安装配置
+    好。
+  + 使用livecd进去把/dev/sda整个dd出来做成一个img。
+  + 使用livecd启动需要安装系统的机器，然后把img再dd去/dev/sda里面去就
+    可以了。
+    #+BEGIN_SRC sh
+      dd if=os.img | ssh root@192.168.58.2 dd of=/dev/sda
+    #+END_SRC
+
+  安装时虚拟机的磁盘别选太大，这样使用dd安装时就不会太久。然后把磁盘选
+  为lvm。通过这种方式安装好后又可以扩展。
+
+* MISC
+  dd命令执行经常需要较长时间。急性子们可以这样查询当前进度：
+  
+  #+BEGIN_SRC sh
+    # 比如：每5秒输出dd的进度
+    watch -n 5 pkill -USR1 ^dd$
+  #+END_SRC

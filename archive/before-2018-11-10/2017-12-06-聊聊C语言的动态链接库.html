@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C语言的动态链接库</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">C语言的动态链接库</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org4979e26">1. 动态链接库例子</a></li>
+<li><a href="#org650ab7c">2. 一个更详细的例子和说明（翻译）</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4979e26" class="outline-2">
+<h2 id="org4979e26"><span class="section-number-2">1</span> 动态链接库例子</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+写一个 <code>lib.c</code> 函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #d18aff;">    #include</span> <span style="color: #ff4ea3;">&lt;stdio.h&gt;</span>
+
+    <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">from_lib</span>()
+    {
+        printf(<span style="color: #ff4ea3;">"This is hello world from lib\n"</span>);
+        <span style="color: #a1db00;">return</span> 0;
+    }
+</pre>
+</div>
+
+<p>
+再写一个调用的 <code>main.c</code> 函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #d18aff;">    #include</span> <span style="color: #ff4ea3;">&lt;stdio.h&gt;</span>
+<span style="color: #d18aff;">    #include</span> <span style="color: #ff4ea3;">&lt;stdlib.h&gt;</span>
+<span style="color: #d18aff;">    #include</span> <span style="color: #ff4ea3;">&lt;string.h&gt;</span>
+
+
+    <span style="color: #00d7af;">int</span> <span style="color: #ffd700;">main</span>(<span style="color: #00d7af;">int</span> <span style="color: #ff8700;">args</span>,<span style="color: #00d7af;">char</span> *<span style="color: #ff8700;">argv</span>[])
+    {
+        from_lib();
+        <span style="color: #a1db00;">return</span> 0;
+    }
+</pre>
+</div>
+
+<p>
+对应的 <code>Makefile</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile-gmake">    <span style="color: #ffd700;">.PHONY</span>:libtest a.out
+    <span style="color: #ffd700;">a.out</span>:
+            echo <span style="color: #ff4ea3;">"compile a.out"</span>
+            gcc main.c -L. -ltest
+    <span style="color: #ffd700;">libtest</span>:
+            gcc lib.c -fPIC -shared -o libtest.so
+    <span style="color: #ffd700;">clean</span>:
+            rm -rfv libtest.so a.out
+</pre>
+</div>
+
+<p>
+需要设置变量 <code>LD_LIBRARY_PATH</code> ，把当前路径加入其中然后执行：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">LD_LIBRARY_PATH</span>=<span style="color: #ff4ea3;">"/tmp/dynamic"</span>
+    ./a.out
+</pre>
+</div>
+
+<p>
+一行流执行应该这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #ff8700;">LD_LIBRARY_PATH</span>=<span style="color: #ff4ea3;">"."</span> ./a.out
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org650ab7c" class="outline-2">
+<h2 id="org650ab7c"><span class="section-number-2">2</span> 一个更详细的例子和说明（翻译）</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html">参考文档</a>
+</p>
+
+<p>
+有下面三个文件：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #d18aff;">#if</span><span style="color: #d18aff;">n</span><span style="color: #d18aff;">def</span> foo_h__                                                                                                                 
+<span style="color: #d18aff;">#define</span> <span style="color: #ff8700;">foo_h__</span>                                                                                                                 
+                                                                                                                                                
+<span style="color: #a1db00;">extern</span> <span style="color: #00d7af;">void</span> <span style="color: #ffd700;">foo</span>(<span style="color: #00d7af;">void</span>);                                                                                                          
+                                                                                                                                                
+<span style="color: #d18aff;">#endif</span>  <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #6c6c6c; font-style: italic;">foo_h__                                                                                                              </span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">##foo.c: </span><span style="color: #6c6c6c; font-style: italic;">*/</span>                                                                                                                        
+                                                                                                                                                
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">&lt;stdio.h&gt;</span>                                                                                                              
+
+<span style="color: #00d7af;">void</span> <span style="color: #ffd700;">foo</span>(<span style="color: #00d7af;">void</span>)                                                                                                                  
+{                                                                                                                               
+    puts(<span style="color: #ff4ea3;">"Hello, I'm a shared library"</span>);                                                                                        
+}                                                                                                                               
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #6c6c6c; font-style: italic;">##main.c: </span><span style="color: #6c6c6c; font-style: italic;">*/</span>                                                                                                                       
+                                                                                                                                                
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">&lt;stdio.h&gt;</span>                                                                                                              
+<span style="color: #d18aff;">#include</span> <span style="color: #ff4ea3;">"foo.h"</span>                                                                                                                
+                                                                                                                                                
+<span style="color: #00d7af;">int</span> <span style="color: #ffd700;">main</span>(<span style="color: #00d7af;">void</span>)                                                                                                                  
+{                                                                                                                               
+    puts(<span style="color: #ff4ea3;">"This is a shared library test..."</span>);                                                                                   
+    foo();                                                                                                                      
+    <span style="color: #a1db00;">return</span> 0;                                                                                                                   
+}                                                                                                                               
+</pre>
+</div>
+
+<ol class="org-ol">
+<li><p>
+编译出“位置无关”代码（Position Independent Code，PIC）：
+</p>
+<pre class="example">
+$ gcc -c -Wall -Werror -fpic foo.c
+</pre></li>
+<li><p>
+基于目标文件创建一个动态链接库：
+</p>
+<pre class="example">
+     gcc -shared -o libfoo.so foo.o
+</pre></li>
+<li><p>
+把动态库和程序链接起来：
+</p>
+<pre class="example">
+$ gcc -Wall -o test main.c -lfoo                                                                                                
+/usr/bin/ld: cannot find -lfoo                                                                                                  
+collect2: ld returned 1 exit status                                                                                             
+</pre>
+<p>
+报错表示编译器找不到对应的库文件。需要使用 <code>-L</code> 参数来告诉编译器
+到哪儿找对应的动态库文件。
+</p>
+<pre class="example">
+$ gcc -L. -Wall -o test main.c -lfoo
+</pre></li>
+<li><p>
+使运态库在运行时能被找到。
+</p>
+<pre class="example">
+$ ./test                                                                                                                        
+./test: error while loading shared libraries: libfoo.so: cannot open shared object file: No such file or directory     
+</pre>
+<p>
+出现该错误说明该动态库找不到。
+</p>
+<ol class="org-ol">
+<li><p>
+可以通过设置 <code>LD_LIBRARY_PATH</code> 变量解决该问题：
+</p>
+<pre class="example">
+   $ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH                                                                    
+   $ ./test                                                                                                                        
+   This is a shared library test...                                                                                                
+   Hello, I'm a shared library                                                                                                     
+</pre></li>
+<li><p>
+还可以在编译的时候通 <code>-rpath</code> 指定一个固定的地址：
+</p>
+<pre class="example">
+$ unset LD_LIBRARY_PATH                                                                                                         
+$ gcc -L. -Wl,-rpath=. -Wall -o test main.c -lfoo                                             
+$ ./test                                                                                                                        
+This is a shared library test...                                                                                                
+Hello, I'm a shared library                                                                                                     
+</pre></li>
+<li><p>
+还可以把编译生成的 <code>so</code> 文件放到系统动态库默认目录中
+<code>/usr/lib</code> 和 <code>/usr/local/lib</code> 。然后更新一下动态库的cache即可。
+</p>
+<pre class="example">
+$ cp /home/username/foo/libfoo.so /usr/lib                                                                                      
+$ chmod 0755 /usr/lib/libfoo.so                                                                                                 
+$ ldconfig
+</pre>
+<p>
+检查一下cache里面有没有：
+</p>
+<pre class="example">
+$ ldconfig -p|grep foo        
+libfoo.so (libc6) =&gt; /usr/lib/libfoo.so                                                                                         
+</pre>
+<p>
+还可以再使用 <code>ldd</code> 来查看一下可执行文件 <code>test</code> 中依赖的是哪一个库：
+</p>
+<pre class="example">
+$ ldd test | grep foo                                                                                                           
+libfoo.so =&gt; /usr/lib/libfoo.so (0x00a42000)                                                                                    
+</pre>
+<p>
+这下再重新来试一次：
+</p>
+<pre class="example">
+$ unset LD_LIBRARY_PATH                                                                                                         
+$ gcc -Wall -o test main.c -lfoo                                                                                                
+$ ldd test | grep foo                                                                                                           
+libfoo.so =&gt; /usr/lib/libfoo.so (0x00a42000)                                                                                    
+$ ./test                                                                                                                        
+This is a shared library test...                                                                                                
+Hello, I'm a shared library                                                                                                     
+</pre></li>
+</ol></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

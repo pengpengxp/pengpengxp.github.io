@@ -1,0 +1,145 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-03-26-Linux下的工具
+
+Linux是好用，但是软件太多，同一个功能经常是有很多工具可以实现。本文记
+录一些我用过觉得不错的工具的名字或者使用方法，以供后面查阅。
+
+* 发包
+** sendip
+   This is a test tool, which make special header of tcp/ip packet.
+   
+   测试工具，可以自己定制发包的ip地址，等头部信息。
+   
+   通常执行格式如下：
+   #+BEGIN_SRC sh
+     sendip –v –d r64 –p ipv4 –iv 4 –ih 5 –il 128 –is 10.0.0.1 –id 30.0.0.1 –p tcp –ts 1379 –td 23 –tt 8 30.0.0.1
+     sendip –v –d r64 –p ipv4 –iv 4 –ih 5 –il 128 –is 10.0.0.1 –id 192.168.57.109 –p tcp –ts 1379 –td 8080 –tt 8 192.168.56.108
+   #+END_SRC
+
+   -v：运行时输出详细运行信息，如不指定，运行时不输出信息
+   –d r64：用64 字节的随机数值填充IP包中的数据段
+   –p ipv4：指定协议类型为IP 协议（IP 协议有自己的相应参数，以i 开头）
+   –iv 4：协议版本为4，即IPV4
+   –ih 5：指定IP 头的长度为5×4＝20 字节
+   –il 128：指定IP 包的总长度为128 字节
+   –is 10.0.0.1：指定IP 包的源地址
+   –id 30.0.0.1：指定IP 包的目的地址
+   –p tcp：指定IP 包中封装的包的协议类型（TCP 协议有自己的相应参数，以t 开头）
+   –ts 1379：指定TCP 包的源端口1379
+   –td 23：指定TCP 包的目的端口为23
+   -tt 8：指定TCP 包的偏移量即TCP 头的长度，没有TCP 选项时为5，即20 字节，有TCP 选项时需要增加。
+   30.0.0.1：指定发包的目的主机
+
+   sendip –v –d r64 –p ipv4 –iv 4 –ih 5 –il 128 –is 10.0.0.1 –id 192.168.57.109 –p tcp –ts 1379 –td 8080 –tt 8 192.168.56.108
+
+** [[http://www.perihel.at/sec/mz/][Mausezahn]]
+   发组播的数据包：
+   #+BEGIN_SRC sh
+mz eth0 -c 0 -d 10msec -B 230.1.1.1 -t udp "dp=32000,dscp=46" -P "Multicast test packet"  
+   #+END_SRC
+
+** scapy
+   这是一个python库，我用它来发一些igmp的query包，
+
+   发送report：
+   #+BEGIN_SRC python :tangle /tmp/igmp_tools/report.py :mkdirp yes
+#!/usr/bin/python
+
+from scapy.all import *
+from scapy.contrib.igmp import IGMP
+import random
+
+
+src_ip = "192.168.1.1"
+multicast_ip = "239.255.12.45"
+interface = "eth0"
+
+def send_igmp_report(dst):
+	a=Ether(src="94:c6:91:02:56:d6")
+	b=IP(src=src_ip)
+	c=IGMP(type=0x16, gaddr=dst)
+	c.igmpize(b, a)
+	print "Joining IP " + c.gaddr + " MAC " + a.dst
+	sendp(a/b/c, iface=interface)
+
+send_igmp_report(multicast_ip)
+   
+   #+END_SRC
+   
+   发送leave：
+   #+BEGIN_SRC python :tangle /tmp/igmp_tools/leave.py :mkdirp yes
+#!/usr/bin/python
+
+from scapy.all import *
+from scapy.contrib.igmp import IGMP
+import random
+
+src_ip = "192.168.1.1"
+src_mac = "94:c6:91:02:56:d6"
+interface = "eth0"
+multicast_ip = "224.239.12.45"
+
+
+def send_igmp_leave(dst):
+	a=Ether(src=src_mac)
+	b=IP(src=src_ip)
+	c=IGMP(type=0x17, gaddr=dst)
+	c.igmpize(b, a)
+	print "Joining IP " + c.gaddr + " MAC " + a.dst
+	sendp(a/b/c, iface=interface)
+
+
+send_igmp_leave(multicast_ip);
+   #+END_SRC
+
+   发送普通查询：
+   #+BEGIN_SRC python :tangle /tmp/igmp_tools/ordinary_query.py :mkdirp yes
+#!/usr/bin/python
+
+from scapy.all import *
+from scapy.contrib.igmp import IGMP
+import random
+
+
+src_ip = "192.168.1.1"
+interface = "eth0"
+multicast_ip = "224.0.0.1"
+
+
+def send_igmp_ordinary_query():
+	a=Ether(src="94:c6:91:02:56:d6")
+	b=IP(src=src_ip, dst=multicast_ip)
+	c=IGMP(type=0x11)
+	c.igmpize(b, a)
+	sendp(a/b/c, iface=interface)
+
+send_igmp_ordinary_query()
+   #+END_SRC
+
+   发送特定组查询：
+   #+BEGIN_SRC python :tangle /tmp/igmp_tools/specified_query.py :mkdirp yes
+#!/usr/bin/python
+
+from scapy.all import *
+from scapy.contrib.igmp import IGMP
+import random
+
+
+src_ip = "192.168.1.1"
+interface = "eth0"
+multicast_ip = "239.255.12.45"
+
+
+def send_igmp_specified_query(dst):
+	a=Ether(src="94:c6:91:02:56:d6")
+	b=IP(src=src_ip)
+	c=IGMP(type=0x11, gaddr=dst)
+	c.igmpize(b, a)
+	sendp(a/b/c, iface=interface)
+
+
+send_igmp_specified_query(multicast_ip)
+   #+END_SRC

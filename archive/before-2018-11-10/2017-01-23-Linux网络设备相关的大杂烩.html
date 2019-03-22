@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linux网络设备相关的大杂烩</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Linux网络设备相关的大杂烩</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org400fba2">1. 一个网卡上的多个ip</a></li>
+<li><a href="#veth">2. veth</a></li>
+<li><a href="#orgfbca757">3. vlan</a></li>
+<li><a href="#org3acc391">4. 一个具体的使用bridge示例</a></li>
+<li><a href="#org5273a19">5. 查询设备的类型</a></li>
+<li><a href="#org8f03087">6. <span class="todo TODO">TODO</span> tap和tun</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org400fba2" class="outline-2">
+<h2 id="org400fba2"><span class="section-number-2">1</span> 一个网卡上的多个ip</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+之前在网络上看到过可以这样就可以在ubuntu上使用“虚拟网卡”：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ifconfig eth0:1 192.168.56.2 netmask 255.255.255.0
+</pre>
+</div>
+<p>
+其实这样添加的不是虚拟网卡。只是在eth0网卡上多设置了一个ip。现在已经
+不推荐这样使用啦。使用ifconfig是查不出来的。需要使用 <code>ip address</code> 才
+可以查询出来：
+</p>
+<pre class="example">
+    2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+        link/ether 08:00:27:80:4f:6d brd ff:ff:ff:ff:ff:ff
+        inet 192.168.56.2/24 brd 192.168.56.255 scope global eth0
+           valid_lft forever preferred_lft forever
+        inet 192.168.56.119/24 brd 192.168.56.255 scope global secondary eth0:1
+           valid_lft forever preferred_lft forever
+        inet6 fe80::a00:27ff:fe80:4f6d/64 scope link 
+           valid_lft forever preferred_lft forever
+</pre>
+<p>
+你看，这是在eth0上整了两个ip。理解了这种方式的原理后就知道了，名字还
+不能随便取，必须以 <code>ifconfig &lt;interface&gt;:&lt;number&gt;</code> 这样的形式。如果
+interface是 <code>eth0</code> ，取 <code>hello:0</code> 这样的名字肯定就是不可以的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga143e2e" class="outline-2">
+<h2 id="veth"><a id="orga143e2e"></a><span class="section-number-2">2</span> veth</h2>
+<div class="outline-text-2" id="text-veth">
+<p>
+veth是另一种类型的“网络设备”。它总是成对出现的。有点类似于管道。数据
+从一个口进来，一定从另一个口出去。可以看下英文解释：
+</p>
+<pre class="example">
+    Virtual Ethernet interfaces are an interesting construct; they always
+    come in pairs, and they are connected like a tube—whatever comes in
+    one veth interface will come out the other peer veth interface・.
+</pre>
+
+<p>
+它们的作用体现在不同的namespace中。关于namespace可以参考 <a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/">这篇文章</a> 。
+就像管道可以用来连接两个进程一样，veth可以用来连接两个
+namespace<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>。对应
+的两个veth，一个放在namespace1一个放在namespace2。然后就可以搞事情啦。
+</p>
+
+<p>
+有时候需要查询与一个veth相对应的另一个veth，可以这样先查对应的peer在
+namespace中的index：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25171;&#21360;veth0&#23545;&#24212;&#30340;peer&#22312;&#20854;namespace&#20013;&#30340;`ip link'&#21629;&#20196;&#30340;&#32034;&#24341;</span>
+    ethtool -S veth0
+</pre>
+</div>
+<p>
+然后再到对应的namespace中去 <code>ip link</code> 一下。对应索引号的就是它的peer
+啦 。假设上面一个命令输出结果：
+</p>
+<pre class="example">
+    NIC statistics:
+         peer_ifindex: 9
+</pre>
+<p>
+说明在veth0的peer对应的namespace中使用`ip link'查出来的索引号是9。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfbca757" class="outline-2">
+<h2 id="orgfbca757"><span class="section-number-2">3</span> vlan</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+vlan也是一种网络设备，可以这样来增加一个：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ip link add name eth0.110 link eth0 type vlan id 110
+</pre>
+</div>
+<p>
+然后要以查询它的id等内容：
+</p>
+<pre class="example">
+    root@rcs:/home/riversec/dist#ip -d link show eth0.110
+    3: eth0.110@eth0: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+        link/ether fa:16:3e:2a:e7:6a brd ff:ff:ff:ff:ff:ff promiscuity 0
+        vlan protocol 802.1Q id 110 &lt;REORDER_HDR&gt; addrgenmode eui64
+</pre>
+
+<p>
+使用上面的方法配置好vlan后，需要把设置 <code>up</code> 起来，然后再配一个ip：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ip link set eth0.110 up
+    ip address add 192.168.56.23/24 dev eth0.110
+</pre>
+</div>
+
+<p>
+这样，另一台机器如果也是配置了一个id为110的vlan设备，那么这两个网卡
+之前通信就会走vlan啦。具体的说，A机器的vlan给B机器的vlan发消息时，会
+在数据链路帧的源Mac后加入32位的数据。前16位为 <code>0x8100</code> 。后面12位为
+设置的id。接改方收到后，由内核802.1q模块判断该id。如果是本机的vlan。
+再上送。
+</p>
+
+<p>
+如果想要使用tcpdump来抓取报文查看出去的报文是否是携带VLAN的id的，需
+要抓取 <b>eth0</b> 的报文，使用 <code>-e</code> 选项就可以看到对应的 <code>802.1Q</code> 的VLAN
+id ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">tcpdump -i eth0 -en vlan 
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3acc391" class="outline-2">
+<h2 id="org3acc391"><span class="section-number-2">4</span> 一个具体的使用bridge示例</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+bridge就是一个傻瓜交换机。
+</p>
+
+<p>
+当前很多虚拟环境，比如openstack、docker等都会使用这种技术来解决虚拟
+机和宿主机以及虚拟机和虚拟机之间的网络连接问题。如下图所示，docker中
+默认是这样使用网桥的：
+</p>
+<pre class="example">
+    +------------------------------------------------------------------------+
+    |                             Host                                       |
+    |                                                                        |
+    |     +------------------+                     +------------------+      |
+    |     |                  |                     |                  |      |
+    |     |                  |                     |                  |      |
+    |     |    Container1    |                     |    Container2    |      |
+    |     |                  |                     |                  |      |
+    |     |    +--------+    |                     |    +--------+    |      |
+    |     |    |  eth0  |    |                     |    |  eth0  |    |      |
+    |     +----+---+----+----+                     +----+----+---+----+      |
+    |              ^  172.17.42.2                            ^  172.17.42.3  |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              v                                         v               |
+    |          +---+-----+                              +----+----+          |
+    |          |         |                              |         |          |
+    |     +----+ vethXX  +------------------------------+ vethYY  +----+     |
+    |     |    |         |                              |         |    |     |
+    |     |    +---------+           docker0            +---------+    |     | 
+    |     |                       +------------+                       |     |
+    |     +-----------------------+  docker0   +-----------------------+     |
+    |                             +-----+------+ 172.17.42.1/16              |
+    |                                                                        |
+    |                       +--------------------------+                     |
+    +-----------------------|         eth0             |---------------------+
+                            +--------------------------+
+                                                 10.10.10.1
+</pre>
+<p>
+图中的 <code>Container1</code> 和 <code>Container2</code> 就是拉起的虚拟机。默认情况下会新
+建一个名叫 `docker0` 的网桥。可以理解为 `docker0` 就是Linux在内部使
+用软件虚拟出了一个交换机。拉起的容器中的 `eth0` 都通过前文提到的
+<a href="#veth">2</a> 连接在这个交换机上，172网段上的报文到了bridge后会“交换”到连
+在这个交换机的其它“端口”，这样宿主机和容器以及容器和容器之间都可以
+相互通信。
+</p>
+
+<p>
+但是这样会导致宿主机以外的机器不能访问到容器。为了实现“外部”也可以
+访问容器。我们可以这样设计：
+</p>
+<pre class="example">
+    +------------------------------------------------------------------------+
+    |                             Host                                       |
+    |                                                                        |
+    |     +------------------+                     +------------------+      |
+    |     |                  |                     |                  |      |
+    |     |                  |                     |                  |      |
+    |     |    Container1    |                     |    Container2    |      |
+    |     |                  |                     |                  |      |
+    |     |    +--------+    |                     |    +--------+    |      |
+    |     |    |  eth0  |    |                     |    |  eth0  |    |      |
+    |     +----+---+----+----+                     +----+----+---+----+      |
+    |              ^  10.10.10.2                             ^  10.10.10.3   |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              |                                         |               |
+    |              v                                         v               |
+    |          +---+-----+                              +----+----+          |
+    |          |         |                              |         |          |
+    |     +----+ vethXX  +------------------------------+ vethYY  +----+     |
+    |     |    |         |                              |         |    |     |
+    |     |    +---------+         bridge-eth0          +---------+    |     | 
+    |     |                     +---------------+                      |     |
+    |     +---------------------+  bridge-eth0  +----------------------+     |
+    |                           +---------------+                            |
+    |                                   ^   10.10.10.1                       |
+    |                                   |                                    |
+    |                                   v                                    |
+    |                       +-----------+--------------+                     |
+    +-----------------------|         eth0             |---------------------+
+                            +--------------------------+                   
+</pre>
+<ol class="org-ol">
+<li>把宿主机上的eth0网卡用的ip地址“移”到网桥上 <code>bridge-eth0</code> 。</li>
+<li>设置宿主机中的eth0网卡也连到 <code>bridge-eth0</code> 上。</li>
+<li>配置docker服务使用名为 <code>bridge-eth0</code> 的网桥。</li>
+</ol>
+
+<p>
+下面的脚本接受一个 <code>&lt;interface&gt;</code> 参数。实现如下功能：
+</p>
+<ol class="org-ol">
+<li>新建一个名为 <code>bridge-&lt;interface-name&gt;</code> 的网桥。</li>
+<li>把原来 <code>&lt;interface&gt;</code> 的ip地址分配给了 <code>bridge-&lt;interface-name&gt;</code> 。</li>
+<li>把原来 <code>&lt;interface&gt;</code> 的连到 <code>bridge-&lt;interface-name&gt;</code> 网桥。</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+    moveHostIntf(){
+        <span style="color: #ff8700;">IFINDEX</span>=$<span style="color: #ff8700;">1</span>
+        <span style="color: #ff8700;">BRIDGE</span>=bridge-$<span style="color: #ff8700;">IFINDEX</span>
+
+        bridge link show|cut -d<span style="color: #ff4ea3;">\ </span> -f 2|grep <span style="color: #ff4ea3;">"^$IFINDEX\$"</span>
+        <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">brctl show $BRIDGE | grep "\&lt;$IFINDEX\&gt;" &gt;/dev/null</span>
+        <span style="color: #a1db00;">if</span> [ $<span style="color: #ff8700;">?</span> = 0 ];<span style="color: #a1db00;">then</span>
+            <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"host interface $IFINDEX already in bridge $BRIDGE"</span>
+            <span style="color: #a1db00;">return</span> 1
+        <span style="color: #a1db00;">fi</span>
+
+        <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">save route table related to this interface</span>
+        <span style="color: #ff8700;">myRoute</span>=$(ip route show scope global dev $<span style="color: #ff8700;">IFINDEX</span> | <span style="color: #a1db00;">while </span><span style="color: #d18aff;">read</span> dst via gw;<span style="color: #a1db00;">do if</span> [ <span style="color: #ff4ea3;">"$via"</span> = <span style="color: #ff4ea3;">"via"</span> ]; <span style="color: #a1db00;">then </span><span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"route add -net $dst gw $gw"</span>;<span style="color: #a1db00;">fi</span>;<span style="color: #a1db00;">done</span>;)
+
+        <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">save IP of this interface</span>
+        <span style="color: #ff8700;">myIp</span>=$(getIpAddr $<span style="color: #ff8700;">IFINDEX</span>)
+
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26032;&#24314;&#32593;&#26725;</span>
+        brctl addbr $<span style="color: #ff8700;">BRIDGE</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#28165;&#31354;&#21407;&#26469;&#32593;&#21345;&#19978;&#30340;ip</span>
+        ip addr flush dev $<span style="color: #ff8700;">IFINDEX</span>
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25226;&#21407;&#32593;&#21345;&#25509;&#21040;&#26032;&#24314;&#30340;&#32593;&#26725;&#19978;</span>
+        brctl addif $<span style="color: #ff8700;">BRIDGE</span> $<span style="color: #ff8700;">IFINDEX</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25226;&#21407;&#26469;&#32593;&#21345;&#30340;ip&#35774;&#32622;&#21040;&#26032;&#24314;&#30340;&#32593;&#26725;&#19978;</span>
+        ifconfig $<span style="color: #ff8700;">BRIDGE</span> $<span style="color: #ff8700;">myIp</span>
+
+        <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">restore route table related to this interface</span>
+        <span style="color: #a1db00;">for </span><span style="color: #d18aff;">r</span><span style="color: #a1db00;"> in</span> <span style="color: #ff4ea3;">"$myRoute"</span>;<span style="color: #a1db00;">do</span>
+            $<span style="color: #ff8700;">r</span>
+        <span style="color: #a1db00;">done</span>
+
+    }
+
+    getIpAddr(){
+        ip addr show $<span style="color: #ff8700;">1</span>|grep -o <span style="color: #ff4ea3;">"inet [^[:space:]]*"</span>|cut -d<span style="color: #ff4ea3;">\ </span> -f2
+    }
+
+
+    moveHostIntf $<span style="color: #ff8700;">1</span>
+
+</pre>
+</div>
+
+<p>
+最后配置docker使用名为 <code>bridge-&lt;interface-name&gt;</code> 网桥，需要先停止
+docker服务：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo service docker stop
+</pre>
+</div>
+
+<p>
+修改docker配置文件 <code>/etc/default/docker</code> ，加入这句：
+</p>
+<pre class="example">
+    DOCKER_OPTS="-b=bridge-eth0"
+</pre>
+
+<p>
+最后该文件可能看起来像这样：
+</p>
+<pre class="example">
+    # Here in Debian, this file is sourced by:
+    #   - /etc/init.d/docker (sysvinit)
+    #   - /etc/init/docker (upstart)
+    #   - systemd's docker.service
+
+    # Use of this file for configuring your Docker daemon is discouraged.
+
+    # The recommended alternative is "/etc/docker/daemon.json", as described in:
+    #   https://docs.docker.com/v1.11/engine/reference/commandline/daemon/#daemon-configuration-file
+
+    # If that does not suit your needs, try a systemd drop-in file, as described in:
+    #   https://docs.docker.com/v1.11/engine/admin/systemd/#custom-docker-daemon-options
+    DOCKER_OPTS="-b=bridge-eth0"
+</pre>
+
+<p>
+这样拉起的容器，就可以分到10网段的ip地址。它们也就暴露在外部网络中了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5273a19" class="outline-2">
+<h2 id="org5273a19"><span class="section-number-2">5</span> 查询设备的类型</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+使用 <code>ip link</code> 可以查出来当前namespace中的所有的网络设备。可以这样来
+查同一类型的设备：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26597;&#35810;&#25152;&#26377;&#32593;&#26725;&#35774;&#22791;</span>
+    ip link show bridge
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">ubuntu&#36824;&#21487;&#20197;&#38656;&#35201;&#23433;&#35013;bridge-utils&#26469;&#26597;&#35810;&#26725;</span>
+    sudo apt install bridge-utils
+    brctl show
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26597;&#35810;&#25152;&#26377;vlan&#35774;&#22791; </span>
+    ip link show vlan
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8f03087" class="outline-2">
+<h2 id="org8f03087"><span class="section-number-2">6</span> <span class="todo TODO">TODO</span> tap和tun</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+tap就可以理解为一个网卡了，可以使用 <code>ip tuntap</code> 来查询所有的tap。
+tuntap分为tun和tap。tap是二层概念。tun是三层概念。
+</p>
+
+<p>
+一个使用tap的例子：
+使用kvm拉起的虚拟机，在发送报文前其实已经在协议栈中处理过了。如果再
+给host中的网卡，下去的时候还得走一次协议栈。这是没必要的。可以新建一
+个tap，然后在kvm拉起虚拟机的时候传入这个tap。这样虚拟机发送时，直接
+把做好的报文写入这个tap就可以了。它直接就下送了，不再过协议栈。
+</p>
+
+<p>
+tap和tun的概念理解还不是很深。先挖个坑在这～
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">两个namespace之间现在我只知道这种方式来通信。</div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

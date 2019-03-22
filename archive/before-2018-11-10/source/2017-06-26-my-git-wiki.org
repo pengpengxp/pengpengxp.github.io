@@ -1,0 +1,727 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: Git wiki
+
+* git reset
+** git reset base
+   reset其实就是在move HEAD指针。顺便会改变几个空间中的内容。
+   #+BEGIN_SRC sh
+      # head = HEAD~, index = HEAD, working_directory = HEAD
+      git reset --soft HEAD~
+
+      # head = HEAD~, index = HEAD~, working_directory = HEAD ,default
+      # methods
+      git reset --mixed HEAD~
+
+      # head = HEAD~, index = HEAD~, working_directory = HEAD~ , this is
+      # dangerous because some commit may lost!
+      git reset --hard HEAD~
+   #+END_SRC
+
+   =git add= 到index中的内容是不可回退的。git add后，使用 =git reset
+   HEAD= 可以回退到add之前的状态。
+
+   =reset --hard= 后，其实那些commit是还在的。这些没有被任何branch引
+   用的commit叫 =dangling commit= 。这些东西git会定期清理它。如果想手
+   动清理，需要先把reflog清理掉（我理解reflog还是在“引用”它。）然后
+   手动用 =git gc= 来清理就可以了。
+   #+BEGIN_SRC sh
+       git reflog expire --expire-unreachable=now --all
+       git gc --prune=now
+   #+END_SRC
+** git reset with path or files
+   #+BEGIN_EXAMPLE
+      +----------------------------------------------------------------------+
+      |                                                    +---------------+ |
+      |                                                    |     HEAD      | |
+      |                                                    +------+--------+ |
+      |                                                           |          |
+      |                                                    +------+--------+ |
+      |                                                    |    master     | |
+      |                                                    +------+--------+ |
+      |                                                           |          |
+      +---------------+          +---------------+         +------v--------+ |
+      |  commit_id:x  |          |  commit_id:y  |         |  commit_id:z  | |
+      |               |          |               |         |               | |
+      |   file.txt    |<---------+   file.txt    |<--------+   file.txt    | |
+      |     v1        |          |     v2        |         |     v3        | |
+      |               |          |               |         |               | |
+      +---------------+          +---------------+         +---------------+ |
+      |                                                                      |
+      |                          Git repository                              |
+      +----------------------------------------------------------------------+
+
+      +---------------+          +---------------+         +-----------------+
+      |    HEAD       |          |    Index      |         |Working Directory|
+      +---------------+          +---------------+         +-----------------+
+      |  commit_id:z  |          |               |         |                 |
+      |               |          |               |         |                 |
+      |   file.txt    |          |   file.txt    |         |   file.txt      |
+      |     v3        |          |     v1        |         |     v3          |
+      |               |          |               |         |                 |
+      +---------------+          +---------------+         +-----------------+
+
+      git reset commit_id:x file.txt
+   #+END_EXAMPLE
+
+   =git reset= 如果针对file或path进行操作。只是简单地是把对应
+   commit_id中的的file放到Index（暂存区）中。
+
+   如果对应的commit_id刚好是HEAD，则 =git reset HEAD file= 刚好和
+   =git add file= 在上图是对称动作。
+   #+BEGIN_EXAMPLE
+      +----------+                           +----------+                   +-----------------+
+      |  HEAD    |                           |  Index   |                   |Working Directory|
+      +----------+                           +----------+                   +-----------------+
+      |          |                           |          |                   |                 |
+      |          |  git reset HEAD file.txt  |          |  git add file.txt |                 |
+      | file.txt |-------------------------->| file.txt |<------------------|   file.txt      |
+      |          |                           |          |                   |                 |
+      |          |                           |          |                   |                 |
+      +----------+                           +----------+                   +-----------------+
+
+   #+END_EXAMPLE
+
+* git checkout with path or file
+  =git checkout commid_id file= 和 =git reset commid_id file= 的区别
+  是把对应commit_id中的file同时放到了Index和Working Directory。
+  #+BEGIN_EXAMPLE
+     +----------------------------------------------------------------------+
+     |                                                    +---------------+ |
+     |                                                    |     HEAD      | |
+     |                                                    +------+--------+ |
+     |                                                           |          |
+     |                                                    +------+--------+ |
+     |                                                    |    master     | |
+     |                                                    +------+--------+ |
+     |                                                           |          |
+     +---------------+          +---------------+         +------v--------+ |
+     |  commit_id:x  |          |  commit_id:y  |         |  commit_id:z  | |
+     |               |          |               |         |               | |
+     |   file.txt    |<---------+   file.txt    |<--------+   file.txt    | |
+     |     v1        |          |     v2        |         |     v3        | |
+     |               |          |               |         |               | |
+     +---------------+          +---------------+         +---------------+ |
+     |                                                                      |
+     |                          Git repository                              |
+     +----------------------------------------------------------------------+
+
+     +---------------+          +---------------+         +-----------------+
+     |    HEAD       |          |    Index      |         |Working Directory|
+     +---------------+          +---------------+         +-----------------+
+     |  commit_id:z  |          |               |         |                 |
+     |               |          |               |         |                 |
+     |   file.txt    |          |   file.txt    |         |   file.txt      |
+     |     v3        |          |     v1        |         |     v1          |
+     |               |          |               |         |                 |
+     +---------------+          +---------------+         +-----------------+
+
+     git checkout commit_id:x file.txt
+  #+END_EXAMPLE
+
+* git blame
+  =git blame <filename>= 可以查看一个文件被谁修改过，这个在debug的时候
+  很有用
+
+* git merge
+** git 解决merge冲突的经验和技巧
+   [[https://www.zhihu.com/question/21215715][对于解决 Git 的 Merge Conflict 你有哪些经验和技巧？]]
+   #+BEGIN_EXAMPLE
+     我的经验是使用rebase。
+
+     具体操作
+     1. git add <FILE>
+     2. git commit ...
+     3. git pull --rebase （将你的版本加在最后的节点上） 如果有冲突，会
+        提示你。冲突分为两种，一种是在不同地方的冲突，通常情况下，git是
+        可以自己合并的。另外一种是因为可能是同一个文件的编辑，git没法自
+        动合并，需要二选一，这时候打开冲突的文件，手动编辑文件到可用的版
+        本。然后。
+     4. git rebase --continue
+     5. 重复3，4直到所有的都solve
+     6. git push
+   #+END_EXAMPLE
+
+** git merge conflict 以某一分支为准直接应用
+   By default, when Git sees a conflict between two branches being
+   merged, it will add merge conflict markers into your code and mark
+   the file as conflicted and let you resolve it. If you would prefer
+   for Git to simply choose a specific side and ignore the other side
+   instead of letting you manually merge the conflict, you can pass
+   the merge command either a -Xours or -Xtheirs.
+
+   如果出现了confict，如果确信是可以保存某一分支的内容。可以使用这个选
+   项。
+   #+BEGIN_SRC sh
+      git checkout -b A
+      git checkout master
+      # 合并后以当前master为准
+      git merge -Xours A
+      # 合并后以A为准
+      git merge -Xtheris A
+   #+END_SRC
+** git merge-base
+   可以找到两个commit的共同的祖先。这个在想找到分支的交叉点的时候很有
+   用。
+   #+BEGIN_SRC sh
+      git merge-base 7d6930f4c77bc7cd5e018ce046a26726ec448db3 000351e7b82e3211dd8fa5f4d0c09d647b66f450
+   #+END_SRC
+
+* git merge rebase and cherry-pick
+  merge在history上是直接汇总两个分支。
+
+  rebase是使用把两个分支中的不同内容整成一个patch，然后应用到被rebase
+  的分支。它会修改git的历史。做了rebase操作，git log不会出现 =Merged
+  from= 这样的提交。history是线性的。
+
+  cherry-pick: =A cherry-pick in Git is like a rebase for a single
+  commit.= cherry-pick可以把某一个特定的commit rebase到对应分支。
+
+* git stash
+  可以暂存当前工作区的内容，以待后续使用。它是以栈的形式存在的。使用
+  直接就 =git stash= 就可以了，这样当前缓冲区就是clean的了。需要恢复
+  的时候，使用 =git stash apply XXXX= 就可以了。
+
+  常用命令：
+  #+BEGIN_SRC sh
+     git stash
+     git stash list
+     git stash apply
+     git stash clear
+     git stash pop
+     git stash drop
+  #+END_SRC
+
+  最新建的stash的index是0哦。最旧的数字最大。
+
+* git config
+  :PROPERTIES:
+  :CUSTOM_ID: git_config
+  :END:
+** git config base
+   使用git时最先需要设置的是就是用户名和邮箱：
+   #+BEGIN_SRC sh
+      git config --global user.name 'xxxxx'
+      git config --global user.email 'xxxx@gmail.com'
+   #+END_SRC
+
+   设置commit的模版，以后每次commit都会自动加入这个模版。
+   #+BEGIN_SRC sh
+      git config --global commit.template ~/.gitmessage.txt
+   #+END_SRC
+
+   配置默认使用emacs编辑器，这里 =emacsclient= 不能加 =--no-wait= 选项。
+   需要让命令行等待emacsclient：
+   #+BEGIN_SRC sh
+      git config --global core.editor 'emacsclient'
+   #+END_SRC
+
+** git config的 =--global= 选项
+   可以看到上一小节中我们在配置时都带了 =--global= 选项。从名字中可以
+   看出这是一个全局设置的意思。它默认修改的是 =~/.gitconfig= 文件。比
+   如我当前的这个文件长这样：
+   #+BEGIN_SRC conf-space
+     [diff]
+             tool = bc3
+     [difftool]
+             prompt = false
+     [merge]
+             tool = bc3
+     [mergetool]
+             prompt = true
+             keepBackup = false
+     [filter "lfs"]
+             clean = git-lfs clean %f
+             smudge = git-lfs smudge %f
+             required = true
+     [user]
+             name = PengXie
+             email = xxx@gmail.com
+     [core]
+             quotepath = false
+             editor = emacsclient
+     [commit]
+             template = /Users/pengpengxp/.gitmessage.txt
+     [http]
+             proxy = socks5://172.16.25.48:1089
+     [https]
+             proxy = socks5://172.16.25.48:1089
+     [push]
+             default = simple
+
+   #+END_SRC
+
+   如果不加这个选项，默认是就是配置当前仓库（需在在一个仓库内执行，不
+   然会报错。）。此时它修改的是当前目录下 =.git/config= 文件。只对本仓
+   库有效。
+
+* git reflog和git log
+  =git reflog= 是暂存本地自己的commit、pull、checkout等操作的，感觉就
+  像是操作日志。记录了每个commit号。它是和commit等这样如果你不小心执
+  行了删除分支等操作。但是你也许还是可以找回来的。它默认是暂存90天的。
+  可以配置。也就是说git里只要commit了。信息应该是很难丢失的。可以使用
+  =git log -g= 来更详细地显示reflog。
+
+  =git log= 是从当前HEAD指向的commit一级一级回退到祖先的日志。
+
+  下面是教程上讲的 =git reflog= ：
+  #+BEGIN_EXAMPLE
+     这样就丢弃了最新的两个 commit ── 包含这两个 commit 的分支不存在了。
+     现在要做的是找出最新的那个 commit 的 SHA，然后添加一个指它它的分支。关
+     键在于找出最新的 commit 的 SHA ── 你不大可能记住了这个 SHA，是吧？
+
+     通常最快捷的办法是使用 git reflog 工具。当你 (在一个仓库下) 工作时，
+     Git 会在你每次修改了 HEAD 时悄悄地将改动记录下来。当你提交或修改分支时，
+     reflog 就会更新。git update-ref 命令也可以更新 reflog，这是在本章前面
+     的 "Git References" 部分我们使用该命令而不是手工将 SHA 值写入 ref 文件
+     的理由。任何时间运行 git reflog 命令可以查看当前的状态：
+  #+END_EXAMPLE
+
+* git revert
+  git revert commit_id会把对应的commit的修改找出来干掉，如果有冲突就
+  提示unmerge。它不会修改提交历史，而是会产生一次新的commit。
+
+  我试了一下，如果要去掉的这次commit_id完全工作在一个和后面提交都不相
+  关的文件时，可以直接revert。它产生了新的提交，新提交中去掉了
+  commit_id对应的内容。原来的那些提交都在的。
+
+* git push
+  :PROPERTIES:
+  :CUSTOM_ID: git-push
+  :END:
+** 常规用法
+   #+BEGIN_EXAMPLE
+     git push origin local-branch-name:server-branch-name
+   #+END_EXAMPLE
+   把local的branch推送到origin标记的remote上的名字为server-branch-name的
+   branch，如果没有，则新建。
+   #+BEGIN_EXAMPLE
+     git push origin --all
+   #+END_EXAMPLE
+   把本地所有分支推送到remote上去。名字就和本地是一样的。
+
+** 具体解释
+   --------------------------------------------------------------------------------
+   git push origin serverfix:serverfix
+
+   it says,"Take my /serverfix/ and make it the remote's /serverfix/." You
+   can use thsi format to push a local branch into a remote branch that
+   is named differently. If you didn't want it to be called /serverfix/ on
+   the remote, you could instead run git push origin
+   /serverfix/:awesomebranch to push your local /serverfix/ branch to the
+   awesomebranch branch on the remote project; If you didn't want it to
+   be called /serverfix/ on the remote, you could instead run $git push
+   origin serverfix:awesomebranch$ to push your local /serverfix/ branch to
+   the awesomebranch branch on the remote project.
+   --------------------------------------------------------------------------------
+
+   *我的理解*
+   --------------------------------------------------------------------------------
+   git push origin localserverfix:remoteserverfix
+
+   localserverfix是本地branch的名字，remoteserverfix是remote端branch的名
+   字。
+   --------------------------------------------------------------------------------
+** push.default
+   :PROPERTIES:
+   :CUSTOM_ID: git-push-default
+   :END:
+   设置这个选项，可以不用每次都显示的指定需要push的分支，设置对了，以后就
+   直接git push就行了。。manual上面是这么写的：
+   #+BEGIN_EXAMPLE
+     push.default
+         Defines the action git push should take if no refspec is explicitly given. Different values are well-suited for specific
+         workflows; for instance, in a purely central workflow (i.e. the fetch source is equal to the push destination), upstream is
+         probably what you want. Possible values are:
+
+         ·   nothing - do not push anything (error out) unless a refspec is explicitly given. This is primarily meant for people who
+             want to avoid mistakes by always being explicit.
+
+         ·   current - push the current branch to update a branch with the same name on the receiving end. Works in both central and
+             non-central workflows.
+
+         ·   upstream - push the current branch back to the branch whose changes are usually integrated into the current branch (which
+             is called @{upstream}). This mode only makes sense if you are pushing to the same repository you would normally pull from
+             (i.e. central workflow).
+
+         ·   simple - in centralized workflow, work like upstream with an added safety to refuse to push if the upstream branch’s name
+             is different from the local one.
+
+             When pushing to a remote that is different from the remote you normally pull from, work as current. This is the safest
+             option and is suited for beginners.
+
+             This mode will become the default in Git 2.0.
+
+         ·   matching - push all branches having the same name on both ends. This makes the repository you are pushing to remember the
+             set of branches that will be pushed out (e.g. if you always push maint and master there and no other branches, the
+             repository you push to will have these two branches, and your local maint and master will be pushed there).
+
+             To use this mode effectively, you have to make sure all the branches you would push out are ready to be pushed out before
+             running git push, as the whole point of this mode is to allow you to push all of the branches in one go. If you usually
+             finish work on only one branch and push out the result, while other branches are unfinished, this mode is not for you. Also
+             this mode is not suitable for pushing into a shared central repository, as other people may add new branches there, or
+             update the tip of existing branches outside your control.
+
+             This is currently the default, but Git 2.0 will change the default to simple.
+
+   #+END_EXAMPLE
+   我暂时使用设置成了 =current= 选项。每次都push我的当前分支。现在推
+   荐使用 =simple= 。
+   #+BEGIN_EXAMPLE
+     git config --global push.default "simple"
+   #+END_EXAMPLE
+
+* git track							  :git track:
+  :PROPERTIES:
+  :CUSTOM_ID: git-track
+  :END:
+  *原文*
+  --------------------------------------------------------------------------------
+  When you clone a repository, it generally automatically creates a
+  master branch that tracks origin/master.
+
+  这就是为什么我自己建立一个local的repository，再使用push传到网上之后，
+  没有建立联系的原因。我没有track。
+  --------------------------------------------------------------------------------
+
+  新建一个branch，然后track remote端的branch：
+  #+BEGIN_EXAMPLE
+    git checkout -b new-branch --track origin/master
+  #+END_EXAMPLE
+  我是新建了一个test branch track了origin/master以后。将master branch改
+  名为master_bak，然后将test改名为master这样曲线救国的。
+
+  *Question*
+  --------------------------------------------------------------------------------
+  1) how to make the current branch(master) to track the remote branch
+     rather than making a new local branch?
+  --------------------------------------------------------------------------------
+
+* git fetch
+  :PROPERTIES:
+  :CUSTOM_ID: git-fetch
+  :END:
+  我理解如下：
+  1. git fetch就是和远端做了一次“数据库同步”。
+  2. 它更新了本地git的“数据库”。
+  3. 它完全不会修改本地任何文件。
+
+  举一个简单的例子：A和B都clone了仓库后，B先push了一次代码。那么A怎么
+  能知道B的修改呢？git可能会提醒你需要使用 [[#git-pull][git pull]] 。但如果你不想把你
+  当前工作的目录弄的乱七八糟的。我真心 *不建议* 使用 =git pull= 。
+
+  这时候A使用 =git fetch= 。它就能知道B的修改啦。而且我保证，A的工作目
+  录没有任何修改。
+
+  git fetch可以选择fetch不同的remote：
+  #+BEGIN_SRC sh
+    git fetch origin
+  #+END_SRC
+
+* git pull
+  :PROPERTIES:
+  :CUSTOM_ID: git-pull
+  :END:
+
+  =git pull= 全等于 =git fetch; git merge FETCH_END=
+
+  progit上这么写的：
+  #+BEGIN_EXAMPLE
+    Running git pull generally fetches data from the server you originally
+    cloned from and automatically tries to merge it into the code you’re
+    currently working on.
+  #+END_EXAMPLE
+
+* git remote
+** git remote base
+   git可以是一个本地库，但是它更多地，应该是和远端做交互，以进行多人协
+   作。
+
+   =git remote= 命令就是设置远端库的地址的。常用的命令：
+   #+BEGIN_SRC sh
+     # 查询所有远端
+     git remote -v
+     # 添加
+     git remote add origin <url>
+     # 修改
+     git remote set-url origin <url>
+     # 其它
+     git remote --help
+   #+END_SRC
+
+   其实可以看到，这些 =origin= 都只是一个 =url= 的别名而已。
+
+   git和远端进行交互，有两种方式可选：ssh和https。不过一般https都只有下
+   载权限（就像很多开源软件一样，大家都可以下载）。而上传权限的话，一般
+   需要配置 =ssh= 方式了。使用ssh最好上传公钥到github上去，这样push就可
+   以不需要密码了， 可以参考 [[#git-example][一个实际的例子]] 。
+
+** git remote add & git fetch
+   *我的理解*
+   --------------------------------------------------------------------------------
+   读了pro git对应部份，终于明白了。git remote就是控制远程的分支的。一般默
+   认origin/master是你最近一次和remote连接的时候，remote那边的master指向的
+   snapshot。在本地，origin/master就是指向remote的master的“指针”。
+   master是指向本地的。如果在最近有别人修改过remote上的master（也就是把
+   master向前推进了），使用git fetch origin来获得所有remote上origin有的而
+   本地没有的。
+
+   英文原文：To synchronize your work, you run a git fetch origin
+   command. This command looks up which server origin is, fetches any
+   data from it that you don't yet have, and updates your local database,
+   moving your origin/master pointer to its new, more up-to-date
+   position.
+
+   那么还有一个问题：如果origin还有其他分支呢？也会一起fetch过来然后
+   update了？是的。英文原文如下：
+
+   It's important to note that when you do a fetch that brings down new
+   remote branches, you don't automatically have local, ediable copies of
+   them. In other words, in this case, you don't have a new serverfix
+   branch -- you only have an origin/serverfix pointer that you can't modify.
+
+   If you want your own serverfix branch that you can work on, you can
+   base it off your remote branch:
+   #+BEGIN_EXAMPLE
+     git checkout -b origin/serverfix
+   #+END_EXAMPLE
+* git diff
+  |-------------------+---------------------------------------------------------------------------|
+  | command           | for                                                                       |
+  |-------------------+---------------------------------------------------------------------------|
+  | git diff          | To see what you’ve changed but not yet staged                            |
+  | git diff --staged | If you want to see what you’ve staged that will go into your next commit |
+  | git diff --cached | ?                                                                         |
+  |-------------------+---------------------------------------------------------------------------|
+* git clean
+  删除没有跟踪的文件。
+  |--------+----------------------------------------------------------------------------------------|
+  | option | explanation                                                                            |
+  |--------+----------------------------------------------------------------------------------------|
+  | =-d=   | 删除untrack的文件夹和文件                                                              |
+  | =-f=   | 如果 =clean.requireForce= 没有设置为false，git clean要删除文件或目录必须加上 =-f= 选项 |
+  | =-x=   | 也删除忽略的文件                                                                       |
+  | =-X=   | 只删除忽略的文件                                                                       |
+  |--------+----------------------------------------------------------------------------------------|
+
+* git 工具
+** tig
+*** 命令行下的git interface
+    tig可认通过edit命令直接调出编辑器来编辑对应行的文件。我希望配置成
+    emacs来编辑。默认是使用git的默认编辑器。但是 [[#git_config]] 我们配置
+    editor是等待的。对于tig，我不希望等待。可以通过设置 =GIT_EDITOR= 环
+    境变量来实现。把下面这句话写到 =~/.bashrc= 就可以了。
+    #+BEGIN_SRC sh
+      alias tig='GIT_EDITOR="emacsclient --no-wait" tig'
+    #+END_SRC
+
+    配置好tig后，直接使用 =e= 就可以调用默认编辑器来编辑对应在文件的对
+    应行了。
+
+*** status view(s)
+    + =R=: refresh
+    + =u=: 在unstage和stage状态中切换，对于同一文件，
+      =unstage->staged= 会覆盖stage中的内容，应该是 =git add= 操作。
+      =staged->unstage= ，会保留 unstage状态中的内容，应该是调用了
+      =git reset HEAD <filename>=
+    + =!=: 只能作用于unstaged的modified状态的文件。 =git checkout --
+      <filename>= 。
+    + [ ] =C=: commit。但是我这样设置了编辑器后，就没法在tig中commit了。
+      还有点问题。commit还是自己用命令来搞吧。
+* 一个实际的例子
+  :PROPERTIES:
+  :CUSTOM_ID: git-example
+  :END:
+  本地有一个git仓库，我想把它放到github上去。
+
+  本机上需要先配置git的用户名和邮箱：
+  #+BEGIN_SRC sh
+    git config --global user.name "pengpengxp"
+    git config --global user.email "pengpengxppri@gmail.com"
+  #+END_SRC
+
+  当然，为了方便，这里我还是先使用 =ssh-keygen= 生成了公钥。然后到我的
+  github上把我的mka的公钥传上去了。这样以后push都不需要密码的。这样使
+  用ssh的方式，用户名都是默认使用 =git= 。github区分不同的用户不是靠用
+  户名，而是靠的密钥文件，详细可以参考 [[file:2017-06-21-multi-git-account-in-a-machine.org][一台电脑上多个github用户的配置]]
+  。
+
+  然后添加上远程的url：
+  #+BEGIN_SRC sh
+    git remote add origin git@github.com:pengpengxp/emacs.d-mac.git
+  #+END_SRC
+
+  然后使用 =git push origin master= 直接就可以传上去了。
+
+  如果想直接就push，可以参考 [[#git-push-default][push.default]] 。
+
+** 传是去以后还有一些文件夹没有实际上传
+   原因是这些文件夹都是我通过使用`git clone'下来的。里面被理解成了
+   submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所以我希望
+   能建立一个完全独立的.emacs.d的话。每次下载下来的东西。最好都把.git
+   去掉。
+
+** 配置ssh，不需要每次输入密码
+   可以使用ssh的方式来和github仓库交互，配置默认无密码后，每次提交都不需
+   要输入用户名和密码了，很方便。
+
+   配置默认的ssh和一般几台机器上差不多，先使用ssh-keygen生成id_rsa.pub。
+   然后拷贝其中内容到github端。github帐户那儿有设置ssh的。把它粘贴上去就
+   行了。当然最后需要输入密码确认一遍。
+
+   刚开始的时候我配置好了ssh，但是push还是需要输入用户名密码，结果发现，
+   原来一般git clone的时候使用的是https，所有保存在origin中的url都是https
+   的。需要修改为ssh的。我认为应该可以直接修改.git目录中的config中的url都
+   可以的。但是我还是照着网上说的，使用命令来修改的：
+   #+BEGIN_EXAMPLE
+     git remote set-url origin git@github.com:pengpengxp/.emacs.d.git
+   #+END_EXAMPLE
+
+* git submodule
+  一个仓库下也许某个子目录也是一个git仓库。这个目录就是一个
+  =submodule= 。
+
+  对于每个submodule都执行一下git命令：
+  #+BEGIN_SRC sh
+     for i in `find $PWD -type d -name "*git"`;do chdir `dirname $i`;echo $i;git status;done
+     for i in `find $PWD -type d -name "*git"`;do now=`pwd`;cd `dirname $i`;echo "====>`pwd`"; git status;cd $now;done
+  #+END_SRC
+
+* MISC
+** 找一个库中someone修改过的文件
+   #+BEGIN_SRC sh
+     git log --pretty="%H" --author="authorname" |
+         while read commit_hash
+         do
+             git show --oneline --name-only $commit_hash | tail -n+2
+         done | sort | uniq
+   #+END_SRC
+** Doc
+   [[https://git-scm.com/book/zh/v1/][中文的doc]]
+** git clone只能克隆master分支，需要所有分支的时候不知道怎么办？
+   其实是都在的，只不过是被隐藏了。使用下面的命令可以看到的。
+   #+BEGIN_EXAMPLE
+     git branch -a
+   #+END_EXAMPLE
+   不过如果要在remote上的其他分支上进行开发，最好在弄出一个本地分支出来做：
+   #+BEGIN_EXAMPLE
+     git checkout -b "local-branch-name" "remote-branch-name"
+   #+END_EXAMPLE
+** 远程怎么删除分支
+   使用下面的命令删除远程分支：
+   #+BEGIN_EXAMPLE
+     git push origin --delete "remote-branch-name"
+   #+END_EXAMPLE
+   也可以这样简写：
+   #+BEGIN_EXAMPLE
+     git push origin :"remote-branch-name"
+   #+END_EXAMPLE
+** 在emacs使用magit与远程进行交互
+   在magit的状态下，使用P，有--force选项，直接按-f，然后再按一次P就行了。
+
+* TODO 自已配置一个git server自已使用
+* COMMENT 在github上上传我的第一个repository   :needtobeimproved:gitconfig:git:
+  首先配置本机上的用户名和邮箱主样才能使用git。
+  #+BEGIN_SRC sh
+  git config --global user.name "pengpengxp"
+  git config --global user.email "pengpengxppri@gmail.com"
+  #+END_SRC
+
+  基本能使用了
+** 新建repository
+   首先新建一个repository，取名为.emacs.d。然后使用：
+   #+BEGIN_EXAMPLE
+     git clone https://github.com/pengpengxp/.emacs.d.git
+   #+END_EXAMPLE
+
+   拷贝到自己的机器上。进行自己的修改。使用：
+   #+BEGIN_EXAMPLE
+     git push origin master --force
+   #+END_EXAMPLE
+   可以将自己local的master分支push到remote的master上去。
+
+   使用：
+   #+BEGIN_EXAMPLE
+     git push origin --all
+   #+END_EXAMPLE
+   可以将local所有的分支传上去。
+
+   *Question*
+   --------------------------------------------------------------------------------
+   1) 怎么把本地的master分支push到remote的test分支上去？
+
+   2) 这里我必须使用--force选项，好像标准流程是先使用pull从remote端拷贝过
+      来进行merge，然后在使用push才行。这里我还不知道怎么处理，每次都是暴
+      力使用--force选项进行的。
+   --------------------------------------------------------------------------------
+   *PS：现在的理解：pull是把远程的内容和我本地的内容merge。然后就可以push了。*
+
+   上传到远程的repository上去。这里的origin我的理解其实是一个url的别名。可
+   以在.git目录的config中看到并进行修改。还可以使用命令修改：
+   #+BEGIN_EXAMPLE
+     git remote set-url origin ssh://git@github.com:pengpengxp/.emacs.d.git
+   #+END_EXAMPLE
+   可以使用命令查看remote：
+   #+BEGIN_EXAMPLE
+     git remote -v
+   #+END_EXAMPLE
+   也可以添加一个：
+   #+BEGIN_EXAMPLE
+     git remote add upstream https://github.com/pengpengxp/.emacs.c.git
+   #+END_EXAMPLE
+
+   --------------------------------------------------------------------------------
+   *Question*
+
+   这个remote好像可以使得所有工作不相互影响。但是现在不会用，就只使用
+   origin了。
+   --------------------------------------------------------------------------------
+* 定义自己本地的 =.gitignore=
+  我使用 =gtags, cscope= 等文件，会生成一些tags和cscope开头的索引文件。
+  又不想对每一个库都修改它的 =.gitignore= 。可以设置一下本地的 =git= ：
+  #+BEGIN_SRC sh
+git config --global core.excludesfile "~/.gitignore"
+  #+END_SRC
+  然后把我需要怱略的文件都写到里面：
+  #+BEGIN_EXAMPLE
+# tags and cscope files
+TAGS
+tags
+GTAGS
+GSYMS
+GRTAGS
+GPATH
+cscope.*
+  #+END_EXAMPLE
+
+  这下每个库中git都不会管这些文件了。
+* magit
+  =magit-log-buffer-file= 可以显示出来一个文件对应修改的commit。选中区
+  域后还可以只显示出修改这个区域的commit。这个命令对于查看一个文件的修
+  改历史很有用。
+* 使用gitlab直接在command line中gitlab发merge request
+
+  #+BEGIN_SRC sh :tangle /tmp/create_merge_request.sh
+#!/bin/bash
+
+# 需要先安装一个ruby的包
+# gem install gitlab
+
+# 设置一下gitlab的restfull api地址
+export GITLAB_API_ENDPOINT=http://10.0.0.3:9000/api/v4
+
+# 这个token需要到自己的gitlab账户里面去生成一个，直接copy下来
+export GITLAB_API_PRIVATE_TOKEN=<your token>
+
+# 最后的assignee_id就是指定的assignee的用户，可以使用gitlab users查对应的id
+gitlab create_merge_request zhangjm/test "New merge request" "{source_branch: 'pull_request_cmd', target_branch: 'master', assignee_id: 2}"
+
+exit 0
+
+  #+END_SRC
+* git显示一个文件的所有历史修改记录
+  #+BEGIN_SRC sh
+git log --follow -p -- <file>
+  #+END_SRC

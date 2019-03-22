@@ -1,0 +1,175 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-07-用python进行函数编程
+
+
+* 函数式编程
+** Map
+   把一个函数映射到一个列表中的每个元素。一般和匿名函数（lambda）结合
+   使用。先看看下面这段代码：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     items = [1, 2, 3, 4, 5]
+     squared = []
+     for i in items:
+         squared.append(i**2)
+     print squared
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 4, 9, 16, 25]
+
+   修改为map后可以这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     items = [1, 2, 3, 4, 5]
+     squared = list(map(lambda x: x**2, items))
+     print squared
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 4, 9, 16, 25]
+
+   map不仅可以应用到全是数据的列表，还可以应用到全是函数的列表上（因为
+   函数式编程可以把函数也理解为数据，所以其实这两种也没差）：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     # -*- coding: utf-8; -*-
+     def add(x):
+         return x + x
+
+     def multi(x):
+         return x * x
+
+     f = [add, multi]
+
+     # 这里的x分别就是上面的函数，一个一个进行调用罗
+     value = map(lambda x: x(3), f)
+
+     # 这里加了list转换，为了兼容，python2中map返回列表，3中map返回迭代器。
+     print list(value)
+   #+END_SRC
+
+   #+RESULTS:
+   : [6, 9]
+   
+   map写一个把所有list中字符串转换为首字母大写其它小写的形式：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def f(x):
+         a = x.lower()
+         return ''.join(a[0].upper()) + a[1:]
+
+     b = ['XIE', 'sd', 'PDFJAF', 'aaaaaaaasdfasDSFFDSAF']
+     print map(f, b)
+  #+END_SRC
+
+   #+RESULTS:
+   : ['Xie', 'Sd', 'Pdfjaf', 'Aaaaaaaasdfasdsffdsaf']
+
+** Filter
+   和map类似的用法，它可以过滤满足条件的元素出来。
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     num = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+     value = filter(lambda x: x < 0, num)
+     print(list(value))
+   #+END_SRC
+   filter是内置函数，它类似于for，但是更快。但是大部分情况下，还是 [[file:2017-07-05-python%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0.org::#tuidaoshi][推导式]] 更优雅一些。
+
+** Reduce
+   reduce把一个函数作用在一个序列[x1, x2, x3...]上，这个函数必须接收两
+   个参数，reduce把结果继续和序列的下一个元素做累积计算，其效果就是：
+   #+BEGIN_EXAMPLE
+     reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)
+   #+END_EXAMPLE
+   
+   这样的话写一个求和的函数可以这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     a = range(201)
+     print reduce((lambda x, y: x + y), a)
+   #+END_SRC
+
+   #+RESULTS:
+   : 20100
+   
+   reduce求积：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def fun(l):
+         return reduce((lambda x, y:x * y), l)
+
+     print fun(range(1, 5))
+   #+END_SRC
+
+   #+RESULTS:
+   : 24
+
+
+   把 =[1, 3, 5, 7, 9]= 转换为13579可以这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     a = [1, 3, 5, 7, 9]
+     def f(x, y):
+         return x * 10 + y
+
+     print reduce(f, a)
+   #+END_SRC
+
+   #+RESULTS:
+   : 13579
+
+   因为字符串也是一个序列，那么加上map我们可以这样搞一个字符串转换数字
+   的函数：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def fn(x, y):
+         return x * 10 + y
+
+     def char2num(s):
+         return {'0': 0,
+                 '1': 1,
+                 '2': 2,
+                 '3': 3,
+                 '4': 4,
+                 '5': 5,
+                 '6': 6,
+                 '7': 7,
+                 '8': 8,
+                 '9': 9,
+         }[s]
+
+     a = map(char2num, '13579')
+     b = reduce(fn, map(char2num, '13579'))
+     print a
+     print b
+     print type(b)
+   #+END_SRC
+
+   #+RESULTS:
+   : [1, 3, 5, 7, 9]
+   : 13579
+   : <type 'int'>
+
+   整合起来弄成一个函数就可以是这样：
+   #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+     def mystr2int(s):
+         def fn(x, y):
+             return x * 10 + y
+
+         def char2num(s):
+             return {'0': 0,
+                     '1': 1,
+                     '2': 2,
+                     '3': 3,
+                     '4': 4,
+                     '5': 5,
+                     '6': 6,
+                     '7': 7,
+                     '8': 8,
+                     '9': 9,
+             }[s]
+
+         return reduce(fn, map(char2num, s))
+
+     result = mystr2int('13579')
+     print type(result), result
+   #+END_SRC
+
+   #+RESULTS:
+   : <type 'int'> 13579
+

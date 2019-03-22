@@ -1,0 +1,166 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-12-gnu-readline
+
+
+* makefile文件
+  #+BEGIN_SRC makefile-bsdmake :tangle "/tmp/readline/makefile" :mkdirp yes
+    .PHONY:a.out
+    a.out:
+            cc -g -lreadline hello.c -o hello
+            cc -g -lreadline main.c -o main
+    clean:
+            rm -rfv a.out* *.o
+  #+END_SRC
+
+* Hello,World
+  #+BEGIN_SRC C :tangle "/tmp/readline/hello.c" :mkdirp yes
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <readline/readline.h>
+    #include <readline/history.h>
+
+    int main()
+    {
+        printf( "%s\n", readline( "test> " ) );
+        return 0;
+    }
+
+  #+END_SRC
+
+* 防止内存泄露
+  =readline()= 返回的字符串是使用 =malloc()= 分配的，调用者在使用完毕
+  后，需要使用 =free()= 来释放内存。不然会泄露。
+
+  下面这个代码用 =valgrind= 扫一下：
+  #+BEGIN_SRC C
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <readline/readline.h>
+    #include <readline/history.h>
+
+    int main()
+    {
+        char *line;
+        line = readline("test> ");
+        printf( "%s\n", line);
+
+        /* free(line); */
+        return 0;
+    }
+
+  #+END_SRC
+  #+BEGIN_EXAMPLE
+     /tmp/readline/ valgrind ./hello
+    ==74398== Memcheck, a memory error detector
+    ==74398== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+    ==74398== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+    ==74398== Command: ./hello
+    ==74398== 
+    test> xiepeng nihao
+    xiepeng nihao
+    ==74398== 
+    ==74398== HEAP SUMMARY:
+    ==74398==     in use at exit: 214,423 bytes in 358 blocks
+    ==74398==   total heap usage: 496 allocs, 138 frees, 239,503 bytes allocated
+    ==74398== 
+    ==74398== LEAK SUMMARY:
+    ==74398==    definitely lost: 15 bytes in 1 blocks
+    ==74398==    indirectly lost: 0 bytes in 0 blocks
+    ==74398==      possibly lost: 2,064 bytes in 1 blocks
+    ==74398==    still reachable: 191,796 bytes in 167 blocks
+    ==74398==         suppressed: 20,548 bytes in 189 blocks
+    ==74398== Rerun with --leak-check=full to see details of leaked memory
+    ==74398== 
+    ==74398== For counts of detected and suppressed errors, rerun with: -v
+    ==74398== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+  #+END_EXAMPLE
+  提示输入的字符串都泄露啦。
+  
+  把后面的 =free()= 加上就好了：
+  #+BEGIN_SRC C
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <readline/readline.h>
+    #include <readline/history.h>
+
+    int main()
+    {
+        char *line;
+        line = readline("test> ");
+        printf( "%s\n", line);
+        free(line);
+        return 0;
+    }
+
+  #+END_SRC
+  #+BEGIN_EXAMPLE
+     /tmp/readline/ valgrind ./hello
+    ==74584== Memcheck, a memory error detector
+    ==74584== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+    ==74584== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+    ==74584== Command: ./hello
+    ==74584== 
+    test> xiepeng nihao
+    xiepeng nihao
+    ==74584== 
+    ==74584== HEAP SUMMARY:
+    ==74584==     in use at exit: 214,408 bytes in 357 blocks
+    ==74584==   total heap usage: 496 allocs, 139 frees, 239,503 bytes allocated
+    ==74584== 
+    ==74584== LEAK SUMMARY:
+    ==74584==    definitely lost: 0 bytes in 0 blocks
+    ==74584==    indirectly lost: 0 bytes in 0 blocks
+    ==74584==      possibly lost: 2,064 bytes in 1 blocks
+    ==74584==    still reachable: 191,796 bytes in 167 blocks
+    ==74584==         suppressed: 20,548 bytes in 189 blocks
+    ==74584== Rerun with --leak-check=full to see details of leaked memory
+    ==74584== 
+    ==74584== For counts of detected and suppressed errors, rerun with: -v
+    ==74584== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+  #+END_EXAMPLE
+  
+* basic behavior
+  #+BEGIN_SRC C :tangle "/tmp/readline/main.c" :mkdirp yes
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <readline/readline.h>
+    #include <readline/history.h>
+
+    /* A static variable for holding the line. */ 
+    static char *line_read = (char *)NULL;        
+
+    /* Read a string, and return a pointer to it. 
+       Returns NULL on EOF. */                    
+    char* rl_gets ()                                    
+    {                                             
+        /* If the buffer has already been allocated,
+           return the memory to the free pool. */   
+        if (line_read)                              
+        {                                         
+            free (line_read);                       
+            line_read = (char *)NULL;               
+        }                                         
+
+        /* Get a line from the user. */             
+        line_read = readline ("");                  
+
+        /* If the line has any text in it,          
+           save it on the history. */               
+        if (line_read && *line_read)                
+            add_history (line_read);                  
+
+        return (line_read);                         
+    }                                             
+
+    int main()
+    {
+        char * line;
+        line = rl_gets();
+        printf("line = %s\n", line);
+        return 0;
+    }
+
+  #+END_SRC

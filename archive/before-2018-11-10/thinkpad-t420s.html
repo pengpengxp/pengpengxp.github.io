@@ -1,0 +1,1257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>记录安装ubuntu的Thinkpad T420s的笔记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">记录安装ubuntu的Thinkpad T420s的笔记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org839db41">1. 禁止触摸板</a></li>
+<li><a href="#orgc50492b">2. <code>ubuntu16.04</code> 中亮度调节不起作用</a></li>
+<li><a href="#org38365ef">3. xfce4自带的截图工具</a></li>
+<li><a href="#org641d113">4. 使用shutter来截图</a></li>
+<li><a href="#orgda305cf">5. 管理iphone</a></li>
+<li><a href="#org2bedebb">6. 使用ftp给iphone共享videos</a></li>
+<li><a href="#org20a9c52">7. xfce4当前自己就支持自建wifi热点</a></li>
+<li><a href="#org309cda8">8. pppoe拨号（未实际测试过）</a></li>
+<li><a href="#orge5997e4">9. networkmanager</a></li>
+<li><a href="#org65cc673">10. 移动硬盘备份</a></li>
+<li><a href="#org752b91c">11. xfce4修改开始菜单中对应程序</a></li>
+<li><a href="#orga4e2efc">12. install fcitx</a></li>
+<li><a href="#org4119ebf">13. 添加字体</a></li>
+<li><a href="#org8b16307">14. 挂载小米手机（可能android手机都适用）从android手机中copy文件</a></li>
+<li><a href="#orgefb927e">15. debain装上默认不能控制声音</a></li>
+<li><a href="#org26dd58e">16. firefox全屏下一直显示tabbar</a></li>
+<li><a href="#org8aadf1e">17. 笔记本台式机共享鼠标键盘</a>
+<ul>
+<li><a href="#orgf574d38">17.1. x2vnc</a></li>
+<li><a href="#org42c0487">17.2. x2x</a></li>
+</ul>
+</li>
+<li><a href="#org7e43967">18. 笔记本台式机共享clipboard</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org839db41" class="outline-2">
+<h2 id="org839db41"><span class="section-number-2">1</span> 禁止触摸板</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+对于键盘党来说，触摸板很是碍事，可以这样禁用它 <a href="https://askubuntu.com/questions/65951/how-to-disable-the-touchpad">How to disable the
+touchpad? - Ask Ubuntu</a> ：
+</p>
+<pre class="example">
+    Run the following command in a terminal:
+
+    xinput list
+
+    You will get an output that looks like this:
+
+    ⎡ Virtual core pointer                          id=2    [master pointer  (3)]
+    ⎜   ↳ Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
+    ⎜   ↳ SynPS/2 Synaptics TouchPad                id=12   [slave  pointer  (2)]
+    ⎣ Virtual core keyboard                         id=3    [master keyboard (2)]
+        ↳ Virtual core XTEST keyboard               id=5    [slave  keyboard (3)]
+        ↳ Power Button                              id=6    [slave  keyboard (3)]
+        ↳ Video Bus                                 id=7    [slave  keyboard (3)]
+        ↳ Power Button                              id=8    [slave  keyboard (3)]
+        ↳ Sleep Button                              id=9    [slave  keyboard (3)]
+        ↳ Laptop_Integrated_Webcam_1.3M             id=10   [slave  keyboard (3)]
+        ↳ AT Translated Set 2 keyboard              id=11   [slave  keyboard (3)]
+        ↳ Dell WMI hotkeys                          id=13   [slave  keyboard (3)]
+
+    It displays all the input devices connected. Note that they all have an id. Since 12 is the id for my touchpad, running the following command will disable it.
+
+    xinput set-prop 12 "Device Enabled" 0
+
+    In Ubuntu versions &gt;12.04 you can also directly disable via
+
+    xinput --disable 12
+
+    (and enable via a similar command)
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgc50492b" class="outline-2">
+<h2 id="orgc50492b"><span class="section-number-2">2</span> <code>ubuntu16.04</code> 中亮度调节不起作用</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="https://askubuntu.com/questions/762764/cant-change-brightness-in-ubuntu-16-04-lts">screen - Can't change brightness in Ubuntu 16.04 LTS - Ask Ubuntu</a>
+</p>
+
+<p>
+这个答案有用。
+</p>
+<pre class="example">
+    Pre Ubuntu LTS 16.04
+
+    Under (X)Ubuntu 14.04 LTS, brightness control on my Panasonic Toughbook CF-52 used to work fine by adding acpi_osi=Linux to the GRUB_CMDLINE_LINUX_DEFAULT= line in /etc/default/grub:
+
+    GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_osi=Linux"
+
+    and issuing
+
+    $ sudo update-grub
+
+    after editing and before rebooting.
+    Since Ubuntu LTS 16.04
+
+    However, above solution stopped working after upgrading to (X)Ubuntu LTS 16.04. This appears to be typical for laptops with integrated Intel video graphics.
+
+    One can check this with the following command:
+
+    $ ls /sys/class/backlight/
+        intel_backlight  panasonic
+
+    At least intel_backlight should be mentioned, most probably in addition to an OEM name like for example panasonic, dell_backlight, etc.
+
+    If this is the case, proceed with creating the following file
+
+    $ sudo nano /usr/share/X11/xorg.conf.d/20-intel.conf
+
+    with contents:
+
+    Section "Device"
+            Identifier  "card0"
+            Driver      "intel"
+            Option      "Backlight"  "intel_backlight"
+            BusID       "PCI:0:2:0"
+    EndSection
+
+    Reboot, and enjoy your backlight buttons!
+</pre>
+
+<p>
+<b>不过我也按后面说的修改了grub，不知道有没有影响</b>
+</p>
+<pre class="example">
+    I use Lenovo Z570 and adding acpi_backlight=none to /etc/default/grub
+    and updating grub worked nicely with Fn key.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org38365ef" class="outline-2">
+<h2 id="org38365ef"><span class="section-number-2">3</span> xfce4自带的截图工具</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+选择一个区域截图并放入剪切板：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    xfce4-screenshooter -r -c
+</pre>
+</div>
+
+<p>
+选择一个区域截图并用对应的程序打开，这样就可以截图然后马上编辑：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    xfce4-screenshooter -r -s /command/to/open/screenshot
+    xfce4-screenshooter -r -s /usr/bin/gimp
+</pre>
+</div>
+
+<p>
+选择一个区域截图并存入对应的目录：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    xfce4-screenshooter -r -s /path/to/save/screenshot/
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org641d113" class="outline-2">
+<h2 id="org641d113"><span class="section-number-2">4</span> 使用shutter来截图</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+我需要可以标记截图文件。使用 <code>shutter</code> 来完成好一点。
+</p>
+
+<p>
+配置一下 <code>shutter</code> 在截图完成后使用内置编辑器打开截图文件。然后把下
+面的脚本绑定一个快捷键就好了：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">shutter -s -e -o <span style="color: #ff4ea3;">'/path/to/you/screenshot/&#25130;&#22270;_%y-%m-%d_%T.png'</span>
+</pre>
+</div>
+<p>
+一定要加 <code>-e</code> ，使用每次截图后退出 <code>shutter</code> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgda305cf" class="outline-2">
+<h2 id="orgda305cf"><span class="section-number-2">5</span> 管理iphone</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+<a href="https://github.com/libimobiledevice/">https://github.com/libimobiledevice/</a>
+</p>
+
+<p>
+使用这里面的一些工具可以管理iphone里的东西。
+</p>
+
+<p>
+其中 ifuse 可以把iphone挂载到某个目录上。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    mkdir /tmp/iphone;ifuse /tmp/iphone
+    ifuse -u /tmp/iphone
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2bedebb" class="outline-2">
+<h2 id="org2bedebb"><span class="section-number-2">6</span> 使用ftp给iphone共享videos</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+我在iphone上使用nPlayer，它可以直接访问ftp server。
+</p>
+
+<p>
+ubuntu上下载 <code>vsftpd</code> 然后配置。
+</p>
+
+<p>
+其实默认配置就可以了，我开启了匿名访问：
+</p>
+<pre class="example">
+    # Allow anonymous FTP? (Disabled by default).
+    anonymous_enable=YES
+</pre>
+
+<p>
+默认的目录在 <code>/srv/ftp</code> 下面。把需要的东西copy到下面，然后nPlayer就
+可以播放或者下载啦。
+</p>
+
+<p>
+启动关闭vsftpd就是这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo service vsftpd start/restart/stop
+</pre>
+</div>
+
+<p>
+整个的 <code>/etc/vsftpd.conf</code> 文件长这样：
+</p>
+<pre class="example">
+    # Example config file /etc/vsftpd.conf
+    #
+    # The default compiled in settings are fairly paranoid. This sample file
+    # loosens things up a bit, to make the ftp daemon more usable.
+    # Please see vsftpd.conf.5 for all compiled in defaults.
+    #
+    # READ THIS: This example file is NOT an exhaustive list of vsftpd options.
+    # Please read the vsftpd.conf.5 manual page to get a full idea of vsftpd's
+    # capabilities.
+    #
+    #
+    # Run standalone?  vsftpd can run either from an inetd or as a standalone
+    # daemon started from an initscript.
+    listen=NO
+    #
+    # This directive enables listening on IPv6 sockets. By default, listening
+    # on the IPv6 "any" address (::) will accept connections from both IPv6
+    # and IPv4 clients. It is not necessary to listen on *both* IPv4 and IPv6
+    # sockets. If you want that (perhaps because you want to listen on specific
+    # addresses) then you must run two copies of vsftpd with two configuration
+    # files.
+    listen_ipv6=YES
+    #
+    # Allow anonymous FTP? (Disabled by default).
+    anonymous_enable=YES
+    #
+    # Uncomment this to allow local users to log in.
+    local_enable=YES
+    #
+    # Uncomment this to enable any form of FTP write command.
+    #write_enable=YES
+    #
+    # Default umask for local users is 077. You may wish to change this to 022,
+    # if your users expect that (022 is used by most other ftpd's)
+    #local_umask=022
+    #
+    # Uncomment this to allow the anonymous FTP user to upload files. This only
+    # has an effect if the above global write enable is activated. Also, you will
+    # obviously need to create a directory writable by the FTP user.
+    #anon_upload_enable=YES
+    #
+    # Uncomment this if you want the anonymous FTP user to be able to create
+    # new directories.
+    #anon_mkdir_write_enable=YES
+    #
+    # Activate directory messages - messages given to remote users when they
+    # go into a certain directory.
+    dirmessage_enable=YES
+    #
+    # If enabled, vsftpd will display directory listings with the time
+    # in  your  local  time  zone.  The default is to display GMT. The
+    # times returned by the MDTM FTP command are also affected by this
+    # option.
+    use_localtime=YES
+    #
+    # Activate logging of uploads/downloads.
+    xferlog_enable=YES
+    #
+    # Make sure PORT transfer connections originate from port 20 (ftp-data).
+    connect_from_port_20=YES
+    #
+    # If you want, you can arrange for uploaded anonymous files to be owned by
+    # a different user. Note! Using "root" for uploaded files is not
+    # recommended!
+    #chown_uploads=YES
+    #chown_username=whoever
+    #
+    # You may override where the log file goes if you like. The default is shown
+    # below.
+    #xferlog_file=/var/log/vsftpd.log
+    #
+    # If you want, you can have your log file in standard ftpd xferlog format.
+    # Note that the default log file location is /var/log/xferlog in this case.
+    #xferlog_std_format=YES
+    #
+    # You may change the default value for timing out an idle session.
+    #idle_session_timeout=600
+    #
+    # You may change the default value for timing out a data connection.
+    #data_connection_timeout=120
+    #
+    # It is recommended that you define on your system a unique user which the
+    # ftp server can use as a totally isolated and unprivileged user.
+    #nopriv_user=ftpsecure
+    #
+    # Enable this and the server will recognise asynchronous ABOR requests. Not
+    # recommended for security (the code is non-trivial). Not enabling it,
+    # however, may confuse older FTP clients.
+    #async_abor_enable=YES
+    #
+    # By default the server will pretend to allow ASCII mode but in fact ignore
+    # the request. Turn on the below options to have the server actually do ASCII
+    # mangling on files when in ASCII mode.
+    # Beware that on some FTP servers, ASCII support allows a denial of service
+    # attack (DoS) via the command "SIZE /big/file" in ASCII mode. vsftpd
+    # predicted this attack and has always been safe, reporting the size of the
+    # raw file.
+    # ASCII mangling is a horrible feature of the protocol.
+    #ascii_upload_enable=YES
+    #ascii_download_enable=YES
+    #
+    # You may fully customise the login banner string:
+    #ftpd_banner=Welcome to blah FTP service.
+    #
+    # You may specify a file of disallowed anonymous e-mail addresses. Apparently
+    # useful for combatting certain DoS attacks.
+    #deny_email_enable=YES
+    # (default follows)
+    #banned_email_file=/etc/vsftpd.banned_emails
+    #
+    # You may restrict local users to their home directories.  See the FAQ for
+    # the possible risks in this before using chroot_local_user or
+    # chroot_list_enable below.
+    #chroot_local_user=YES
+    #
+    # You may specify an explicit list of local users to chroot() to their home
+    # directory. If chroot_local_user is YES, then this list becomes a list of
+    # users to NOT chroot().
+    # (Warning! chroot'ing can be very dangerous. If using chroot, make sure that
+    # the user does not have write access to the top level directory within the
+    # chroot)
+    #chroot_local_user=YES
+    #chroot_list_enable=YES
+    # (default follows)
+    #chroot_list_file=/etc/vsftpd.chroot_list
+    #
+    # You may activate the "-R" option to the builtin ls. This is disabled by
+    # default to avoid remote users being able to cause excessive I/O on large
+    # sites. However, some broken FTP clients such as "ncftp" and "mirror" assume
+    # the presence of the "-R" option, so there is a strong case for enabling it.
+    #ls_recurse_enable=YES
+    #
+    # Customization
+    #
+    # Some of vsftpd's settings don't fit the filesystem layout by
+    # default.
+    #
+    # This option should be the name of a directory which is empty.  Also, the
+    # directory should not be writable by the ftp user. This directory is used
+    # as a secure chroot() jail at times vsftpd does not require filesystem
+    # access.
+    secure_chroot_dir=/var/run/vsftpd/empty
+    #
+    # This string is the name of the PAM service vsftpd will use.
+    pam_service_name=vsftpd
+    #
+    # This option specifies the location of the RSA certificate to use for SSL
+    # encrypted connections.
+    rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+    rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+    ssl_enable=NO
+
+    #
+    # Uncomment this to indicate that vsftpd use a utf8 filesystem.
+    #utf8_filesystem=YES
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org20a9c52" class="outline-2">
+<h2 id="org20a9c52"><span class="section-number-2">7</span> xfce4当前自己就支持自建wifi热点</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+先需要到网络连接中配置一个 <code>Wi-Fi</code> 热点。
+</p>
+
+<p>
+直接到网络那儿创建新的 <code>Wi-Fi</code> 网络就可以了。
+</p>
+
+<p>
+总之很简单。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org309cda8" class="outline-2">
+<h2 id="org309cda8"><span class="section-number-2">8</span> pppoe拨号（未实际测试过）</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+<a href="http://wiki.ubuntu.org.cn/ADSL%EF%BC%88PPPOE%EF%BC%89%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97">ADSL（PPPOE）接入指南 - Ubuntu中文</a>
+</p>
+<pre class="example">
+
+    导航
+
+        首页
+        最近更改
+        随机页面
+        页面分类
+        帮助
+
+    编辑
+
+        编辑指南
+        沙盒
+        新闻动态
+        字词处理
+
+    工具
+
+        链入页面
+        相关更改
+        特殊页面
+        打印版本
+        固定链接
+        页面信息
+
+    ADSL（PPPOE）接入指南
+
+    Ubuntu Linux是自带ADSL拨号网络（PPPOE调制解调器）支持的，但是没有Windows下拨号那么方便。其实Ubuntu下ADSL上网也并不是很难，目前在中国ADSL家庭用户居多，在此就介绍一下Ubuntu下ADSL（PPPOE）拨号的方法。
+
+    此文档也同时解决了，nm-applet图标消失的问题，也就是pppoeconf和NetworkManager之间的冲突问题。
+    配置 ADSL
+
+    方法一：使用“网络连接”图形界面配置
+
+    Ubuntu 里面已经自带了网络配置向导，在顶部菜单中进入系统-&gt;首选项-&gt;Network Configuration-&gt;DSL，进行设置，依次填写用户名，服务以及密码。
+
+    连接建立后，在桌面左键单击网络连接的图标，会列出所有的连接，其中在“有线网络”下就有刚才建立的ADSL连接，单击即可拨号上网。
+
+    方法二：使用pppoeconf命令拨号
+
+    启用有线连接：
+
+    sudo ifconfig eth0 up
+
+    在终端中输入:
+
+    sudo pppoeconf
+
+    一个基于文本菜单的程序会指导你进行下面的步骤：
+
+    1. 确认以太网卡已被检测到。
+
+    2. 输入你的用户名（由ISP所提供 注意：输入时请先清除输入框中的“username“，否则可能造成验证错误）。
+
+    3. 输入你的密码（由ISP所提供）。
+
+    4. 如果你已经配置了一个PPPoE的连接，会通知你这个连接将会被修改。
+
+    5. 弹出一个选项:你被询问是否需要'noauth'和'defaultroute'选项和去掉'nodetach',这里选择"Yes"。
+
+    6. Use peer DNS - 选择 "Yes".
+
+    7. Limited MSS problem - 选择 "Yes".
+
+    8. 当你被询问是否在需要在进入系统的时候自动连接，你可以选择"Yes"。
+
+    9. 最后，你会被询问是否马上建立连接。
+
+    在需要的时候启动ADSL连接，可以在终端中输入：
+
+    sudo pon dsl-provider
+
+    断开ADSL连接，可以在终端中输入：
+
+    sudo poff
+
+    如果你发现连接正常工作，尝试手动去调整你之前ADSL连接的配置（参考前一节）。
+
+    需要查看日志，可以在终端中输入：
+
+    plog
+
+    获得接口信息，可以在终端中输入：
+
+    ifconfig ppp0
+
+    使用pppoeconf拨号后，Network Manager显示设备未托管的解决办法：
+
+    在终端中输入以下命令，来配置网络连接管理文件：
+
+    sudo gedit /etc/NetworkManager/nm-system-settings.conf 打开后，找到 [ifupdown] managed=false 修改成： [ifupdown] managed=true
+
+    终端运行sudo gedit /etc/network/interfaces 只保留
+
+    auto lo iface lo inet loopback
+
+    删除dns设置 sudo mv /etc/resolv.conf /etc/resolv.conf_backup
+
+    之后重启 network-manager服务： sudo service network-manager restart
+
+    方法三：使用新版的NetworkManager
+
+    直接引用 lainme简洁明了的回复； http://forum.ubuntu.org.cn/viewtopic.php?f=48&amp;t=239763&amp;start=3
+
+    1、从PPA更新network-manager sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BC8EBFE8 在/etc/apt/sources.list最后加上 deb http://ppa.launchpad.net/network-manager/trunk/ubuntu karmic main deb-src http://ppa.launchpad.net/network-manager/trunk/ubuntu karmic main sudo aptitude update sudo aptitude safe-upgrade
+
+    2、解决pppoeconf和network-manager冲突 更改/etc/NetworkManager/nm-system-settings.conf中的managed＝true 更改/etc/network/interfaces，只保留 auto lo iface lo inet loopback 删除/etc/resolv.conf
+
+    然后sudo /etc/init.d/network-manager restart 如果面板没有nm图标，ALT+F2输入nm-applet，并添加自启动（我的安装时没有添加）
+
+    3、右击NM图标，编辑链接，切换到DSL，新建，输入用户名和密码。
+    ADSL命令
+
+    注意:以下命令不是设置步骤，只是教你如何进行adsl拨号的日常操作
+
+    拨号 ADSL
+
+    pon dsl-provider
+
+    断开 ADSL
+
+    poff dsl-provider
+
+    查看拨号日志
+
+    plog
+
+    对于 拨号 ADSL 和 断开 ADSL 可以在菜单编辑器中或面板中依照以上命令行建立相应的快捷方式以方便拨号。
+
+    在面板上右击，选择添加到面板 -&gt; 自定义应用程序启动器 -&gt; 添加
+
+    类型： 终端中的应用程序
+
+    名称： ADSL 拨号
+
+    命令：pon dsl-provider
+
+    注释： ADSL 拨号
+
+    以后需要连接ADSL拨号只需要点击该快捷方式，点击之后会弹出终端窗口提示用户输入密码，输入完成后即连接网络。
+
+    断开网络的快捷方式与此类似，只需将pon改为poff。
+
+    用户还可以更改拨号名称，将dsl-prvider改为自己想要的更简短的名字。
+
+    使用应用程序／附件／超级用户终端
+
+    cd /etc/ppp/peers
+
+    mv dsl-provider name
+
+    注：cd 目标路径 ；mv 原文件名 目标文件名。
+
+    若不确定/etc/ppp/peers中有哪些文件，可以使用命令
+
+    ls
+
+    显示文件夹中文件的文件名。
+    如何设置动态域名(可选)
+
+    #首先去 http://www.3322.org 申请一个动态域名
+    #然后修改 /etc/ppp/ip-up 增加拨号时更新域名指令
+    sudo gedit /etc/ppp/ip-up
+    #在最后增加如下行
+    w3m -no-cookie -dump 'http://username:password@members.3322.org/dyndns/update?system=dyndns&amp;hostname=yourdns.3322.org'
+
+    将username:password按格式替换为你的用户名和密码 hostname替换为你的域名，其他不必更改。以上设置将在拨号时自动将动态域名解
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orge5997e4" class="outline-2">
+<h2 id="orge5997e4"><span class="section-number-2">9</span> networkmanager</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+xfce4中的gui的nm-applet有时会出点小问题。但是不影响使用的。不行的时
+候可以重启一下试试：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    killall nm-applet
+    nm-applet    2&gt;&amp;1 &gt; /dev/null &amp;
+</pre>
+</div>
+
+<p>
+<b>推荐使用 <code>nmtui</code> 来玩。</b>
+</p>
+
+<p>
+查询当前所有的wifi信号：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    nmcli device wifi list
+</pre>
+</div>
+
+<p>
+重新扫描wifi信号？
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    nmcli device wifi rescan
+</pre>
+</div>
+
+<p>
+连接某个wifi信号：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    nmcli device wifi connect <span style="color: #ff4ea3;">"iPhone (3)"</span> password <span style="color: #ff4ea3;">"peng1234567890"</span>
+</pre>
+</div>
+
+<p>
+具体都可以通过查询它的帮助。
+</p>
+<pre class="example">
+    ➜  /tmp nmcli -h
+    Usage: nmcli [OPTIONS] OBJECT { COMMAND | help }
+
+    OPTIONS
+      -t[erse]                                   terse output
+      -p[retty]                                  pretty output
+      -m[ode] tabular|multiline                  output mode
+      -c[olors] auto|yes|no                      whether to use colors in output
+      -f[ields] &lt;field1,field2,...&gt;|all|common   specify fields to output
+      -e[scape] yes|no                           escape columns separators in values
+      -a[sk]                                     ask for missing parameters
+      -s[how-secrets]                            allow displaying passwords
+      -w[ait] &lt;seconds&gt;                          set timeout waiting for finishing operations
+      -v[ersion]                                 show program version
+      -h[elp]                                    print this help
+
+    OBJECT
+      g[eneral]       NetworkManager's general status and operations
+      n[etworking]    overall networking control
+      r[adio]         NetworkManager radio switches
+      c[onnection]    NetworkManager's connections
+      d[evice]        devices managed by NetworkManager
+      a[gent]         NetworkManager secret agent or polkit agent
+      m[onitor]       monitor NetworkManager changes
+
+    ➜  /tmp nmcli device -h
+    Usage: nmcli device { COMMAND | help }
+
+    COMMAND := { status | show | connect | reapply | disconnect | delete | monitor | wifi | lldp }
+
+      status
+
+      show [&lt;ifname&gt;]
+
+      set [ifname] &lt;ifname&gt; [autoconnect yes|no] [managed yes|no]
+
+      connect &lt;ifname&gt;
+
+      reapply &lt;ifname&gt;
+
+      disconnect &lt;ifname&gt; ...
+
+      delete &lt;ifname&gt; ...
+
+      monitor &lt;ifname&gt; ...
+
+      wifi [list [ifname &lt;ifname&gt;] [bssid &lt;BSSID&gt;]]
+
+      wifi connect &lt;(B)SSID&gt; [password &lt;password&gt;] [wep-key-type key|phrase] [ifname &lt;ifname&gt;]
+                             [bssid &lt;BSSID&gt;] [name &lt;name&gt;] [private yes|no] [hidden yes|no]
+
+      wifi hotspot [ifname &lt;ifname&gt;] [con-name &lt;name&gt;] [ssid &lt;SSID&gt;] [band a|bg] [channel &lt;channel&gt;] [password &lt;password&gt;]
+
+      wifi rescan [ifname &lt;ifname&gt;] [[ssid &lt;SSID to scan&gt;] ...]
+
+      lldp [list [ifname &lt;ifname&gt;]]
+</pre>
+
+<p>
+另外保存一些命令行使用例子：
+</p>
+<pre class="example">
+    命令行
+
+    下列应用程序可能对于没有X时配置和管理网络有帮助。
+    nmcli
+
+    命令行前端nmcli包括在networkmanager中。
+
+    对于使用信息，参考nmcli(1)。 例子:
+
+        连接 WiFi 网络:
+
+        nmcli dev wifi connect &lt;name&gt; password &lt;password&gt;
+
+        通过wlan1接口连接 WiFi 网络:
+
+        nmcli dev wifi connect &lt;name&gt; password &lt;password&gt; iface wlan1 [profile name]
+
+        断开一个接口:
+
+        nmcli dev disconnect iface eth0
+
+        重新连接一个标记为已断开的接口:
+
+        nmcli con up uuid &lt;uuid&gt;
+
+        获得 UUID 列表:
+
+        nmcli con show
+
+        查看网络设备及其状态列表:
+
+        nmcli dev
+
+        关闭 WiFi:
+
+        nmcli r wifi off
+
+    nmtui
+
+    "nmtui" 是一个基于curses的图形化前端，包括在networkmanager中。
+
+    使用信息参见nmtui(1)。
+
+    nmcli-dmenu
+
+    networkmanager-dmenu-gitAUR 是一个通过 dmenu 而不是 nm-applet 来管理 NetworkManager 连接的脚本。它提供了所有必要的特性, 例如连接到已有的 WiFi 或有线网络, 连接到新的 WiFi 网络, 在需要的时候询问密码, 连接到已有的 VPN, 启用/停用网络连接, 运行 nm-connection-editor 的图形界面。
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org65cc673" class="outline-2">
+<h2 id="org65cc673"><span class="section-number-2">10</span> 移动硬盘备份</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+可以尝试下这种办法。加速备份的办法：
+</p>
+<pre class="example">
+To save space, you can compress data produced by dd with gzip, e.g.:
+
+dd if=/dev/hdb | gzip -c  &gt; /image.img
+
+You can restore your disk with:
+
+gunzip -c /image.img.gz | dd of=/dev/hdb
+
+To save even more space, defragment the drive/partition you wish to
+clone beforehand (if appropriate), then zero-out all the remaining
+unused space, making it easier for gzip to compress:
+
+mkdir /mnt/hdb
+mount /dev/hdb /mnt/hdb
+dd if=/dev/zero of=/mnt/hdb/zero
+
+Wait a bit, dd will eventually fail with a "disk full" message, then:
+
+rm /mnt/hdb/zero
+umount /mnt/hdb
+dd if=/dev/hdb | gzip -c  &gt; /image.img
+
+Also, you can get a dd process running in the background to report
+status by sending it a signal with the kill command, e.g.:
+
+dd if=/dev/hdb of=/image.img &amp;
+kill -SIGUSR1 1234
+
+Check your system - the above command is for Linux, OSX and BSD dd
+commands differ in the signals they accept (OSX uses SIGINFO - you can
+press Ctrl+T to report the status).
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org752b91c" class="outline-2">
+<h2 id="org752b91c"><span class="section-number-2">11</span> xfce4修改开始菜单中对应程序</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+我更新了firefox，下载到了 <code>/usr/local/firefox/</code> 目录。现在需要对应开
+始菜单中图标对应调用它。
+</p>
+
+<p>
+可以到 <code>/usr/share/applications/</code> 或者
+<code>~/.local/share/applicatioins</code> 中找到对应项，然后修改其中的 <code>Exec</code>
+项就可以了。
+</p>
+
+<p>
+我当前生效是到 <code>/usr/share/applications/</code> 修改生效的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga4e2efc" class="outline-2">
+<h2 id="orga4e2efc"><span class="section-number-2">12</span> install fcitx</h2>
+<div class="outline-text-2" id="text-12">
+<pre class="example">
+# 1.安装
+sudo apt-get install fcitx-rime librime-data-wubi
+# 2.配置 fcitx 为默认. 然后重启
+im-config
+sudo reboot
+# 3.添加输入法
+fcitx-config-gtk3
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org4119ebf" class="outline-2">
+<h2 id="org4119ebf"><span class="section-number-2">13</span> 添加字体</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+都copy到 <code>/usr/share/fonts</code> 目录。然后 <code>fc-cache -f -v</code> 就可以了。
+</p>
+
+<p>
+我喜欢的英文字体 <code>ubuntu mono</code> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8b16307" class="outline-2">
+<h2 id="org8b16307"><span class="section-number-2">14</span> 挂载小米手机（可能android手机都适用）从android手机中copy文件</h2>
+<div class="outline-text-2" id="text-14">
+<div class="org-src-container">
+<pre class="src src-sh">mkdir /media/xiaomi/
+chmod 775 /media/xiaomi
+apt-get install go-mtpfs
+go-mtpfs -allow-other /media/xiaomi/
+go-mtpfs  -usb-timeout=60000 -allow-other /media/xiaomi/
+</pre>
+</div>
+
+<p>
+直接使用adb，比如下面命令可以直接把小米的录音拉出来：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">adb pull /sdcard/MIUI/sound_recorder/call_rec
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgefb927e" class="outline-2">
+<h2 id="orgefb927e"><span class="section-number-2">15</span> debain装上默认不能控制声音</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+安装对应的软件（具体是啥忘了）。然后把下面的两句分别绑定到按键上就可
+以了。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">To turn volume up 5%:</span>
+amixer sset Master 5%+
+
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">To turn volume down 5%:</span>
+amixer sset Master 5%-
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org26dd58e" class="outline-2">
+<h2 id="org26dd58e"><span class="section-number-2">16</span> firefox全屏下一直显示tabbar</h2>
+<div class="outline-text-2" id="text-16">
+<pre class="example">
+Type about:config on Firefox address bar.
+Search for browser.fullscreen.autohide
+Set it to false
+
+There you go.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8aadf1e" class="outline-2">
+<h2 id="org8aadf1e"><span class="section-number-2">17</span> 笔记本台式机共享鼠标键盘</h2>
+<div class="outline-text-2" id="text-17">
+</div>
+<div id="outline-container-orgf574d38" class="outline-3">
+<h3 id="orgf574d38"><span class="section-number-3">17.1</span> x2vnc</h3>
+<div class="outline-text-3" id="text-17-1">
+<p>
+看到windows用户使用 <code>synergy</code> 来在win和linux中共享键盘和鼠标。但是这
+个玩意儿是收费的。然后我找了一个免费的替代品 <code>x2vnc</code> 。
+</p>
+
+<p>
+两个linux之前，直接参考的 <a href="http://hantslug.org.uk/2006/05/using-x2vnc/">这篇文章</a> 。
+</p>
+
+<pre class="example">
+Install x2vnc on the workstation (Debian users: aptitude install
+x2vnc).
+
+Install a VNC server on the laptop that exports the current
+display. x11vnc is ideal for this (Debian users: aptitude install
+x11vnc).
+
+On the laptop, run: x11vnc -storepasswd &lt;password&gt; ~/.vncpasswd Copy
+~/.vncpasswd to the workstation.
+
+On the laptop, run: x11vnc -rfbauth ~/.vncpasswd -forever -bg -allow
+workstation_name
+
+On the workstation, run: x2vnc -passwdfile ~/.vncpasswd laptop_name:0
+
+(Note: In the above, workstation_name is the DNS name of the
+workstation. It could also be the IP address. The same applies for
+laptop_name)
+
+Now if you move your mouse to the far right of your screen and keep
+going, your mouse should appear on the laptop. The workstation’s
+keyboard will also “type” on to the laptop. It’s just as though
+your keyboard and mouse are connected to the same two machines.
+</pre>
+
+<p>
+总地来说，就是client和server。server这边需要开一个vnc。x2vnc就是基于
+vnc搞的。server端启动vnc。然后client直接使用 <code>x2vnc</code> 连接上就可以了。
+</p>
+</div>
+</div>
+<div id="outline-container-org42c0487" class="outline-3">
+<h3 id="org42c0487"><span class="section-number-3">17.2</span> x2x</h3>
+<div class="outline-text-3" id="text-17-2">
+<p>
+使用x2vnc有点卡，x2x感觉要好很多。
+</p>
+
+<p>
+参考的 <a href="https://www.linuxjournal.com/content/share-keyboardmouse-between-multiple-computers-x2x">这里</a> ，和 <a href="https://help.ubuntu.com/community/X2xHowto">这里</a> 。
+</p>
+
+<p>
+其实在server端直接使用安装好 <code>x2x</code> 后，使用下面的命令就可以了，这个
+命令是从client登陆然后执行 <code>x2x</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ssh -XC user@laptop  x2x -east -to :0.0
+</pre>
+</div>
+
+<p>
+x2x的 Man Page 也写得很清楚：
+</p>
+<pre class="example">
+EXAMPLES
+       Calling the system whose keyboard is to be used "primary" and the other system "secondary", you need to specify either  -from  primary-x-display  or
+       -to  secondary-x-display.  The x2x program can be run on either system.  The easiest way to maintain security is to tunnel an X connection over ssh.
+       Since x2x can be run on either computer, it can be invoked in either of the following ways, where we assume the local display on each system is :0.
+
+       run indirectly on secondary:
+
+              primary $ ssh -X secondary x2x -to :0 -east
+
+       run indirectly on primary:
+
+              secondary $ ssh -X primary x2x -from :0 -west
+
+       run directly indirectly on primary:
+
+              primary $ ssh -A secondary env DISPLAY=:0.0 ssh -X primary x2x -from :0 -east
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7e43967" class="outline-2">
+<h2 id="org7e43967"><span class="section-number-2">18</span> 笔记本台式机共享clipboard</h2>
+<div class="outline-text-2" id="text-18">
+<p>
+用的 <a href="https://github.com/coralw/share-clipboard">share-clipboard</a> 。
+</p>
+
+<p>
+ubuntu上安装：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">sudo apt-get install nodejs-legacy
+npm install copy-paste
+</pre>
+</div>
+
+<p>
+然后一个 <code>node share-clipboard.js</code> ，另一个机器 <code>node
+  share-clipboard.js &lt;ip&gt;</code> 。 这样两个
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

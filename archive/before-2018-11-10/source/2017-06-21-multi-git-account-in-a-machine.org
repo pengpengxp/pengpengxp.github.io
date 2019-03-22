@@ -1,0 +1,77 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: align
+#+STARUP: hideblocks
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+
+
+#+Title: 一台电脑上多个github用户的配置
+
+
+在公司有一个专门访问私有库的github账号，同时也想使用我自己的github的账
+号。
+
+于是我参考了 [[https://code.tutsplus.com/tutorials/quick-tip-how-to-work-with-github-and-multiple-accounts--net-22574][这篇文章]] 。
+
+github区分用户不是通过用户名，因为使用ssh的时候都是用的 =git= 这个用户
+的。它是用不同的公钥来区分用户的。那么我们的目标就是配置不同的库使用不
+同的公钥就可以了。
+
+首先需要生成密钥对：
+第一个密钥对我一般都是直接 =ssh-keygen= 然后一路回车完成。
+
+生成第二个的时候，可以这样来：
+#+BEGIN_EXAMPLE
+  ssh-keygen -t rsa -C "your-email-address"
+
+  Be careful that you don't over-write your existing key for your
+  personal account. Instead, when prompted, save the file as
+  id_rsa_COMPANY. In my case, I've saved the file to
+  ~/.ssh/id_rsa_nettuts.
+#+END_EXAMPLE
+就是说保存的时候需要注意不要把原来的key覆盖掉了，我存为
+=~/.ssh/id_rsa_pengpengxp= 。
+
+然后就是分别到各自的页面上去把对应的公钥上传上去。
+
+最后配置的时候在 =~/.ssh/config= 加入这样几句：
+#+BEGIN_EXAMPLE
+  # default
+  Host github.com
+          HostName github.com
+          User git
+          IdentityFile ~/.ssh/id_rsa
+
+  Host github-peng
+          HostName github.com
+          User git
+          IdentityFile ~/.ssh/id_rsa_pengpengxp
+#+END_EXAMPLE
+我的理解是，第一个 =Host= 是指本机的域名。 =Hostname= 是指真正的域名或
+ip。用户名都是使用的 =git= 。最后就是设置不同的 =Host= 使用不同的认证
+文件。
+
+这样设置过后，公司的github直接正常使用即可。我自己的库，需要push的时候，
+需要添加一个特殊的 =remote= ， 以
+=git@github.com:pengpengxp/supermartket.git= 为例：
+#+BEGIN_SRC sh
+  git remote add peng git@github-peng:pengpengxp/supermartket.git
+#+END_SRC
+添加后可能就是下面这个样子：
+#+BEGIN_EXAMPLE
+   ~/github/supermartket/ [master] git remote -v
+  origin  git@github.com:pengpengxp/supermartket.git (fetch)
+  origin  git@github.com:pengpengxp/supermartket.git (push)
+  peng    git@github-peng:pengpengxp/supermartket.git (fetch)
+  peng    git@github-peng:pengpengxp/supermartket.git (push)
+#+END_EXAMPLE
+向 =peng= 这个 =remote= push就可以了：
+#+BEGIN_SRC sh
+  git push peng master
+#+END_SRC
+
+这样设置后，向 =peng= push的时候，因为域名是 =github-peng= ，所以会使
+用 =~/.ssh/id_rsa_pengpengxp= 做为认证文件。但是实际使用的域名又确实是
+=github.com= 。

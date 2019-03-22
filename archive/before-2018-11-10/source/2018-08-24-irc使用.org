@@ -1,0 +1,158 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2018-08-24-irc使用
+
+* 注册
+  比如我要注册pengpengxp
+  #+BEGIN_EXAMPLE
+/nick pengpengxp
+/msg nickserv register 密码 邮件地址
+
+-freenode-connect- Due to the persistent ongoing spam, all new connections are
+                 being set +R (block messages from unidentified users) and
+                 will be scanned for vulnerabilities. This will not harm your
+                 computer, and vulnerable hosts will be notified.
+-NickServ- An email containing nickname activation instructions has been sent
+           to pengpengxppub@sina.com.
+  #+END_EXAMPLE
+
+  这个邮件地址有些irc服务器是必须填的，因为它要求你用来验证注册的。然
+  后打开邮箱，看里面的提示操作就注册成功了。比如：
+  #+BEGIN_EXAMPLE
+/msg NickServ VERIFY REGISTER pengpengxp snuwrmfzzuze
+-NickServ- Thank you for verifying your e-mail address! You have taken steps
+           in ensuring that your registrations are not exploited.
+  #+END_EXAMPLE
+
+* 常用命令
+  + 注册：
+    #+BEGIN_EXAMPLE
+/msg nickserv help
+    #+END_EXAMPLE
+
+  + 改昵称：
+    #+BEGIN_EXAMPLE
+/nick 新的昵称
+    #+END_EXAMPLE
+
+  + 查看某人资料：
+    #+BEGIN_EXAMPLE
+/whois 昵称
+    #+END_EXAMPLE
+
+  + 查看某IP登录的所有用户：
+  #+BEGIN_EXAMPLE
+/who ip
+  #+END_EXAMPLE
+
+  + 查看所有频道里面的人的名单。
+  #+BEGIN_EXAMPLE
+/WHO
+  #+END_EXAMPLE
+
+  + 用来加入这个频道，如果这个频道不存在，那么服务器将创建一个这样的频
+    道，当然，不是所有的服务器都提供这项服务的。
+    #+BEGIN_EXAMPLE
+/JOIN #频道名
+    #+END_EXAMPLE
+
+  + 用来离开这间屋子，并可以留下您离开的原因。
+    #+BEGIN_EXAMPLE
+/PART #频道名 离开频道的原因
+    #+END_EXAMPLE
+
+  + 用来退出服务器，并附上退出的原因。
+    #+BEGIN_EXAMPLE
+/QUIT 退出的原因
+    #+END_EXAMPLE
+
+  + 这命令用来告诉别人你暂时离开一会，比如/AWAY 偶去pmm了， 那么别人和你
+    开小窗说话，他将看到这样的信息:youname IS AWAY:偶去pmm了。要取消您的
+    AWAY信息,打/AWAY就行了。
+    #+BEGIN_EXAMPLE
+/AWAY 原因
+    #+END_EXAMPLE
+
+  + 用来邀请别人到指定频道的命令。
+    #+BEGIN_EXAMPLE
+/INVITE 昵称 #频道名
+    #+END_EXAMPLE
+
+  + 管理
+    + 如果您是这个频道的管理员，就可以把你想要踢的人踢出去，并可以说明原
+      因。
+      #+BEGIN_EXAMPLE
+/KICK #频道名 昵称 原因
+      #+END_EXAMPLE
+
+    + 如果您是这个频道的管理员，用来改变频道的主题。
+      #+BEGIN_EXAMPLE
+/TOPIC #频道名' 频道主题
+      #+END_EXAMPLE
+
+  + 自行
+
+  + 用nick做主语的祈使句
+    #+BEGIN_EXAMPLE
+/ME 您要作的动作
+    #+END_EXAMPLE
+
+  + 用来向别人单独发送信息的命令。
+    #+BEGIN_EXAMPLE
+/MSG 昵称|#频道 要说的话
+    #+END_EXAMPLE
+
+  + 用来和别人开小窗来聊天。
+    #+BEGIN_EXAMPLE
+/QUERY 昵称 要说的话
+    #+END_EXAMPLE
+
+  + 提示，不要用，通常挨踢
+    #+BEGIN_EXAMPLE
+/NOTICE 昵称|#频道名 要说的话
+    #+END_EXAMPLE
+
+  + 频道
+    + 查看服务器上所有频道及主题（公共服务器如 Freenode 请慎用，因为太
+      多）。
+      #+BEGIN_EXAMPLE
+/list
+      #+END_EXAMPLE
+
+    + 显示#ubuntu-cn这个频道
+      #+BEGIN_EXAMPLE
+/list #ubuntu-cn
+      #+END_EXAMPLE
+
+    + 现在查看的是人数大于A个人但小于B个人的频道
+      #+BEGIN_EXAMPLE
+/list －MIN A －MAX B
+      #+END_EXAMPLE
+
+    + 那么您所查看的是所有含有ABC字符串的频道。
+      #+BEGIN_EXAMPLE
+/list *ABC*
+      #+END_EXAMPLE
+
+  + Freenode相关
+    + 首先找到想要的昵称——已经被注册的就没法用了
+      #+BEGIN_EXAMPLE
+/nick 新的昵称
+      #+END_EXAMPLE
+
+    + 注册
+      #+BEGIN_EXAMPLE
+/msg NickServ REGISTER 密码 电子邮件地址
+      #+END_EXAMPLE
+
+    + 密码验明正身
+      #+BEGIN_EXAMPLE
+/msg NickServ IDENTIFY 昵称 密码
+      #+END_EXAMPLE
+
+    + 验明正身后，换昵称加为额外的名
+  #+BEGIN_EXAMPLE
+/msg NickServ GROUP
+  #+END_EXAMPLE

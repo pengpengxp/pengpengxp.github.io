@@ -1,0 +1,51 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 从evil到xah-fly-keys
+
+最近写了好几个月的C，强度比较大，感觉手指开始有点不太舒服。一直都用的
+evil，以前也一直想着换到 `xah-fly-keys' ，干脆这次试下它。
+
+* 和evil的区别
+  1. 不同于evil中有很多种模式，`xah-fly-keys' 中只有insert和command两
+     种模式。
+  2. evil中定义了各种的map，比如 `evil-insert-mode-map'，
+     `evil-normal-mode-map'，`evil-insert-mode-local-map'等等，
+     `xah-fly-keys'中只有很少的几个map。
+     1. `xah-fly-key-map' ：这个是主要的map，command模式中的命令主要就
+        是绑定到它。这个mode在insert和command模式下都会修改。进入
+        command模式的时候，调用 `xah-fly-command-mode-init'设置它。进
+        入insert模式时，调用 `xah-fly-insert-mode-init' 设置它。如果想
+        用自定义 `xah-fly-key-map' ，可以在
+        `xah-fly-insert-mode-activate-hook'和
+        `xah-fly-command-mode-activate-hook'两个hook中把它们覆盖掉。
+     2. `xah-fly-leader-key-map' ：这个是以`leader-key'（默认是SPC）为
+        开头的所有map。
+     3. 其它的map，比如 `xah-fly-c-keymap'， 都基本绑定到
+        `xah-fly-leader-key-map'上。
+     4. evil在normal模式下一般回车，大写字母， =\,/= 等等这些都是有特
+        殊用处的。在`xah-fly-keys'的command-mode中，它们是可以继续使用
+        的。这个功能我还在体验中。
+
+* 需要注意
+  1. 默认`xah-fly-keys'中的map是以drorak命名的，比如`xah-fly-c-keymap'
+     应该是我们常用键盘的`i'。 
+
+* TODO normal模式中evil中对应的功能
+  1. [ ] A: =;f=
+  2. [ ] I: =hf=
+  3. [ ] f,t: 
+  4. [ ] y: =c=
+  5. [ ] d: =x=
+
+  |-------+-------------------------------------------------+--------------------------|
+  | Evil  | Feature                                         | Xah-fly-keys Replacement |
+  |-------+-------------------------------------------------+--------------------------|
+  | =A=   | goto end of line and activiate insert mode      | =;f=                     |
+  | =I=   | goto beginning of line and activiate insertmode | =hf=                     |
+  | =f=   | find some char in current line                  | =N/A=                    |
+  | =t=   | ...                                             | =N/A=                    |
+  | =vi"= | select all text between ""                      | =9=                      |
+  |-------+-------------------------------------------------+--------------------------|
+

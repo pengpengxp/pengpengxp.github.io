@@ -1,0 +1,43 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+
+# #+BEGIN_HTML
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/index.html">Home</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/life.html">生活</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/wiki.html">Wiki</a>
+
+# <a style="margin-right: 50px" href="http://pengpengxp.github.io/about.html">关于我</a>
+# #+END_HTML
+
+#+BEGIN_SRC artist
+  __          ___ _    _   
+  \ \        / (_) |  (_)  
+   \ \  /\  / / _| | ___   
+    \ \/  \/ / | | |/ / |  
+     \  /\  /  | |   <| |  
+      \/  \/   |_|_|\_\_|  
+#+END_SRC
+
+[[file:index.org][Home]] [[file:wiki.org][wiki]] [[file:life.org][生活]] [[file:about.org][关于我]] 
+
+   + [[file:2018-05-30-org-mode-to-pdf.org][2018-05-30-org-mode-to-pdf]]
+   + [[file:2018-07-31-%E4%BD%BF%E7%94%A8mutex%E4%BA%92%E6%96%A5%E9%87%8F%E5%92%8C%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%E5%AF%B9%E7%BA%BF%E7%A8%8B%E8%BF%9B%E8%A1%8C%E5%90%8C%E6%AD%A5%E7%9A%84%E4%BE%8B%E5%AD%90.org][2018-07-31-使用mutex互斥量和条件变量对线程进行同步的例子]]
+   + [[file:2017-07-12-gnu-readline.org][2017-07-12-gnu-readline]]
+   + [[file:2018-08-23-snmp%E7%AC%94%E8%AE%B0.org][wiki: snmp笔记]]
+   + [[file:tcpdump.org][wiki: Tcpdump wiki]]
+   + [[file:2017-06-27-nginx-wiki.org][wiki: Nginx wiki]]
+   + [[file:2017-06-19-my_emacs_and_lisp_wiki.org][wiki: Emacs and Lisp wiki]]
+   + [[file:2017-06-19-my_linux_wiki.org][wiki: Linux wiki]]
+   + [[file:2017-06-19-my_python_wiki.org][wiki: Python wiki]]
+   + [[file:2017-06-19-my_shell_script_wiki.org][wiki: Shell wiki]]
+   + [[file:2017-06-26-my-git-wiki.org][wiki: Git wiki]]
+   + [[file:2017-06-28-docker-wiki.org][wiki: Docker wiki]]
+   + [[file:2017-06-28-Mac-wiki.org][wiki: Mac wiki]]
+   + [[file:2017-06-28-openstack-wiki.org][wiki: Openstack wiki]]
+   + [[file:2017-06-28-Azure-wiki.org][wiki: Azure wiki]]
+   + [[file:2017-07-10-my-c-cpp-wiki.org][wiki: c-cpp-wiki]]
+   + [[file:2017-07-05-python%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0.org][python进阶笔记]]
+   + [[file:2017-06-29-my-saved-website.org][My Bookmars]]

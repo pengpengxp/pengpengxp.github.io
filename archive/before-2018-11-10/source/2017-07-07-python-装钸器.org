@@ -1,0 +1,474 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-07-python-装钸器
+
+* 装钸器
+  在python中，函数是对象。可以进行赋值等操作：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    # -*- coding: utf-8; -*-
+    def hi(name="yasoob"):
+        return "hi " + name
+
+    print(hi())
+    # output: 'hi yasoob'
+
+    # 我们甚至可以将一个函数赋值给一个变量，比如
+    greet = hi
+    # 我们这里没有在使用小括号，因为我们并不是在调用hi函数
+    # 而是在将它放在greet变量里头。我们尝试运行下这个
+
+    print(greet())
+    # output: 'hi yasoob'
+
+    # 如果我们删掉旧的hi函数，看看会发生什么！
+    del hi
+    print(hi())
+    #outputs: NameError
+
+    print(greet())
+    #outputs: 'hi yasoob'
+
+  #+END_SRC
+  
+  函数中可以定义函数：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def out_fun():
+
+        def inter_fun1():
+            print 'in inter_fun1'
+
+        def inter_fun2():
+            print 'in inter_fun2'
+        
+        print 'begin out_fun'
+
+        inter_fun1()
+        inter_fun2()
+    
+        print 'end_out_fun'
+    
+    out_fun()
+  #+END_SRC
+
+  #+RESULTS:
+  : begin out_fun
+  : in inter_fun1
+  : in inter_fun2
+  : end_out_fun
+
+  内部的 =inter_fun1= 和 =inter_fun2= 在外部是不可见的。
+
+  函数也可以返回函数：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def re_fun():
+        print 'in re_fun'
+
+        def hi():
+            print 'hi this is the returned function'
+            return 'this is return value'
+
+        return hi
+
+
+    a = re_fun()
+
+    print a()
+  #+END_SRC
+
+  #+RESULTS:
+  : in re_fun
+  : hi this is the returned function
+  : this is return value
+
+  函数也可以做为参数传递给另一个函数：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a(fun):
+        print 'a will call function %s' % fun.__name__
+        fun()
+
+    def hi():
+        print 'hi'
+
+    def hello():
+        print 'hello,world'
+    
+    a(hi)
+    a(hello)
+  #+END_SRC
+
+  #+RESULTS:
+  : a will call function hi
+  : hi
+  : a will call function hello
+  : hello,world
+
+  装钸器就是让你能在你的函数的前后去执行代码：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a_new_decorator(a_func):
+
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+
+            a_func()
+
+            print("I am doing some boring work after executing a_func()")
+
+        return wrapTheFunction
+
+    def a_function_requiring_decoration():
+        print("I am the function which needs some decoration to remove my foul smell")
+
+    a_function_requiring_decoration()
+    #outputs: "I am the function which needs some decoration to remove my foul smell"
+
+    a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)
+    #now a_function_requiring_decoration is wrapped by wrapTheFunction()
+
+    a_function_requiring_decoration()
+    #outputs:I am doing some boring work before executing a_func()
+    #        I am the function which needs some decoration to remove my foul smell
+    #        I am doing some boring work after executing a_func()
+  #+END_SRC
+
+  #+RESULTS:
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work before executing a_func()
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work after executing a_func()
+
+  如果我们按照python中的语法来写的话，这个装钸器应该是这样的：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a_new_decorator(a_func):
+
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+
+            a_func()
+
+            print("I am doing some boring work after executing a_func()")
+
+        return wrapTheFunction
+
+    @a_new_decorator
+    def a_function_requiring_decoration():
+        """Hey you! Decorate me!"""
+        print("I am the function which needs some decoration to "
+              "remove my foul smell")
+
+    a_function_requiring_decoration()
+    #outputs: I am doing some boring work before executing a_func()
+    #         I am the function which needs some decoration to remove my foul smell
+    #         I am doing some boring work after executing a_func()
+
+    #the @a_new_decorator is just a short way of saying:
+    a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)
+  #+END_SRC
+
+  #+RESULTS:
+  : I am doing some boring work before executing a_func()
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work after executing a_func()
+
+  但是这样会有一个问题：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    def a_new_decorator(a_func):
+
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+
+            a_func()
+
+            print("I am doing some boring work after executing a_func()")
+
+        return wrapTheFunction
+
+    @a_new_decorator
+    def a_function_requiring_decoration():
+        """Hey you! Decorate me!"""
+        print("I am the function which needs some decoration to "
+              "remove my foul smell")
+
+    a_function_requiring_decoration()
+    a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)
+
+    print a_function_requiring_decoration.__name__
+  #+END_SRC
+
+  #+RESULTS:
+  : I am doing some boring work before executing a_func()
+  : I am the function which needs some decoration to remove my foul smell
+  : I am doing some boring work after executing a_func()
+  : wrapTheFunction
+
+  最后函数的 =__name__= 属性被覆盖了。这并不是我们想要的。python中有一
+  个 =functools.wraps= 可以用来解决这个问题，他可以保留被装钸的函数的
+  =__name__= 和 =__doc__= 属性。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def a_new_decorator(a_func):
+        @wraps(a_func)
+        def wrapTheFunction():
+            print("I am doing some boring work before executing a_func()")
+            a_func()
+            print("I am doing some boring work after executing a_func()")
+        return wrapTheFunction
+
+    @a_new_decorator
+    def a_function_requiring_decoration():
+        """Hey yo! Decorate me!"""
+        print("I am the function which needs some decoration to "
+              "remove my foul smell")
+
+    print(a_function_requiring_decoration.__name__)
+    # Output: a_function_requiring_decoration
+  #+END_SRC
+
+  #+RESULTS:
+  : a_function_requiring_decoration
+
+  web应用认证的时候常用装钸器来这样写：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def requires_auth(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            auth = request.authorization
+            if not auth or not check_auth(auth.username, auth.password):
+                authenticate()
+            return f(*args, **kwargs)
+        return decorated
+  #+END_SRC
+
+  记录日志也是常使用的：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def logit(func):
+        @wraps(func)
+        def with_logging(*args, **kwargs):
+            print(func.__name__ + " was called")
+            return func(*args, **kwargs)
+        return with_logging
+
+    @logit
+    def addition_func(x):
+       """Do some math."""
+       return x + x
+
+
+    result = addition_func(4)
+    # Output: addition_func was called
+  #+END_SRC
+
+  #+RESULTS:
+  : addition_func was called
+  
+  如果需要定义带参数的装钸器：
+  #+name: nested_decorator
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+    def logit(logfile='out.log'):
+        def logging_decorator(func):
+            @wraps(func)
+            def wrapped_function(*args, **kwargs):
+                log_string = func.__name__ + " was called"
+                print(log_string)
+                # 打开logfile，并写入内容
+                with open(logfile, 'a') as opened_file:
+                    # 现在将日志打到指定的logfile
+                    opened_file.write(log_string + '\n')
+                return func(*args, **kwargs)
+            return wrapped_function
+        return logging_decorator
+
+    @logit()
+    def myfunc1():
+        pass
+
+    myfunc1()
+    # Output: myfunc1 was called
+    # 现在一个叫做 out.log 的文件出现了，里面的内容就是上面的字符串
+
+    @logit(logfile='func2.log')
+    def myfunc2():
+        pass
+
+    myfunc2()
+    # Output: myfunc2 was called
+    # 现在一个叫做 func2.log 的文件出现了，里面的内容就是上面的字符串
+  #+END_SRC
+  可以类似于这样来理解：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    logit(logfile='out.log')(myfunc1)
+    logit(logfile='func2.log')(myfunc2)
+  #+END_SRC
+  函数式编程，函数是第一类数据，可以做为参数传递，也可以做为返回值。所
+  以这种带参数的装钸器执行就是类似于上面这样。
+
+  装钸器还可以实现为一个类，这就更灵活啦。比如上面的记录日志的同时，还
+  想再发邮件给管理员。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+
+    class clogit(object):
+        """Documentation for clogit
+
+        """
+        def __init__(self, logfile):
+            super(clogit, self).__init__()
+            self.logfile = logfile
+
+        def __call__(self, func):
+            @wraps(func)
+            def wrapper(*args, **kargs):
+                logstring = 'function %s is called' % func.__name__
+                func(*args, **kargs)
+
+                with open(self.logfile, 'wb') as f:
+                    f.write(logstring)
+
+                self.notify(logstring)
+
+            return wrapper
+
+        def notify(self, s):
+            # clogit not notify
+            pass
+
+    @clogit('/tmp/logit')
+    def function_test():
+        print 'this is function'
+
+    function_test()
+  #+END_SRC
+  这个感觉有点像：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    clogit('/tmp/logit').__call__(function_test)
+  #+END_SRC
+  
+  它比 [[nested_decorator][嵌套函数的方式]] 更整洁一些。而且扩展也很方便啦，现在我们可以定义
+  一个可以发邮件的子类：
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    from functools import wraps
+
+
+    class clogit(object):
+        """Documentation for clogit
+
+        """
+        def __init__(self, logfile='/tmp/logit'):
+            super(clogit, self).__init__()
+            self.logfile = logfile
+
+        def __call__(self, func):
+            @wraps(func)
+            def wrapper(*args, **kargs):
+                logstring = 'function %s is called' % func.__name__
+                func(*args, **kargs)
+
+                with open(self.logfile, 'wb') as f:
+                    f.write(logstring)
+
+                self.notify(logstring)
+
+            return wrapper
+
+        def notify(self, s):
+            # clogit not notify
+            pass
+
+
+    class email_andlogit(clogit):
+        """Documentation for email_andlogit
+
+        """
+        def __init__(self, emailaddress='xxx@gmail.com', *args, **kargs):
+            super(email_andlogit, self).__init__(*args, **kargs)
+            self.emailaddress = emailaddress
+
+        def notify(self, s):
+            print 'I will email %s to %s' % (s, self.emailaddress)
+            # send email here
+
+    @email_andlogit('peng@gmail.com', '/tmp/emaillogit')
+    def test_email():
+        print 'this is function'
+    test_email()
+  #+END_SRC
+  这样， =email_andlogit= 不仅会写入日志，还会发送一封邮件给管理员啦。
+  
+  最后，有一个问题：再思考一下能否写出一个 =@log= 的 =decorator= ，使
+  它既支持：
+  #+BEGIN_EXAMPLE
+    @log
+    def f():
+        pass
+  #+END_EXAMPLE
+  又支持
+  #+BEGIN_EXAMPLE
+    @log('execute')
+    def f():
+        pass
+  #+END_EXAMPLE
+  
+  下面是解法，有点复杂，需要慢慢理解下。
+  #+BEGIN_SRC python :results output :exports both :tangle /tmp/test_from_org_tangle.py
+    # -*- coding: utf-8; -*-
+    import functools
+    
+
+    def log(args):
+        ''' 函数Log装饰器 '''
+        desc = 'Just call!'
+        def decoration(func):
+            ''' 装饰器 '''
+            @functools.wraps(func)
+            def wrapper(*K, **KM):
+                ''' 执行装饰器参数函数 '''
+                print '[+] Function Execute: ' + func.__name__ + ' (' + desc + ')'
+                result = func(*K, **KM)
+                print '[+] Function Finished: ' + func.__name__ + ' (' + desc + ')'
+                return result
+            return wrapper
+
+        if hasattr(args, '__call__'):
+            return decoration(args)
+        else:
+            desc = args
+            return decoration
+
+    @log
+    def fun_log():
+        print 'fun_log'
+
+    @log('[test]')
+    def fun_test():
+        print 'fun_test'
+
+
+    fun_log()
+    print '================'
+    fun_test()
+  #+END_SRC
+
+  #+RESULTS:
+  : [+] Function Execute: fun_log (Just call!)
+  : fun_log
+  : [+] Function Finished: fun_log (Just call!)
+  : ================
+  : [+] Function Execute: fun_test ([test])
+  : fun_test
+  : [+] Function Finished: fun_test ([test])
+
+  我理解 =@log('tet')= 这种形式的时候，参数 =tet= 是放到了一个闭包里面
+  的。直到函数调用结束，闭包才释放掉。
+
+* 参考资料
+  1. [[https://eastlakeside.gitbooks.io/interpy-zh/content/decorators/][pyhton-进阶中文版]]
+  2. [[http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819879946007bbf6ad052463ab18034f0254bf355000][廖雪峰讲python装钸器]]

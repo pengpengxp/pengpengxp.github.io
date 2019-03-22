@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>把mbr分驱方式转换成gpt</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">把mbr分驱方式转换成gpt</h1>
+<p>
+Long long ago, 我们安装openstack compute节点是在virtualbox中制做好镜像
+后，使用dd把镜像导出来，然后再使用dd进行安装的。当时大概是按这个教程做
+的：
+</p>
+<pre class="example">
+  compute的安装步骤
+  1、用live盘启动新装compute节点，进入系统后将网卡的ip地址，注意关闭wifi。
+  2、执行如下命令将compute－install镜像写入硬盘
+     sudo su ssh openstack@xxx.xxx.xxx.xxx "dd if=path/to/compute-install.img" | dd of=/dev/sda
+     reboot
+  3、再用live盘启动，进入界面后运行gparted，将剩余空间开辟一个53000M的空间，用于扩张compute的根文件系统，
+    并将剩余的空间分成另一个盘，将两个文件格式指定为lvm格式。
+  4、拔掉compute的两根网线，并重启系统（这一步很重要）
+  5、进入系统后修改/etc/hostname，将compute修改为对应的computeX
+     同时，修改/etc/network/interface，修改为相应的IP地址。
+     将/etc/nova/nova.conf中的my_ip修改为本机xxx.xxx.xxx.xxx
+     执行如下命令，扩展根文件系统，注意，通过fdisk -l /dev/sda看53000M分区对应的是sdaX，下面以sda3为例：
+     pvcreate /dev/sda3
+     vgextend compute-vg /dev/sda3
+     lvextend -l +100%FREE /dev/compute-vg/root
+     resize2fs /dev/compute-vg/root
+  6、重启系统，插上网线
+</pre>
+
+<p>
+这样安装会导致我们的分驱策略是这样的：
+</p>
+<pre class="example">
+  +---------------------------------------------------------------+
+  |   +-------------------+-------------------+-------------------+-------------------+
+  |   |    Primary        |    Extened        |    Primary        |    Primary        |
+  |   |                   |                   |                   |                   |
+  |   |    500MB          |     7.5GB         |      50GB         |    160GB          |
+  |   |                   |                   |                   |                   |
+  |   +-------------------+--------+----------+-------------------+-------------------+
+  |                                |                              |
+  |                                |                              |
+  |                                |                              |
+  |                                |                              |
+  |                                |                LVM           |
+  |                                v                              |
+  |                       +--------+----------+                   |
+  |                       |    Logical        |                   |
+  |                       |                   |                   |
+  |                       |    7.5GB          |                   |
+  |                       |                   |                   |
+  +-----------------------+-------------------+-------------------+
+</pre>
+
+<p>
+这样分配，主要的问题就在于，Extened分驱已经不能扩展了！Extened分驱已经
+不能扩展了！Extened分驱已经不能扩展了！
+</p>
+
+<p>
+使用MBR方式的分驱表，因为只有64K，有只能分四个主分驱的限制！！！
+</p>
+
+<p>
+这样，最后的160GB，就不能再分了。假如需求是这样：再加入60GB的空间到LVM，
+然后剩下100GB的空间以后备用。这种状态下，PMs一定会大声地回答你：这个需
+求做不了！
+</p>
+
+<p>
+可能的解决思路是：使用gpt的分驱方式，这种方式的优点是：没有只能四个主
+分驱的限制。实际上它就没有主分驱和扩展分驱一说。于是PM立马提需求：我们
+“无损地”把mbr方式分好的分驱表转成gpt，可以分多个驱了，问题就解决啦。
+</p>
+
+<p>
+程序员们收到指令后就开始Google、Coding，Testing。一套组合拳之后，终于
+有了眉目：
+</p>
+
+<ol class="org-ol">
+<li>gdisk可以把mbr转成gpt。</li>
+<li>转换之后，bootloader会被搞坏，需要重新安装。这里使用了syslinux。因
+为它支持引导gpt分驱的磁盘。</li>
+<li>不是所有的bios都支持gpt方式的分驱，这个问题在程序员给God献上了自己
+的膝盖后得到了解决：我们的小盒子是支持的。</li>
+</ol>
+
+<p>
+最后程序员为了能让不会写代码的PM也能搞定这件事情以方便他们出去吹牛逼。
+写下了下面的脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20351;&#29992;liveCD&#36827;&#20837;&#65292;&#36825;&#37324;&#20197;16.04&#20026;&#20363;&#12290;&#22914;&#26524;&#26159;&#20854;&#23427;live&#65292;&#35831;&#23545;&#24212;&#20462;&#25913;&#19979;&#38754;&#30340;&#36719;</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20214;&#28304;</span>
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#29992;gdisk&#25226;sda&#30340;&#20998;&#39537;&#34920;&#36716;&#20026;gpt&#65288;gdisk /dev/sda&#65292;&#28982;&#21518;r f y w&#23601;&#21487;&#20197;&#20102;&#65289;&#12290;</span>
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#28982;&#21518;&#20351;&#29992;gparted&#25226;sda&#30340;&#26368;&#21518;&#19968;&#20010;&#24050;&#32463;&#20998;&#22909;&#30340;lvm&#30340;&#20998;&#39537;&#21024;&#25481;&#65288;&#23601;&#26159;&#19978;&#22270;&#20013;</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">160GB&#30340;&#37027;&#20010;&#20998;&#39537;&#65289;&#12290;important&#12290;&#22914;&#26524;&#27492;&#26102;&#19981;&#20351;&#29992;gparted&#21024;&#65292;&#20250;&#26377;&#38382;&#39064;&#65292;</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">pvscan&#26368;&#21518;&#36824;&#26159;&#20250;&#25195;&#20986;&#26469;&#23427;&#12290;&#36825;&#26159;&#19968;&#20010;&#22353;&#65292;&#19981;&#30693;&#36947;gparted&#22810;&#20570;&#20102;&#20123;&#20160;&#20040;&#20107;&#24773;&#12290;</span>
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26368;&#21518;&#20351;&#29992;gparted&#25226;sda1&#35774;&#20026; =legacy_boot= &#30340;&#26041;&#24335;&#21551;&#21160;&#12290;&#36873;&#20013;</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">sda1&#65288;Partition-&gt;Manage Flags-&gt;legacy_boot&#65289;&#12290;</span>
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#19979;&#38754;&#36825;&#20010;&#33050;&#26412;&#23601;&#26159;&#21435;&#23433;&#35013;bootloader&#12290;&#20351;&#29992;syslinux&#26469;&#20570;&#20026;bootloader&#65288;&#22240;&#20026;</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#23427;&#25903;&#25345;&#20174;bios&#20013;&#35782;&#21035;gpt&#20998;&#39537;&#65292;&#19981;&#36807;&#36825;&#20063;&#26159;&#38656;&#35201;bios&#25903;&#25345;&#65292;&#25105;&#20204;&#30340;&#23567;&#30418;&#23376;&#26159;&#25903;</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25345;&#30340;&#65292;&#20294;&#26159;&#32769;&#19968;&#28857;&#30340;bios&#23601;&#19981;&#25903;&#25345;&#20102;&#12290;&#65289;&#12290;</span>
+
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26356;&#26032;&#36719;&#20214;&#28304;&#65292;&#23433;&#35013;&#38656;&#35201;&#30340;&#36719;&#20214;&#21253;</span>
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse'</span> &gt; /etc/apt/sources.list
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse'</span> &gt;&gt; /etc/apt/sources.list
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse'</span> &gt;&gt; /etc/apt/sources.list
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'deb http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse'</span> &gt;&gt; /etc/apt/sources.list
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse'</span> &gt;&gt; /etc/apt/sources.list
+  apt-get update;apt-get install extlinux syslinux-common -y
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20351;lvm&#30340;&#21367;&#22312;liveCD&#20013;&#21487;&#35265;,Activate all volume groups available.</span>
+  vgchange -a y
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25346;&#36733;&#19978;&#26469;</span>
+  mount /dev/compute-vg/root /mnt
+  mount /dev/sda1 /mnt/boot
+  mkdir /mnt/boot/extlinux/
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#23433;&#35013;extlinux</span>
+  extlinux -i  /mnt/boot/extlinux/
+
+  cp /usr/lib/syslinux/modules/bios/* /mnt/boot/extlinux/
+
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#37197;&#32622;extlinux&#30340;&#24341;&#23548;</span>
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'UI menu.c32'</span> &gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'PROMPT 0'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">''</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'MENU TITLE Boot Menu'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'TIMEOUT 50'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'DEFAULT ubuntu'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">''</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'LABEL ubuntu'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'        MENU LABEL Ubuntu Linux'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'        LINUX ../vmlinuz-4.4.0-38-generic'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'        APPEND root=/dev/compute-vg/root ro'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'        INITRD ../initrd.img-4.4.0-38-generic'</span> &gt;&gt; /mnt/boot/extlinux/extlinux.conf
+
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Copy syslinux IPL which is capable of booting GPT partition to the</span>
+   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">disk's MBR.</span>
+  dd <span style="color: #ff8700;">if</span>=/usr/lib/syslinux/mbr/gptmbr.bin <span style="color: #ff8700;">of</span>=/dev/sda <span style="color: #ff8700;">bs</span>=440 <span style="color: #ff8700;">count</span>=1
+</pre>
+</div>
+
+<p>
+重启系统，现在可以使用parted命令来分驱啦（mkpart，按提示走就可以了）。
+</p>
+
+<p>
+最后附上把新建好的盘加入lvm中的命令：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#25226;sda2&#25630;&#25104;lvm&#30340;&#65292;&#36825;&#26679;&#20351;&#29992;pvscan&#25165;&#33021;&#25195;&#20986;&#26469;&#65292;&#65288;&#22914;&#26524;&#20351;&#29992;&#22270;&#24418;&#35805;&#30340;gparted</span>
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26032;&#24314;&#30340;lvm&#30913;&#30424;&#30340;&#35805;&#65292;&#24212;&#35813;&#20250;&#40664;&#35748;&#25191;&#34892;&#36825;&#19968;&#27493;&#65289;</span>
+  pvcreate /dev/sda2
+  pvscan
+
+  vgextend /dev/compute-vg /dev/sda2
+  lvresize -l +100%FREE /dev/compute-vg/root
+  resize2fs /dev/compute-vg/root
+</pre>
+</div>
+
+
+<p>
+参考文档：
+<a href="https://wiki.archlinux.org/index.php/GUID_Partition_Table_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">GUID Partition Table</a>
+</p>
+
+<p>
+<a href="http://www.rodsbooks.com/gdisk/mbr2gpt.html">Converting to or from GPT</a>
+</p>
+
+<p>
+<a href="http://www.lightofdawn.org/wiki/wiki.cgi/BIOSBootGPT">Booting GPT disk on BIOS systems</a>
+</p>
+
+<p>
+<a href="http://shallowsky.com/linux/extlinux.html">How to install extlinux (syslinux) as a bootloader</a>
+</p>
+
+<p>
+<a href="https://wiki.archlinux.org/index.php/Syslinux_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">Syslinux</a>
+</p>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

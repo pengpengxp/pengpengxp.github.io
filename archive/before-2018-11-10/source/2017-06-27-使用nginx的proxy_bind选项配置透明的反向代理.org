@@ -1,0 +1,115 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 使用nginx的proxy_bind选项配置透明的反向代理
+
+* 背景
+  一般使用nginx做为反向代理。后面的web服务器看到的都是作为nginx反向代
+  理服务器主机的ip地址。但有的时候，upstream需要看到真正客户的ip地址。
+  这时候需要做一些特殊的配置才行。
+
+* proxy_bind
+   #+BEGIN_EXAMPLE
+     user  root;
+     location / {
+              proxy_pass       http://192.168.57.109:80;
+              proxy_bind $remote_addr  transparent;
+     }
+   #+END_EXAMPLE
+   这样设置后，ningx后面真正的web服务器看到的ip不在是nginx反向代理服务
+   器主机的ip。而是真正发起请求的主机ip。
+  
+   =$remote_addr= 是一个通配。如果这里设置为固定ip和端口，则不管是从哪
+   个主机发起的请求，web服务器收到的请求报文里源ip端口都只是该ip和端口。
+  
+   *注意* ： 这玩意儿要使用只能是root权限，就是配置中的第一句。
+   
+   *另外* ： =proxy_bind $remote_addr transparent;= 在1.10.3版本上还不
+   支持。自己编译的1.11.3才支持。
+
+* iptables和路由表
+   :PROPERTIES:
+   :CUSTOM_ID: iptables
+   :END:
+   
+   下面脚本的做用：
+   1) 新建一个链，把过来的tcp包都打上标记。
+   2) 新建一个路由表100，让有标记的包都走表100。
+   3) 在路由表100加入一个默认路由，把所有包都扔到lo网卡上去。
+      
+   这样做的目地见 [[#tproxy_sum][总结]] 。
+   
+   #+BEGIN_SRC sh
+     #### 新建一个 DIVERT 给包打标签
+     sudo iptables -t mangle -N DIVERT;
+     sudo iptables -t mangle -A DIVERT -j MARK --set-mark 1;
+     sudo iptables -t mangle -A DIVERT -j ACCEPT;
+
+     #### 把tcp的包给DIVERT处理
+     sudo iptables -t mangle -A PREROUTING -p tcp -m socket -j DIVERT;
+
+     #### 有标签的包去查名为 100 的路由表
+     sudo ip rule add fwmark 1 lookup 100
+
+     #### 100的路由表里就一条默认路由，把所有包都扔到lo网卡上去
+     sudo ip route add local 0.0.0.0/0 dev lo table 100;
+   #+END_SRC
+   
+* 总结
+   :PROPERTIES:
+   :CUSTOM_ID: tproxy_sum
+   :END:
+  #+BEGIN_EXAMPLE
+    +-----------------------------------------------+                                       +-----------------------------------------------+
+    |                                               |                  (3)                  |                                               |
+    |                                        +------+<------------------<------------------<+------+                                        |
+    |                                        |      |                                       |      |                                        |
+    |             Host 2: nginx proxy        | eth1: 57.108                            eth0:57.109 |    Host 3: upstream                    |
+    |                                        |      |                                       |      |                                        |
+    |         +------------------------+     +------+>------------------>------------------>+------+                                        |
+    |         |     eth0: 56.108       |            |                  (2)                  |                                               |
+    +---------+------------------------+------------+                                       +-----------------------------------------------+
+              v                        ^                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+        (4)   v                        ^  (1)                                                      
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              v                        ^                                                           
+    +---------+------------------------+------------+
+    |         |     eth0: 56.1         |            |
+    |         +------------------------+            |
+    |                                               |                                              
+    |               Host 1: client                  |                                              
+    |                                               |                                              
+    |                                               |                                              
+    |                                               |
+    +-----------------------------------------------+
+  #+END_EXAMPLE
+
+  场景：Host 1上执行： =curl 192.168.56.108= 。图中的ip地址都省略前面
+  的 =192.168.= 。
+  
+  proxy_bind使Host 3看到的ip是 192.168.56.1。
+  
+  这里Host 3的默认网关应该是Host 2的eth1,使用 =sudo ip route add
+  default via 192.168.57.108= 添加。这样client的请求通过 (1)->(2) 到达
+  upstream后，upstream处理完回来才会走 (3) 。走到 (3) 的包源ip为
+  =192.168.57.109= ，目的ip为 =192.168.56.1= 。
+
+  使用 [[#iptables][iptables]] 的脚本，可以使这个回来的包提上来给nginx处理。nginx发现
+  是upstream的回应，就通过 (4) 返回给client。
+
+* TODO 这个其实我理解还不是特别深，可能需要再搭个环境测一下
+  1. [ ] 而且我觉得从 =(3)->(4)= ，可以使用 [[file:2017-06-27-ip_forward%E5%92%8Crp_filter.org::#ip_forward][ip_forward]] 直接设置转发。
+     这样做是不是为了让包再过一次nginx？直接转发可能nginx对回来的包都
+     处理不了。
+  2. [ ] Host 1接收到的(4)回来的包，源ip是Host 2的还是Host 3的？如果需
+     要是Host 3的，是不是nginx这边还需要处理下？

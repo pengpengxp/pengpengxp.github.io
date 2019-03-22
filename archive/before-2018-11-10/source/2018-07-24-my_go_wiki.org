@@ -1,0 +1,8 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: Go wiki
+
+1. [ ] [[https://github.com/go101/go101][Go 101]] 是一本介绍 Go 语言的语法和各种细节的开源电子书，帮助读者深入彻底地了解 Go。
+

@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-20 Sat 10:35 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>org-mode写文档</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">org-mode写文档</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org7a8d115">1. 介绍</a>
+<ul>
+<li><a href="#org15954ea">1.1. Org Mode</a></li>
+<li><a href="#orgf032356">1.2. LaTeX</a></li>
+</ul>
+</li>
+<li><a href="#org87d733a">2. Org Mode直接导出pdf</a>
+<ul>
+<li><a href="#org0812fdd">2.1. 配置texlive环境</a>
+<ul>
+<li><a href="#orga6a7a0f">2.1.1. 字体</a></li>
+</ul>
+</li>
+<li><a href="#org3528905">2.2. 查询latex的package</a></li>
+<li><a href="#orgfb2316e">2.3. 自定义生成pdf的格式</a>
+<ul>
+<li><a href="#orgde3f111">2.3.1. org文档转pdf文件格式</a></li>
+<li><a href="#orge9548f6">2.3.2. 结合body only进一步定制pdf文件格式</a>
+<ul>
+<li><a href="#org6f51f71">2.3.2.1. 需要修改文章头页眉页脚等</a></li>
+<li><a href="#org4510e1a">2.3.2.2. 需要在文档中直接插入latex源码</a></li>
+</ul>
+</li>
+<li><a href="#org7869ddb">2.3.3. org文档中需要写latex源码做为示例</a></li>
+<li><a href="#orge7e1d2d">2.3.4. org的block中的行太长</a></li>
+<li><a href="#org9a2e361">2.3.5. 标题和目录分页显示</a></li>
+<li><a href="#org0f912d3">2.3.6. 自定义源码的格式</a></li>
+<li><a href="#orged6d2e2">2.3.7. 全局定义example block导出的environment</a></li>
+<li><a href="#org33f0b35">2.3.8. org导出标题的级别</a></li>
+<li><a href="#org29b2de1">2.3.9. 不要title页</a></li>
+<li><a href="#org19fb0d3">2.3.10. <span class="todo TODO">TODO</span> mylongverbatim现在使用的是listings，换行后不爽，看下能不能使用 <code>spverbatim</code> 。后者我加不上frame加框</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgdaa7d59">3. Org Mode导出为html再打印成pdf</a>
+<ul>
+<li><a href="#orgd769848">3.1. 最简单的做法</a></li>
+<li><a href="#orgd00a671">3.2. 为pdf加书签(bookmarks)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7a8d115" class="outline-2">
+<h2 id="org7a8d115"><span class="section-number-2">1</span> 介绍</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+I really do not like Microsoft Word！
+</p>
+</div>
+
+<div id="outline-container-org15954ea" class="outline-3">
+<h3 id="org15954ea"><span class="section-number-3">1.1</span> <a href="https://orgmode.org/">Org Mode</a></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+一个快速高效的纯文本系统。我所有笔记，TODO，当前的blog以及研究生毕业
+论文全都是用它写的。
+</p>
+
+<p>
+优点：
+</p>
+<ol class="org-ol">
+<li>纯文本。</li>
+<li>开源。</li>
+<li>高效。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgf032356" class="outline-3">
+<h3 id="orgf032356"><span class="section-number-3">1.2</span> <a href="https://www.latex-project.org/">LaTeX</a></h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+LaTeX是一个高质量的排版系统。它是为科学和技术文档来设计的。它是通讯
+和科学领域的事实标准。关键是，它还免费。我的简历是直接用它来排版的。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org87d733a" class="outline-2">
+<h2 id="org87d733a"><span class="section-number-2">2</span> Org Mode直接导出pdf</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Org Mode支持各种各样的导出。本文只介绍Org Mode直接导出pdf文档相关内
+容。
+</p>
+
+<p>
+简单来说，想要把Org Mode写的纯文本文件转为pdf文件进行发布，需要先导
+出为LaTeX的源文件，然后再通过LaTeX提供的工具来“编译”为pdf。
+</p>
+<div class="org-src-container">
+<pre class="src src-artist">
++--------------------------+
+| Org Mode Plain Text File |
++--------------------------+
+           |
+           | export
+           v
++--------------------------+
+|  LaTeX Source File       |
++--------------------------+
+           |
+           | compile
+           v
++--------------------------+
+|   Final pdf file         |
++--------------------------+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0812fdd" class="outline-3">
+<h3 id="org0812fdd"><span class="section-number-3">2.1</span> 配置texlive环境</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+可以到 <a href="https://www.tug.org/texlive/acquire-dvd.html">这里</a> 去下载新的最新的texlive的iso文件。
+</p>
+
+<p>
+下载完成后，使用下面命令把iso挂载到目录：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">sudo mount -o loop texlive.iso /tmp/texlive/
+</pre>
+</div>
+
+<p>
+进入对应目录执行install开头的脚本即可。
+</p>
+
+<p>
+安装完成后，会有提示需要设置几个环境变量：
+</p>
+<pre class="example">
+Welcome to TeX Live!
+
+See /usr/local/texlive/2018/index.html for links to documentation.
+The TeX Live web site (http://tug.org/texlive/) contains any updates and
+corrections. TeX Live is a joint project of the TeX user groups around the
+world; please consider supporting it by joining the group best for you. The
+list of groups is available on the web at http://tug.org/usergroups.html.
+
+Add /usr/local/texlive/2018/texmf-dist/doc/man to MANPATH.
+Add /usr/local/texlive/2018/texmf-dist/doc/info to INFOPATH.
+Most importantly, add /usr/local/texlive/2018/bin/x86_64-linux
+to your PATH for current and future sessions.
+</pre>
+
+<p>
+在.bashrc这些地方搞定就可以了， <b>注意</b> ，这几个变量是必须要设置的，
+不然可能编译都通不过。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">for texlive</span>
+<span style="color: #d18aff;">export</span> <span style="color: #ff8700;">PATH</span>=/usr/local/texlive/2018/bin/x86_64-linux:$<span style="color: #ff8700;">PATH</span>
+<span style="color: #d18aff;">export</span> <span style="color: #ff8700;">MANPATH</span>=/usr/local/texlive/2018/texmf-dist/doc/man:$<span style="color: #ff8700;">MANPATH</span>
+<span style="color: #d18aff;">export</span> <span style="color: #ff8700;">INFOPATH</span>=/usr/local/texlive/2018/texmf-dist/doc/info:$<span style="color: #ff8700;">INFOPATH</span>
+</pre>
+</div>
+
+<p>
+然后就可以使用 <code>xelatex</code> 来把tex的源文件编译为pdf文件啦。
+</p>
+</div>
+
+<div id="outline-container-orga6a7a0f" class="outline-4">
+<h4 id="orga6a7a0f"><span class="section-number-4">2.1.1</span> 字体</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+以前texlive默认选择的是windows上的字体。在linux上我有时直接把
+windows上的字体拷过来当成盗版来用。有时是去配置texlive使用当前系统
+有的字体。
+</p>
+
+<p>
+新款的texlive（我当前使用的是2018）是支持ubuntu和mac了。看起来，直
+接使用 !fontsec=ubuntu! 选项就可以了。比如这样：
+</p>
+<pre class="example">
+\documentclass[11pt,fontset=ubuntu]{ctexart}
+</pre>
+<p>
+这个选项其实就是在选择
+<code>/usr/local/texlive/2018/texmf-dist/tex/latex/ctex/fontset/</code> 目录中
+的哪个文件。我看里面的代码，其实它就是设置中文字体为文泉一系的字体
+了。
+</p>
+
+<p>
+如果ubuntu上没有安装文泉字体，编译还是会报错。这时候不如就手动设置
+中文字体，可以参考下面的latex代码：
+</p>
+<pre class="example">
+\documentclass{article}
+
+\usepackage{xeCJK}
+
+% 下面这些字体一定要是系统有的
+\setCJKmainfont[BoldFont={SimHei},ItalicFont={STKaiti}]{SimSun}
+\setCJKsansfont{SimHei}
+\setCJKmonofont{STFangsong}
+\setCJKfamilyfont{zhsong}{SimSun}
+\setCJKfamilyfont{zhhei}{SimHei}
+\setCJKfamilyfont{zhkai}{STKaiti}
+\setCJKfamilyfont{zhfs}{STFangsong}
+
+% 重新定义一些中文拼音命令方便使用
+\newcommand*{\songti}{\CJKfamily{zhsong}} % 宋体
+\newcommand*{\heiti}{\CJKfamily{zhhei}}   % 黑体
+\newcommand*{\kaishu}{\CJKfamily{zhkai}}  % 楷书
+\newcommand*{\fangsong}{\CJKfamily{zhfs}} % 仿宋
+\newcommand*{\lishu}{\CJKfamily{zhli}}    % 隶书
+\newcommand*{\youyuan}{\CJKfamily{zhyou}} % 幼圆
+
+\begin{document}
+
+你好，TeX Live 2009！
+
+\lishu{这是隶书}
+
+\fangsong{这是仿宋}
+
+\songti{这是宋体}
+
+\heiti{这是黑体}
+
+\kaishu{这是楷书}
+
+\youyuan{这是幼圆}
+
+\end{document}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3528905" class="outline-3">
+<h3 id="org3528905"><span class="section-number-3">2.2</span> 查询latex的package</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+可以使用 <code>texdoc</code> 命令来查询。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">texdoc spverbatim
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfb2316e" class="outline-3">
+<h3 id="orgfb2316e"><span class="section-number-3">2.3</span> 自定义生成pdf的格式</h3>
+<div class="outline-text-3" id="text-2-3">
+</div>
+<div id="outline-container-orgde3f111" class="outline-4">
+<h4 id="orgde3f111"><span class="section-number-4">2.3.1</span> org文档转pdf文件格式</h4>
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+原生的org生成的tex源文件都是使用 <code>article</code> 这个class。作为中文用户，
+需要设置org在导出的时候使用 <code>ctexart</code> ，还可以根据自己需要定制一下。
+设轩 <code>org-latex-classes</code> 这个变量就可以了。
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-to-list 'org-latex-classes '(<span style="color: #ff4ea3;">"ctexart"</span> <span style="color: #ff4ea3;">"\\documentclass[11pt]{ctexart}</span>
+<span style="color: #ff4ea3;">[NO-DEFAULT-PACKAGES]</span>
+<span style="color: #ff4ea3;">\\usepackage[utf8]{inputenc}</span>
+<span style="color: #ff4ea3;">\\usepackage[T1]{fontenc}</span>
+<span style="color: #ff4ea3;">\\usepackage{fixltx2e}</span>
+<span style="color: #ff4ea3;">\\usepackage{graphicx}</span>
+<span style="color: #ff4ea3;">\\usepackage{longtable}</span>
+<span style="color: #ff4ea3;">\\usepackage{float}</span>
+<span style="color: #ff4ea3;">\\usepackage{wrapfig}</span>
+<span style="color: #ff4ea3;">\\usepackage{rotating}</span>
+<span style="color: #ff4ea3;">\\usepackage[normalem]{ulem}</span>
+<span style="color: #ff4ea3;">\\usepackage{amsmath}</span>
+<span style="color: #ff4ea3;">\\usepackage{textcomp}</span>
+<span style="color: #ff4ea3;">\\usepackage{marvosym}</span>
+<span style="color: #ff4ea3;">\\usepackage{wasysym}</span>
+<span style="color: #ff4ea3;">\\usepackage{listings}</span>
+<span style="color: #ff4ea3;">\\usepackage{amssymb}</span>
+<span style="color: #ff4ea3;">\\usepackage{booktabs}</span>
+<span style="color: #ff4ea3;">\\usepackage[colorlinks,linkcolor=black,anchorcolor=red,citecolor=black]{hyperref}</span>
+<span style="color: #ff4ea3;">\\tolerance=1000</span>
+
+<span style="color: #ff4ea3;">% &#35774;&#32622;&#28304;&#30721;&#26684;&#24335;</span>
+<span style="color: #ff4ea3;">\\lstset{framexleftmargin=5mm, frame=shadowbox, rulesepcolor=\\color{blue}}</span>
+<span style="color: #ff4ea3;">\\lstset{basicstyle=\\tiny}</span>
+<span style="color: #ff4ea3;">\\lstset{postbreak=\\space, breakindent=5pt, breaklines}</span>
+
+<span style="color: #ff4ea3;">% &#35774;&#32622;verbatim&#30340;&#23383;&#20307;&#22823;&#23567;</span>
+<span style="color: #ff4ea3;">\\makeatletter</span>
+<span style="color: #ff4ea3;">\\def\\verbatim{\\tiny\\@verbatim \\frenchspacing\\@vobeyspaces \\@xverbatim}</span>
+<span style="color: #ff4ea3;">\\makeatother</span>
+<span style="color: #ff4ea3;">"</span>
+                                  (<span style="color: #ff4ea3;">"\\section{%s}"</span> . <span style="color: #ff4ea3;">"\\section*{%s}"</span>)
+                                  (<span style="color: #ff4ea3;">"\\subsection{%s}"</span> . <span style="color: #ff4ea3;">"\\subsection*{%s}"</span>)
+                                  (<span style="color: #ff4ea3;">"\\subsubsection{%s}"</span> . <span style="color: #ff4ea3;">"\\subsubsection*{%s}"</span>)
+                                  (<span style="color: #ff4ea3;">"\\paragraph{%s}"</span> . <span style="color: #ff4ea3;">"\\paragraph*{%s}"</span>)
+                                  (<span style="color: #ff4ea3;">"\\subparagraph{%s}"</span> . <span style="color: #ff4ea3;">"\\subparagraph*{%s}"</span>)))
+
+<span style="color: #6c6c6c; font-style: italic;">;;; </span><span style="color: #6c6c6c; font-style: italic;">&#35774;&#32622;&#40664;&#35748;&#30340;class&#20026;ctexart</span>
+(<span style="color: #a1db00;">setq</span> org-latex-default-class <span style="color: #ff4ea3;">"ctexart"</span>)
+</pre>
+</div>
+
+<p>
+设置好后，所有通过org文件导出的tex源文件的开头部分就是我们设置的内
+容了。
+</p>
+
+<p>
+这样就可以从org文件直接导出到pdf文件。后面如果需要修改导出的pdf的默
+认章节格式时，可以直接修改一下上面的变量即可。
+</p>
+
+<p>
+还可以设置多个class，然后在单个org文件中指定使用：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #6c6c6c; font-style: italic;">#+LATEX_CLASS: article</span>
+</pre>
+</div>
+<p>
+这样设置后，该文件导出还是按 <code>article</code> 的设置来。
+</p>
+</div>
+</div>
+<div id="outline-container-orge9548f6" class="outline-4">
+<h4 id="orge9548f6"><span class="section-number-4">2.3.2</span> 结合body only进一步定制pdf文件格式</h4>
+<div class="outline-text-4" id="text-2-3-2">
+<p>
+有时针对一个类型的文档，可能需要进一步的定制，可能到了需要修改latex
+源码的时候，有两种办法。
+</p>
+</div>
+
+<div id="outline-container-org6f51f71" class="outline-5">
+<h5 id="org6f51f71"><span class="section-number-5">2.3.2.1</span> 需要修改文章头页眉页脚等</h5>
+<div class="outline-text-5" id="text-2-3-2-1">
+<p>
+org在导出时，有一个 <code>body-only</code> 的选项，打开后（在 <code>C-c C-e</code> 后默
+认是使用 <code>C-b</code> 来切换），只有内容才会导出。
+</p>
+
+<p>
+有了这个功能，可以把tex源文件的头部分开，需要修改格式的tex源码都在
+这个文件进行，然后 <code>\include{body}</code> 就可以了。
+</p>
+
+<p>
+假设org文件名为 <code>body.org</code> ，我开启 <code>body-only</code> 后，导出到
+<code>body.tex</code> 文件中。
+</p>
+
+<p>
+写一个 <code>head.tex</code> 大概像这样：
+</p>
+<pre class="example">
+\documentclass[11pt]{ctexart}
+
+%% 这里面可以随意地修改格式
+
+\maketitle
+
+\clearpage
+
+\tableofcontents
+
+%% 这个直接把内容包进来就好
+\include{body}
+
+\end{document}
+</pre>
+
+<p>
+最后直接编译 <code>head.tex</code> 就可以了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4510e1a" class="outline-5">
+<h5 id="org4510e1a"><span class="section-number-5">2.3.2.2</span> 需要在文档中直接插入latex源码</h5>
+<div class="outline-text-5" id="text-2-3-2-2">
+<p>
+直接使用 <code>+BEGIN_LATEX</code> 这个的block插入就可以了。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7869ddb" class="outline-4">
+<h4 id="org7869ddb"><span class="section-number-4">2.3.3</span> org文档中需要写latex源码做为示例</h4>
+<div class="outline-text-4" id="text-2-3-3">
+<p>
+此时直接使用 <code>example</code> 的block还不行，需要给这个block加上一个latex
+的属性。比如这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #6c6c6c; font-style: italic;">#+ATTR_LATEX: :environment verbatim</span>
+<span style="color: #eeeeee; background-color: #005f87;">#+BEGIN_EXAMPLE</span>
+\documentclass{article}
+
+hi
+
+\end{document}
+<span style="color: #4e4e4e; background-color: #3a3a3a;">#+END_EXAMPLE</span>
+</pre>
+</div>
+<p>
+这样导出的tex文件会被一个 <code>verbatim</code> 包住。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge7e1d2d" class="outline-4">
+<h4 id="orge7e1d2d"><span class="section-number-4">2.3.4</span> org的block中的行太长</h4>
+<div class="outline-text-4" id="text-2-3-4">
+<p>
+默认的block导出来对应的tex都是 <code>verbatim</code> 。verbatim对太长的行不会
+自动折行。这样如果我写了很长的行在block里面。导出的pdf就超长了。
+</p>
+
+<p>
+解决的方法有几种：
+</p>
+<ol class="org-ol">
+<li>不要在block中写太长的行。废话。</li>
+
+<li><p>
+设置默认verbatim的字体，缩小它的字体。这种方法可以解决一些情况。
+但还是治标不治本。我在导出的tex前后加入了下面这段：
+</p>
+<pre class="example">
+% 设置verbatim的字体大小
+\\makeatletter
+\\def\\verbatim{\\tiny\\@verbatim \\frenchspacing\\@vobeyspaces \\@xverbatim}
+\\makeatother
+</pre>
+<p>
+这样verbatim都是使用tiny的字体了。
+</p></li>
+
+<li><p>
+使用 <code>spverbatim</code> 包。这个包可以自动给超长的行添加换行。在头部
+加上 <code>\usepackge{spverbatim}</code> 后。 <b>注意</b> ，我测试出来的话，当
+前只在org的example这个block支持 <code>:environment</code> 这个选项。直接接
+照这样写就可以了：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #6c6c6c; font-style: italic;">#+ATTR_LATEX: :environment spverbatim</span>
+<span style="color: #eeeeee; background-color: #005f87;">#+BEGIN_EXAMPLE</span>
+This is a very long line.
+<span style="color: #4e4e4e; background-color: #3a3a3a;">#+END_EXAMPLE</span>
+</pre>
+</div>
+<p>
+这样这个block导出就会被 <code>spverbatim</code> 包住，而不是默认的
+<code>verbatim</code> 了。
+</p></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org9a2e361" class="outline-4">
+<h4 id="org9a2e361"><span class="section-number-4">2.3.5</span> 标题和目录分页显示</h4>
+<div class="outline-text-4" id="text-2-3-5">
+<p>
+在org文件中加入这样神奇的一行就可以了：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #6c6c6c; font-style: italic;">#+LATEX_HEADER: \makeatletter \def\@maketitle{\null \begin{center} {\vskip 5em \Huge \@title} \vskip 30em {\LARGE \@author} \vskip 3em {\LARGE \@date} \end{center} \newpage} \makeatother</span>
+</pre>
+</div>
+
+<p>
+这个我参考的是 <a href="https://emacs-china.org/t/org-mode-pdf/245/5">这里</a> 。
+</p>
+<pre class="example">
+要在org-mode导出时让标题页和目录页分页显示，得修改\maketitle命令，查阅
+有两种方法，一种直接修改，见链接
+http://tex.stackexchange.com/questions/216098/redefine-maketitle 6 ，
+另一种是用titling包去修改，我自己在org-mode加入一下代码，标题页和目录
+页就可以分开了，具体样式可以自己去修改
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0f912d3" class="outline-4">
+<h4 id="org0f912d3"><span class="section-number-4">2.3.6</span> 自定义源码的格式</h4>
+<div class="outline-text-4" id="text-2-3-6">
+<p>
+源码默认的block默认导出还是 <code>verbatim</code> 此时还管设置什么 <code>options</code>
+都是不支持的。可以修改为 <code>listings</code> 或者 <code>minted</code> 。
+</p>
+
+<p>
+这样修改就是listings了：
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">&#35774;&#32622;org-mode&#30340;&#28304;&#20195;&#30721;block&#40664;&#35748;&#23548;&#20986;&#30340;latex&#30340;environment&#20026;listtings</span>
+(<span style="color: #a1db00;">setq</span> org-latex-listings 'listings)
+(add-to-list 'org-latex-packages-alist '(<span style="color: #ff4ea3;">""</span> <span style="color: #ff4ea3;">"listings"</span>))
+</pre>
+</div>
+
+<p>
+这样设置为 <code>minted</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">&#35774;&#32622;org-mode&#30340;&#28304;&#20195;&#30721;block&#40664;&#35748;&#23548;&#20986;&#30340;latex&#30340;environment&#20026;minted</span>
+(<span style="color: #a1db00;">setq</span> org-latex-listings 'minted
+      org-latex-packages-alist '((<span style="color: #ff4ea3;">""</span> <span style="color: #ff4ea3;">"minted"</span>))
+      )
+</pre>
+</div>
+
+<p>
+这两个都是支持直接在org中设置options：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #6c6c6c; font-style: italic;">     #+ATTR_LATEX: :options commentstyle=\bfseries</span>
+<span style="color: #eeeeee; background-color: #005f87;">     #+BEGIN_SRC emacs-lisp</span>
+<span style="color: #5fafd7; background-color: #3a3a3a;">       (</span><span style="color: #a1db00; background-color: #3a3a3a;">defun</span><span style="color: #5fafd7; background-color: #3a3a3a;"> </span><span style="color: #ffd700; background-color: #3a3a3a;">Fib</span><span style="color: #5fafd7; background-color: #3a3a3a;"> (n)</span>
+<span style="color: #5fafd7; background-color: #3a3a3a;">         (</span><span style="color: #a1db00; background-color: #3a3a3a;">if</span><span style="color: #5fafd7; background-color: #3a3a3a;"> (&lt; n 2) n (+ (Fib (- n 1)) (Fib (- n 2)))))</span>
+<span style="color: #4e4e4e; background-color: #3a3a3a;">     #+END_SRC</span>
+</pre>
+</div>
+
+<p>
+设置源代码导出为这两个环境后，需要给编译的命令加上 <code>-shell-escape</code>
+选项。
+比如我这样设置编译命令：
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #a1db00;">setq</span> org-latex-pdf-process
+      '(
+        <span style="color: #ff4ea3;">"xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"</span>
+        <span style="color: #ff4ea3;">"xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"</span>
+        <span style="color: #ff4ea3;">"xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"</span>
+        <span style="color: #ff4ea3;">"rm -fr %b.out %b.log %b.tex auto"</span>
+        ))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orged6d2e2" class="outline-4">
+<h4 id="orged6d2e2"><span class="section-number-4">2.3.7</span> 全局定义example block导出的environment</h4>
+<div class="outline-text-4" id="text-2-3-7">
+<p>
+参考info，可以给 <code>org-export-filter-TYPE-block-functions</code> 挂钩子。
+会把所有block的text都传给它。这里我直接在钩子函数里面把
+<code>{verbatim}</code> 替换成了 <code>mylongverbatim</code> 。当然， <code>mylongverbatim</code>
+是我自定义好的。
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">&#28155;&#21152;&#36825;&#20010;filter&#25226;&#40664;&#35748;example&#23548;&#20986;&#30340;environment&#20174;verbatim&#25442;&#25104;&#25105;&#33258;&#23450;</span>
+<span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">&#35758;&#30340; mylongverbatim</span>
+(<span style="color: #a1db00;">defun</span> <span style="color: #ffd700;">my-latex-filter-example-myverbatim</span> (text backend info)
+  <span style="color: #ff4b4b;">"user my customized verbatim."</span>
+  (<span style="color: #a1db00;">when</span> (org-export-derived-backend-p backend 'latex)
+    (replace-regexp-in-string <span style="color: #ff4ea3;">"{verbatim}"</span> <span style="color: #ff4ea3;">"{mylongverbatim}"</span> text)))
+(add-to-list 'org-export-filter-example-block-functions
+             'my-latex-filter-example-myverbatim)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org33f0b35" class="outline-4">
+<h4 id="org33f0b35"><span class="section-number-4">2.3.8</span> org导出标题的级别</h4>
+<div class="outline-text-4" id="text-2-3-8">
+<p>
+默认是3级，可以修改变量 <code>org-export-headline-levels</code> 。
+</p>
+
+<p>
+也可以直接在org文件中设置，这样就可以设置为4级：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #6c6c6c; font-style: italic;">#+options: H:4</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org29b2de1" class="outline-4">
+<h4 id="org29b2de1"><span class="section-number-4">2.3.9</span> 不要title页</h4>
+<div class="outline-text-4" id="text-2-3-9">
+<p>
+下面这样就可以搞定：
+</p>
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #ffaf5f; background-color: #6c6c6c;">#+title:</span>
+<span style="color: #6c6c6c; font-style: italic;">#+OPTIONS: author:nil date:nil</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org19fb0d3" class="outline-4">
+<h4 id="org19fb0d3"><span class="section-number-4">2.3.10</span> <span class="todo TODO">TODO</span> mylongverbatim现在使用的是listings，换行后不爽，看下能不能使用 <code>spverbatim</code> 。后者我加不上frame加框</h4>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdaa7d59" class="outline-2">
+<h2 id="orgdaa7d59"><span class="section-number-2">3</span> Org Mode导出为html再打印成pdf</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgd769848" class="outline-3">
+<h3 id="orgd769848"><span class="section-number-3">3.1</span> 最简单的做法</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+org-mode转html是最简单的。html可以直接打印为pdf。在chrome中，一般可
+以设置不需要打印页眉页脚。
+</p>
+
+<p>
+如果有很长的行，还可以通过在打印时缩放来缩小后打印。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd00a671" class="outline-3">
+<h3 id="orgd00a671"><span class="section-number-3">3.2</span> 为pdf加书签(bookmarks)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+最后一个问题就是打印出来的pdf没有书签。就是左侧边栏的东西。我在 <a href="http://ask.xmodulo.com/add-bookmarks-pdf-document-linux.html">这里</a>
+找到了方法。
+</p>
+
+<p>
+<b>可惜的是</b> ，我按照此方法加入加入中文书签会显示乱码。
+</p>
+
+<p>
+写一个文件叫 <code>index.info</code> ：
+</p>
+<pre class="example">
+[/Page 1 /Title (January) /OUT pdfmark
+[/Page 2 /Title (February) /OUT pdfmark
+[/Page 3 /Title (March) /OUT pdfmark
+[/Page 4 /Title (April) /OUT pdfmark
+[/Page 5 /Title (May) /OUT pdfmark
+[/Page 6 /Title (June) /OUT pdfmark
+[/Page 7 /Title (July) /OUT pdfmark
+</pre>
+
+<p>
+然后使用下面的命令来把input.pdf转为output.pdf，出来的output.pdf就是有书签的了
+</p>
+<pre class="example">
+$ gs -sDEVICE=pdfwrite -q -dBATCH -dNOPAUSE -sOutputFile=output.pdf -dPDFSETTINGS=/prepress index.info -f input.pdf
+</pre>
+
+<p>
+这样修改 <code>index.info</code> 就可以加入嵌入的书签：
+</p>
+<pre class="example">
+[/Count 3 /Page 4 /Title (Introduction) /OUT pdfmark
+[/Page 4 /Title (Features) /OUT pdfmark
+[/Page 6 /Title (Mailing lists and IRC channel) /OUT pdfmark
+[/Page 6 /Title (Virus submitting) /OUT pdfmark
+[/Count 2 /Page 6 /Title (Base package) /OUT pdfmark
+[/Count 2 /Page 6 /Title (Supported platforms) /OUT pdfmark
+[/Page 6 /Title (UNIX) /OUT pdfmark
+[/Page 7 /Title (Windows) /OUT pdfmark
+[/Page 7 /Title (Binary packages) /OUT pdfmark
+[/Count 7 /Page 7 /Title (Installation) /OUT pdfmark
+[/Page 7 /Title (Requirements) /OUT pdfmark
+[/Page 8 /Title (Installing on shell account) /OUT pdfmark
+[/Page 8 /Title (Adding new system user and group) /OUT pdfmark
+[/Page 9 /Title (Compilation of base package) /OUT pdfmark
+[/Page 9 /Title (Compilation with clamav-milter enabled) /OUT pdfmark
+[/Page 9 /Title (Running unit tests) /OUT pdfmark
+[/Page 10 /Title (Reporting a unit test failure bug) /OUT pdfmark
+</pre>
+
+<p>
+原文纯文本如下：
+</p>
+<pre class="example">
+
+How to add bookmarks to a PDF document on Linux
+Posted on April 11, 2016 by Dan Nanni   2 Comments
+
+Question: I would like to add bookmarks to a PDF file, so that the
+bookmarks appear in the left hand side bookmarks panel. Is there a
+command-line approach to create bookmarks and embed bookmark links in
+a PDF file on Linux?
+
+In a PDF document, bookmarks can be added as a navigational tool to
+allow readers to locate and quickly move to particular sections in the
+document by clicking on bookmark links. If a PDF file is a very log
+document with hundreds of pages, adding properly organized bookmarks
+can be essential to guide users to browse the document effectively.
+
+PDF bookmarks can be implemented with the pdfmark operator, which is
+part of a PostScript language extension. Among other things, pdfmark
+can be used to add a hotlink to a small piece of text in a PDF, which
+is pretty much a bookmark function.
+
+pdfmark can be embedded into a PDF file with Ghostscript. Here is how
+to add PDF bookmarks from the command line with Ghostscript on Linux.
+Add Bookmarks in a PDF file with Ghostscript
+
+To add PDF bookmarks, first create an index file (index.info) in the format of:
+
+[/Page 1 /Title (January) /OUT pdfmark
+[/Page 2 /Title (February) /OUT pdfmark
+[/Page 3 /Title (March) /OUT pdfmark
+[/Page 4 /Title (April) /OUT pdfmark
+[/Page 5 /Title (May) /OUT pdfmark
+[/Page 6 /Title (June) /OUT pdfmark
+[/Page 7 /Title (July) /OUT pdfmark
+
+"/Page" indicates the page number to the bookmark jumps to, and
+"/Title" represents the name of the bookmark.
+
+Once you created index.info, use the following command to add the
+bookmarks in the PDF file input.pdf. output.pdf will have the
+bookmarks embedded.
+
+$ gs -sDEVICE=pdfwrite -q -dBATCH -dNOPAUSE -sOutputFile=output.pdf -dPDFSETTINGS=/prepress index.info -f input.pdf
+
+For example, given the input PDF file:
+
+The output PDF file will look like:
+
+Add Nested Bookmarks in a PDF file with Ghostscript
+
+If you have a structured PDF document with chapters, sections,
+subsections, etc., you may want to add "nested" bookmarks in the PDF
+file. In that case, use "/Count N" attribute with pdfmark to represent
+nested levels. The argument 'N' corresponds to the number of
+immediately subordinate bookmarks. For example, if the first chapter
+has three sections, you can can add "/Count 3" in that chapter's
+bookmark, and if a given section has two subsections, include "/Count
+2" in the section's bookmark.
+
+Let's create nested bookmarks for the following document.
+
+The created index file looks like the following.
+
+[/Count 3 /Page 4 /Title (Introduction) /OUT pdfmark
+[/Page 4 /Title (Features) /OUT pdfmark
+[/Page 6 /Title (Mailing lists and IRC channel) /OUT pdfmark
+[/Page 6 /Title (Virus submitting) /OUT pdfmark
+[/Count 2 /Page 6 /Title (Base package) /OUT pdfmark
+[/Count 2 /Page 6 /Title (Supported platforms) /OUT pdfmark
+[/Page 6 /Title (UNIX) /OUT pdfmark
+[/Page 7 /Title (Windows) /OUT pdfmark
+[/Page 7 /Title (Binary packages) /OUT pdfmark
+[/Count 7 /Page 7 /Title (Installation) /OUT pdfmark
+[/Page 7 /Title (Requirements) /OUT pdfmark
+[/Page 8 /Title (Installing on shell account) /OUT pdfmark
+[/Page 8 /Title (Adding new system user and group) /OUT pdfmark
+[/Page 9 /Title (Compilation of base package) /OUT pdfmark
+[/Page 9 /Title (Compilation with clamav-milter enabled) /OUT pdfmark
+[/Page 9 /Title (Running unit tests) /OUT pdfmark
+[/Page 10 /Title (Reporting a unit test failure bug) /OUT pdfmark
+
+Use the same command as above to add nested bookmarks in the input PDF
+file.
+
+$ gs -sDEVICE=pdfwrite -q -dBATCH -dNOPAUSE -sOutputFile=output.pdf -dPDFSETTINGS=/prepress index.info -f input.pdf
+
+The output PDF file with nested bookmarks will look like the
+following.
+
+All nested bookmarks are expanded by default. If you want nested
+bookmarks to be collapsed initially, use "[/Count -N]" format (i.e.,
+add '-' sign in front of the number).
+
+With that, the output will look like the following.
+
+You will need to click on each closed bookmark to expand it.
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-20 Sat 10:35</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 记录一个难搞的openstack异常问题
+
+=openstack= 物理机异常掉电后，某些vm起不来的问题一直停在：
+#+BEGIN_EXAMPLE
+  parser"
+   ,* Starting configure network device security                            [ OK ]
+   ,* Starting configure network device security                            [ OK ]
+   ,* Starting Mount network filesystems                                    [ OK ]
+   ,* Stopping Mount network filesystems                                    [ OK ]
+   ,* Starting Bridge socket events into upstart                            [ OK ]
+   ,* Starting Mount network filesystems                                    [ OK ]
+   ,* Starting configure network device                                     [ OK ]
+   ,* Stopping Mount network filesystems                                    [ OK ]
+   ,* Starting configure network device                                     [ OK ]
+   ,* Stopping cold plug devices                                            [ OK ]
+   ,* Stopping log initial device creation                                  [ OK ]
+   ,* Starting enable remaining boot-time encrypted block devices           [ OK ]
+#+END_EXAMPLE
+  
+我在 [[https://bugs.launchpad.net/linuxmint/+bug/1339249][这里]] 搜到这样一个解法：
+#+BEGIN_EXAMPLE
+  I occasionally have this identical issue with Ubuntu when running it
+  as a VirtualBox appliance. It happens when there is an fstab entry to
+  mount a device on boot, but the device doesn't exist. I suppose there
+  could be other possible issues, perhaps where the device name has
+  changed for some reason, but essentially that is just as bad since
+  mount is very picky.
+
+  In my case it happens when I have manually created an fstab entry to
+  mount a shared folder (vboxfs), which has been removed from the
+  virtual machine's settings or source folder deleted from the host
+  machine.
+
+  To fix you must drop into recovery mode on boot, remount the root
+  partition as read/write if necessary, edit fstab to fix or comment out
+  the offending entry, save it and reboot.
+
+  I hope this helps you solve your problem guys, good luck!
+  #+END_EXAMPLE
+  
+实际处理后，问题应该就和他说的差不多，原因其实很简单：因为起不来的虚
+拟机都是外挂了磁盘的。异常掉电后导致磁盘的状态有些不正常。而我们在
+=fstab= 中加入了启动挂载。于是操作系统在启动的时候一直尝试去挂载一块
+不正常的磁盘。就卡住啦。
+  
+如果是物理机发生这种情况，可以尝试这样修复一下：
+1. 使用LiveCD登进去修改一下 =fstab= ，把自动挂载去掉。重启。
+2. 使用 =fsck /dev/sdX= 来尝试修复下对应的硬盘。
+3. 再修改 =fstab= ，设置好自动挂载。重启机器。
+
+但是我们是在云上，而且外挂磁盘还做成了lvm。不过做法也差不多：
+1. 使用 =openstack= 的 =cli= 把磁盘 =umount= 掉。
+   #+BEGIN_SRC sh
+     openstack server remove volume <server> <volume>
+   #+END_SRC
+2. 重启机器应该就可以进去了。
+3. 修改一下 =fstab= ，把自动挂载去掉。重启。
+4. lvm不能直接使用 =fsck /dev/sdX= 来修复对应的“物理盘”。需要修复
+   “逻辑盘”。也就是对应的lvm的vg。可以使用 =vgs= 查一下啦。最后修复
+   lvm我测试使用 =fsck= 还没用。需要使用 =e2fsck= 。
+   #+BEGIN_SRC sh
+        e2fsck /dev/compute-vg/root
+   #+END_SRC
+   然后一路yes。
+5. 再修改 =fstab= ，设置好自动挂载。重启机器。
+
+终于把这个烦人的问题搞定了！

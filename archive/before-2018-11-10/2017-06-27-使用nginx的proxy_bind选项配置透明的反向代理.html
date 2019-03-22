@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>使用nginx的proxy_bind选项配置透明的反向代理</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">使用nginx的proxy_bind选项配置透明的反向代理</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org0be3a16">1. 背景</a></li>
+<li><a href="#org8738920">2. proxy_bind</a></li>
+<li><a href="#iptables">3. iptables和路由表</a></li>
+<li><a href="#tproxy_sum">4. 总结</a></li>
+<li><a href="#org6d47f83">5. <span class="todo TODO">TODO</span> 这个其实我理解还不是特别深，可能需要再搭个环境测一下</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0be3a16" class="outline-2">
+<h2 id="org0be3a16"><span class="section-number-2">1</span> 背景</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+一般使用nginx做为反向代理。后面的web服务器看到的都是作为nginx反向代
+理服务器主机的ip地址。但有的时候，upstream需要看到真正客户的ip地址。
+这时候需要做一些特殊的配置才行。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8738920" class="outline-2">
+<h2 id="org8738920"><span class="section-number-2">2</span> proxy_bind</h2>
+<div class="outline-text-2" id="text-2">
+<pre class="example">
+     user  root;
+     location / {
+              proxy_pass       http://192.168.57.109:80;
+              proxy_bind $remote_addr  transparent;
+     }
+</pre>
+<p>
+这样设置后，ningx后面真正的web服务器看到的ip不在是nginx反向代理服务
+器主机的ip。而是真正发起请求的主机ip。
+</p>
+
+<p>
+<code>$remote_addr</code> 是一个通配。如果这里设置为固定ip和端口，则不管是从哪
+个主机发起的请求，web服务器收到的请求报文里源ip端口都只是该ip和端口。
+</p>
+
+<p>
+<b>注意</b> ： 这玩意儿要使用只能是root权限，就是配置中的第一句。
+</p>
+
+<p>
+<b>另外</b> ： <code>proxy_bind $remote_addr transparent;</code> 在1.10.3版本上还不
+支持。自己编译的1.11.3才支持。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orged8e3f4" class="outline-2">
+<h2 id="iptables"><a id="orged8e3f4"></a><span class="section-number-2">3</span> iptables和路由表</h2>
+<div class="outline-text-2" id="text-iptables">
+<p>
+下面脚本的做用：
+</p>
+<ol class="org-ol">
+<li>新建一个链，把过来的tcp包都打上标记。</li>
+<li>新建一个路由表100，让有标记的包都走表100。</li>
+<li>在路由表100加入一个默认路由，把所有包都扔到lo网卡上去。</li>
+</ol>
+
+<p>
+这样做的目地见 <a href="#tproxy_sum">总结</a> 。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">&#26032;&#24314;&#19968;&#20010; DIVERT &#32473;&#21253;&#25171;&#26631;&#31614;</span>
+     sudo iptables -t mangle -N DIVERT;
+     sudo iptables -t mangle -A DIVERT -j MARK --set-mark 1;
+     sudo iptables -t mangle -A DIVERT -j ACCEPT;
+
+     <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">&#25226;tcp&#30340;&#21253;&#32473;DIVERT&#22788;&#29702;</span>
+     sudo iptables -t mangle -A PREROUTING -p tcp -m socket -j DIVERT;
+
+     <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">&#26377;&#26631;&#31614;&#30340;&#21253;&#21435;&#26597;&#21517;&#20026; 100 &#30340;&#36335;&#30001;&#34920;</span>
+     sudo ip rule add fwmark 1 lookup 100
+
+     <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">100&#30340;&#36335;&#30001;&#34920;&#37324;&#23601;&#19968;&#26465;&#40664;&#35748;&#36335;&#30001;&#65292;&#25226;&#25152;&#26377;&#21253;&#37117;&#25172;&#21040;lo&#32593;&#21345;&#19978;&#21435;</span>
+     sudo ip route add local 0.0.0.0/0 dev lo table 100;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8bddcde" class="outline-2">
+<h2 id="tproxy_sum"><a id="org8bddcde"></a><span class="section-number-2">4</span> 总结</h2>
+<div class="outline-text-2" id="text-tproxy_sum">
+<pre class="example">
+    +-----------------------------------------------+                                       +-----------------------------------------------+
+    |                                               |                  (3)                  |                                               |
+    |                                        +------+&lt;------------------&lt;------------------&lt;+------+                                        |
+    |                                        |      |                                       |      |                                        |
+    |             Host 2: nginx proxy        | eth1: 57.108                            eth0:57.109 |    Host 3: upstream                    |
+    |                                        |      |                                       |      |                                        |
+    |         +------------------------+     +------+&gt;------------------&gt;------------------&gt;+------+                                        |
+    |         |     eth0: 56.108       |            |                  (2)                  |                                               |
+    +---------+------------------------+------------+                                       +-----------------------------------------------+
+              v                        ^                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+        (4)   v                        ^  (1)                                                      
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              |                        |                                                           
+              v                        ^                                                           
+    +---------+------------------------+------------+
+    |         |     eth0: 56.1         |            |
+    |         +------------------------+            |
+    |                                               |                                              
+    |               Host 1: client                  |                                              
+    |                                               |                                              
+    |                                               |                                              
+    |                                               |
+    +-----------------------------------------------+
+</pre>
+
+<p>
+场景：Host 1上执行： <code>curl 192.168.56.108</code> 。图中的ip地址都省略前面
+的 <code>192.168.</code> 。
+</p>
+
+<p>
+proxy_bind使Host 3看到的ip是 192.168.56.1。
+</p>
+
+<p>
+这里Host 3的默认网关应该是Host 2的eth1,使用 <code>sudo ip route add
+  default via 192.168.57.108</code> 添加。这样client的请求通过 (1)-&gt;(2) 到达
+upstream后，upstream处理完回来才会走 (3) 。走到 (3) 的包源ip为
+<code>192.168.57.109</code> ，目的ip为 <code>192.168.56.1</code> 。
+</p>
+
+<p>
+使用 <a href="#iptables">iptables</a> 的脚本，可以使这个回来的包提上来给nginx处理。nginx发现
+是upstream的回应，就通过 (4) 返回给client。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6d47f83" class="outline-2">
+<h2 id="org6d47f83"><span class="section-number-2">5</span> <span class="todo TODO">TODO</span> 这个其实我理解还不是特别深，可能需要再搭个环境测一下</h2>
+<div class="outline-text-2" id="text-5">
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> 而且我觉得从 <code>(3)-&gt;(4)</code> ，可以使用 <a href="2017-06-27-ip_forward%E5%92%8Crp_filter.html#ip_forward">ip_forward</a> 直接设置转发。
+这样做是不是为了让包再过一次nginx？直接转发可能nginx对回来的包都
+处理不了。</li>
+<li class="off"><code>[&#xa0;]</code> Host 1接收到的(4)回来的包，源ip是Host 2的还是Host 3的？如果需
+要是Host 3的，是不是nginx这边还需要处理下？</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

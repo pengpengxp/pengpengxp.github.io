@@ -1,0 +1,1237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2017-07-03-python-协程和生成器</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Peng Xie" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2017-07-03-python-协程和生成器</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#generator">1. 生成器</a>
+<ul>
+<li><a href="#org2b6a523">1.1. 简单的generator</a></li>
+<li><a href="#orgecb6695">1.2. 定义函数做为generator</a></li>
+</ul>
+</li>
+<li><a href="#orgb167c65">2. python中的协程</a></li>
+<li><a href="#org127d591">3. 理解一下python中的yield</a></li>
+<li><a href="#orga6a9884">4. 参考资料三写得太好了，我理解式的翻译了一些</a>
+<ul>
+<li><a href="#org1d645d0">4.1. 更进一步理解生成器</a>
+<ul>
+<li><a href="#tail">4.1.1. 一个python版本的 <code>tail -f</code></a></li>
+<li><a href="#generator_pipe">4.1.2. 生成器做为管道</a></li>
+<li><a href="#orga7100b1">4.1.3. 一个特殊一点的例子</a></li>
+<li><a href="#org706a303">4.1.4. 简单总结</a></li>
+</ul>
+</li>
+<li><a href="#org2fbe74d">4.2. 更进一步理解协程</a>
+<ul>
+<li><a href="#org190d4eb">4.2.1. 使用协程写的 <code>tail -f</code></a></li>
+<li><a href="#coroutine_pipe">4.2.2. 协程做为管道</a></li>
+<li><a href="#orgab27412">4.2.3. 协程做广播</a></li>
+<li><a href="#org014b273">4.2.4. 错误地使用协程</a></li>
+</ul>
+</li>
+<li><a href="#orge862a88">4.3. 使用协程和生成器做成一个类似于OS的多任务系统</a></li>
+<li><a href="#org6d7dc2b">4.4. 总结</a></li>
+</ul>
+</li>
+<li><a href="#orgcf44e45">5. 参考资料</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org4fe6281" class="outline-2">
+<h2 id="generator"><a id="org4fe6281"></a><span class="section-number-2">1</span> 生成器</h2>
+<div class="outline-text-2" id="text-generator">
+<p>
+<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/00138681965108490cb4c13182e472f8d87830f13be6e88000">廖雪峰的这个博客写得很好了</a>
+</p>
+</div>
+
+<div id="outline-container-org2b6a523" class="outline-3">
+<h3 id="org2b6a523"><span class="section-number-3">1.1</span> 简单的generator</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+python中的for很好用，但是如果循环的次数较多的话，需要占用很多内存。
+于是就有了 <code>generator</code> ，需要在时候才计算。看看下面的的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #ff8700;">L</span> = [x <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(10)]
+     <span style="color: #ff8700;">l</span> = (x <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(10))
+     <span style="color: #a1db00;">print</span> L
+     <span style="color: #a1db00;">print</span> l
+</pre>
+</div>
+
+<p>
+generator可以例用next来访问：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #ff8700;">l</span> = (x <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(4))
+     <span style="color: #a1db00;">print</span> l.<span style="color: #d18aff;">next</span>()
+     <span style="color: #a1db00;">print</span> l.<span style="color: #d18aff;">next</span>()
+     <span style="color: #a1db00;">print</span> l.<span style="color: #d18aff;">next</span>()
+     <span style="color: #a1db00;">print</span> l.<span style="color: #d18aff;">next</span>()
+     <span style="color: #a1db00;">print</span> l.<span style="color: #d18aff;">next</span>()
+</pre>
+</div>
+
+<p>
+结果如下：
+</p>
+<pre class="example">
+     0
+     1
+     2
+     3
+     Traceback (most recent call last):
+       File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+       File "/tmp/main.py", line 6, in &lt;module&gt;
+         print l.next()
+     StopIteration
+</pre>
+<p>
+可以看到，最后一个next抛出了一个 <code>StopIteration</code> 。我理解generator应
+该是靠这个机制来完成它正确地打开方式的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #ff8700;">l</span> = (x <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(3))
+     <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> l:
+         <span style="color: #a1db00;">print</span> i
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">fib</span>(<span style="color: #d18aff;">max</span>):
+         <span style="color: #ff8700;">n</span>, <span style="color: #ff8700;">a</span>, <span style="color: #ff8700;">b</span> = 0, 0, 1
+         <span style="color: #a1db00;">while</span> (n &lt; <span style="color: #d18aff;">max</span>):
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'----&gt;b = %s&lt;----'</span> % b
+             <span style="color: #a1db00;">yield</span> b
+             <span style="color: #ff8700;">a</span>, <span style="color: #ff8700;">b</span> = b, a + b
+             <span style="color: #ff8700;">n</span> = n + 1
+
+     <span style="color: #ff8700;">g</span> = fib(6)
+     <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> g:
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'====&gt;b = %s&lt;====\n'</span> % i
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgecb6695" class="outline-3">
+<h3 id="orgecb6695"><span class="section-number-3">1.2</span> 定义函数做为generator</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+比较复杂的情况下，还可以定义一个函数做为generator，比如打印1到n的函
+数：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(n):
+         <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(n):
+             <span style="color: #a1db00;">print</span> i
+
+     foo(4)
+</pre>
+</div>
+
+<p>
+上面的函数稍威修改一下就是一个generator啦：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(n):
+         <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(n):
+             <span style="color: #a1db00;">yield</span> i
+
+     <span style="color: #a1db00;">print</span> foo(3)
+     <span style="color: #a1db00;">for</span> n <span style="color: #a1db00;">in</span> foo(3):
+         <span style="color: #a1db00;">print</span> n
+</pre>
+</div>
+
+<p>
+<b>如果一个函数中包含yield关键字，那么这个函数就不再是个普通函数，而
+是一个generator</b>
+</p>
+
+<p>
+generator不像一般函数一样遇到return或者运行到最后返回。而generator
+的函数，在调用next时开始执行，遇到yield返回，吐出yield的内容，再次
+调用next又从上次yield后执行。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>():
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'step 1'</span>
+         <span style="color: #a1db00;">yield</span> <span style="color: #ff4ea3;">'[test] %s from yield'</span> % 1
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'step 2'</span>
+         <span style="color: #a1db00;">yield</span> <span style="color: #ff4ea3;">'[test] %s from yield'</span> % 1
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'step 3'</span>
+         <span style="color: #a1db00;">yield</span> <span style="color: #ff4ea3;">'[test] %s from yield'</span> % 1
+
+     <span style="color: #ff8700;">f</span> = foo()
+     <span style="color: #a1db00;">print</span> f.<span style="color: #d18aff;">next</span>()
+     <span style="color: #a1db00;">print</span> f.<span style="color: #d18aff;">next</span>()
+     <span style="color: #a1db00;">print</span> f.<span style="color: #d18aff;">next</span>()
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb167c65" class="outline-2">
+<h2 id="orgb167c65"><span class="section-number-2">2</span> python中的协程</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="https://eastlakeside.gitbooks.io/interpy-zh/content/Coroutines/">这里讲得很形象</a>
+</p>
+
+<p>
+协程和 <a href="#generator">生成器</a> 类似，但是不同是的，生成器是数据的生产者，协程是数据的
+消费者。
+</p>
+
+<p>
+对应生成器的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(n):
+        <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(n):
+            <span style="color: #a1db00;">yield</span> i
+
+    <span style="color: #a1db00;">print</span> foo(3)
+    <span style="color: #a1db00;">for</span> n <span style="color: #a1db00;">in</span> foo(3):
+        <span style="color: #a1db00;">print</span> n
+</pre>
+</div>
+
+<p>
+这样可以定义一个协程：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">grep</span>(pattern):
+         <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"Searching for"</span>, pattern)
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">if</span> pattern <span style="color: #a1db00;">in</span> line:
+                 <span style="color: #a1db00;">print</span>(line)
+</pre>
+</div>
+<p>
+和生成器一样，定义一个协程后，调用 <code>next()</code> 函数才开始执行，到
+<code>yield</code> 后停止，然后调用 <code>send()</code> 函数给协程发送数据。协程收到数据
+后继续往下执行，直到下一次的 <code>yield</code> 。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">grep</span>(pattern):
+         <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">"Searching for"</span>, pattern)
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'recieve data '</span>, line
+             <span style="color: #a1db00;">if</span> pattern <span style="color: #a1db00;">in</span> line:
+                 <span style="color: #a1db00;">print</span>(line)
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'after if'</span>
+
+
+     <span style="color: #ff8700;">g</span> = grep(<span style="color: #ff4ea3;">'test'</span>)
+     g.<span style="color: #d18aff;">next</span>()
+     g.send(<span style="color: #ff4ea3;">'hi this is'</span>)
+     g.send(<span style="color: #ff4ea3;">'hi this is test'</span>)
+</pre>
+</div>
+
+
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/local/bin/python</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">coroutine.py</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">A decorator function that takes care of starting a coroutine</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">automatically on call.</span>
+
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">coroutine</span>(func):
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">start</span>(*args, **kwargs):
+            <span style="color: #ff8700;">cr</span> = func(*args, **kwargs)
+            cr.<span style="color: #d18aff;">next</span>()
+            <span style="color: #a1db00;">return</span> cr
+        <span style="color: #a1db00;">return</span> start
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Example use</span>
+    <span style="color: #a1db00;">if</span> <span style="color: #d18aff;">__name__</span> == <span style="color: #ff4ea3;">'__main__'</span>:
+        <span style="color: #00d7af;">@coroutine</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">grep</span>(pattern):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Looking for %s"</span> % pattern
+            <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+                <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+                <span style="color: #a1db00;">if</span> pattern <span style="color: #a1db00;">in</span> line:
+                    <span style="color: #a1db00;">print</span> line,
+
+        <span style="color: #ff8700;">g</span> = grep(<span style="color: #ff4ea3;">"python"</span>)
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Notice how you don't need a next() call here</span>
+        g.send(<span style="color: #ff4ea3;">"Yeah, but no, but yeah, but no"</span>)
+        g.send(<span style="color: #ff4ea3;">"A series of tubes"</span>)
+        g.send(<span style="color: #ff4ea3;">"python generators rock!"</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org127d591" class="outline-2">
+<h2 id="org127d591"><span class="section-number-2">3</span> 理解一下python中的yield</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> time
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">consumer</span>():
+        <span style="color: #ff8700;">r</span> = <span style="color: #ff4ea3;">''</span>
+        <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+            <span style="color: #ff8700;">n</span> = <span style="color: #a1db00;">yield</span> r
+            <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> n:
+                <span style="color: #a1db00;">return</span>
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'[CONSUMER] Consuming %s...'</span> % n)
+            time.sleep(1)
+            <span style="color: #ff8700;">r</span> = <span style="color: #ff4ea3;">'200 OK'</span>
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">produce</span>(c):
+        c.<span style="color: #d18aff;">next</span>()
+        <span style="color: #ff8700;">n</span> = 0
+        <span style="color: #a1db00;">while</span> n &lt; 5:
+            <span style="color: #ff8700;">n</span> = n + 1
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'[PRODUCER] Producing %s...'</span> % n)
+            <span style="color: #ff8700;">r</span> = c.send(n)
+            <span style="color: #a1db00;">print</span>(<span style="color: #ff4ea3;">'[PRODUCER] Consumer return: %s'</span> % r)
+        c.close()
+
+    <span style="color: #a1db00;">if</span> <span style="color: #d18aff;">__name__</span>==<span style="color: #ff4ea3;">'__main__'</span>:
+        <span style="color: #ff8700;">c</span> = consumer()
+        produce(c)
+</pre>
+</div>
+
+<p>
+可以看到 !n = yield r! 这一句，yield出去的r返回给send的发起者的。而
+<code>yield</code> 本身的值赋给了n，n就是send发送过来的。。
+</p>
+
+<p>
+执行流程是这样的：
+</p>
+<ol class="org-ol">
+<li>主程序调用produce，c.next()执行就直接切换到consumer中开始执行。</li>
+<li>consumer中执行到yield，切换到produce从c.next()后继续执行，此时从
+consumer中yield回来的值是空。也就是consumer中第一句给r的赋值。</li>
+<li>produce进入while，执行到c.send(n)。然后切换到consumer又从yield开
+始执行。此时consumer收到的n是由produce发送过来的值。</li>
+<li>consumer睡一秒后给r赋值，然后重复while循环。到yield后吐出新赋值的
+r给produce。</li>
+<li>produce打印返回值r，重复循环到c.send(n)。进入步骤3。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orga6a9884" class="outline-2">
+<h2 id="orga6a9884"><span class="section-number-2">4</span> 参考资料三写得太好了，我理解式的翻译了一些</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+就是它，建议英语可以的直接读它 <a href="data/Coroutines.pdf">Coroutines.pdf</a>
+</p>
+</div>
+<div id="outline-container-org1d645d0" class="outline-3">
+<h3 id="org1d645d0"><span class="section-number-3">4.1</span> 更进一步理解生成器</h3>
+<div class="outline-text-3" id="text-4-1">
+</div>
+<div id="outline-container-orgf012821" class="outline-4">
+<h4 id="tail"><a id="orgf012821"></a><span class="section-number-4">4.1.1</span> 一个python版本的 <code>tail -f</code></h4>
+<div class="outline-text-4" id="text-tail">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> time
+       <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">follow</span>(thefile):
+           thefile.seek(0,2)      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Go to the end of the file</span>
+           <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+                <span style="color: #ff8700;">line</span> = thefile.readline()
+                <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> line:
+                    time.sleep(0.1)    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Sleep briefly</span>
+                    <span style="color: #a1db00;">continue</span>
+                <span style="color: #a1db00;">yield</span> line
+
+
+     <span style="color: #ff8700;">logfile</span>  = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">"access-log"</span>)
+     <span style="color: #a1db00;">for</span> line <span style="color: #a1db00;">in</span> follow(logfile):
+         <span style="color: #a1db00;">print</span> line,
+</pre>
+</div>
+<p>
+程序执行后，会一直在while中循环，如果文件结尾有插入数据，用yield吐出
+来进行输出。输出完后再次进入follow中的while循环继续执行
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbd5828d" class="outline-4">
+<h4 id="generator_pipe"><a id="orgbd5828d"></a><span class="section-number-4">4.1.2</span> 生成器做为管道</h4>
+<div class="outline-text-4" id="text-generator_pipe">
+<p>
+结合 <a href="#tail">一个python版本的 <code>tail -f</code></a> ，来看看生成器做为管道的用法：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> time
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">follow</span>(thefile):
+         thefile.seek(0,2)      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Go to the end of the file</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+              <span style="color: #ff8700;">line</span> = thefile.readline()
+              <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> line:
+                  time.sleep(0.1)    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Sleep briefly</span>
+                  <span style="color: #a1db00;">continue</span>
+              <span style="color: #a1db00;">yield</span> line
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">grep</span>(pattern, lines):
+         <span style="color: #a1db00;">for</span> line <span style="color: #a1db00;">in</span> lines:
+             <span style="color: #a1db00;">if</span> pattern <span style="color: #a1db00;">in</span> line:
+                 <span style="color: #a1db00;">yield</span> line
+
+     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Set up a processing pipe : tail -f | grep python</span>
+     <span style="color: #ff8700;">logfile</span>  = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">"access-log"</span>)
+     <span style="color: #ff8700;">loglines</span> = follow(logfile)
+     <span style="color: #ff8700;">pylines</span>  = grep(<span style="color: #ff4ea3;">"python"</span>,loglines)
+     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Pull results out of the processing pipeline</span>
+     <span style="color: #a1db00;">for</span> line <span style="color: #a1db00;">in</span> pylines:
+         <span style="color: #a1db00;">print</span> line,
+</pre>
+</div>
+<p>
+grep本身就是一个生成器，它接受一个安符串的pattern和一个生成器做为参
+数。程序执行时，应该是一直在 <code>follow</code> 函数的while中循环等待。如果文
+件结尾有数据进来，follow吐出数据，此时进入grep中的for，如果在这一行
+中找到pattern，grep又吐出数据进行输出。完毕后又回到follow的while循环
+中继续等待。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga7100b1" class="outline-4">
+<h4 id="orga7100b1"><span class="section-number-4">4.1.3</span> 一个特殊一点的例子</h4>
+<div class="outline-text-4" id="text-4-1-3">
+<p>
+注意看为啥中间的数字没有了。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">      <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">countdown</span>(n):
+          <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Counting down from"</span>, n
+          <span style="color: #a1db00;">while</span> n &gt;= 0:
+              <span style="color: #ff8700;">newvalue</span> = (<span style="color: #a1db00;">yield</span> n)
+              <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">If a new value got sent in, reset n with it</span>
+              <span style="color: #a1db00;">if</span> newvalue <span style="color: #a1db00;">is</span> <span style="color: #a1db00;">not</span> <span style="color: #5fafd7;">None</span>:
+                  <span style="color: #ff8700;">n</span> = newvalue
+              <span style="color: #a1db00;">else</span>:
+                  <span style="color: #ff8700;">n</span> -= 1
+
+      <span style="color: #ff8700;">c</span> = countdown(5)
+      <span style="color: #a1db00;">for</span> n <span style="color: #a1db00;">in</span> c:
+          <span style="color: #a1db00;">print</span> n
+          <span style="color: #a1db00;">if</span> n == 5:
+              <span style="color: #ff8700;">a</span> = c.send(3)
+              <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'a = %s'</span> % a
+</pre>
+</div>
+
+<p>
+<b>还需要注意的</b> ：send后如果不接收它的结果，那么countdown中间有一次
+yield出来的3将被丢弃。比如这样，结果里面是没有3的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">      <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">countdown</span>(n):
+          <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Counting down from"</span>, n
+          <span style="color: #a1db00;">while</span> n &gt;= 0:
+              <span style="color: #ff8700;">newvalue</span> = (<span style="color: #a1db00;">yield</span> n)
+              <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">If a new value got sent in, reset n with it</span>
+              <span style="color: #a1db00;">if</span> newvalue <span style="color: #a1db00;">is</span> <span style="color: #a1db00;">not</span> <span style="color: #5fafd7;">None</span>:
+                  <span style="color: #ff8700;">n</span> = newvalue
+              <span style="color: #a1db00;">else</span>:
+                  <span style="color: #ff8700;">n</span> -= 1
+
+      <span style="color: #ff8700;">c</span> = countdown(5)
+      <span style="color: #a1db00;">for</span> n <span style="color: #a1db00;">in</span> c:
+          <span style="color: #a1db00;">print</span> n
+          <span style="color: #a1db00;">if</span> n == 5:
+              c.send(3)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org706a303" class="outline-4">
+<h4 id="org706a303"><span class="section-number-4">4.1.4</span> 简单总结</h4>
+<div class="outline-text-4" id="text-4-1-4">
+<ol class="org-ol">
+<li>生成器为迭代器产生数据。</li>
+<li>协程是数据的消费者。</li>
+<li>不要把协程和迭代器混在一起。</li>
+<li>协程与迭代器无关。</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2fbe74d" class="outline-3">
+<h3 id="org2fbe74d"><span class="section-number-3">4.2</span> 更进一步理解协程</h3>
+<div class="outline-text-3" id="text-4-2">
+</div>
+<div id="outline-container-org190d4eb" class="outline-4">
+<h4 id="org190d4eb"><span class="section-number-4">4.2.1</span> 使用协程写的 <code>tail -f</code></h4>
+<div class="outline-text-4" id="text-4-2-1">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> time
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">coroutine</span>(fun):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">start</span>(*arg, **args):
+             <span style="color: #ff8700;">cr</span> = fun(*arg, ** args)
+             cr.<span style="color: #d18aff;">next</span>()
+             <span style="color: #a1db00;">return</span> cr
+         <span style="color: #a1db00;">return</span> start
+
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">follow</span>(thefile, target):
+         thefile.seek(0,2)      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Go to the end of the file</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+              <span style="color: #ff8700;">line</span> = thefile.readline()
+              <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> line:
+                  time.sleep(0.1)    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Sleep briefly</span>
+                  <span style="color: #a1db00;">continue</span>
+              target.send(line)
+
+
+     <span style="color: #00d7af;">@coroutine</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">printer</span>():
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">print</span> line,
+
+     <span style="color: #ff8700;">f</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">"access-log"</span>)
+     follow(f, printer())
+</pre>
+</div>
+<p>
+程序执行后：
+</p>
+<ol class="org-ol">
+<li>执行printer到yield返回follow。</li>
+<li>follow循环等待数据。</li>
+<li>如果有数据follow发送给printer。</li>
+<li>printer输出数据后，再次从yield返回follow进入步骤2。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgb717a3b" class="outline-4">
+<h4 id="coroutine_pipe"><a id="orgb717a3b"></a><span class="section-number-4">4.2.2</span> 协程做为管道</h4>
+<div class="outline-text-4" id="text-coroutine_pipe">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> time
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">coroutine</span>(fun):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">start</span>(*arg, **args):
+             <span style="color: #ff8700;">cr</span> = fun(*arg, ** args)
+             cr.<span style="color: #d18aff;">next</span>()
+             <span style="color: #a1db00;">return</span> cr
+         <span style="color: #a1db00;">return</span> start
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">follow</span>(thefile, target):
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begin follow'</span>
+         thefile.seek(0,2)      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Go to the end of the file</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+              <span style="color: #ff8700;">line</span> = thefile.readline()
+              <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> line:
+                  time.sleep(0.1)    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Sleep briefly</span>
+                  <span style="color: #a1db00;">continue</span>
+              target.send(line)
+
+     <span style="color: #00d7af;">@coroutine</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">printer</span>():
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begind printer'</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">print</span> line,
+
+     <span style="color: #00d7af;">@coroutine</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">grep</span>(pattern, target):
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begin grep'</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">if</span> pattern <span style="color: #a1db00;">in</span> line:
+                 target.send(line)
+
+     <span style="color: #ff8700;">f</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">"kk.txt"</span>)
+     follow(f, grep(<span style="color: #ff4ea3;">'python'</span>, printer()))
+</pre>
+</div>
+<p>
+从打印可以看到，程序开始这样执行：
+</p>
+<ol class="org-ol">
+<li>从printer开始执行，到yield后停下等待数据。</li>
+<li>然后执行grep到yield。</li>
+<li>然后执行follow进入while一直等待数据。</li>
+<li>有数据后follow发送给grep。</li>
+<li>grep处理后，如果有合适的数据再发送给printer处理，完成后从yield返
+回follow。如果grep没有发现合适的数据就直接从yield返回follow。</li>
+<li>printer收到数据后从再次停在yield后返回grep。然后grep返回follow进
+入步骤3。</li>
+</ol>
+
+<p>
+结合 <a href="#generator_pipe">生成器做为管道</a> ，生成器是使用迭代器从管道中拉取数据。而协程是使
+用 <code>send()</code> 向管道中push数据。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgab27412" class="outline-4">
+<h4 id="orgab27412"><span class="section-number-4">4.2.3</span> 协程做广播</h4>
+<div class="outline-text-4" id="text-4-2-3">
+<p>
+结合 <a href="#coroutine_pipe">协程做为管道</a> ，其实协程还有类似于广播的功能：
+</p>
+
+
+<div class="figure">
+<p><img src="./images/coroutine_broadcasting.png" alt="coroutine_broadcasting.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> time
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">coroutine</span>(fun):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">start</span>(*arg, **args):
+             <span style="color: #ff8700;">cr</span> = fun(*arg, ** args)
+             cr.<span style="color: #d18aff;">next</span>()
+             <span style="color: #a1db00;">return</span> cr
+         <span style="color: #a1db00;">return</span> start
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">follow</span>(thefile, target):
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begin follow'</span>
+         thefile.seek(0,2)      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Go to the end of the file</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+              <span style="color: #ff8700;">line</span> = thefile.readline()
+              <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> line:
+                  time.sleep(0.1)    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Sleep briefly</span>
+                  <span style="color: #a1db00;">continue</span>
+              target.send(line)
+
+     <span style="color: #00d7af;">@coroutine</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">printer</span>():
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begind printer'</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">print</span> line,
+
+     <span style="color: #00d7af;">@coroutine</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">grep</span>(pattern, target):
+         <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begin grep'</span>
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">line</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">if</span> pattern <span style="color: #a1db00;">in</span> line:
+                 target.send(line)
+
+
+     <span style="color: #00d7af;">@coroutine</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">broadcast</span>(targets):
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #ff8700;">item</span> = (<span style="color: #a1db00;">yield</span>)
+             <span style="color: #a1db00;">for</span> target <span style="color: #a1db00;">in</span> targets:
+                 target.send(item)
+
+
+     <span style="color: #ff8700;">f</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">"kk.txt"</span>)
+     follow(f, broadcast([grep(<span style="color: #ff4ea3;">'python'</span>, printer()),
+                          grep(<span style="color: #ff4ea3;">'ply'</span>, printer()),
+                          grep(<span style="color: #ff4ea3;">'simple'</span>, printer())]))
+</pre>
+</div>
+<p>
+这个和 <a href="#coroutine_pipe">协程做为管道</a> 的区别就只是到了broadcast，它send给了多个
+coroutine。这种情况的模型如下：
+<img src="./images/coroutine_model_1.png" alt="coroutine_model_1.png" />
+</p>
+
+<p>
+另一种模型是这样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">      <span style="color: #ff8700;">f</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">"access-log"</span>)
+      <span style="color: #ff8700;">p</span> = printer()
+
+      follow(f, broadcast([grep(<span style="color: #ff4ea3;">'python'</span>, p),
+                           grep(<span style="color: #ff4ea3;">'ply'</span>, p),
+                           grep(<span style="color: #ff4ea3;">'simple'</span>, p)]))
+</pre>
+</div>
+
+<div class="figure">
+<p><img src="./images/coroutine_model_2.png" alt="coroutine_model_2.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org014b273" class="outline-4">
+<h4 id="org014b273"><span class="section-number-4">4.2.4</span> 错误地使用协程</h4>
+<div class="outline-text-4" id="text-4-2-4">
+<p>
+不能对一个正在执行的协程再调用 <code>send()</code> 。比如这样就会导致程序挂掉：
+<img src="./images/coroutine_creash.png" alt="coroutine_creash.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge862a88" class="outline-3">
+<h3 id="orge862a88"><span class="section-number-3">4.3</span> 使用协程和生成器做成一个类似于OS的多任务系统</h3>
+<div class="outline-text-3" id="text-4-3">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Task</span>(<span style="color: #d18aff;">object</span>):
+         <span style="color: #ff8700;">taskid</span> = 0
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>,target):
+             <span style="color: #ff8700;">Task.taskid</span> += 1
+             <span style="color: #a1db00;">self</span>.tid     = Task.taskid
+             <span style="color: #a1db00;">self</span>.target  = target
+             <span style="color: #a1db00;">self</span>.sendval = <span style="color: #5fafd7;">None</span>
+
+
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Task ID</span>
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Target coroutine</span>
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Value to send</span>
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">run</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">return</span> <span style="color: #a1db00;">self</span>.target.send(<span style="color: #a1db00;">self</span>.sendval)
+
+
+     <span style="color: #a1db00;">if</span> <span style="color: #d18aff;">__name__</span> == <span style="color: #ff4ea3;">'__main__'</span>:    
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">A very simple generator</span>
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>():
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Part 1"</span>
+             <span style="color: #a1db00;">yield</span>
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Part 2"</span>
+             <span style="color: #a1db00;">yield</span>
+    
+         <span style="color: #ff8700;">t1</span> = Task(foo())
+         t1.run()
+         t1.run()
+</pre>
+</div>
+
+<p>
+调度器：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Scheduler</span>(<span style="color: #d18aff;">object</span>):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">self</span>.ready   = Queue()
+             <span style="color: #a1db00;">self</span>.taskmap = {}
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">new</span>(<span style="color: #a1db00;">self</span>,target):
+             <span style="color: #ff8700;">newtask</span> = Task(target)
+             <span style="color: #a1db00;">self</span>.taskmap[newtask.tid] = newtask
+             <span style="color: #a1db00;">self</span>.schedule(newtask)
+             <span style="color: #a1db00;">return</span> newtask.tid
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">schedule</span>(<span style="color: #a1db00;">self</span>,task):
+             <span style="color: #a1db00;">self</span>.ready.put(task)
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">mainloop</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">while</span> <span style="color: #a1db00;">self</span>.taskmap:
+                 <span style="color: #ff8700;">task</span> = <span style="color: #a1db00;">self</span>.ready.get()
+                 <span style="color: #ff8700;">result</span> = task.run()
+                 <span style="color: #a1db00;">self</span>.schedule(task)
+</pre>
+</div>
+
+<p>
+第一个多任务的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">from</span> kombu <span style="color: #a1db00;">import</span> Queue
+
+     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Task</span>(<span style="color: #d18aff;">object</span>):
+         <span style="color: #ff8700;">taskid</span> = 0
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>,target):
+             <span style="color: #ff8700;">Task.taskid</span> += 1
+             <span style="color: #a1db00;">self</span>.tid     = Task.taskid
+             <span style="color: #a1db00;">self</span>.target  = target
+             <span style="color: #a1db00;">self</span>.sendval = <span style="color: #5fafd7;">None</span>
+
+
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Task ID</span>
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Target coroutine</span>
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Value to send</span>
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">run</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">return</span> <span style="color: #a1db00;">self</span>.target.send(<span style="color: #a1db00;">self</span>.sendval)
+
+
+     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Scheduler</span>(<span style="color: #d18aff;">object</span>):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">self</span>.ready   = Queue()
+             <span style="color: #a1db00;">self</span>.taskmap = {}
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">new</span>(<span style="color: #a1db00;">self</span>,target):
+             <span style="color: #ff8700;">newtask</span> = Task(target)
+             <span style="color: #a1db00;">self</span>.taskmap[newtask.tid] = newtask
+             <span style="color: #a1db00;">self</span>.schedule(newtask)
+             <span style="color: #a1db00;">return</span> newtask.tid
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">schedule</span>(<span style="color: #a1db00;">self</span>,task):
+             <span style="color: #a1db00;">self</span>.ready.put(task)
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">mainloop</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">while</span> <span style="color: #a1db00;">self</span>.taskmap:
+                 <span style="color: #ff8700;">task</span> = <span style="color: #a1db00;">self</span>.ready.get()
+                 <span style="color: #ff8700;">result</span> = task.run()
+                 <span style="color: #a1db00;">self</span>.schedule(task)
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>():
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"I'm foo"</span>
+             <span style="color: #a1db00;">yield</span>
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>():
+         <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"I'm bar"</span>
+             <span style="color: #a1db00;">yield</span>
+
+     <span style="color: #ff8700;">sched</span> = Scheduler()
+     sched.new(foo())
+     sched.new(bar())
+     sched.mainloop()
+</pre>
+</div>
+
+<p>
+上面这个例子中，如果一个任务退出，会导致crash。所以需要处理一下任务
+退出的情况：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">from</span> kombu <span style="color: #a1db00;">import</span> Queue
+
+     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Task</span>(<span style="color: #d18aff;">object</span>):
+         <span style="color: #ff8700;">taskid</span> = 0
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>,target):
+             <span style="color: #ff8700;">Task.taskid</span> += 1
+             <span style="color: #a1db00;">self</span>.tid     = Task.taskid
+             <span style="color: #a1db00;">self</span>.target  = target
+             <span style="color: #a1db00;">self</span>.sendval = <span style="color: #5fafd7;">None</span>
+
+
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Task ID</span>
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Target coroutine</span>
+         <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Value to send</span>
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">run</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">return</span> <span style="color: #a1db00;">self</span>.target.send(<span style="color: #a1db00;">self</span>.sendval)
+
+
+     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Scheduler</span>(<span style="color: #d18aff;">object</span>):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">self</span>.ready   = Queue()
+             <span style="color: #a1db00;">self</span>.taskmap = {}
+
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">exit</span>(<span style="color: #a1db00;">self</span>, task):
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"Task %d terminated"</span> % task.tid
+             <span style="color: #a1db00;">del</span> <span style="color: #a1db00;">self</span>.taskmap[task.tid]
+
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">new</span>(<span style="color: #a1db00;">self</span>,target):
+             <span style="color: #ff8700;">newtask</span> = Task(target)
+             <span style="color: #a1db00;">self</span>.taskmap[newtask.tid] = newtask
+             <span style="color: #a1db00;">self</span>.schedule(newtask)
+             <span style="color: #a1db00;">return</span> newtask.tid
+
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">schedule</span>(<span style="color: #a1db00;">self</span>,task):
+             <span style="color: #a1db00;">self</span>.ready.put(task)
+
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">mainloop</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">while</span> <span style="color: #a1db00;">self</span>.taskmap:
+                 <span style="color: #ff8700;">task</span> = <span style="color: #a1db00;">self</span>.ready.get()
+                 <span style="color: #a1db00;">try</span>:
+                     <span style="color: #ff8700;">result</span> = task.run()
+                 <span style="color: #a1db00;">except</span> <span style="color: #00d7af;">StopIteration</span>:
+                     <span style="color: #a1db00;">self</span>.<span style="color: #5fafd7;">exit</span>(task)
+                     <span style="color: #a1db00;">continue</span>
+                 <span style="color: #a1db00;">self</span>.schedule(task)
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>():
+         <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">xrange</span>(5):
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"I'm foo"</span>
+             <span style="color: #a1db00;">yield</span>
+
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>():
+         <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">xrange</span>(10):
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"I'm bar"</span>
+             <span style="color: #a1db00;">yield</span>
+
+     <span style="color: #ff8700;">sched</span> = Scheduler()
+     sched.new(foo())
+     sched.new(bar())
+     sched.mainloop()
+</pre>
+</div>
+
+<p>
+这个例子中，scheduler可以看成是操作系统。任务中的yield就是操作系统中
+的“中断”（或者是trap）。如果任务需要请求操作系统（scheduler）提供
+的服务，即系统调用，需要带参数使用yield：
+</p>
+<pre class="example">
+     class SystemCall(object):
+         def handle(self):
+     pass
+     class Scheduler(object):
+         ...
+         def mainloop(self):
+              while self.taskmap:
+                 task = self.ready.get()
+                 try:
+                     result = task.run()
+                     if isinstance(result,SystemCall):
+                         result.task  = task
+                         result.sched = self
+                         result.handle()
+                         continue
+                 except StopIteration:
+                     self.exit(task)
+                     continue
+                 self.schedule(task)
+</pre>
+<p>
+这里的 <code>SystemCall</code> 就是系统调用的基类，所有系统调用都继承自它。在
+mainloop中执行时，如果任务yield出来的是SystemCall，则先保存上下文
+（当前任务和调度器）。下面定义一个返回任务id的系统调用：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">GetTid</span>(SystemCall):
+         <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">handle</span>(<span style="color: #a1db00;">self</span>):
+             <span style="color: #a1db00;">self</span>.task.sendval = <span style="color: #a1db00;">self</span>.task.tid
+             <span style="color: #a1db00;">self</span>.sched.schedule(<span style="color: #a1db00;">self</span>.task)
+</pre>
+</div>
+
+<p>
+那么此时任务应该这样定义：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>():
+         <span style="color: #ff8700;">mytid</span> = <span style="color: #a1db00;">yield</span> GetTid()
+         <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">xrange</span>(5):
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"I'm foo"</span>, mytid
+             <span style="color: #a1db00;">yield</span>
+     <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>():
+         <span style="color: #ff8700;">mytid</span> = <span style="color: #a1db00;">yield</span> GetTid()
+         <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">xrange</span>(10):
+             <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"I'm bar"</span>, mytid
+             <span style="color: #a1db00;">yield</span>
+</pre>
+</div>
+<p>
+总的流程：，
+</p>
+<ol class="org-ol">
+<li>调度器先调度到一个任务，任务yield出来一个系统调用。</li>
+<li>调度器判断是系统调用没错后，保存上下文环境，然后进入系统调用执行。</li>
+<li>本例系统调用中修改了任务自己的属性 <code>self.sendval</code> 。然后重新把该
+任务加入加绪队列。</li>
+<li>调度器继续从就绪队列中取出任务进行执行。</li>
+<li>再次调度到该任务时，它继续从yield处开始执行，而这次mytid就是系统
+调用设置的 <code>self.sendval</code> 。它是在执行时通过send发送过来的。其实
+可以理解为系统调用的返回值就是它设置的 <code>self.sendval</code> 。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org6d7dc2b" class="outline-3">
+<h3 id="org6d7dc2b"><span class="section-number-3">4.4</span> 总结</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+yield总共有三个用途：
+</p>
+<ol class="org-ol">
+<li>生成迭代器，数据的生产者。</li>
+<li>接收消息，数据的消费者。</li>
+<li>类似于操作系统的trap，实现多任务。</li>
+</ol>
+
+<p>
+忠告就是： <b>不要尝试写一个带yield的函数来实现两个以上的上述功能。</b>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcf44e45" class="outline-2">
+<h2 id="orgcf44e45"><span class="section-number-2">5</span> 参考资料</h2>
+<div class="outline-text-2" id="text-5">
+<ol class="org-ol">
+<li><p>
+<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868328689835ecd883d910145dfa8227b539725e5ed000">廖雪峰讲协程</a>
+</p>
+<pre class="example">
+       但是在A中是没有调用B的，所以协程的调用比函数调用理解起来要难一些。
+
+       看起来A、B的执行有点像多线程，但协程的特点在于是一个线程执行，那和多线
+       程比，协程有何优势？
+
+       最大的优势就是协程极高的执行效率。因为子程序切换不是线程切换，而是由程
+       序自身控制，因此，没有线程切换的开销，和多线程比，线程数量越多，协程的
+       性能优势就越明显。
+
+       第二大优势就是不需要多线程的锁机制，因为只有一个线程，也不存在同时写变
+       量冲突，在协程中控制共享资源不加锁，只需要判断状态就好了，所以执行效率
+       比多线程高很多。
+
+       因为协程是一个线程执行，那怎么利用多核CPU呢？最简单的方法是多进程+协程，
+       既充分利用多核，又充分发挥协程的高效率，可获得极高的性能。
+
+       Python对协程的支持还非常有限，用在generator中的yield可以一定程度上实现
+       协程。虽然支持不完全，但已经可以发挥相当大的威力了。
+</pre></li>
+<li><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001407503089986d175822da68d4d6685fbe849a0e0ca35000">廖雪峰讲gevent</a></li>
+<li><a href="http://www.dabeaz.com/coroutines/Coroutines.pdf">这里还有一个不错的英文介绍</a></li>
+</ol>
+
+<p>
+Python通过yield提供了对协程的基本支持，但是不完全。而第三方的gevent
+为Python提供了比较完善的协程支持。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Peng Xie</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

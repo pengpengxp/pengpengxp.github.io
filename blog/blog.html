@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>Blog</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="../index.html">Back to Pengpengxp</a></li>
+          <hr>
+        </ul>
+      </div>
+
+      <div class="article">
+
+        <h1>Blog</h1>
+          <section>
+            <div class="peng-time">
+              <time>2019-03-06</time>
+            </div>
+            <p>使用callibre抓取instapaper保存的文章时，总是最新的文章在最前，这样看起来不太爽。因为我总是希望最先阅读最旧的文章。</p>
+
+
+            <p>然后我就找到了callibre的recipe中有这样一个功能：
+              <pre class="python"><span class="variable-name">reverse_article_order</span> = <span class="constant">True</span></pre>
+              直接就可以把抓取的文章顺序反转。使用方法就是直接使用高级修改callibre的recipe，加入下面一句就可以了（默认好像它是被注释掉了）。
+              所以我的recipe看起来可能就是这样的：</p>
+
+            <pre class="python3"><span class="comment-delimiter"># </span><span class="comment">Calibre recipe for Instapaper.com (Stable version)
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Homepage: http://khromov.wordpress.com/projects/instapaper-calibre-recipe/
+</span><span class="comment-delimiter"># </span><span class="comment">Source: https://github.com/kovidgoyal/calibre/blob/master/recipes/instapaper.recipe
+</span>
+<span class="keyword">from</span> calibre.web.feeds.news <span class="keyword">import</span> BasicNewsRecipe
+
+
+<span class="keyword">class</span> <span class="type">AdvancedUserRecipe1299694372</span>(BasicNewsRecipe):
+    <span class="variable-name">title</span> = u<span class="string">'Instapaper'</span>
+    <span class="variable-name">__author__</span> = <span class="string">'Darko Miletic, Stanislav Khromov, Jim Ramsay'</span>
+    <span class="variable-name">publisher</span> = <span class="string">'Instapaper.com'</span>
+    <span class="variable-name">category</span> = <span class="string">'info, custom, Instapaper'</span>
+    <span class="variable-name">oldest_article</span> = 365
+    <span class="variable-name">max_articles_per_feed</span> = 100
+    <span class="variable-name">reverse_article_order</span> = <span class="constant">True</span>
+    <span class="variable-name">no_stylesheets</span> = <span class="constant">False</span>
+    <span class="variable-name">extra_css</span> = <span class="string">'q { font-style: italic; } .size3mode { color: black; }'</span>
+    <span class="variable-name">remove_javascript</span> = <span class="constant">True</span>
+    <span class="variable-name">remove_tags</span> = [
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'id'</span>: <span class="string">'text_controls_toggle'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'script'</span>),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'id'</span>: <span class="string">'text_controls'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'section'</span>, attrs={<span class="string">'class'</span>: <span class="string">'primary_bar'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'class'</span>: <span class="string">'modal_group'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'id'</span>: <span class="string">'editing_controls'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'class'</span>: <span class="string">'modal_name'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'class'</span>: <span class="string">'highlight_popover'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'class'</span>: <span class="string">'bar bottom'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'class'</span>: <span class="string">'evernote_confirm'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'id'</span>: <span class="string">'controlbar_container'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'id'</span>: <span class="string">'footer'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'div'</span>, attrs={<span class="string">'id'</span>: <span class="string">'speedRead'</span>}),
+        <span class="builtin">dict</span>(name=<span class="string">'label'</span>)
+    ]
+    <span class="variable-name">use_embedded_content</span> = <span class="constant">False</span>
+    <span class="variable-name">needs_subscription</span> = <span class="constant">True</span>
+    <span class="variable-name">INDEX</span> = u<span class="string">'https://www.instapaper.com'</span>
+    <span class="variable-name">LOGIN</span> = INDEX + u<span class="string">'/user/login'</span>
+
+    <span class="variable-name">feeds</span> = [
+        (u<span class="string">'Instapaper Unread'</span>, u<span class="string">'https://www.instapaper.com/u'</span>)
+        <span class="comment-delimiter">#            </span><span class="comment">(u'Instapaper Starred', u'https://www.instapaper.com/starred')
+</span>    ]
+
+    <span class="keyword">def</span> <span class="function-name">get_browser</span>(<span class="keyword">self</span>):
+        <span class="variable-name">br</span> = BasicNewsRecipe.get_browser(<span class="keyword">self</span>)
+        <span class="keyword">if</span> <span class="keyword">self</span>.username <span class="keyword">is</span> <span class="keyword">not</span> <span class="constant">None</span>:
+            br.<span class="builtin">open</span>(<span class="keyword">self</span>.LOGIN)
+            br.select_form(nr=0)
+            <span class="variable-name">br</span>[<span class="string">'username'</span>] = <span class="keyword">self</span>.username
+            <span class="keyword">if</span> <span class="keyword">self</span>.password <span class="keyword">is</span> <span class="keyword">not</span> <span class="constant">None</span>:
+                <span class="variable-name">br</span>[<span class="string">'password'</span>] = <span class="keyword">self</span>.password
+            br.submit()
+        <span class="keyword">return</span> br
+
+    <span class="keyword">def</span> <span class="function-name">parse_index</span>(<span class="keyword">self</span>):
+        <span class="variable-name">totalfeeds</span> = []
+        <span class="variable-name">lfeeds</span> = <span class="keyword">self</span>.get_feeds()
+        <span class="keyword">for</span> feedobj <span class="keyword">in</span> lfeeds:
+            <span class="variable-name">feedtitle</span>, <span class="variable-name">feedurl</span> = feedobj
+            <span class="keyword">self</span>.report_progress(0, <span class="string">'Fetching feed'</span> + <span class="string">' %s...'</span> %
+                                 (feedtitle <span class="keyword">if</span> feedtitle <span class="keyword">else</span> feedurl))
+            <span class="variable-name">articles</span> = []
+            <span class="variable-name">soup</span> = <span class="keyword">self</span>.index_to_soup(feedurl)
+            <span class="keyword">for</span> item <span class="keyword">in</span> soup.findAll(<span class="string">'a'</span>, attrs={<span class="string">'class'</span>: <span class="string">'article_title'</span>}):
+                articles.append({
+                    <span class="string">'url'</span>: <span class="string">'https://www.instapaper.com'</span> + item[<span class="string">'href'</span>],
+                    <span class="string">'title'</span>: item[<span class="string">'title'</span>]
+                })
+            totalfeeds.append((feedtitle, articles))
+        <span class="keyword">return</span> totalfeeds
+</pre>
+          </section>
+
+          <section>
+            <div class="peng-time">
+              <time>2019-02-27</time>
+            </div>
+
+            <p>今天使用了一下 <a class="sorc" href="http://www.hammerspoon.org/" data-accessed="2019-02-27">hammerspoon</a> ，我主要想用来直接用按键切换应用程序。</p>
+
+            <p>下载后，具体做法就是直接新建 <span style="color:red">~/Users/pengpengxp/.hammerspoon</span> 目录，目录中新建 <span style="color:red">init.lua</span> 文件。</p>
+
+            <p>然后我直接写了下面的内容：<pre class="lua">hs.hotkey.bind({"cmd", "control"}, "E", function()
+      hs.execute("open /Applications/Emacs.app/")
+end)
+
+hs.hotkey.bind({"cmd", "control"}, "P", function()
+      hs.execute("open /Applications/Opera.app/")
+end)
+
+hs.hotkey.bind({"cmd", "control"}, "F", function()
+      hs.execute("open /Users/pengpengxp")
+end)
+
+hs.hotkey.bind({"cmd", "control"}, "C", function()
+      hs.execute("open /Applications/Calendar.app")
+end)
+
+hs.hotkey.bind({"cmd", "control"}, "I", function()
+      hs.execute("open /Applications/iTerm.app")
+end)
+
+hs.hotkey.bind({"cmd", "control"}, "G", function()
+      hs.execute("open /Applications/Google\\ Chrome.app")
+end)
+
+hs.hotkey.bind({"cmd", "control"}, "O", function()
+      hs.execute("open //Applications/WeChat.app")
+end)
+
+-- reload
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
+  hs.reload()
+end)
+hs.alert.show("Config loaded")
+</pre></p>
+
+            <p>基本就可以使用了。不过我原本习惯是，按住两边的command然后加按键来切换的。我没有找到hammerspoon识别rightcommand和leftcommand的功能。
+              我看起来好像它只识别command，而不能区分是哪边。</p>
+
+          </section>
+
+        <section>
+          <div class="peng-time">
+            <time>2019-02-26</time>
+            <p>之前一直没搞太明白云上IaaS、PaaS和SaaS的区别。这次翻译一篇文章。
+              原文是
+              <a class="sorc" href="https://www.bmc.com/blogs/saas-vs-paas-vs-iaas-whats-the-difference-and-how-to-choose/" data-accessed="2019-02-26">saas-vs-paas-vs-iaas-whats-the-difference</a>，我的翻译 <a href="iaas_pass_sass.html">IaaS、PaaS和SaaS的区别</a> 。</p>
+
+            <p>然后又看下了知乎的回答，我觉得讲得不错：链接是 <a class="sorc" href="https://www.zhihu.com/question/20387284" data-accessed="2019-02-27">这里</a> </p>
+
+            <ul>
+              <li>IaaS就像之前我搭建的Openstack平台一样，提供给用户的就是直接的计算节点等等。</li>
+              <li>PaaS应该来说是面象软件开发人员的服务，云提供硬件、OS、编程语言、开发库、布署工具，帮助开发者更快地进行开发，如Google的GAE。</li>
+              <li>SaaS是面象软件消费者的，用户无需安装，直接通过济览器就可以使用云提供的服务，比如Gmail。</li>
+            </ul>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

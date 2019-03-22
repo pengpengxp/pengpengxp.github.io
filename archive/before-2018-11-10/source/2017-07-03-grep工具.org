@@ -1,0 +1,78 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-03-grep工具
+
+* grep
+  刚开始使用linux的时候就了解了grep了。基本天天都要用。和很多linux下的
+  工具一样，做得事情很简单，但实用。
+
+  总结一些常用的选项功能：
+  1. =-i= ：忽略大小写。
+  2. =-R= ：递归地搜索目录。
+  3. =-e= ：如果需要搜索多个 =pattern= ，可以使用多个 =-e= 选项。这样
+     每个 =pattern= 满足都会找出来。另外，它还适合以 =-= 开头的
+     =pattern= 。
+  4. =-A= ：显示满足条件行的下面几行。比如 =grep -A20= 显示下面20行。
+  5. =-B= ：显示满足条件行的上面几行。比如 =grep -B20= 显示上面20行。
+  6. =-C= ：显示满足条件行的上面和下面几行。比如 =grep -C20= 显示上面
+     20行和下面20行。
+  7. =-n= ：显示引号。
+  8. =-l= ：加上该选项，结果只会显示包含的 =pattern= 的文件名，不会再
+     显示对应行的内容。
+
+* [[https://github.com/ggreer/the_silver_searcher][ag(the_silver_searcher)]]
+  :PROPERTIES:
+  :CUSTOM_ID: ag
+  :END:
+  遇然情况下知道了ag，试用一下，感觉比grep快好多啊。于是Emacs中也换成
+  ag。
+
+  1. 它可以根据 =.gitignore= 等文件过滤掉一些无关的文件。
+  2. 使用 =Pthread= 来并行搜索，发挥CPU的全部实力。
+  3. 一个字母一个字母搜索的时候，使用 [[https://en.wikipedia.org/wiki/Boyer%25E2%2580%2593Moore_string_search_algorithm][BM算法]] 来加速。
+  4. 使用 [[http://sljit.sourceforge.net/pcre.html][PCRE's JIT]] 来操作正则。
+  5. 在把每个相同的正则应用到每个文件时，ag会先调用 =pcre_study()= 函
+     数。
+  6. 不会对ignore的文件调用 =fnmatch()= 函数，非正则的 =pattern= 会直
+     接载入到数组中进行二进制搜索。
+     
+  ag的正则支持multiline搜索。
+
+  ag可以忽略一些目录，开始时使用 =.agignore= 文件。 =2.0.0= 以后，该名
+  字改为 =.ignore= 。写法和 =.gitignore= 是一样的。
+
+* [[https://github.com/BurntSushi/ripgrep][rg(ripgrep)]]
+  这是我最后了解到的工具。
+  
+  快的原因：
+  #+BEGIN_EXAMPLE
+    It is built on top of Rust's regex engine. Rust's regex engine uses
+    finite automata, SIMD and aggressive literal optimizations to make
+    searching very fast.
+
+    Rust's regex library maintains performance with full Unicode support
+    by building UTF-8 decoding directly into its deterministic finite
+    automaton engine.
+
+    It supports searching with either memory maps or by searching
+    incrementally with an intermediate buffer. The former is better for
+    single files and the latter is better for large directories. ripgrep
+    chooses the best searching strategy for you automatically.
+
+    Applies your ignore patterns in .gitignore files using a
+    RegexSet. That means a single file path can be matched against
+    multiple glob patterns simultaneously.
+
+    It uses a lock-free parallel recursive directory iterator, courtesy of
+    crossbeam and ignore.
+  #+END_EXAMPLE
+  
+  实际使用时，我需要rg忽略某些目录。可以使用 =.rgignore= 文件来指定。
+  比如在一个git库的根目录下新建一个 =.rgignore= 。按照 =.gitignore= 随
+  便写点就可以了。
+
+* ack
+  这个工具只是知道，没有用过。据说如果没有ack就没有 [[#ag][ag]] 。它是用纯perl
+  来做的。

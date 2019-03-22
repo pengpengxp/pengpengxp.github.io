@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>Linux下的命令行下载工具</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="linux_blog.html">Linux Info</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <h1>Linux下的命令行下载工具</h1>
+        <div class="peng-time">
+          <time>2018-12-06</time>
+        </div>
+
+        <h2>Wget</h2>
+        <p>如果需要下载整个静态网站的时候，我喜欢使用 <a class="sorc" href="https://www.gnu.org/software/wget/" data-accessed="2018-12-06">wget</a> 命令。
+          直接使用下面一条命令就可以搞定：</p>
+
+        <pre class="bash">wget -r -p -np -k &lt;url&gt;</pre>
+
+        <h2>多线程下载器aria2和axel</h2>
+        <p>需要下载大文件的时候，可以使用 <a class="sorc" href="https://github.com/axel-download-accelerator/axel" data-accessed="2018-12-06">axel</a> 和
+        <a class="sorc" href="https://aria2.github.io/" data-accessed="2018-12-06">aria2</a> 。它们基本用法如下。</p>
+
+        <pre class="bash">proxychains aria2 -x 16 -s 16 &lt;url&gt;
+axel -n 16 &lt;url&gt;</pre>
+
+
+        <p><b>但是</b>，当前我在使用aria2时，发现它下载https网站上的视频时，可能会有问题。所以现在https上的视频，我一般是使用axel下载的。</p>
+
+        <h2>下载网页视频</h2>
+
+        <p>使用上述aria2和axel这两个工具下载时，需要知道对应文件的链接。 它们再结合 video downloadhelper 这个插件就更好用了。
+        <a class="sorc" href="https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/" data-accessed="2018-12-06">Firefox的版本在这里。</a>
+        <a class="sorc" href="https://chrome.google.com/webstore/detail/video-downloadhelper/lmjnegcaeklhafolokijcfjliaokphfk?hl=zh-CN" data-accessed="2018-12-06">Chrome的版本在这里。</a>
+        </p>
+
+        <p>该插件本身就支持直接下载，不过因为浏览器的一些限制，有些操作直接在浏览器中不能做，所以它还有一个 <a class="sorc" href="https://www.downloadhelper.net/install-coapp" data-accessed="2018-12-06">Video DownloadHelper Companion App</a>
+          来做这个事情。下载对应版本安装即可。不过这个coapp设计时就是不能直接在命令行运行的。
+          使用video downloadhelper可以很方便得到页面上视频的url。
+          得到链接后，再尝试使用上面的axel，aria2来进行多线程下载，下载速度是非常迅速地。</p>
+
+        <p>上面说的用法，对于一些网页上的流式视频文件不起作用，这个时候推荐使用 <a class="sorc" href="https://rg3.github.io/youtube-dl/" data-accessed="2018-12-06">youtube-dl</a> 。 它的基本用法很简单，命令后面直接跟地址就行了。
+        但是，youtube-dl默认只能是单线程下载的，速度不是很快。它支持调用其它程序来下载。这样可以很方便地结合axel和aria2。简单的例子是下面这样。</p>
+
+        <pre class="bash">proxychains youtube-dl &lt;url&gt; --external-downloader <span class="string">"axel"</span>  --external-downloader-args <span class="string">"-n 16"</span></pre>
+
+        <pre class="bash">proxychains youtube-dl &lt;url&gt; --external-downloader <span class="string">"aria2c"</span>  --external-downloader-args <span class="string">"-x 1"</span> </pre>
+
+        <p>youtube-dl的最新版我试了一下，优酷上的流视频下载很轻松就搞定了。</p>
+
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  var gitalk = new Gitalk({
+      clientID: '3c74db23d6478d210434',
+      clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+      repo: 'pengpengxp.github.io',
+      owner: 'pengpengxp',
+      admin: ['pengpengxp'],
+      id: 'linux/linux_command_line_downloader.html',
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

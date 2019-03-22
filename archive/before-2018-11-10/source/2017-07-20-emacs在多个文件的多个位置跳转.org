@@ -1,0 +1,65 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: emacs在多个文件的多个位置跳转
+
+之前我写过一篇 [[file:2017-06-05-Emacs%E5%A6%82%E4%BD%95%E6%9A%82%E5%AD%98windows_layout.org][Emacs如何暂存windows_layout]] 。可以保存窗口布局和位置。
+但是实际编程时，我可能会遇到很长的文件，如需要同时修改100行，888行，
+1500行。或者是一个功能需要修改同时多个文件的多个地方，常见的server和
+client编程时，如果修改了消息格式，那么client和server两端都需要修改。这
+个时候光记住窗口布局显然是有点不够了。
+
+这个插件这可以派上用场啦 [[https://github.com/joodland/bm][bm]] 。
+
+* 安装
+  我是直接使用 package-install 安装的。如果网络不好，可以参考 [[file:2017-07-21-emacs%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0package%E6%9D%A5%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6.org][emacs使
+  用本地package来安装软件]] .
+
+* 使用
+  常用的函数有这些：
+  |--------------------------------+------------------------------------|
+  | 函数名                         | 功能                               |
+  |--------------------------------+------------------------------------|
+  | bm-toggle                      | 在当前行标记或反标记一个tag        |
+  | bm-bookmark-regexp             | 把满足regexp的行都打上tag          |
+  |--------------------------------+------------------------------------|
+  | bm-next                        | 跳到下一个tag                      |
+  | bm-previous                    | 跳到上一个tag                      |
+  |--------------------------------+------------------------------------|
+  | bm-show-all                    | 显示所有的tag                      |
+  | bm-show                        | 显示当前buffer的tag                |
+  | helm-bm                        | 使用helm调出bm，可以通过输入来过滤 |
+  |--------------------------------+------------------------------------|
+  | peng-bm-remove-all-all-buffers | 删除所有的tag                      |
+  | peng-bm-remove-current-buffer  | 删除当前buffer的tag                |
+  |--------------------------------+------------------------------------|
+  | bm-toggle-buffer-persistence   | 设置当前buffer中的tag为永久的      |
+  | bm-save                        | 保存所有设置为永久的tag到文件      |
+  | bm-load-and-restore            | 从文件中加载tag到buffer            |
+  |--------------------------------+------------------------------------|
+
+  我使用hydra，所以这样定义一个：
+  #+BEGIN_SRC elisp
+    (defhydra hydra-local-bookmark-menu (:exit t
+                                               :columns 3)
+      "Local bookmark"
+      ("t" bm-toggle "toggle")
+      ("P" bm-toggle-buffer-persistence "toggle buffer persistence")
+      ("n" bm-next "next" :exit nil)
+      ("p" bm-previous "previours" :exit nil)
+      ("s" bm-show-all "show all")
+      ("S" bm-save "save all bookmark to disk")
+      ("L" bm-load-and-restore "load bookmark from disk")
+      ("l" bm-show "show current file")
+      ("d" peng-bm-remove-all-all-buffers "remove all")
+      ("c" peng-bm-remove-current-buffer "remove current file")
+      ("h" helm-bm "helm bm")
+      ("RET" nil "cancel")
+      ("<return>" nil "cancel")
+      )
+  #+END_SRC
+  然后随便绑定到一个按键就是啦：
+  #+BEGIN_SRC elisp
+    (global-set-key (kbd "C-c t") 'hydra-local-bookmark-menu/body)
+  #+END_SRC

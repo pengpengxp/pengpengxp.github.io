@@ -1,0 +1,42 @@
+/* -------------------------------------------------------------------------- */
+/* for layout */
+body {
+font-family: Arial;
+margin: 0;
+}
+
+div.main {
+display: flex;
+/* flex-direction: row-reverse; */
+}
+
+div.nav {
+width: 10%;
+border:solid thin silver;
+margin:1ex;
+border-radius:1rem;
+}
+
+div.nav.li {
+margin:1rem;
+}
+
+div.article {
+width: 90%;
+margin: 0.5rem;
+}
+
+h1 {
+text-align: center;
+}
+
+li {
+margin-bottom:.6rem;
+}
+
+time {
+background-color: silver;
+display: table;
+margin: 0.5rem;
+}
+

@@ -1,0 +1,1843 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-18 一 16:43 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>python进阶笔记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">python进阶笔记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org1286acb">1. Collections</a>
+<ul>
+<li><a href="#orgfeb3020">1.1. <span class="todo TODO">TODO</span> defaultdict 这儿没懂</a></li>
+<li><a href="#orgfe58e23">1.2. counter</a></li>
+<li><a href="#org575bb26">1.3. deque</a></li>
+<li><a href="#org16f9f49">1.4. namedtuple</a></li>
+<li><a href="#orgec0fbec">1.5. enum.Enum</a></li>
+</ul>
+</li>
+<li><a href="#orga9b7f3b">2. lambda</a></li>
+<li><a href="#tuidaoshi">3. 推导式</a></li>
+<li><a href="#org263f0b3">4. 上下文管理</a></li>
+<li><a href="#org96ff175">5. 装钸器</a></li>
+<li><a href="#org4cc8950">6. 函数式编程</a>
+<ul>
+<li><a href="#org1f57083">6.1. Map</a></li>
+<li><a href="#org6871f9a">6.2. Filter</a></li>
+<li><a href="#orgede05b7">6.3. Reduce</a></li>
+</ul>
+</li>
+<li><a href="#org4cb8ebc">7. set 数据结构</a></li>
+<li><a href="#orgf1658b8">8. 三元运算符</a></li>
+<li><a href="#org46089b4">9. Global</a></li>
+<li><a href="#mutable_or_unmutable">10. 可变对象和不可变对象</a>
+<ul>
+<li><a href="#org9149096">10.1. 总结可变类型和不可变类型</a></li>
+</ul>
+</li>
+<li><a href="#orgb625af3">11. python实用命令</a>
+<ul>
+<li><a href="#org33d8232">11.1. 共享文件目录</a></li>
+<li><a href="#org5905ce2">11.2. 脚本性能分析</a></li>
+<li><a href="#orgbf34335">11.3. CSV转换为json</a></li>
+<li><a href="#orgc396aa8">11.4. 列表辗平</a></li>
+<li><a href="#org288c880">11.5. 一行式的构造器</a></li>
+<li><a href="#org6e6344f">11.6. 命令行下编译py文件</a></li>
+</ul>
+</li>
+<li><a href="#org0048e56">12. 对象自省</a>
+<ul>
+<li><a href="#org6401ca9">12.1. dir</a></li>
+<li><a href="#org12ed21f">12.2. type和id</a></li>
+<li><a href="#orge089b5c">12.3. inspect</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1286acb" class="outline-2">
+<h2 id="org1286acb"><span class="section-number-2">1</span> Collections</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orgfeb3020" class="outline-3">
+<h3 id="orgfeb3020"><span class="section-number-3">1.1</span> <span class="todo TODO">TODO</span> defaultdict <a href="#orgb20b311">这儿没懂</a></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+它可以在初始化时设置数据的类型，感觉有点像 <code>C++</code> 中的 <code>&lt;list&gt;</code> 这些
+容器一样。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> defaultdict
+
+    <span style="color: #8fbc8f;">colours</span> = (
+        (<span style="color: #ffa500;">'Yasoob'</span>, <span style="color: #ffa500;">'Yellow'</span>),
+        (<span style="color: #ffa500;">'Ali'</span>, <span style="color: #ffa500;">'Blue'</span>),
+        (<span style="color: #ffa500;">'Arham'</span>, <span style="color: #ffa500;">'Green'</span>),
+        (<span style="color: #ffa500;">'Ali'</span>, <span style="color: #ffa500;">'Black'</span>),
+        (<span style="color: #ffa500;">'Yasoob'</span>, <span style="color: #ffa500;">'Red'</span>),
+        (<span style="color: #ffa500;">'Ahmed'</span>, <span style="color: #ffa500;">'Silver'</span>),
+    )
+
+    <span style="color: #8fbc8f;">favourite_colours</span> = defaultdict(<span style="color: #b0c4de;">list</span>)
+
+    <span style="color: PaleYellow;">for</span> name, colour <span style="color: PaleYellow;">in</span> colours:
+        favourite_colours[name].append(colour)
+
+    <span style="color: PaleYellow;">print</span>(favourite_colours)
+</pre>
+</div>
+
+<p>
+上面的例子用dict应该这样写：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> defaultdict
+
+    <span style="color: #8fbc8f;">colours</span> = (
+        (<span style="color: #ffa500;">'Yasoob'</span>, <span style="color: #ffa500;">'Yellow'</span>),
+        (<span style="color: #ffa500;">'Ali'</span>, <span style="color: #ffa500;">'Blue'</span>),
+        (<span style="color: #ffa500;">'Arham'</span>, <span style="color: #ffa500;">'Green'</span>),
+        (<span style="color: #ffa500;">'Ali'</span>, <span style="color: #ffa500;">'Black'</span>),
+        (<span style="color: #ffa500;">'Yasoob'</span>, <span style="color: #ffa500;">'Red'</span>),
+        (<span style="color: #ffa500;">'Ahmed'</span>, <span style="color: #ffa500;">'Silver'</span>),
+    )
+
+    <span style="color: #8fbc8f;">favourite_colours</span> = <span style="color: #b0c4de;">dict</span>()
+
+    <span style="color: #8fbc8f;">favourite_colours</span>[<span style="color: #ffa500;">'xie'</span>] = []
+    favourite_colours[<span style="color: #ffa500;">'xie'</span>].append(<span style="color: #ffa500;">'peng'</span>)
+
+    <span style="color: PaleYellow;">for</span> name, colour <span style="color: PaleYellow;">in</span> colours:
+        <span style="color: #8fbc8f;">favourite_colours</span>[name] = []
+        favourite_colours[name].append(colour)
+
+    <span style="color: PaleYellow;">print</span>(favourite_colours)
+</pre>
+</div>
+
+<p>
+另外，对一个键进行嵌套赋值时，dict会出异常：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">d</span> = <span style="color: #b0c4de;">dict</span>()
+    d[<span style="color: #ffa500;">'xie'</span>][<span style="color: #ffa500;">'peng'</span>] = <span style="color: #ffa500;">'hi'</span>
+</pre>
+</div>
+
+<p>
+使用defaultdict可以解决。这个代码硬是没看懂。 <a id="orgb20b311"></a>
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">import</span> collections
+    <span style="color: #8fbc8f;">tree</span> = <span style="color: PaleYellow;">lambda</span>: collections.defaultdict(tree)
+    <span style="color: #8fbc8f;">some_dict</span> = tree()
+    some_dict[<span style="color: #ffa500;">'colours'</span>][<span style="color: #ffa500;">'favourite'</span>] = <span style="color: #ffa500;">"yellow"</span>
+    <span style="color: PaleYellow;">print</span> some_dict
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfe58e23" class="outline-3">
+<h3 id="orgfe58e23"><span class="section-number-3">1.2</span> counter</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+我看reference，它是dict的一个子类。键对应的就是需要统计的元素，值就
+是它的个数。迭代器中的元素可以使用counter来统计个数，counter还可以
+用其它的 <code>mapping</code> 或者 <code>counter</code> 来初始化。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> Counter
+
+     <span style="color: #8fbc8f;">colours</span> = (
+         (<span style="color: #ffa500;">'Yasoob'</span>, <span style="color: #ffa500;">'Yellow'</span>),
+         (<span style="color: #ffa500;">'Ali'</span>, <span style="color: #ffa500;">'Blue'</span>),
+         (<span style="color: #ffa500;">'Arham'</span>, <span style="color: #ffa500;">'Green'</span>),
+         (<span style="color: #ffa500;">'Ali'</span>, <span style="color: #ffa500;">'Black'</span>),
+         (<span style="color: #ffa500;">'Yasoob'</span>, <span style="color: #ffa500;">'Red'</span>),
+         (<span style="color: #ffa500;">'Ahmed'</span>, <span style="color: #ffa500;">'Silver'</span>),
+     )
+
+     <span style="color: #8fbc8f;">favs</span> = Counter(name <span style="color: PaleYellow;">for</span> name, colour <span style="color: PaleYellow;">in</span> colours)
+     <span style="color: PaleYellow;">print</span>(favs)
+</pre>
+</div>
+
+<p>
+统计一个文件中的行：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> Counter
+     <span style="color: PaleYellow;">with</span> <span style="color: #b0c4de;">open</span>(<span style="color: #ffa500;">'/tmp/kk.txt'</span>, <span style="color: #ffa500;">'rb'</span>) <span style="color: PaleYellow;">as</span> f:
+         <span style="color: #8fbc8f;">line_count</span> = Counter(f)
+     <span style="color: PaleYellow;">print</span>(line_count)
+</pre>
+</div>
+
+<p>
+统计一个字符串：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> Counter
+
+     <span style="color: #8fbc8f;">c</span> = Counter(<span style="color: #ffa500;">'xxxxxxie'</span>)
+     <span style="color: PaleYellow;">print</span> c
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org575bb26" class="outline-3">
+<h3 id="org575bb26"><span class="section-number-3">1.3</span> deque</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+双端队列
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> deque
+
+     <span style="color: #8fbc8f;">d</span> = deque()
+     d.append(1)
+     d.append(2)
+     d.append(3)
+     <span style="color: PaleYellow;">print</span> d
+
+     <span style="color: #8fbc8f;">d</span> = deque(<span style="color: #b0c4de;">range</span>(5))
+     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">len</span>(d))
+     <span style="color: PaleYellow;">print</span>(d)
+
+     <span style="color: PaleYellow;">print</span> d.popleft()
+     <span style="color: PaleYellow;">print</span> d.pop()
+     <span style="color: PaleYellow;">print</span> d
+</pre>
+</div>
+
+<p>
+它可以限制队列的大小，超出限制大小时，队列的另一端的数据会被挤出去，
+另外，还可以使用extend来用列表扩展队列：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> deque
+
+     <span style="color: #8fbc8f;">d</span> = deque(maxlen=10)
+     <span style="color: PaleYellow;">for</span> i <span style="color: PaleYellow;">in</span> <span style="color: #b0c4de;">range</span>(10):
+         d.append(i)
+
+     <span style="color: PaleYellow;">print</span> d
+
+     d.append(11)
+     <span style="color: PaleYellow;">print</span> d
+     d.appendleft(12)
+     <span style="color: PaleYellow;">print</span> d
+
+     d.extend([8, 8, 8])
+     <span style="color: PaleYellow;">print</span> d
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org16f9f49" class="outline-3">
+<h3 id="org16f9f49"><span class="section-number-3">1.4</span> namedtuple</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+命名元组和元组一样，都是不可变的。但是你可以不用索引来访问其中的元
+素，可以像字典一样去访问它。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> namedtuple
+
+     <span style="color: #8fbc8f;">Animal</span> = namedtuple(<span style="color: #ffa500;">'Animal'</span>, <span style="color: #ffa500;">'name age type'</span>)
+     <span style="color: #8fbc8f;">perry</span> = Animal(name=<span style="color: #ffa500;">"perry"</span>, age=31, <span style="color: #b0c4de;">type</span>=<span style="color: #ffa500;">"cat"</span>)
+
+     <span style="color: PaleYellow;">print</span>(perry)
+     <span style="color: PaleYellow;">print</span> perry.name
+     <span style="color: PaleYellow;">print</span> perry.age
+
+     <span style="color: #8fbc8f;">d</span> = {<span style="color: #ffa500;">'xie'</span>: <span style="color: #ffa500;">'peng'</span>}
+     <span style="color: PaleYellow;">print</span> d[<span style="color: #ffa500;">'xie'</span>]
+     <span style="color: PaleYellow;">print</span> d.get(<span style="color: #ffa500;">'xie'</span>)
+</pre>
+</div>
+
+<p>
+元组的属性值是不可变的，下面的代码会出问题：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> namedtuple
+
+     <span style="color: #8fbc8f;">test</span> = namedtuple(<span style="color: #ffa500;">'test'</span>, <span style="color: #ffa500;">'name age'</span>)
+     <span style="color: #8fbc8f;">d</span> = test(name=<span style="color: #ffa500;">'xiepeng'</span>, age=27)
+     <span style="color: #8fbc8f;">d.age</span> = 1
+</pre>
+</div>
+
+<p>
+命名元组很轻量，和元组占用差不多的内存。它比字典更快。
+</p>
+
+<p>
+它也可以通过索引来访问元素，所以它其实是向后兼容元组的。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> namedtuple
+
+     <span style="color: #8fbc8f;">Animal</span> = namedtuple(<span style="color: #ffa500;">'Animal'</span>, <span style="color: #ffa500;">'name age type'</span>)
+     <span style="color: #8fbc8f;">perry</span> = Animal(name=<span style="color: #ffa500;">"perry"</span>, age=31, <span style="color: #b0c4de;">type</span>=<span style="color: #ffa500;">"cat"</span>)
+     <span style="color: PaleYellow;">print</span>(perry[0])
+     <span style="color: PaleYellow;">print</span>(perry[1])
+</pre>
+</div>
+
+<p>
+命名元组还可以转换为字典：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> namedtuple
+
+
+     <span style="color: #8fbc8f;">test</span> = namedtuple(<span style="color: #ffa500;">'test'</span>, <span style="color: #ffa500;">'name age'</span>)
+
+     <span style="color: #8fbc8f;">a</span> = test(name=<span style="color: #ffa500;">'xie'</span>, age=27)
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">type</span>(a)
+     <span style="color: PaleYellow;">print</span> a
+     <span style="color: #8fbc8f;">d</span> = a._asdict()
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">type</span>(d)
+     <span style="color: PaleYellow;">print</span> d
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgec0fbec" class="outline-3">
+<h3 id="orgec0fbec"><span class="section-number-3">1.5</span> enum.Enum</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">-*- coding: utf-8; -*-</span>
+     <span style="color: PaleYellow;">from</span> collections <span style="color: PaleYellow;">import</span> namedtuple
+     <span style="color: PaleYellow;">from</span> enum <span style="color: PaleYellow;">import</span> Enum
+
+     <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">Species</span>(Enum):
+         <span style="color: #8fbc8f;">cat</span> = 1
+         <span style="color: #8fbc8f;">dog</span> = 2
+         <span style="color: #8fbc8f;">horse</span> = 3
+         <span style="color: #8fbc8f;">aardvark</span> = 4
+         <span style="color: #8fbc8f;">butterfly</span> = 5
+         <span style="color: #8fbc8f;">owl</span> = 6
+         <span style="color: #8fbc8f;">platypus</span> = 7
+         <span style="color: #8fbc8f;">dragon</span> = 8
+         <span style="color: #8fbc8f;">unicorn</span> = 9
+         <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#20381;&#27425;&#31867;&#25512;</span>
+
+         <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#20294;&#25105;&#20204;&#24182;&#19981;&#24819;&#20851;&#24515;&#21516;&#19968;&#29289;&#31181;&#30340;&#24180;&#40836;&#65292;&#25152;&#20197;&#25105;&#20204;&#21487;&#20197;&#20351;&#29992;&#19968;&#20010;&#21035;&#21517;</span>
+         <span style="color: #8fbc8f;">kitten</span> = 1  <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">(&#35793;&#32773;&#27880;&#65306;&#24188;&#23567;&#30340;&#29483;&#21674;)</span>
+         <span style="color: #8fbc8f;">puppy</span> = 2   <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">(&#35793;&#32773;&#27880;&#65306;&#24188;&#23567;&#30340;&#29399;&#29399;)</span>
+
+     <span style="color: #8fbc8f;">Animal</span> = namedtuple(<span style="color: #ffa500;">'Animal'</span>, <span style="color: #ffa500;">'name age type'</span>)
+     <span style="color: #8fbc8f;">perry</span> = Animal(name=<span style="color: #ffa500;">"Perry"</span>, age=31, <span style="color: #b0c4de;">type</span>=Species.cat)
+     <span style="color: #8fbc8f;">drogon</span> = Animal(name=<span style="color: #ffa500;">"Drogon"</span>, age=4, <span style="color: #b0c4de;">type</span>=Species.dragon)
+     <span style="color: #8fbc8f;">tom</span> = Animal(name=<span style="color: #ffa500;">"Tom"</span>, age=75, <span style="color: #b0c4de;">type</span>=Species.cat)
+     <span style="color: #8fbc8f;">charlie</span> = Animal(name=<span style="color: #ffa500;">"Charlie"</span>, age=2, <span style="color: #b0c4de;">type</span>=Species.kitten)
+
+     <span style="color: PaleYellow;">print</span> charlie.<span style="color: #b0c4de;">type</span> == tom.<span style="color: #b0c4de;">type</span>
+     <span style="color: PaleYellow;">print</span> charlie.<span style="color: #b0c4de;">type</span>
+
+     <span style="color: PaleYellow;">print</span> Species(1)
+     <span style="color: PaleYellow;">print</span> Species[<span style="color: #ffa500;">'cat'</span>]
+     <span style="color: PaleYellow;">print</span> Species.cat
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga9b7f3b" class="outline-2">
+<h2 id="orga9b7f3b"><span class="section-number-2">2</span> lambda</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+和elisp一样，它就是匿名函数。其函数原型如下：
+</p>
+<pre class="example">
+    lambda 参数:操作(参数)
+</pre>
+
+<p>
+例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">add</span> = <span style="color: PaleYellow;">lambda</span> x, y: x + y
+
+    <span style="color: PaleYellow;">print</span> add(2, 3)
+</pre>
+</div>
+
+<p>
+排序时的key函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">a</span> = [(1, 2), (4, 1), (9, 10), (13, -3)]
+    a.sort(key=<span style="color: PaleYellow;">lambda</span> x: x[1])
+    <span style="color: PaleYellow;">print</span> a
+
+    a.sort(key=<span style="color: PaleYellow;">lambda</span> x: x[0])
+    <span style="color: PaleYellow;">print</span> a
+
+    <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">sorted</span>(a, key=<span style="color: PaleYellow;">lambda</span> x: x[1])
+
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">list1</span> = [9, 7, 5]
+    <span style="color: #8fbc8f;">list2</span> = [10, 8, 6]
+
+    <span style="color: #8fbc8f;">data</span> = <span style="color: #b0c4de;">zip</span>(list1, list2)
+    <span style="color: PaleYellow;">print</span> data
+    data.sort()
+    <span style="color: PaleYellow;">print</span> data
+    <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'================'</span>
+    <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">zip</span>(*data)
+    <span style="color: #8fbc8f;">list1</span>, <span style="color: #8fbc8f;">list2</span> = <span style="color: #b0c4de;">map</span>(<span style="color: PaleYellow;">lambda</span> t: <span style="color: #b0c4de;">list</span>(t), <span style="color: #b0c4de;">zip</span>(*data))
+    <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'################'</span>
+    <span style="color: PaleYellow;">print</span> list1
+    <span style="color: PaleYellow;">print</span> list2
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbb3837e" class="outline-2">
+<h2 id="tuidaoshi"><a id="orgbb3837e"></a><span class="section-number-2">3</span> 推导式</h2>
+<div class="outline-text-2" id="text-tuidaoshi">
+<p>
+集合推导式
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">squared</span> = {x**2 <span style="color: PaleYellow;">for</span> x <span style="color: PaleYellow;">in</span> [1, 1, 2]}
+    <span style="color: PaleYellow;">print</span>(squared)
+</pre>
+</div>
+
+<p>
+列表推导式：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">multiples</span> = [i <span style="color: PaleYellow;">for</span> i <span style="color: PaleYellow;">in</span> <span style="color: #b0c4de;">range</span>(30) <span style="color: PaleYellow;">if</span> i % 3 <span style="color: PaleYellow;">is</span> 0]
+    <span style="color: PaleYellow;">print</span>(multiples)
+
+    <span style="color: #8fbc8f;">squared</span> = []
+    <span style="color: PaleYellow;">for</span> x <span style="color: PaleYellow;">in</span> <span style="color: #b0c4de;">range</span>(10):
+        squared.append(x**2)
+    <span style="color: PaleYellow;">print</span> squared
+
+    <span style="color: #8fbc8f;">squared2</span> = [x**2 <span style="color: PaleYellow;">for</span> x <span style="color: PaleYellow;">in</span> <span style="color: #b0c4de;">range</span>(10)]
+    <span style="color: PaleYellow;">print</span> squared2
+</pre>
+</div>
+
+<p>
+字典推导式：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">mcase</span> = {<span style="color: #ffa500;">'a'</span>: 10, <span style="color: #ffa500;">'b'</span>: 34, <span style="color: #ffa500;">'A'</span>: 7, <span style="color: #ffa500;">'Z'</span>: 3}
+
+    <span style="color: #8fbc8f;">mcase_frequency</span> = {
+        k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0)
+        <span style="color: PaleYellow;">for</span> k <span style="color: PaleYellow;">in</span> mcase.keys()
+    }
+    <span style="color: PaleYellow;">print</span> mcase_frequency
+</pre>
+</div>
+
+<p>
+可以使用来对换一个字典的键值：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">d</span> = {
+        <span style="color: #ffa500;">'xie'</span>: <span style="color: #ffa500;">'peng'</span>,
+        <span style="color: #ffa500;">'hi'</span>: <span style="color: #ffa500;">'hao'</span>
+    }
+
+    <span style="color: PaleYellow;">print</span> d
+    <span style="color: PaleYellow;">print</span> {v: k <span style="color: PaleYellow;">for</span> k, v <span style="color: PaleYellow;">in</span> d.items()}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org263f0b3" class="outline-2">
+<h2 id="org263f0b3"><span class="section-number-2">4</span> 上下文管理</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+使用with进行上下文管理，非常方便：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">with</span> <span style="color: #b0c4de;">open</span>(<span style="color: #ffa500;">'xxx'</span>, <span style="color: #ffa500;">'rb'</span>) <span style="color: PaleYellow;">as</span> f:
+        f.read()
+        ...
+</pre>
+</div>
+
+<p>
+可以自己定义上下文管理器：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">File</span>(<span style="color: #b0c4de;">object</span>):
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, filename, method):
+            <span style="color: PaleYellow;">self</span>.file_obj = <span style="color: #b0c4de;">open</span>(filename, method)
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__enter__</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.file_obj
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__exit__</span>(<span style="color: PaleYellow;">self</span>, <span style="color: #b0c4de;">type</span>, value, traceback):
+            <span style="color: PaleYellow;">self</span>.file_obj.close()
+
+
+    <span style="color: PaleYellow;">with</span> File(<span style="color: #ffa500;">'/tmp/kk.txt'</span>, <span style="color: #ffa500;">'r'</span>) <span style="color: PaleYellow;">as</span> f:
+        <span style="color: PaleYellow;">print</span> f.read()
+</pre>
+</div>
+
+<p>
+它真的起作用了！
+</p>
+
+<p>
+大概的过程：
+</p>
+<ol class="org-ol">
+<li><code>with</code> 先暂存下 <code>__exit__</code> 方法。</li>
+<li>调用 <code>__enter__</code> 方法，把它的返回值赋给 <code>f</code> 。</li>
+<li>通过f执行对应的操作。</li>
+<li>最后 <code>with</code> 语句调用 <code>__exit__</code> 做后续处理，这里就是直接关闭文件
+句柄。</li>
+</ol>
+
+<p>
+下面我们来看下 <code>__exit__</code> 的其它几个参数，如果在 <code>with</code> 执行的时候发
+生了异常，它会将异常的 <code>type, value, traceback</code> 都传递给 <code>__exit__</code>
+。让它来处理异常。两种情况：
+</p>
+<ol class="org-ol">
+<li>如果 <code>__exit__</code> 返回的是True，那么这个异常就被优雅地处理了。</li>
+<li>如果 <code>exit__</code> 返回的是True以外的任何东西，那么这个异常将被 <code>with</code>
+语句抛出。</li>
+</ol>
+
+
+<p>
+下面这个例子我们就自己handle了错误：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">File</span>(<span style="color: #b0c4de;">object</span>):
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, file_name, method):
+            <span style="color: PaleYellow;">self</span>.file_obj = <span style="color: #b0c4de;">open</span>(file_name, method)
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__enter__</span>(<span style="color: PaleYellow;">self</span>):
+            <span style="color: PaleYellow;">return</span> <span style="color: PaleYellow;">self</span>.file_obj
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__exit__</span>(<span style="color: PaleYellow;">self</span>, <span style="color: #b0c4de;">type</span>, value, traceback):
+
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"Exception has been handled"</span>)
+            <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">type</span>
+            <span style="color: PaleYellow;">print</span> value
+            <span style="color: PaleYellow;">print</span> traceback
+
+            <span style="color: PaleYellow;">self</span>.file_obj.close()
+            <span style="color: PaleYellow;">return</span> <span style="color: #7fffd4;">True</span>
+
+    <span style="color: PaleYellow;">with</span> File(<span style="color: #ffa500;">'demo.txt'</span>, <span style="color: #ffa500;">'w'</span>) <span style="color: PaleYellow;">as</span> opened_file:
+        opened_file.undefined_function()
+</pre>
+</div>
+
+<p>
+还可以使用生成器和装钸器来实现上下文管理。Python有个contextlib模块专
+门用于这个目的。我们可以使用一个生成器函数来实现一个上下文管理器，而
+不是使用一个类。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> contextlib <span style="color: PaleYellow;">import</span> contextmanager
+
+    <span style="color: #00ff00;">@contextmanager</span>
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">open_file</span>(name):
+        <span style="color: #8fbc8f;">f</span> = <span style="color: #b0c4de;">open</span>(name, <span style="color: #ffa500;">'w'</span>)
+        <span style="color: PaleYellow;">yield</span> f
+        f.close()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org96ff175" class="outline-2">
+<h2 id="org96ff175"><span class="section-number-2">5</span> 装钸器</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+在python中，函数是对象。可以进行赋值等操作：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">-*- coding: utf-8; -*-</span>
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">hi</span>(name=<span style="color: #ffa500;">"yasoob"</span>):
+        <span style="color: PaleYellow;">return</span> <span style="color: #ffa500;">"hi "</span> + name
+
+    <span style="color: PaleYellow;">print</span>(hi())
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">output: 'hi yasoob'</span>
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25105;&#20204;&#29978;&#33267;&#21487;&#20197;&#23558;&#19968;&#20010;&#20989;&#25968;&#36171;&#20540;&#32473;&#19968;&#20010;&#21464;&#37327;&#65292;&#27604;&#22914;</span>
+    <span style="color: #8fbc8f;">greet</span> = hi
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25105;&#20204;&#36825;&#37324;&#27809;&#26377;&#22312;&#20351;&#29992;&#23567;&#25324;&#21495;&#65292;&#22240;&#20026;&#25105;&#20204;&#24182;&#19981;&#26159;&#22312;&#35843;&#29992;hi&#20989;&#25968;</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#32780;&#26159;&#22312;&#23558;&#23427;&#25918;&#22312;greet&#21464;&#37327;&#37324;&#22836;&#12290;&#25105;&#20204;&#23581;&#35797;&#36816;&#34892;&#19979;&#36825;&#20010;</span>
+
+    <span style="color: PaleYellow;">print</span>(greet())
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">output: 'hi yasoob'</span>
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#22914;&#26524;&#25105;&#20204;&#21024;&#25481;&#26087;&#30340;hi&#20989;&#25968;&#65292;&#30475;&#30475;&#20250;&#21457;&#29983;&#20160;&#20040;&#65281;</span>
+    <span style="color: PaleYellow;">del</span> hi
+    <span style="color: PaleYellow;">print</span>(hi())
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">outputs: NameError</span>
+
+    <span style="color: PaleYellow;">print</span>(greet())
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">outputs: 'hi yasoob'</span>
+
+</pre>
+</div>
+
+<p>
+函数中可以定义函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">out_fun</span>():
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">inter_fun1</span>():
+            <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'in inter_fun1'</span>
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">inter_fun2</span>():
+            <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'in inter_fun2'</span>
+        
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'begin out_fun'</span>
+
+        inter_fun1()
+        inter_fun2()
+    
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'end_out_fun'</span>
+    
+    out_fun()
+</pre>
+</div>
+
+<p>
+内部的 <code>inter_fun1</code> 和 <code>inter_fun2</code> 在外部是不可见的。
+</p>
+
+<p>
+函数也可以返回函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">re_fun</span>():
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'in re_fun'</span>
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">hi</span>():
+            <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'hi this is the returned function'</span>
+            <span style="color: PaleYellow;">return</span> <span style="color: #ffa500;">'this is return value'</span>
+
+        <span style="color: PaleYellow;">return</span> hi
+
+
+    <span style="color: #8fbc8f;">a</span> = re_fun()
+
+    <span style="color: PaleYellow;">print</span> a()
+</pre>
+</div>
+
+<p>
+函数也可以做为参数传递给另一个函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a</span>(fun):
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'a will call function %s'</span> % fun.<span style="color: #b0c4de;">__name__</span>
+        fun()
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">hi</span>():
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'hi'</span>
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">hello</span>():
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'hello,world'</span>
+    
+    a(hi)
+    a(hello)
+</pre>
+</div>
+
+<p>
+装钸器就是让你能在你的函数的前后去执行代码：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_new_decorator</span>(a_func):
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapTheFunction</span>():
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work before executing a_func()"</span>)
+
+            a_func()
+
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work after executing a_func()"</span>)
+
+        <span style="color: PaleYellow;">return</span> wrapTheFunction
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_function_requiring_decoration</span>():
+        <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am the function which needs some decoration to remove my foul smell"</span>)
+
+    a_function_requiring_decoration()
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">outputs: "I am the function which needs some decoration to remove my foul smell"</span>
+
+    <span style="color: #8fbc8f;">a_function_requiring_decoration</span> = a_new_decorator(a_function_requiring_decoration)
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">now a_function_requiring_decoration is wrapped by wrapTheFunction()</span>
+
+    a_function_requiring_decoration()
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">outputs:I am doing some boring work before executing a_func()</span>
+    <span style="color: #cd5c5c;">#        </span><span style="color: #cd5c5c;">I am the function which needs some decoration to remove my foul smell</span>
+    <span style="color: #cd5c5c;">#        </span><span style="color: #cd5c5c;">I am doing some boring work after executing a_func()</span>
+</pre>
+</div>
+
+<p>
+如果我们按照python中的语法来写的话，这个装钸器应该是这样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_new_decorator</span>(a_func):
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapTheFunction</span>():
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work before executing a_func()"</span>)
+
+            a_func()
+
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work after executing a_func()"</span>)
+
+        <span style="color: PaleYellow;">return</span> wrapTheFunction
+
+    <span style="color: #00ff00;">@a_new_decorator</span>
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_function_requiring_decoration</span>():
+        <span style="color: #ffa500;">"""Hey you! Decorate me!"""</span>
+        <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am the function which needs some decoration to "</span>
+              <span style="color: #ffa500;">"remove my foul smell"</span>)
+
+    a_function_requiring_decoration()
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">outputs: I am doing some boring work before executing a_func()</span>
+    <span style="color: #cd5c5c;">#         </span><span style="color: #cd5c5c;">I am the function which needs some decoration to remove my foul smell</span>
+    <span style="color: #cd5c5c;">#         </span><span style="color: #cd5c5c;">I am doing some boring work after executing a_func()</span>
+
+    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">the @a_new_decorator is just a short way of saying:</span>
+    <span style="color: #8fbc8f;">a_function_requiring_decoration</span> = a_new_decorator(a_function_requiring_decoration)
+</pre>
+</div>
+
+<p>
+但是这样会有一个问题：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_new_decorator</span>(a_func):
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapTheFunction</span>():
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work before executing a_func()"</span>)
+
+            a_func()
+
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work after executing a_func()"</span>)
+
+        <span style="color: PaleYellow;">return</span> wrapTheFunction
+
+    <span style="color: #00ff00;">@a_new_decorator</span>
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_function_requiring_decoration</span>():
+        <span style="color: #ffa500;">"""Hey you! Decorate me!"""</span>
+        <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am the function which needs some decoration to "</span>
+              <span style="color: #ffa500;">"remove my foul smell"</span>)
+
+    a_function_requiring_decoration()
+    <span style="color: #8fbc8f;">a_function_requiring_decoration</span> = a_new_decorator(a_function_requiring_decoration)
+
+    <span style="color: PaleYellow;">print</span> a_function_requiring_decoration.<span style="color: #b0c4de;">__name__</span>
+</pre>
+</div>
+
+<p>
+最后函数的 <code>__name__</code> 属性被覆盖了。这并不是我们想要的。python中有一
+个 <code>functools.wraps</code> 可以用来解决这个问题，他可以保留被装钸的函数的
+<code>__name__</code> 和 <code>__doc__</code> 属性。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_new_decorator</span>(a_func):
+        <span style="color: #00ff00;">@wraps</span>(a_func)
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapTheFunction</span>():
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work before executing a_func()"</span>)
+            a_func()
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am doing some boring work after executing a_func()"</span>)
+        <span style="color: PaleYellow;">return</span> wrapTheFunction
+
+    <span style="color: #00ff00;">@a_new_decorator</span>
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">a_function_requiring_decoration</span>():
+        <span style="color: #ffa500;">"""Hey yo! Decorate me!"""</span>
+        <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">"I am the function which needs some decoration to "</span>
+              <span style="color: #ffa500;">"remove my foul smell"</span>)
+
+    <span style="color: PaleYellow;">print</span>(a_function_requiring_decoration.<span style="color: #b0c4de;">__name__</span>)
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: a_function_requiring_decoration</span>
+</pre>
+</div>
+
+<p>
+web应用认证的时候常用装钸器来这样写：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">requires_auth</span>(f):
+        <span style="color: #00ff00;">@wraps</span>(f)
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">decorated</span>(*args, **kwargs):
+            <span style="color: #8fbc8f;">auth</span> = request.authorization
+            <span style="color: PaleYellow;">if</span> <span style="color: PaleYellow;">not</span> auth <span style="color: PaleYellow;">or</span> <span style="color: PaleYellow;">not</span> check_auth(auth.username, auth.password):
+                authenticate()
+            <span style="color: PaleYellow;">return</span> f(*args, **kwargs)
+        <span style="color: PaleYellow;">return</span> decorated
+</pre>
+</div>
+
+<p>
+记录日志也是常使用的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">logit</span>(func):
+        <span style="color: #00ff00;">@wraps</span>(func)
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">with_logging</span>(*args, **kwargs):
+            <span style="color: PaleYellow;">print</span>(func.<span style="color: #b0c4de;">__name__</span> + <span style="color: #ffa500;">" was called"</span>)
+            <span style="color: PaleYellow;">return</span> func(*args, **kwargs)
+        <span style="color: PaleYellow;">return</span> with_logging
+
+    <span style="color: #00ff00;">@logit</span>
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">addition_func</span>(x):
+       <span style="color: #ffa500;">"""Do some math."""</span>
+       <span style="color: PaleYellow;">return</span> x + x
+
+
+    <span style="color: #8fbc8f;">result</span> = addition_func(4)
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: addition_func was called</span>
+</pre>
+</div>
+
+<p>
+如果需要定义带参数的装钸器：
+</p>
+<div class="org-src-container">
+<pre class="src src-python" id="org9b7c2c7">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">logit</span>(logfile=<span style="color: #ffa500;">'out.log'</span>):
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">logging_decorator</span>(func):
+            <span style="color: #00ff00;">@wraps</span>(func)
+            <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapped_function</span>(*args, **kwargs):
+                <span style="color: #8fbc8f;">log_string</span> = func.<span style="color: #b0c4de;">__name__</span> + <span style="color: #ffa500;">" was called"</span>
+                <span style="color: PaleYellow;">print</span>(log_string)
+                <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#25171;&#24320;logfile&#65292;&#24182;&#20889;&#20837;&#20869;&#23481;</span>
+                <span style="color: PaleYellow;">with</span> <span style="color: #b0c4de;">open</span>(logfile, <span style="color: #ffa500;">'a'</span>) <span style="color: PaleYellow;">as</span> opened_file:
+                    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#29616;&#22312;&#23558;&#26085;&#24535;&#25171;&#21040;&#25351;&#23450;&#30340;logfile</span>
+                    opened_file.write(log_string + <span style="color: #ffa500;">'\n'</span>)
+                <span style="color: PaleYellow;">return</span> func(*args, **kwargs)
+            <span style="color: PaleYellow;">return</span> wrapped_function
+        <span style="color: PaleYellow;">return</span> logging_decorator
+
+    <span style="color: #00ff00;">@logit</span>()
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">myfunc1</span>():
+        <span style="color: PaleYellow;">pass</span>
+
+    myfunc1()
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: myfunc1 was called</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#29616;&#22312;&#19968;&#20010;&#21483;&#20570; out.log &#30340;&#25991;&#20214;&#20986;&#29616;&#20102;&#65292;&#37324;&#38754;&#30340;&#20869;&#23481;&#23601;&#26159;&#19978;&#38754;&#30340;&#23383;&#31526;&#20018;</span>
+
+    <span style="color: #00ff00;">@logit</span>(logfile=<span style="color: #ffa500;">'func2.log'</span>)
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">myfunc2</span>():
+        <span style="color: PaleYellow;">pass</span>
+
+    myfunc2()
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: myfunc2 was called</span>
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#29616;&#22312;&#19968;&#20010;&#21483;&#20570; func2.log &#30340;&#25991;&#20214;&#20986;&#29616;&#20102;&#65292;&#37324;&#38754;&#30340;&#20869;&#23481;&#23601;&#26159;&#19978;&#38754;&#30340;&#23383;&#31526;&#20018;</span>
+</pre>
+</div>
+
+<p>
+可以类似于这样来理解：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    logit(logfile=<span style="color: #ffa500;">'out.log'</span>)(myfunc1)
+    logit(logfile=<span style="color: #ffa500;">'func2.log'</span>)(myfunc2)
+</pre>
+</div>
+
+<p>
+函数式编程，函数是第一类数据，可以做为参数传递，也可以做为返回值。所
+以这种带参数的装钸器执行就是类似于上面这样。
+</p>
+
+<p>
+装钸器还可以实现为一个类，这就更灵活啦。比如上面的记录日志的同时，还
+想再发邮件给管理员。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+
+
+    <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">clogit</span>(<span style="color: #b0c4de;">object</span>):
+        <span style="color: #ffa500;">"""Documentation for clogit</span>
+
+<span style="color: #ffa500;">        """</span>
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, logfile):
+            <span style="color: #b0c4de;">super</span>(clogit, <span style="color: PaleYellow;">self</span>).__init__()
+            <span style="color: PaleYellow;">self</span>.logfile = logfile
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__call__</span>(<span style="color: PaleYellow;">self</span>, func):
+            <span style="color: #00ff00;">@wraps</span>(func)
+            <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapper</span>(*args, **kargs):
+                <span style="color: #8fbc8f;">logstring</span> = <span style="color: #ffa500;">'function %s is called'</span> % func.<span style="color: #b0c4de;">__name__</span>
+                func(*args, **kargs)
+
+                <span style="color: PaleYellow;">with</span> <span style="color: #b0c4de;">open</span>(<span style="color: PaleYellow;">self</span>.logfile, <span style="color: #ffa500;">'wb'</span>) <span style="color: PaleYellow;">as</span> f:
+                    f.write(logstring)
+
+                <span style="color: PaleYellow;">self</span>.notify(logstring)
+
+            <span style="color: PaleYellow;">return</span> wrapper
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">notify</span>(<span style="color: PaleYellow;">self</span>, s):
+            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">clogit not notify</span>
+            <span style="color: PaleYellow;">pass</span>
+
+    <span style="color: #00ff00;">@clogit</span>(<span style="color: #ffa500;">'/tmp/logit'</span>)
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">function_test</span>():
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'this is function'</span>
+
+    function_test()
+</pre>
+</div>
+
+<p>
+这个感觉有点像：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    clogit(<span style="color: #ffa500;">'/tmp/logit'</span>).__call__(function_test)
+</pre>
+</div>
+
+<p>
+它比 <a href="#org9b7c2c7">嵌套函数的方式</a> 更整洁一些。而且扩展也很方便啦，现在我们可以定义
+一个可以发邮件的子类：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+
+
+    <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">clogit</span>(<span style="color: #b0c4de;">object</span>):
+        <span style="color: #ffa500;">"""Documentation for clogit</span>
+
+<span style="color: #ffa500;">        """</span>
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, logfile=<span style="color: #ffa500;">'/tmp/logit'</span>):
+            <span style="color: #b0c4de;">super</span>(clogit, <span style="color: PaleYellow;">self</span>).__init__()
+            <span style="color: PaleYellow;">self</span>.logfile = logfile
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__call__</span>(<span style="color: PaleYellow;">self</span>, func):
+            <span style="color: #00ff00;">@wraps</span>(func)
+            <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">wrapper</span>(*args, **kargs):
+                <span style="color: #8fbc8f;">logstring</span> = <span style="color: #ffa500;">'function %s is called'</span> % func.<span style="color: #b0c4de;">__name__</span>
+                func(*args, **kargs)
+
+                <span style="color: PaleYellow;">with</span> <span style="color: #b0c4de;">open</span>(<span style="color: PaleYellow;">self</span>.logfile, <span style="color: #ffa500;">'wb'</span>) <span style="color: PaleYellow;">as</span> f:
+                    f.write(logstring)
+
+                <span style="color: PaleYellow;">self</span>.notify(logstring)
+
+            <span style="color: PaleYellow;">return</span> wrapper
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">notify</span>(<span style="color: PaleYellow;">self</span>, s):
+            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">clogit not notify</span>
+            <span style="color: PaleYellow;">pass</span>
+
+
+    <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">email_andlogit</span>(clogit):
+        <span style="color: #ffa500;">"""Documentation for email_andlogit</span>
+
+<span style="color: #ffa500;">        """</span>
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, emailaddress=<span style="color: #ffa500;">'xxx@gmail.com'</span>, *args, **kargs):
+            <span style="color: #b0c4de;">super</span>(email_andlogit, <span style="color: PaleYellow;">self</span>).__init__(*args, **kargs)
+            <span style="color: PaleYellow;">self</span>.emailaddress = emailaddress
+
+        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">notify</span>(<span style="color: PaleYellow;">self</span>, s):
+            <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'I will email %s to %s'</span> % (s, <span style="color: PaleYellow;">self</span>.emailaddress)
+            <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">send email here</span>
+
+    <span style="color: #00ff00;">@email_andlogit</span>(<span style="color: #ffa500;">'peng@gmail.com'</span>, <span style="color: #ffa500;">'/tmp/emaillogit'</span>)
+    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">test_email</span>():
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'this is function'</span>
+    test_email()
+</pre>
+</div>
+
+<p>
+这样， <code>email_andlogit</code> 不仅会写入日志，还会发送一封邮件给管理员啦。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4cc8950" class="outline-2">
+<h2 id="org4cc8950"><span class="section-number-2">6</span> 函数式编程</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org1f57083" class="outline-3">
+<h3 id="org1f57083"><span class="section-number-3">6.1</span> Map</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+把一个函数映射到一个列表中的每个元素。一般和匿名函数（lambda）结合
+使用。先看看下面这段代码：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">items</span> = [1, 2, 3, 4, 5]
+     <span style="color: #8fbc8f;">squared</span> = []
+     <span style="color: PaleYellow;">for</span> i <span style="color: PaleYellow;">in</span> items:
+         squared.append(i**2)
+     <span style="color: PaleYellow;">print</span> squared
+</pre>
+</div>
+
+<p>
+修改为map后可以这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">items</span> = [1, 2, 3, 4, 5]
+     <span style="color: #8fbc8f;">squared</span> = <span style="color: #b0c4de;">list</span>(<span style="color: #b0c4de;">map</span>(<span style="color: PaleYellow;">lambda</span> x: x**2, items))
+     <span style="color: PaleYellow;">print</span> squared
+</pre>
+</div>
+
+<p>
+map不仅可以应用到全是数据的列表，还可以应用到全是函数的列表上（因为
+函数式编程可以把函数也理解为数据，所以其实这两种也没差）：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">-*- coding: utf-8; -*-</span>
+     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">add</span>(x):
+         <span style="color: PaleYellow;">return</span> x + x
+
+     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">multi</span>(x):
+         <span style="color: PaleYellow;">return</span> x * x
+
+     <span style="color: #8fbc8f;">f</span> = [add, multi]
+
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#36825;&#37324;&#30340;x&#20998;&#21035;&#23601;&#26159;&#19978;&#38754;&#30340;&#20989;&#25968;&#65292;&#19968;&#20010;&#19968;&#20010;&#36827;&#34892;&#35843;&#29992;&#32599;</span>
+     <span style="color: #8fbc8f;">value</span> = <span style="color: #b0c4de;">map</span>(<span style="color: PaleYellow;">lambda</span> x: x(3), f)
+
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#36825;&#37324;&#21152;&#20102;list&#36716;&#25442;&#65292;&#20026;&#20102;&#20860;&#23481;&#65292;python2&#20013;map&#36820;&#22238;&#21015;&#34920;&#65292;3&#20013;map&#36820;&#22238;&#36845;&#20195;&#22120;&#12290;</span>
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">list</span>(value)
+</pre>
+</div>
+
+<p>
+map写一个把所有list中字符串转换为首字母大写其它小写的形式：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">f</span>(x):
+         <span style="color: #8fbc8f;">a</span> = x.lower()
+         <span style="color: PaleYellow;">return</span> <span style="color: #ffa500;">''</span>.join(a[0].upper()) + a[1:]
+
+     <span style="color: #8fbc8f;">b</span> = [<span style="color: #ffa500;">'XIE'</span>, <span style="color: #ffa500;">'sd'</span>, <span style="color: #ffa500;">'PDFJAF'</span>, <span style="color: #ffa500;">'aaaaaaaasdfasDSFFDSAF'</span>]
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">map</span>(f, b)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6871f9a" class="outline-3">
+<h3 id="org6871f9a"><span class="section-number-3">6.2</span> Filter</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+和map类似的用法，它可以过滤满足条件的元素出来。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">num</span> = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+     <span style="color: #8fbc8f;">value</span> = <span style="color: #b0c4de;">filter</span>(<span style="color: PaleYellow;">lambda</span> x: x &lt; 0, num)
+     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">list</span>(value))
+</pre>
+</div>
+
+<p>
+filter是内置函数，它类似于for，但是更快。但是大部分情况下，还是 <a href="#tuidaoshi">推导式</a>  更优雅一些。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgede05b7" class="outline-3">
+<h3 id="orgede05b7"><span class="section-number-3">6.3</span> Reduce</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+reduce把一个函数作用在一个序列[x1, x2, x3&#x2026;]上，这个函数必须接收两
+个参数，reduce把结果继续和序列的下一个元素做累积计算，其效果就是：
+</p>
+<pre class="example">
+     reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)
+</pre>
+
+<p>
+这样的话写一个求和的函数可以这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">a</span> = <span style="color: #b0c4de;">range</span>(201)
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">reduce</span>((<span style="color: PaleYellow;">lambda</span> x, y: x + y), a)
+</pre>
+</div>
+
+<p>
+reduce求积：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fun</span>(l):
+         <span style="color: PaleYellow;">return</span> <span style="color: #b0c4de;">reduce</span>((<span style="color: PaleYellow;">lambda</span> x, y:x * y), l)
+
+     <span style="color: PaleYellow;">print</span> fun(<span style="color: #b0c4de;">range</span>(1, 5))
+</pre>
+</div>
+
+<p>
+把 <code>[1, 3, 5, 7, 9]</code> 转换为13579可以这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">a</span> = [1, 3, 5, 7, 9]
+     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">f</span>(x, y):
+         <span style="color: PaleYellow;">return</span> x * 10 + y
+
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">reduce</span>(f, a)
+</pre>
+</div>
+
+<p>
+因为字符串也是一个序列，那么加上map我们可以这样搞一个字符串转换数字
+的函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fn</span>(x, y):
+         <span style="color: PaleYellow;">return</span> x * 10 + y
+
+     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">char2num</span>(s):
+         <span style="color: PaleYellow;">return</span> {<span style="color: #ffa500;">'0'</span>: 0,
+                 <span style="color: #ffa500;">'1'</span>: 1,
+                 <span style="color: #ffa500;">'2'</span>: 2,
+                 <span style="color: #ffa500;">'3'</span>: 3,
+                 <span style="color: #ffa500;">'4'</span>: 4,
+                 <span style="color: #ffa500;">'5'</span>: 5,
+                 <span style="color: #ffa500;">'6'</span>: 6,
+                 <span style="color: #ffa500;">'7'</span>: 7,
+                 <span style="color: #ffa500;">'8'</span>: 8,
+                 <span style="color: #ffa500;">'9'</span>: 9,
+         }[s]
+
+     <span style="color: #8fbc8f;">a</span> = <span style="color: #b0c4de;">map</span>(char2num, <span style="color: #ffa500;">'13579'</span>)
+     <span style="color: #8fbc8f;">b</span> = <span style="color: #b0c4de;">reduce</span>(fn, <span style="color: #b0c4de;">map</span>(char2num, <span style="color: #ffa500;">'13579'</span>))
+     <span style="color: PaleYellow;">print</span> a
+     <span style="color: PaleYellow;">print</span> b
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">type</span>(b)
+</pre>
+</div>
+
+<p>
+整合起来弄成一个函数就可以是这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">mystr2int</span>(s):
+         <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fn</span>(x, y):
+             <span style="color: PaleYellow;">return</span> x * 10 + y
+
+         <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">char2num</span>(s):
+             <span style="color: PaleYellow;">return</span> {<span style="color: #ffa500;">'0'</span>: 0,
+                     <span style="color: #ffa500;">'1'</span>: 1,
+                     <span style="color: #ffa500;">'2'</span>: 2,
+                     <span style="color: #ffa500;">'3'</span>: 3,
+                     <span style="color: #ffa500;">'4'</span>: 4,
+                     <span style="color: #ffa500;">'5'</span>: 5,
+                     <span style="color: #ffa500;">'6'</span>: 6,
+                     <span style="color: #ffa500;">'7'</span>: 7,
+                     <span style="color: #ffa500;">'8'</span>: 8,
+                     <span style="color: #ffa500;">'9'</span>: 9,
+             }[s]
+
+         <span style="color: PaleYellow;">return</span> <span style="color: #b0c4de;">reduce</span>(fn, <span style="color: #b0c4de;">map</span>(char2num, s))
+
+     <span style="color: #8fbc8f;">result</span> = mystr2int(<span style="color: #ffa500;">'13579'</span>)
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">type</span>(result), result
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4cb8ebc" class="outline-2">
+<h2 id="org4cb8ebc"><span class="section-number-2">7</span> set 数据结构</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+它与列表类似，但是不能包括重复的值，它可以根据一个list来初始化：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">l</span> = [1, 2, 3, 4, 1]
+    <span style="color: #8fbc8f;">s</span> = <span style="color: #b0c4de;">set</span>(l)
+    <span style="color: PaleYellow;">print</span> l
+    <span style="color: PaleYellow;">print</span> s
+</pre>
+</div>
+
+<p>
+求交集：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">a</span> = <span style="color: #b0c4de;">set</span>([1, 2, 3, 4, 5])
+    <span style="color: #8fbc8f;">b</span> = <span style="color: #b0c4de;">set</span>([3, 5])
+    <span style="color: PaleYellow;">print</span> a.intersection(b)
+    <span style="color: PaleYellow;">print</span> a &amp; b
+</pre>
+</div>
+
+<p>
+差集：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">a</span> = <span style="color: #b0c4de;">set</span>([1, 2, 3, 4, 5])
+    <span style="color: #8fbc8f;">b</span> = <span style="color: #b0c4de;">set</span>([3, 5])
+
+    <span style="color: PaleYellow;">print</span> a - b
+</pre>
+</div>
+
+<p>
+并集：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">a</span> = <span style="color: #b0c4de;">set</span>([1, 2, 3, 4, 5])
+    <span style="color: #8fbc8f;">b</span> = <span style="color: #b0c4de;">set</span>([3, 5, 7])
+
+    <span style="color: PaleYellow;">print</span> a | b
+</pre>
+</div>
+
+<p>
+还可以使用符号来创建集合：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">a_set</span> = {<span style="color: #ffa500;">'red'</span>, <span style="color: #ffa500;">'blue'</span>}
+    <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">type</span>(a_set)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf1658b8" class="outline-2">
+<h2 id="orgf1658b8"><span class="section-number-2">8</span> 三元运算符</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+看看下面的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">a</span> = <span style="color: #7fffd4;">True</span>
+    <span style="color: #8fbc8f;">b</span> = <span style="color: #ffa500;">'yes'</span> <span style="color: PaleYellow;">if</span> a <span style="color: PaleYellow;">else</span> <span style="color: #ffa500;">'no'</span>
+    <span style="color: PaleYellow;">print</span> b
+
+    <span style="color: #8fbc8f;">a</span> = <span style="color: #7fffd4;">False</span>
+    <span style="color: #8fbc8f;">b</span> = <span style="color: #ffa500;">'yes'</span> <span style="color: PaleYellow;">if</span> a <span style="color: PaleYellow;">else</span> <span style="color: #ffa500;">'no'</span>
+    <span style="color: PaleYellow;">print</span> b
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org46089b4" class="outline-2">
+<h2 id="org46089b4"><span class="section-number-2">9</span> Global</h2>
+<div class="outline-text-2" id="text-9">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fun</span>():
+        <span style="color: PaleYellow;">global</span> s
+        <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'this is in fun'</span>
+        <span style="color: #8fbc8f;">s</span> = <span style="color: #b0c4de;">range</span>(10)
+
+    fun()
+    <span style="color: PaleYellow;">print</span> s
+</pre>
+</div>
+
+<p>
+在函数内部使用 <code>global</code> 来声明变量，可以使该变量在全局范围都能访问。
+但是一般应该避免这样使用。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0549305" class="outline-2">
+<h2 id="mutable_or_unmutable"><a id="org0549305"></a><span class="section-number-2">10</span> 可变对象和不可变对象</h2>
+<div class="outline-text-2" id="text-mutable_or_unmutable">
+<p>
+可变就是可以被改动，不可变就是常量的意思。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #8fbc8f;">foo</span> = [<span style="color: #ffa500;">'hi'</span>]
+    <span style="color: #8fbc8f;">bar</span> = foo
+    <span style="color: #8fbc8f;">foo</span> += [<span style="color: #ffa500;">'xie'</span>]
+    <span style="color: PaleYellow;">print</span> bar
+</pre>
+</div>
+
+<p>
+其实这两个变量指向的只是同一个东西啦。再来看下下面的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">add_to</span>(num, target=[]):
+        target.append(num)
+        <span style="color: PaleYellow;">return</span> target
+
+    <span style="color: PaleYellow;">print</span> add_to(1)
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: [1]</span>
+
+    <span style="color: PaleYellow;">print</span> add_to(2)
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: [2]</span>
+
+    <span style="color: PaleYellow;">print</span> add_to(3)
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Output: [3]</span>
+</pre>
+</div>
+
+<p>
+为什么这里还是一个累加的结果呢？因为在python中当函数被定义时，默认参
+数只会被调用一次，而不是每次调用都会重新运算。 <b>应该永远不要定义一个
+可变类型的默认参数，除非你知道你在做什么。</b> 上面的例子要实现不累加的
+效果，需要这样做：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">addto</span>(num, target=<span style="color: #7fffd4;">None</span>):
+        <span style="color: PaleYellow;">if</span> target == <span style="color: #7fffd4;">None</span>:
+            <span style="color: #8fbc8f;">target</span> = []
+
+        target.append(num)
+        <span style="color: PaleYellow;">return</span> target
+
+    <span style="color: PaleYellow;">print</span> addto(1)
+    <span style="color: PaleYellow;">print</span> addto(2)
+    <span style="color: PaleYellow;">print</span> addto(3)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org9149096" class="outline-3">
+<h3 id="org9149096"><span class="section-number-3">10.1</span> 总结可变类型和不可变类型</h3>
+<div class="outline-text-3" id="text-10-1">
+<p>
+不可变类型：
+</p>
+<ol class="org-ol">
+<li>元组 <code>(1, 2)</code> 。</li>
+<li><p>
+string ：可以发现s和d都是指向的同一块内存。但是使用切片后，c其实
+是copy出来。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">        <span style="color: #8fbc8f;">s</span> = <span style="color: #ffa500;">'xiepeng'</span>
+        <span style="color: #8fbc8f;">d</span> = <span style="color: #ffa500;">'xiepeng'</span>
+        <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">id</span>(s)
+        <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">id</span>(d)
+
+        <span style="color: #8fbc8f;">c</span> = d[1:]
+        <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">id</span>(s)
+        <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">id</span>(d)
+        <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">id</span>(c)
+</pre>
+</div></li>
+<li><p>
+int和float。77在内存中是同一块地址，但是 <code>j+1</code> ，其实也是执行了
+copy的动作。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">int_test</span>(): 
+            <span style="color: #8fbc8f;">i</span> = 77
+            <span style="color: #8fbc8f;">j</span> = 77
+            <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">id</span>(77))                    <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">140396579590760</span>
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'i id:'</span> + <span style="color: #b0c4de;">str</span>(<span style="color: #b0c4de;">id</span>(i)))      <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">i id:140396579590760</span>
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'j id:'</span> + <span style="color: #b0c4de;">str</span>(<span style="color: #b0c4de;">id</span>(j)))      <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">j id:140396579590760</span>
+            <span style="color: PaleYellow;">print</span> i <span style="color: PaleYellow;">is</span> j                     <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">True</span>
+            <span style="color: #8fbc8f;">j</span> = j + 1
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'new i id:'</span> + <span style="color: #b0c4de;">str</span>(<span style="color: #b0c4de;">id</span>(i)))  <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">new i id:140396579590760</span>
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'new j id:'</span> + <span style="color: #b0c4de;">str</span>(<span style="color: #b0c4de;">id</span>(j)))  <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">new j id:140396579590736</span>
+            <span style="color: PaleYellow;">print</span> i <span style="color: PaleYellow;">is</span> j                     <span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">False</span>
+
+        <span style="color: PaleYellow;">if</span> <span style="color: #b0c4de;">__name__</span> == <span style="color: #ffa500;">'__main__'</span>:
+            int_test()
+</pre>
+</div></li>
+</ol>
+
+<p>
+可变类型：
+</p>
+<ol class="org-ol">
+<li><p>
+dict和list。因为是可变的，所以这里没有拷贝。都是在一块内存里搞事
+情。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">        <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">dict_test</span>():
+            <span style="color: #8fbc8f;">a</span> = {}
+            <span style="color: #8fbc8f;">b</span> = a
+            <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">id</span>(a))
+            <span style="color: #8fbc8f;">a</span>[<span style="color: #ffa500;">'a'</span>] = <span style="color: #ffa500;">'hhhh'</span>
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'id a:'</span> + <span style="color: #b0c4de;">str</span>(<span style="color: #b0c4de;">id</span>(a)))
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'a:'</span> + <span style="color: #b0c4de;">str</span>(a))
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'id b:'</span> + <span style="color: #b0c4de;">str</span>(<span style="color: #b0c4de;">id</span>(b)))
+            <span style="color: PaleYellow;">print</span>(<span style="color: #ffa500;">'b:'</span> + <span style="color: #b0c4de;">str</span>(b))
+
+        <span style="color: PaleYellow;">if</span> <span style="color: #b0c4de;">__name__</span> == <span style="color: #ffa500;">'__main__'</span>:
+            dict_test()
+</pre>
+</div></li>
+</ol>
+
+<p>
+python函数调用的时候都是传递的引用，也就是传给函数原变量实际指向的
+内存空间。如果传递的是可变参数类型，在函数内部对该参数的修改会体现
+到原变量上。这样会出问题的。应避免。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fun</span>(x):
+         <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'inter x = %s before modify'</span> % x
+         x.append(5)
+         <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'inter x = %s after modify'</span> % x
+    
+
+     <span style="color: #8fbc8f;">a</span> = [1,2,3]
+     <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'outer before function a = %s'</span> % a
+     fun(a)
+     <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'outer after function a = %s'</span> % a
+</pre>
+</div>
+
+<p>
+换成不可变类型的string表现就正常了。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fun</span>(x):
+         <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'inter x = [{s}] before modify'</span>.<span style="color: #b0c4de;">format</span>(s=x)
+         <span style="color: #8fbc8f;">x</span> = x + <span style="color: #ffa500;">'end'</span>
+         <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'inter x = [{s}] after modify'</span>.<span style="color: #b0c4de;">format</span>(s=x)
+
+
+     <span style="color: #8fbc8f;">a</span> = <span style="color: #ffa500;">'xie'</span>
+     <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'outer before function a = [{s}]'</span>.<span style="color: #b0c4de;">format</span>(s=a)
+     fun(a)
+     <span style="color: PaleYellow;">print</span> <span style="color: #ffa500;">'outer after function a = [{s}]'</span>.<span style="color: #b0c4de;">format</span>(s=a)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb625af3" class="outline-2">
+<h2 id="orgb625af3"><span class="section-number-2">11</span> python实用命令</h2>
+<div class="outline-text-2" id="text-11">
+</div>
+<div id="outline-container-org33d8232" class="outline-3">
+<h3 id="org33d8232"><span class="section-number-3">11.1</span> 共享文件目录</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+直接进到目录这样：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Python 2</span>
+    python -m SimpleHTTPServer
+
+    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">Python 3</span>
+    python -m http.server
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5905ce2" class="outline-3">
+<h3 id="org5905ce2"><span class="section-number-3">11.2</span> 脚本性能分析</h3>
+<div class="outline-text-3" id="text-11-2">
+<div class="org-src-container">
+<pre class="src src-python">     python -m cProfile main.py
+</pre>
+</div>
+
+<p>
+备注：cProfile是一个比profile更快的实现，因为它是用c写的
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbf34335" class="outline-3">
+<h3 id="orgbf34335"><span class="section-number-3">11.3</span> CSV转换为json</h3>
+<div class="outline-text-3" id="text-11-3">
+<div class="org-src-container">
+<pre class="src src-sh">     python -c <span style="color: #ffa500;">"import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc396aa8" class="outline-3">
+<h3 id="orgc396aa8"><span class="section-number-3">11.4</span> 列表辗平</h3>
+<div class="outline-text-3" id="text-11-4">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">import</span> itertools
+
+     <span style="color: #8fbc8f;">a_list</span> = [[1, 2], [3, 4], [5, 6]]
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">list</span>(itertools.chain.from_iterable(a_list))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org288c880" class="outline-3">
+<h3 id="org288c880"><span class="section-number-3">11.5</span> 一行式的构造器</h3>
+<div class="outline-text-3" id="text-11-5">
+<p>
+避免类初始化时大量重复的赋值语句:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">-*- coding: utf-8; -*-</span>
+     <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">A</span>(<span style="color: #b0c4de;">object</span>):
+         <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, a, b, c, d, e, f):
+             <span style="color: PaleYellow;">self</span>.__dict__.update({k: v <span style="color: PaleYellow;">for</span> k, v <span style="color: PaleYellow;">in</span> <span style="color: #b0c4de;">locals</span>().items() <span style="color: PaleYellow;">if</span> k != <span style="color: #ffa500;">'self'</span>})
+
+
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#19978;&#38754;&#35821;&#21477;&#21487;&#20197;&#24037;&#20316;&#35831;&#30475;&#19979;&#38754;&#65306;</span>
+     <span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">C</span>(<span style="color: #b0c4de;">object</span>):
+         <span style="color: #ffa500;">"""Documentation for C</span>
+
+<span style="color: #ffa500;">         """</span>
+         <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">__init__</span>(<span style="color: PaleYellow;">self</span>, a, b, c=4):
+             <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">locals</span>()
+             <span style="color: PaleYellow;">print</span> <span style="color: PaleYellow;">self</span>.__dict__
+             <span style="color: PaleYellow;">self</span>.__dict__.update({<span style="color: #ffa500;">'z'</span>: 15})
+             <span style="color: PaleYellow;">print</span> <span style="color: PaleYellow;">self</span>.__dict__
+             <span style="color: PaleYellow;">print</span> <span style="color: PaleYellow;">self</span>.z
+
+     <span style="color: #8fbc8f;">c</span> = C(2, 3)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6e6344f" class="outline-3">
+<h3 id="org6e6344f"><span class="section-number-3">11.6</span> 命令行下编译py文件</h3>
+<div class="outline-text-3" id="text-11-6">
+<div class="org-src-container">
+<pre class="src src-sh">     python -m py_compile file.py file2.py
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org0048e56" class="outline-2">
+<h2 id="org0048e56"><span class="section-number-2">12</span> 对象自省</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+自省(introspection)，在计算机编程领域里，是指在运行时来判断一个对象
+的类型的能力。它是Python的强项之一。Python中所有一切都是一个对象，而
+且我们可以仔细勘察那些对象。
+</p>
+</div>
+
+<div id="outline-container-org6401ca9" class="outline-3">
+<h3 id="org6401ca9"><span class="section-number-3">12.1</span> dir</h3>
+<div class="outline-text-3" id="text-12-1">
+<p>
+它返回一个列表，列出了一个对象的所有属性和方法。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">a</span> = 2
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">dir</span>(a)
+</pre>
+</div>
+
+<p>
+如果不传入参数，它可以返回当前作用域的所有名字：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #8fbc8f;">a</span> = 2
+     <span style="color: #8fbc8f;">b</span> = a
+     <span style="color: PaleYellow;">print</span> <span style="color: #b0c4de;">dir</span>()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org12ed21f" class="outline-3">
+<h3 id="org12ed21f"><span class="section-number-3">12.2</span> type和id</h3>
+<div class="outline-text-3" id="text-12-2">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">type</span>(1))
+     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">type</span>(<span style="color: #ffa500;">'xiepeng'</span>))
+
+     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">id</span>(7))
+     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">id</span>(7))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge089b5c" class="outline-3">
+<h3 id="orge089b5c"><span class="section-number-3">12.3</span> inspect</h3>
+<div class="outline-text-3" id="text-12-3">
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: PaleYellow;">import</span> inspect
+     <span style="color: PaleYellow;">print</span>(inspect.getmembers(<span style="color: #b0c4de;">str</span>))
+     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">dir</span>(<span style="color: #b0c4de;">str</span>))
+</pre>
+</div>
+
+<p>
+它和 <code>dir</code> 的区别是dir只返回 <code>name</code> ，而它返回 <code>(name, attribute)</code>
+这样的元组。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2019-03-18 一 16:43</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

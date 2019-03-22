@@ -1,0 +1,51 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-07-11-静态动态语言弱类型强类型语言
+
+* 静态类型和动态类型语言
+  + 静态语言
+    1) 每个变量（在编译的时候）就必须绑定到一个类型
+    2) 每个变量应该绑定到一个对象。不过这个是可选的，如果没有绑定到一
+       个对象，则认为它是 =null= 。
+    3) 一旦变量被绑定到某个类型（被声明了），它就只能被绑定到这个类型
+       的对象。把它绑定到这个类型之外的对象会抛出异常。
+
+  + 动态语言
+    1) 每个变量都只能绑定到一个对象。
+    2) 变量在执行时通过赋值语句被绑定到对象上。
+    3) 在执行时，也可以把一个变量绑定到不同类型的对象上。
+
+  + python是动态类型的语言，java是静态类型的语言
+
+* 弱类型和强类型语言 
+  + 弱类型语言
+    1) 变量可以被隐式转换为 *不相关* 的类型。
+    2) 大多数语言都允许在 *相关地类型* 之前进行隐式地类型转换。不相关的
+       类型比如数字和字符串这两种。在弱类型语言中，下面这几句在弱类型语
+       言中是可行的：
+       #+BEGIN_EXAMPLE
+         a  = 9
+         b = "9"
+         c = concatenate(a, b)  // produces "99"
+         d = add(a, b)          // produces 18
+       #+END_EXAMPLE
+       最后两句会分别把a转为字符串，b转为数字。
+  + 强类型语言
+    1) 上面的例子最后两句会抛异常，必须进行隐式类型转换：
+       #+BEGIN_EXAMPLE
+         a = 9
+         b = "9"
+         c = concatenate(  str(a),  b)
+         d = add(a,  int(b)  )
+       #+END_EXAMPLE
+  + java和python都是强类型的语言，perl是弱类型的语言
+
+* 隐形类型声明和显示类型声明
+  + 显示类型声明：必须显示地进行类型声明
+  + 隐形类型声明：类型声明不是必须的，隐形类型声明使用 =type
+    inferencing= 来决定变量的类型。
+
+* 参考资料
+  [[https://pythonconquerstheuniverse.wordpress.com/2009/10/03/static-vs-dynamic-typing-of-programming-languages/][Static vs. dynamic typing of programming languages]]

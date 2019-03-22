@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+
+    <title>处理版本号</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h1>处理版本号</h1>
+        <p>在文件hello-0.1.tar.gz中数字'0.1'叫做源代码分发的版本号。
+          版本号的目的是为了标识不同的源代码分发，以便对整个开发过程进行追踪。
+          如果你使用GNU构建系统，软件包的版本号是在调用'AM_INIT_AUTOMAKE'宏的那一行指定的。
+          在hello world的例子中（参阅 <a href="Autoconf，和Automake的Hello_world例子.html">Autoconf，和 Automake 的Hello world例子</a> ），我们使用这样一行来指定版本号为0.1:
+<pre class="code">AM_INIT_AUTOMAKE(hello,0.1)</pre></p>
+
+        <p>当你发布新版本时，一定要增加版本号。
+          我们推荐也在ChangeLog中也声明新版本的发布。
+          这样，当有人在查看你的ChangeLog时，他可以看到两个指定版本中间的变化。</p>
+
+        <p>发布你当前版本，可以执行：<pre class="code">% make distcheck</pre>来编译整个分发并且应用测试用例来验证它。
+          一旦这条命令成功执行，你就可以更改configure.in文件中的版本号。
+          然后在ChangeLog文件中记录你发布新版本了。
+          接着更新NEWS文件。
+          执行：<pre class="code">% make dist</pre>，只是重新编译分发而无须等待所有测试用例重复执行。。</p>
+
+        <p>大多数的软件用两个整数来声明它们的版本号：一个主要数字和一个次要数字，两个数字由点号（.）分隔。
+          在我们的例子中，主版本号是0，次版本号是1。
+          如果你发布一个新版本，该版本包含一些新功能，或者对老版本作了一些你希望用户升级的改进时，你应当增加你的次要数字。
+          当你的改进把程序带到一个全新级别的成熟度和稳定性时，你才应该增加主要数字。
+          主要版本号为0表示你的软件还在实验阶段，还没有达到黄金发布时间。
+          当你发布1.0版本，表示告诉用户该软件已经可以作为普通用途来使用了。
+          发布2.0版本表示你的软件已经从用户的反馈中变得成熟了。</p>
+
+        <p>在发布一个新的主要版本时，先给beta测试人员发布一个预发布版本是一个好主意。
+          通常，不管前面的次要版本号是什么，版本1.0的预发布版本号都应当是0.90。
+          当发布了0.90版本，所有的开发都应当被冻结，开发者应当着重解决bugs。
+          如果预发布版本稳定了，它就成为稳定版本了。如果没有，你需要进一步发布新的bug-fexing版本：0.91, 0.92等等。</p>
+
+        <p>许多维护者喜欢发布他们代码的工作版本，这样贡献者就可以在最新的源码的基础上捐献他们的代码。
+          这些非官方版本只是给那些想要为项目做贡献的开发者的，不是面向最终用户的。
+          一般用第三个数字来给这些“非官方”版本使用。
+          不过，在正式发布版本中，请勿必只使用两位数字作为版本号，这样才能比较方便地把它们和非官方版本区分出来。
+          一个可能的连续版本号可能像下面这样：
+          <pre class="code">0.1, 0.1.1, 0.1.2, ... , 0.2, ..., 0.3, ..., 0.90, ..., 1.0</pre></p>
+
+        <p>至少把发布的正式版本都进行归档是一个不错的主意。</p>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

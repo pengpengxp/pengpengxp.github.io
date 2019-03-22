@@ -1,0 +1,106 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-11-30-快捷键切换应用程序
+
+开始使用电脑时总是使用鼠标点点点来切换应用程序。后来我发现 =Atl+Tab=
+可以很大的提升效率。最后我发现如果把常用应用程序绑到固定的快捷键上可以
+省去更多的时间，还可以把每个程序都全屏。
+
+在windows上有 =AutoHotkey= 。 Mac上我之前使用过 =karabiner= 。今天写一
+写Linux下的 =wmctrl= 。* wmctrl来控制窗口
+
+* 安装
+  ubuntu 16.04和Debain中可以直接使用apt来安装：
+  #+BEGIN_SRC sh
+    sudo apt-get install wmctrl
+  #+END_SRC
+
+* 简单使用
+  对于wmctrl来说，它可以“看到”当前打开的所有窗口（window）。可以这样查看
+  一下当前所有的window：
+  #+BEGIN_SRC sh :results output
+wmctrl -xlG
+  #+END_SRC
+
+  #+RESULTS:
+  #+begin_example
+0x03200010  0 3    58   1600 846  Navigator.Firefox-esr  pengpengxp-thinkpad karabiner - Google 搜索 - Mozilla Firefox
+0x0120013a  0 0    0    1600 900  emacs.Emacs           pengpengxp-thinkpad emacs@pengpengxp-thinkpad
+0x02400003  0 0    0    1600 900  lilyterm.Lilyterm     pengpengxp-thinkpad /home/pengpengxp - lilyterm
+0x04c0013a  3 0    0    1600 900  emacs.Emacs           pengpengxp-thinkpad emacs@pengpengxp-thinkpad
+0x02400d4b  3 0    0    1600 900  lilyterm.Lilyterm     pengpengxp-thinkpad /home/pengpengxp - lilyterm
+0x0320012f  3 0    58   1600 846  Navigator.Firefox-esr  pengpengxp-thinkpad Mozilla Firefox Start Page - Mozilla Firefox
+  #+end_example
+  
+  最简单的使用方法就是在打开对应的应用程序后，直接使用下面的命令来激活：
+  #+BEGIN_SRC sh
+    wmctrl -a emacs
+    wmctrl -a firefox
+    wmctrl -a terminal
+  #+END_SRC
+  这个是根据名字来的。我最开始的时候就直接使用的这种方法。一般Gnome，KDE
+  和xfce中都有设置快捷键的地方。找到对应的地方添加快捷键绑定到该脚本中即
+  可。
+
+* 结合虚拟桌面使用
+  当我使用虚拟桌面时，上述设置就不太满虽我需求了。我一般每个桌面做的事
+  情不同，可以桌面1是在本机，桌面2可能都在远程。所以我的需求就变成了：
+  快捷键只能切换本桌面的窗口，不能切到其它桌面的窗口。
+
+  已经有人提过这样的 [[https://askubuntu.com/questions/194703/make-wmctrl-ignore-other-than-current-workspaces-windows][问题]] 了。
+  
+  最后我搞了一个这样的脚本：
+  #+BEGIN_SRC sh
+#!/bin/bash
+# only switch to the application on current screen
+
+SCREEN_W=$(xwininfo -root | sed -n 's/^  Width: \(.*\)$/\1/p')
+SCREEN_H=$(xwininfo -root | sed -n 's/^  Height: \(.*\)$/\1/p')
+
+CURRENT_DESKTOP=`wmctrl -d|grep '*'|awk '{print $1}'`
+
+
+if [ $# != 1 ];then
+    echo "usage pwmctrl emacs.Emacs"
+    exit 1
+fi 
+
+NAME=$1
+
+wmctrl -xlG | awk -v W="$SCREEN_W" -v H="$SCREEN_H" -v NAME="$NAME" -v CURRENT_DESKTOP="$CURRENT_DESKTOP" '$7==NAME && $3>=0 && $3<W && $4>=0 && $4<H && $2==CURRENT_DESKTOP {print $1}' | while read WINS; do wmctrl -ia "$WINS"; done 
+
+exit 0
+  #+END_SRC
+
+  要理解上面脚本，先得搞清楚 =wmctrl -xlg= 输出的每行的内容：
+    #+begin_example
+0x0120013a  0 0    0    1600 900  emacs.Emacs           pengpengxp-thinkpad emacs@pengpengxp-thinkpad
+  #+end_example
+  
+  我理解如下：
+
+  |------------+------------+-----+-----+------+------+----------------------------+-----------------------------------------------|
+  | 0x0120013a |          0 |   0 |   0 | 1600 |  900 | emacs.Emacs                | pengpengxp-thinkpad emacs@pengpengxp-thinkpad |
+  | 唯一标识id | 虚拟桌面号 | N/A | N/A | 宽度 | 长度 | WM_CLASS，可以匹分应用程序 | 窗口的title                                   |
+  |------------+------------+-----+-----+------+------+----------------------------+-----------------------------------------------|
+  
+  可以使用 =wmctrl -d= 找到当前桌面号（带星号的一行）。
+
+  上面的脚本就是输入一个WM_CLASS，然后找到窗口的最大长度和宽度以及当前
+  桌面号。通过awk判断是当前桌面，且宽度和长度都没有超过当前屏幕时，才
+  切换窗口。
+  
+  把上述脚本放到 =/yourpath/pwmctrl= 目录后，选择合适的按键绑到这些内
+  容就可以了：
+  #+BEGIN_EXAMPLE
+/yourpath/pwmctrl emacs.Emacs
+/yourpath/pwmctrl lilyterm.Lilyterm
+/yourpath/pwmctrl Telegram.TelegramDesktop
+/yourpath/pwmctrl google-chrome.Google-chrome
+/yourpath/pwmctrl Opera.Opera
+/yourpath/pwmctrl Navigator.Firefox-esr
+  #+END_EXAMPLE
+  
+  这样就只在当前桌面切换啦。

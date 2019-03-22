@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,xah-fly-keys">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>xah-fly-keys 使用总结</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="emacs_blog.html">Emacs Info</a></li>
+          <li><a href="../archive/before-2018-11-10/2017-06-19-my_emacs_and_lisp_wiki.html">Archived Emacs and Lisp wiki</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <h1>xah-fly-keys 使用总结</h1>
+
+        <time>2018-11-23</time>
+
+        <p>我是从 <a href="https:/github.com/emacs-evil/evil"> evil </a> 切换到 <a href="https://github.com/xahlee/xah-fly-keys">xah-fly-keys</a> 的。
+          导致这个切换的原因我在之前刚使用xah-fly-keys的时候也简单写过一篇文章来记录 <a href="../archive/before-2018-11-10/2018-06-10-从evil到xah-fly-keys.html">从evil到xah-fly-keys</a> ，简单来说就是代码写多了手痛。
+        </p>
+
+        <p>xah-fly-keys是 <a class="sorc" href="http://xahlee.org/" data-accessed="2018-11-22">Xah Lee</a> 根据函数的使用频率，重新设置的一套快捷键绑定方式。
+          而evil，是一个在Emacs中模拟vim操作的插件。</p>
+
+      <h2>xah-fly-keys和evil对比</h2>
+
+      <ul>
+
+        <li>
+          常用命令确实好按，这应该是xah-fly-keys的<b>精髓</b>。
+            evil模拟vim的按键方式一方面是很高效，另一方面，我觉得也是一种限制。其实有时候跳出vim的框框，用emacs的方式解决问题会更高效。
+        </li>
+
+          <li>
+            xah-fly-keys使用很多emacs原生的命令，用了xah-fly-keys后，我才发现原来Emacs本生内置的功能就很强大。
+              比如以前基本不用的isearch-forward，之前主要使用swiper，但是swiper在buffer太大的时候速度是很慢的，同样的buffer使用isearch-forward速度简直像飞一样。
+              再比如<span>rectangle-mark-mode， list-matching-lines, delete-matching-lines, delete-non-matching-lines, copy-to-register, append-to-register</span>等等。
+          </li>
+
+        <li>
+          xah-fly-keys的command模式中的按键绑定在每次从insert回到command模式时都重新绑定一次，可以保证command模式的按键几乎在任何地方都是一样的。
+        </li>
+
+        <li>
+          xah-fly-keys的insert模式基本保留原来mode中的按键绑定。不会像evil一样完全覆盖掉原mode的按键绑定。
+          <a class="sorc" href="https://emacs-china.org/t/xah-fly-keys/7702/6" data-accessed="2018-11-28">论坛里网友提醒，evil也有evil-emacs-state</a>  不过我在使用evil时，大多数时候都是在normal和insert模式下切换。几乎没有用到emacs-state。
+            原来使用evil时，基本上大多数的major-mode我都需要重新定义一下按键绑定，因为evil默认把原来major mode中的很多绑定覆盖了。
+            比如dired-mode，magit-mode，info-mode，ibuffer-mode等等中的很多按键就会被evil覆盖。
+            而在xah-fly-keys中，从command切到insert模式后，原来模式中的按键绑定一般都在，所以在xah-fly-keys中，如果使用原来的major-mode按键，基本不需要再为每个mode自定义按键了。
+        </li>
+
+        <li>
+          xah-fly-keys支持dvorak布局。
+        </li>
+
+        <hr>
+
+      <!-- </ul> -->
+      <!-- <h2>xah-fly-keys对比evil的劣势</h2> -->
+      <!-- <ul> -->
+
+        <li>
+          xah-fly-keys使用者没有evil多。至少在我看来，键盘流们使用vim的按键方式的人还是占多数。
+            所以evil的使用者应该是比xah-fly-keys多的，特别是在 <a class="sorc" href="http://spacemacs.org/" data-accessed="2018-11-26">spacemacs</a> 火了以后。
+            我也是先用的vim，然后在emacs中使用evil，到最近才开始使用xah-fly-keys的。
+        </li>
+
+        <li>
+          如果要根据不同的模式来定制不同的按键绑定，我觉得xah-fly-keys没有evil直观。
+            evil有各种模式对应的local-map，直接在不同的模式中定义对应的local-map就可以了。
+            xah-fly-keys就只有xah-fly-key-map，所以在每种模式中自定义就需要一点小技巧。
+            在 <a href="#customize">定制</a> 一节中可以看到如何定制xah-fly-keys。
+        </li>
+      </ul>
+
+      <h2>evil功能在xah-fly-keys中的对应</h2>
+
+      <div class="pengtable">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Evil</th>
+              <th>Feature</th>
+              <th>Xah-fly-keys Replacement</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><code>A</code></td>
+              <td>光标移动到到行尾，进入insert模式</td>
+              <td><code>;f</code></td>
+            </tr>
+
+            <tr>
+              <td><code>I</code></td>
+              <td>光标移动到到行尾，进入insert模式</td>
+              <td><code>hf</code></td>
+            </tr>
+
+            <tr>
+              <td><code>C</code></td>
+              <td>清除当前光标至行尾内容并进入insert模式</td>
+              <td><code>SPC g f</code>kill-line先删除当前光标到行尾内容，然后进入insert模式</td>
+            </tr>
+
+            <tr>
+              <td><code>f[char]</code></td>
+              <td>在当前行找到[char]字符然后把光标移动到字符上</td>
+              <td>使用`isearch-forward'或者直接光标左右移动，u,o一个word一个word移动出很快</td>
+            </tr>
+
+            <tr>
+              <td><code>t</code></td>
+              <td>在当前行找到[char]字符然后把光标移动到字符之前</td>
+              <td>使用`isearch-forward'或者直接光标左右移动，u,o一个word一个word移动出很快</td>
+            </tr>
+
+            <tr>
+              <td><code>dd</code></td>
+              <td>删除当前行</td>
+              <td>x(xah-cut-line-or-region)</td>
+            </tr>
+
+            <tr>
+              <td><code>df[char]</code></td>
+              <td>删除光标到最近一个[char]中的内容，包括char</td>
+              <td>暂时选中删除，或者使用e，r删除word</td>
+            </tr>
+
+            <tr>
+              <td><code>df[char]</code></td>
+              <td>删除光标到最近一个[char]中的内容，不包括char</td>
+              <td>暂时选中删除，或者使用e，r删除word</td>
+            </tr>
+
+            <tr>
+              <td> <code>vi&quot,vi(,vi{</code> </td>
+              <td>选中&quot,() , {}这些包住的内容</td>
+              <td>我使用 <a class="sorc" href="https://www.emacswiki.org/emacs/thing-edit.el" data-accessed="2018-11-26">thing-edit</a> 直接选中都不需要了</td>
+            </tr>
+
+            <tr>
+              <td>Ctrl v</td>
+              <td>矩形选择和编辑</td>
+              <td>SPC o SPC(rectangle-mark-mode)</td>
+            </tr>
+
+            <tr>
+              <td>%</td>
+              <td>在相互匹配的括号之间跳转</td>
+              <td>/(xah-goto-matching-bracket)括号，双引号，引号等等都要以跳转。</td>
+            </tr>
+
+          </tbody>
+
+          <!-- <caption align="bottom" style="margin: 10px;font-weight: bold;">Evil在xah-fly-keys中的对应功能</caption> -->
+          <caption>Evil在xah-fly-keys中的对应功能</caption>
+
+        </table>
+      </div>
+
+      <h2 id="goodfunction">xah-fly-keys中一些好用的功能</h2>
+
+      <ul>
+        <li>xah-delete-current-text-block默认绑定到g上。该命令以block为单位删除内容，其中的block是以空行为分格的。写代码的时候，相关性很强的内容都是写在一起的。直接用一个g就删除了，很方便。</li>
+        <li>
+          xah-select-block默认绑定到6上。以block为单位的选中。
+        </li>
+        <li>
+          xah-shrink-whitespaces默认绑定到w上。如果当前光标下有多个空格或者一个回车，把它们减少为一个空格。如有当前光标只有一个空格，删除该空格。如果当前光标下没有空格，插入一个空格。
+        </li>
+        <li>
+          xah-toggle-letter-case默认绑定到b上。进行大小写字母切换的，可以在大写、小写，首字母大写这几种中切换。还可以选中一个区域对整个区域进行大小写修改。
+        </li>
+        <li>
+          xah-show-kill-ring默认绑定为<kbd>Space t</kbd>。最近复制剪切过的所有记录都可以查到。
+        </li>
+        <li>
+          xah-copy-file-path默认绑定到<kbd>Space i g</kbd>。拷贝当前文件的路径，在文件buffer中可以使用。在dired-mode中也可以使用，很方便。
+        </li>
+        <li>
+          xah-open-file-at-cursor默认绑定到<kbd>Space i f</kbd>。打开当前光标下的文件，相对路径和绝对路径都支持，还支持http，还支持选择对应的行号。
+        </li>
+
+        <li>
+          xah-fly-keys的command-mode默认大写字母，特殊字符都没有绑定，所以，有些时候如果只需要输入特殊字符或者单个大写字母的时候，是不需要进入insert模式的。
+          比如输入<code>ABC&quot*{}()^$#@!</code>等。
+        </li>
+
+        <li>
+          xah-delete-backward-char-or-bracket-text默认绑定在d上，我直接绑到 <kbd>⌫ Backspace</kbd> 上了。
+          正常情况删除一个字符，如果光标前是一组括号，比如 (),&lt;&gt;,{},"", 等，删除整个括号，包括整个括号中的内容，并把这些内容都放到kill-ring中。
+          个人感觉这个应该是和xah-forward-right-bracket配合使用。这个函数就是直接把光标移动到下一个右括号后面，我把它绑定到了<kbd>Space .</kbd>上。
+        </li>
+
+        <li>
+           <a class="sorc" href="http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html" data-accessed="2018-11-27">emacs_navigating_keys_for_brackets</a> 
+            里面讲到 xah-forward-quote-smart和xah-backward-quote两个函数。前面的smart函数能跳到以""包住的内容的开头。
+          我写C时，这个功能跳字符串很方便。
+        </li>
+
+      </ul>
+
+      <h2 id="customize">定制xah-fly-keys</h2>
+      <h3>根据模式定制按键绑定</h3>
+
+        <p>command模式下的按键大部分都是根据使用频率来制定的，最常用的都绑定在一个按键上，大部份都在leader-key后再敲两下。</p>
+
+        <p>具体的定制方法 <a class="sorc" href="http://ergoemacs.org/misc/xah-fly-keys_customization.html" data-accessed="2018-11-26">杀哥写的： xah-fly-keys_customization</a>讲得很清楚了。</p>
+
+        <p>我最需要的功能是根据不同的模式把command模式下的一些按键绑定到不同的功能。比如我常用的 SPC SPC 按键，我就喜欢在org-mode和c-mode中绑定不同的按键。</p>
+
+        <p>在和Xah咨询后，终于找到正确的方法：定义一个函数，该函数在不同的模式中使用 call-interactively 来调用来同的功能。比如我的f8就是绑定到这个函数的： </p>
+
+      <pre class="emacs-lisp">(<span class="keyword">defun</span> peng-xah-fly-dot-key ()
+        <span class="string">"key `.'"</span>
+        (<span class="keyword">interactive</span>)
+        (<span class="keyword">cond</span>
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> 'c-mode) (<span class="function-name">call-interactively</span> 'hydra-cscope/body))
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> '<span class="xah-elisp-cap-variable">Info-mode</span>) (<span class="function-name">call-interactively</span> 'hydra-info/body))
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> 'dired-mode) (<span class="function-name">call-interactively</span> 'hydra-dired/body))
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> 'mhtml-mode) (<span class="function-name">call-interactively</span> 'hydra-html/body))
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> 'picture-mode) (<span class="function-name">call-interactively</span> 'hydra-artist-mode-menu/body))
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> 'artist-mode) (<span class="function-name">call-interactively</span> 'hydra-artist-mode-menu/body))
+        ((<span class="function-name">eq</span> <span class="variable-name">major-mode</span> 'ibuffer-mode) (<span class="function-name">call-interactively</span> 'hydra-ibuffer-main/body))
+        (<span class="builtin">t</span> <span class="builtin">nil</span>)))
+<span class="hl-line">              </span></pre>
+
+        <p>xah-fly-keys中有两个很重要的函数：<span>xah-fly-command-mode-init</span> 和 <span>xah-fly-insert-mode-init</span>。
+        前者在进入command mode时调用，后者在进入insert mode时调用。
+        command mode中绑定到一个按键的函数都在 <span>xah-fly-command-mode-init</span> 中重新绑定。</p>
+
+        <p>所以，直接使用define-key来修改xah-fly-key-map中的绑定是不行的，因为下次进入command-mode时， <span>xah-fly-command-mode-init</span> 又会修改这个map。 </p>
+
+        <p>最直接的方式就是改 <span>xah-fly-command-mode-init</span> 函数。我就是把这块代码拷贝出来直接在后面添加我的自定义绑定的。</p>
+
+<pre class="emacs-lisp"><span class="comment-delimiter">;; </span><span class="comment">redefine command init
+</span>(<span class="keyword">defun</span> xah-fly-command-mode-init ()
+  <span class="string">"Set command mode keys.
+Version 2017-01-21"</span>
+  (<span class="keyword">interactive</span>)
+  (xah-fly--define-keys
+   xah-fly-key-map
+   '(
+
+     <span class="comment-delimiter">;; </span><span class="comment">IMPORTANT, These keys are all dvorak keys
+</span>     (<span class="string">"~"</span> . <span class="builtin">nil</span>)
+     (<span class="string">":"</span> . <span class="builtin">nil</span>)
+
+     (<span class="string">"SPC"</span> . xah-fly-leader-key-map)
+     (<span class="string">"DEL"</span> . xah-fly-leader-key-map)
+
+     <span class="comment-delimiter">;; </span><span class="comment">("'" . xah-reformat-lines)
+</span>     (<span class="string">","</span> . xah-shrink-whitespaces)
+     (<span class="string">"-"</span> . xah-cycle-hyphen-underscore-space)
+     (<span class="string">"."</span> . xah-backward-kill-word)
+     (<span class="string">";"</span> . xah-comment-dwim)
+     (<span class="string">"/"</span> . hippie-expand)
+     (<span class="string">"\\"</span> . <span class="builtin">nil</span>)
+     (<span class="string">"="</span> . xah-forward-equal-sign)
+     (<span class="string">"["</span> . xah-backward-punct )
+     (<span class="string">"]"</span> . xah-forward-punct)
+
+     (<span class="string">"1"</span> . xah-extend-selection)
+     (<span class="string">"2"</span> . xah-select-line)
+     (<span class="string">"3"</span> . <span class="xah-elisp-command">delete-other-windows</span>)
+     (<span class="string">"4"</span> . <span class="xah-elisp-command">split-window-below</span>)
+     (<span class="string">"5"</span> . <span class="xah-elisp-command">delete-char</span>)
+     (<span class="string">"6"</span> . xah-select-block)
+     (<span class="string">"7"</span> . xah-select-line)
+     (<span class="string">"8"</span> . xah-extend-selection)
+     (<span class="string">"9"</span> . xah-select-text-in-quote)
+     (<span class="string">"0"</span> . xah-pop-local-mark-ring)
+
+     (<span class="string">"a"</span> . <span class="xah-elisp-command">execute-extended-command</span>)
+     (<span class="string">"b"</span> . isearch-forward)
+     (<span class="string">"c"</span> . previous-line)
+     (<span class="string">"d"</span> . xah-beginning-of-line-or-block)
+     (<span class="string">"e"</span> . xah-delete-backward-char-or-bracket-text)
+     (<span class="string">"f"</span> . undo)
+     (<span class="string">"g"</span> . <span class="xah-elisp-command">backward-word</span>)
+     (<span class="string">"h"</span> . <span class="xah-elisp-command">backward-char</span>)
+     (<span class="string">"i"</span> . xah-delete-current-text-block)
+     (<span class="string">"j"</span> . xah-copy-line-or-region)
+     (<span class="string">"k"</span> . xah-paste-or-paste-previous)
+     (<span class="string">"l"</span> . xah-fly-insert-mode-activate-space-before)
+     (<span class="string">"m"</span> . xah-backward-left-bracket)
+     (<span class="string">"n"</span> . <span class="xah-elisp-command">forward-char</span>)
+     (<span class="string">"o"</span> . open-line)
+     (<span class="string">"p"</span> . xah-kill-word)
+     (<span class="string">"q"</span> . xah-cut-line-or-region)
+     (<span class="string">"r"</span> . <span class="xah-elisp-command">forward-word</span>)
+     (<span class="string">"s"</span> . xah-end-of-line-or-block)
+     (<span class="string">"t"</span> . next-line)
+     (<span class="string">"u"</span> . xah-fly-insert-mode-activate)
+     (<span class="string">"v"</span> . xah-forward-right-bracket)
+     (<span class="string">"w"</span> . xah-next-window-or-frame)
+     (<span class="string">"x"</span> . xah-toggle-letter-case)
+     (<span class="string">"y"</span> . set-mark-command)
+     (<span class="string">"z"</span> . xah-goto-matching-bracket)))
+
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"a"</span>) (<span class="keyword">if</span> (<span class="function-name">fboundp</span> 'counsel-M-x) 'counsel-M-x '<span class="xah-elisp-command">execute-extended-command</span> ))
+
+  <span class="comment-delimiter">;; </span><span class="comment">add by pengpengxp the key here is 'qwerty' keys.
+</span>  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"C-a"</span>) 'peng-xah-fly-C-a-key)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"C-e"</span>) 'peng-xah-fly-C-e-key)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"C-n"</span>) 'next-line)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"C-p"</span>) 'previous-line)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"&lt;C-tab&gt;"</span>) '(<span class="keyword">lambda</span> () (<span class="keyword">interactive</span>) (<span class="xah-elisp-command">switch-to-buffer</span> (<span class="function-name">other-buffer</span>))))
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"C-`"</span>) 'counsel-ibuffer)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"&lt;C-S-tab&gt;"</span>) '(<span class="keyword">lambda</span> () (<span class="keyword">interactive</span>) (<span class="xah-elisp-command">switch-to-buffer</span> (<span class="function-name">other-buffer</span>))))
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"&lt;home&gt;"</span>) '<span class="xah-elisp-command">beginning-of-defun</span>)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"&lt;end&gt;"</span>) '<span class="xah-elisp-command">end-of-defun</span>)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"C-o"</span>) 'counsel-find-file)
+
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"DEL"</span>) 'peng-xah-fly-backspace-key)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"&lt;backspace&gt;"</span>) 'peng-xah-fly-backspace-key)
+
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"m"</span>) 'ivy-switch-buffer)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"p"</span>) 'peng-counsel-git-fast)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"d"</span>) 'counsel-find-file)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"s"</span>) peng-thing-edit-map)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"x"</span>) 'peng-xah-fly-x-key)
+
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"0"</span>) 'xah-open-file-fast-ivy)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"1"</span>) 'peng-yank-symbol-name)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"2"</span>) 'peng-replace-current-symbol-with-kill-ring)
+
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"."</span>) 'peng-xah-fly-dot-key)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"`"</span>) 'xref-pop-marker-stack)
+  (<span class="function-name">define-key</span> xah-fly-key-map (<span class="function-name">kbd</span> <span class="string">"&lt;f8&gt;"</span>) 'peng-xah-fly-f8-key)
+
+  (<span class="keyword">progn</span>
+    (<span class="keyword">setq</span> xah-fly-insert-state-q <span class="builtin">nil</span> )
+    (<span class="function-name">modify-all-frames-parameters</span> (<span class="function-name">list</span> (<span class="function-name">cons</span> '<span class="variable-name">cursor-type</span> 'box))))
+
+  (<span class="keyword">setq</span> <span class="variable-name">mode-line-front-space</span> <span class="string">"C"</span>)
+  (<span class="function-name">force-mode-line-update</span>)
+  <span class="comment-delimiter">;;</span><span class="comment">
+</span>  )
+</pre>
+
+<section>
+    <div>
+      <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> 哦:)</b></p>
+    </div>
+</section>
+
+
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+      clientID: '3c74db23d6478d210434',
+      clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+      repo: 'pengpengxp.github.io',
+      owner: 'pengpengxp',
+      admin: ['pengpengxp'],
+      id: 'emacs/summary_of_xah_fly_keys.html',
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+     </div>
+
+    </div>
+
+  </body>
+
+</html>

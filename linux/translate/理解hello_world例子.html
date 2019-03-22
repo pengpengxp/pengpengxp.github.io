@@ -1,0 +1,166 @@
+
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>理解hello world例子</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div> 
+      </div>
+
+      <div class="article">
+
+        <h2 id="understanding_the_hello_world_example">理解hello world例子</h2>
+
+        <p>生成hello-0.1.tar.gz分发包后，大部分的文件都自动生成了。实际上需要开发者手动写的文件只有下面几个：</p>
+
+        <ul>
+          <li>hell.c</li>
+<pre class="code">#include &lt;stdio.h&gt;
+main()
+{ printf(<span class="string">"Howdy, world!\n"</span>);
+}</pre>
+          <li>Makefile.am</li>
+<pre class="code">bin_PROGRAMS = hello
+hello_SOURCES = hello.c</pre>
+
+          <li>configure.in</li>
+<pre class="code">AC_INIT(hello.cc)
+AM_INIT_AUTOMAKE(hello,1.0)
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_OUTPUT(Makefile)</pre>
+        </ul>
+
+          <p>本节将简单介绍下 Makefile.am 和configure.in文件。</p>
+
+          <p>Makefile.am 的语言是一种逻辑语言。它里面没有显示的执行声明。
+          只有一些用于推断可执行程序的关系声明。
+          另一方面，configure.in中的语言是程序性的，它里面的每一行都是一个能被执行的命令。</p>
+
+          <p>从这个角度来说，下面就是configure.in中的命令做的事情：</p>
+
+          <ol>
+            <li>AC_INIT命令初始化configure脚本. 必须传一个源代码文件的名字给它作为参数。任何源文件都可以。</li>
+
+            <li>由于我们使用 Automake ，AM_INIT_AUTOMAKE 进一步执行和 Automake 相关的初始化。
+              如果你手动写 Makefile.in ，则不需要调用这条命令。
+              逗号隔开的两个参数，一个是包的名字，一个是包的版本号。</li>
+
+            <li>AC_PROG_CC 检查使用什么编译器。</li>
+
+            <li>AC_PROG_INSTALL 检查系统中是否具有BSD兼容的实用安装程序。
+              如果没有，将使用 Automake 生成的版本：位于包根目录的install-sh脚本。</li>
+
+            <li>The AC_OUTPUT 告知configure脚本从Makefile.in中生成Makefile文件。</li>
+
+          </ol>
+
+          <p>Makefile.am中就很简单了。第一行指定我们编译出软件的名字。第二行指定组成程序的源文件。</p>
+
+          <p>关于configure.in文件。还有下面几点需要了解：</p>
+
+          <ol>
+            <li>在编译共享库的时候，configure脚本需要知道应该如何处理'ranlib'。这个需要在configure.in中添加一行 AC_PROG_RANLIB 命令。</li>
+
+            <li>如果源码中有C++的代码，需要添加 AC_PROG_CXX 到configure.in中。</li>
+
+            <li>如果源码包含有'yacc'和'lex'，需要添加
+            <pre class="code">AC_PROG_YACC
+AC_PROG_LEX</pre>
+            到configure.in文件中。
+            </li>
+
+            <li>如果源代码中包含Fortran的代码，需要添加AC_PROG_FC到configure.in中。
+              如果混用C和Fortran的代码，就可能需要稍威再多做点工作。具体请参阅：
+              <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Using-Fortran-effectively" data-accessed="2018-12-17">Using-Fortran-effectively</a> 。</li>
+
+            <li>如果在子目录中还有makefile，还需要把他们放到 AC_OUTPUT 声明中：
+            <pre class="code">
+AC_OUTPUT(Makefile       \
+dir1/Makefile            \
+dir2/Makefile            \
+                       )</pre>。
+            如果使用的是bash，反斜杠可以不要。可能的话，最好加上。<b>一定要确保每个需要编译的子目录都被包含了。</b>
+            </li>
+          </ol>
+
+          <p>现在来看看你编译hello world分发时所需要的几个命令：</p>
+<pre class="code">% aclocal
+% autoconf
+% touch README AUTHORS NEWS ChangeLog
+% automake -a
+% ./configure
+% make</pre>
+
+          <p>前三条命令使软件处于 autoconfiscated 状态。剩下的两条命令执行真正的直和编译。详细地说：</p>
+
+          <ol>
+
+            <li>'aclocal'命令安装一个名为 aclocal.m4 的文件。
+              此文件中，一般存放自己写的'autoconf'宏的定义。这些宏，后面可能会在configure.in文件中被使用。
+              后面的教程中讨论如何写'autoconf'的宏。
+              'automake'使用AM_INIT_AUTOMAKE宏。这种宏不属示标准'autoconf'宏。因此，它的定义需要放到aclocal.m4文件中。
+              如果不带参数使用'aclocal'，它自己就能生成正确的aclocal.m4文件。
+              后面教程将会介绍如何结合自己写的'autoconf'宏来使用'aclocal'。</li>
+            <li>autoconf命令结合 aclocal.m4 和 configure.in文件，生成configure脚本。现在，我们要开始营业了。</li>
+            <li>touch命令新建README等这些文件。最好是在automake前保证这些文件都存在。
+            因为automake命令在执行的时候，会检查是否存在这些文件。
+              根据检查的结果来决定最后的分发中是否包含这些文件。Automake 必须决定是否需要这些文件。
+              因为'make distcheck'命令要求必须有这些文件。</li>
+            <li>'automake'命令根据Makefile.am文件编译生成Makefile.in文件。
+              如果缺少GNU代码规范要求的文件，或者是缺少最终生成的makefile文件需要的文件时，'automake'命令也会安装它们。</li>
+
+          </ol>
+
+          <p>configure脚本探测你的系统，最终根据你的编译平台，生成定制化的makefile文件。
+            应该如何进行探测的细节应该在configure.in文件中指定。
+            生成的makefiles是基于Makefile.in文件中的模板来生成的。
+            如果要结合configure脚本生成遵循GNU代码标准的makefile，模版里面就必须包含一些很繁琐无聊的内容。
+            这就是为什么要有 Automake 了。它可以根据Makefile.am中更简洁的描述来生成Makefile.in文件。
+            就像这个例子中一样，在简便的情况下，Makefile.am 也可以写得很简单。
+            一旦生成了makefile文件，接下来make就可以接管了。</p>
+
+          <p>configure是如何把Makefile.in文件中的模板转换为makefile文件的呢？
+            configure脚本真正做了下面两件事情：</p>
+
+          <ul>
+            <li>它维护一个探测安装平台时生成的替换列表。
+              每一个这样的替换列表项都包括一个符号名字和实际需要替换的文本。
+              当configure脚本执行到AC_OUTPUT时，它会展开AC_OUTPUT里面列出的所有文件，然后把里面出现的每一个符号 @FOO@ 替换成它对应的文本FOO。
+            比如，假设你在configure.in中加入下面一行，就可以使得 @FOO@ 被替换为'hello'：
+            <pre class="code">FOO="hello"
+AC_SUBST(FOO)</pre>
+            configure就是这样把编译时需要决定的内容放入makefile中，比如使用哪个编译口、需要给编译器传递什么参数等等。
+            有时，你需要对不是makefile的文件使用configure的替换功能，这就是为什么要了解它的重要性。具体例子请参阅 <a href="使用Automake和Autoconf.html#Scripts_with_Automake">Automake脚本编程</a> 。</li>
+
+            <li>
+              configure在探测安装系统时，也会维护一个定义好值的C预处理宏列表。
+              在完成之前，configure将生成一个配置文件。
+              在该文件中，定义一些C预处理宏的值，或者在生成的makefile中设置标志（通过替换），该标志通过'-D'标志传递给编译器。
+              我们在后面讨论如果配置标志头。</li>
+          </ul>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html> 

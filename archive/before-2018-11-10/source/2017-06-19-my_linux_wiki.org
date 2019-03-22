@@ -1,0 +1,2130 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+SETUPFILE: theme.setup
+#+Title: Linux wiki
+
+
+* DONE 使用percol配置文件管理器。
+  - State "DONE"       from "DONE"       [2014-11-09 日 17:02] \\
+    percol支持正则表达式还没有结果！！
+  据说这个是终极文件管理器？刚配置好开始使用。用一段时间再写。
+*** 主要讲解在ubuntu 14.04中怎么配置：
+
+    这个东西是python写的。我直接在ubuntu上使用：
+    #+begin_src shell-script
+  sudo apt-get install python-pip
+    #+end_src
+    安装了pip之后。pip（install python package）使用：
+    #+begin_src shell-script
+  pip install percol
+    #+end_src
+    安装上了percol。还可以手动安装。具体可以参考[[https://github.com/mooz/percol#whats-this][这里]]
+
+    然后根据网上的[[http://blog.binchen.org/posts/how-to-do-the-file-navigation-efficiently.html][How to do the file navigation efficiently]]，在.bashrc中加
+    入这两个函数：
+    #+begin_src shell-script
+  [ $(uname -s | grep -c CYGWIN) -eq 1 ] && OS_NAME="CYGWIN" || OS_NAME=`uname -s`
+  function pclip() {
+      if [ $OS_NAME == CYGWIN ]; then
+          putclip $@;
+      elif [ $OS_NAME == Darwin ]; then
+          pbcopy $@;
+      else
+          if [ -x /usr/bin/xsel ]; then
+              xsel -ib $@;
+          else
+              if [ -x /usr/bin/xclip ]; then
+                  xclip -selection c $@;
+              else
+                  echo "Neither xsel or xclip is installed!"
+              fi
+          fi
+      fi
+  }
+
+  function ff()
+  {
+      local fullpath=$*
+      local filename=${fullpath##*/} # remove "/" from the beginning
+      filename=${filename##*./} # remove  ".../" from the beginning
+      echo file=$filename
+      #  only the filename without path is needed
+      # filename should be reasonable
+      local cli=`find $PWD -not -iwholename '*/target/*' -not -iwholename '*.svn*' -not -iwholename '*.git*' -not -iwholename '*.sass-cache*' -not -iwholename '*.hg*' -type f -iwholename '*'${filename}'*' -print | percol`
+      echo ${cli}
+      echo -n ${cli} |pclip;
+  }
+    #+end_src
+ 
+    然后就可以在bash中使用ff来查找当前目录下的东西了。可以在.emacs.d中使用
+    ff el试一下。
+
+    其实ff主要还是调用了percol。percol才是真的强。它可以用与管道中接收标准
+    输入然后给你一个过滤的窗口。也可以直接接文件作为参数。然后过滤其中的
+    文本。
+ 
+    ff中还调用了自己写的一个pclip函数。目的是每次filter出来的东西就自动加
+    入到了系统剪切板中了。很方便。这需要使用xsel或者xclip这种工具。在linux
+    下不成问题。
+
+    *Question*
+    --------------------------------------------------------------------------------
+    1) 使用ff的时候，如果当前目录内容太多。或者有权限不足的错误的时候，会
+       出现问题
+    2) percol中不支持正则表达式。暂时没有能力定制。
+    --------------------------------------------------------------------------------
+    *Solved*
+    --------------------------------------------------------------------------------
+    1) 其实是ff函数中find中的问题。直接在find中把错误输出到/dev/null就行了。
+    #+begin_src shell-script
+  function ff()
+  {
+      local fullpath=$*
+      local filename=${fullpath##*/} # remove "/" from the beginning
+      filename=${filename##*./} # remove  ".../" from the beginning
+      echo file=$filename
+      #  only the filename without path is needed
+      # filename should be reasonable
+      local cli=`find $PWD -not -iwholename '*/target/*' -not -iwholename '*.svn*' -not -iwholename '*.git*' -not -iwholename '*.sass-cache*' -not -iwholename '*.hg*' -type f -iwholename '*'${filename}'*' -print 2>/dev/null | percol `
+      echo ${cli}
+      echo -n ${cli} |pclip;
+  }
+    #+end_src
+    --------------------------------------------------------------------------------
+
+    <2014-11-08 六 21:20>
+ 
+* 使用pgrep可以更好的找到正在运行的程序
+  #+BEGIN_EXAMPLE
+  pgrep -l emacs
+  #+END_EXAMPLE
+* 配置hostapd共享无线网络					    :hostapd:
+  :PROPERTIES:
+  :DESCRIPTION: 配置hostapd共享无线网络
+  :END:
+  参考的 [[https://nims11.wordpress.com/2012/04/27/hostapd-the-linux-way-to-create-virtual-wifi-access-point/][这里]] 和 [[https://nims11.wordpress.com/2013/05/22/using-hostapd-with-dnsmasq-to-create-virtual-wifi-access-point-in-linux/][这里]]
+
+  其中第一篇是使用dhcp的，第二篇是使用dnsmasq。我是使用dnsmasq配置成功的。
+
+  必要条件是你的无线网卡一定要能支持AP的功能，使用下面的命令查询一下：
+  #+BEGIN_SRC sh
+  iw list
+  #+END_SRC
+
+  输出中有这样的：
+  #+BEGIN_EXAMPLE
+          Supported interface modes:
+                   ,* IBSS
+                   ,* managed
+                   ,* AP
+                   ,* AP/VLAN
+                   ,* WDS
+                   ,* monitor
+                   ,* mesh point
+          software interface modes (can always be added):
+                   ,* AP/VLAN
+                   ,* monitor
+          valid interface combinations:
+                   ,* #{ AP, mesh point } <= 4,
+                     total <= 4, #channels <= 1
+  #+END_EXAMPLE
+  就是支持AP功能罗。
+
+  首先下载：dhcp,dnsmasq,hostapd。
+
+  hostapd的配置文件是这样的：
+  #+BEGIN_EXAMPLE
+  interface=wlan0
+  # driver=nl80211
+  ssid=pengpengxp
+  hw_mode=g
+  channel=6
+  macaddr_acl=0
+  auth_algs=1
+  ignore_broadcast_ssid=0
+  wpa=3
+  wpa_passphrase=1234567890
+  wpa_key_mgmt=WPA-PSK
+  wpa_pairwise=TKIP
+  rsn_pairwise=CCMP
+  #+END_EXAMPLE
+  很明显，ssid和wpa_passphrase分别是用户名和密码。设置好以后。可以保存该配置在任意文件中，我是保存在/etc/hostapd/hostapd.conf中的。然后可以使用命令
+  #+BEGIN_SRC sh
+  hostapd /etc/hostapd/hostapd.conf
+  #+END_SRC
+
+  这时还不能上网，还需要做一个NAT转换。参考网面的作者写了个脚本：
+  #+BEGIN_SRC sh
+  #!/bin/bash
+  #Initial wifi interface configuration
+  ifconfig $1 up 10.0.0.1 netmask 255.255.255.0
+  sleep 2
+
+  ###########Start dnsmasq, modify if required##########
+  if [ -z "$(ps -e | grep dnsmasq)" ]
+  then
+      dnsmasq
+  fi
+  ###########
+
+  #Enable NAT
+  iptables --flush
+  iptables --table nat --flush
+  iptables --delete-chain
+  iptables --table nat --delete-chain
+  iptables --table nat --append POSTROUTING --out-interface $2 -j MASQUERADE
+  iptables --append FORWARD --in-interface $1 -j ACCEPT
+
+  #Thanks to lorenzo
+  #Uncomment the line below if facing problems while sharing PPPoE, see lorenzo's comment for more details
+  #iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+  sysctl -w net.ipv4.ip_forward=1
+
+  #start hostapd
+  hostapd /etc/hostapd/hostapd.conf 1> /dev/null
+  # hostapd -B /etc/hostapd/hostapd.conf 
+  killall dnsmasq
+
+  #+END_SRC
+
+  保存为p_start_hostapd.sh。在pppoe拔上号情况下，使用：
+  #+BEGIN_SRC sh
+  p_start_hostapd.sh wlan0 ppp0
+  #+END_SRC
+
+  然后就可以使用啦。
+*** 出现过的错误
+    使用第一种方法配置出来不能正常上网。使用第二种方法，网上说不能有太多的设备连接。我本来使用的就不多，这就OK啦。
+    
+    中途还出现本来hostapd configfile能开启的。突然就不行了。网上发现是NetworkManager开启了以后，它接管了网络管理。hostapd不能对网卡进行配置。我直接kill还不行，总是会重复出现，最后直接删掉了。
+
+    会出现一直验证用户名。登录不上的情况。
+*** TODO 使用wpa加密方式用户名验证不能通过
+    我直接没有要密码了。使用静态IP的方式来上。本来也就是进行一个补充的。最后hostapd的配置如下：
+    #+BEGIN_EXAMPLE
+  interface=wlan0
+  driver=nl80211
+  ssid=pengpengxp
+  hw_mode=g
+  channel=6
+  macaddr_acl=0
+  auth_algs=1
+  ignore_broadcast_ssid=0
+
+  #wpa=3
+  #wpa_passphrase=1234567890
+  #wpa_key_mgmt=WPA-PSK
+  #wpa_pairwise=TKIP
+  #rsn_pairwise=CCMP
+    #+END_EXAMPLE
+    就不加密了。但是要手动配置默认的网关。将就用吧。
+* xrandr设置linux分辨率
+* ubuntu 安装virtualbox第三方增强
+  #+BEGIN_EXAMPLE
+     sudo apt-get install virtualbox-guest-utils
+  #+END_EXAMPLE
+
+  #+BEGIN_SRC sh
+      xrandr --output VGA-0 --mode 1920x1440
+  #+END_SRC
+* linux下显示dd命令的进度：
+
+  dd if=/dev/zero of=/tmp/zero.img bs=10M count=100000
+  想要查看上面的dd命令的执行进度，可以使用下面几种方法：
+
+  比如：每5秒输出dd的进度
+
+  方法一：
+
+  watch -n 5 pkill -USR1 ^dd$
+  方法二：
+
+  watch -n 5 killall -USR1 dd
+  方法三：
+
+  while killall -USR1 dd; do sleep 5; done
+  方法四：
+
+  while (ps auxww |grep " dd " |grep -v grep |awk '{print $2}' |while read pid; do kill -USR1 $pid; done) ; do sleep 5; done
+  上述四种方法中使用三个命令：pkill、killall、kill向dd命令发送SIGUSR1信息，dd命令进程接收到信号之后就打印出自己当前的进度。
+
+* enca change file encoding                                           :enca:
+  #+BEGIN_SRC sh
+     # list supported charsets
+     enca --list charsets
+     # query file charset
+     enca -L zh_cn filename
+     # convert file to utf-8
+     enca -L zh_cn -x utf-8 filename
+  #+END_SRC
+
+* mosh
+  安装完mosh后，需要配置一下防火墙，允许这些udp端口流量进来：
+  #+BEGIN_SRC sh
+    sudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT
+  #+END_SRC
+  最坑的是openstack环境这样的云中，是有网络安全组的。需要把安全组中的
+  端口也开放。
+
+* ubuntu配置开机启动
+  [[http://blog.csdn.net/hcx25909/article/details/9068497][这里讲得还可以]]
+
+  这里start-mosh是一个脚本，开头的这些注释是 =ubuntu16.04= 需要加上的
+  所谓的 =LSB信息= 不加没法设置：
+  #+BEGIN_SRC sh
+    #!/bin/bash
+    ### BEGIN INIT INFO
+    # Provides:          svnd.sh
+    # Required-start:    $local_fs $remote_fs $network $syslog
+    # Required-Stop:     $local_fs $remote_fs $network $syslog
+    # Default-Start:     2 3 4 5
+    # Default-Stop:      0 1 6
+    # Short-Description: starts the svnd.sh daemon
+    # Description:       starts svnd.sh using start-stop-daemon
+    ### END INIT INFO
+
+    mosh-server
+  #+END_SRC
+  需要把该脚本放到 =/etc/init.d/= 目录下：
+
+  设置开机启动：
+  #+BEGIN_SRC sh
+    update-rc.d start-mosh defaults 90
+  #+END_SRC
+
+  取消开机启动：
+  #+BEGIN_SRC sh
+    update-rc.d -f start-mosh remove
+  #+END_SRC
+  
+  更加常见是应该是写一个这样的可以接 =start, stop, restart= 等参数的脚
+  本，比如配置开机自启动 =vnc4server= 时的这修脚本：
+  #+BEGIN_SRC sh
+    #!/bin/bash
+
+    USER="jenkins"
+
+    case "$1" in
+        start)
+            echo "Starting vncserver for user '${USER}' on :2"
+            su ${USER} -c "/usr/bin/vnc4server :2"
+            ;;
+        stop)
+            echo "Stopping vncserver for user '${USER}' on :2"
+            su ${USER} -c "/usr/bin/vnc4server -kill :2"
+            ;;
+        restart)
+            $0 stop
+            $0 start
+            ;;
+    esac
+    exit 0
+  #+END_SRC
+ 
+* ubuntu配置ssh
+** 允许root登陆
+   Simply adding a password for root is not enough for Ubuntu 14.04 Server.
+
+   You also need to edit =/etc/ssh/sshd_config= , and comment out the
+   following line:
+
+   PermitRootLogin without-password
+   Just below it, add the following line:
+
+   #+BEGIN_SRC sh
+     PermitRootLogin yes
+   #+END_SRC
+
+   Then restart SSH:
+
+   service ssh restart
+** ssh login慢
+   有时候ssh登陆server的时候特别慢，要等半天。可能是server的原因，也可
+   能是client。当然，很多时候是server啦。查了一下 [[http://askubuntu.com/questions/246323/why-does-sshs-password-prompt-take-so-long-to-appear][这里]] 。估计是dns相关
+   的。可以 =add UseDNS no to /etc/ssh/sshd_config= 。
+** client端
+   ssh使用 =-p= 选项可以指定去连接的server的端口。scp需要使用大写 =-P=
+   。
+   
+   也可以在自己的 =~/.ssh/config= 文件中这样写来指定用户名和端口。如下
+   就可以直接使用 =ssh b= 来访问：
+   #+BEGIN_EXAMPLE
+     Host b
+             Hostname 192.168.56.111
+             User root
+             Port 20160
+   #+END_EXAMPLE
+** 只能使用公钥来登陆
+   我自己的电脑在局域网里面我只希望通过我的公钥来登陆，禁止通过输入用
+   户名密码来登陆。
+   
+   需要把 =/etc/ssh/sshd_config= 中的这一项配置为no（默认是注释掉的）：
+   #+BEGIN_EXAMPLE
+     # Change to no to disable tunnelled clear text passwords
+     PasswordAuthentication no
+   #+END_EXAMPLE
+
+* 在一个多网卡机器上确定哪个网卡上面插着网线
+  现实中有这么一个需求：在台机器有多个网卡，需要配置某个网卡为静态ip。
+  但是给某个网卡插上网线后，如何知道在ubuntu系统中中对应的是哪个网卡呢？
+
+  可以使用 =ethtool= 。
+  #+BEGIN_EXAMPLE
+    riversec@box:~$ ethtool eth0|grep Link
+            Link detected: yes
+    riversec@box:~$
+  #+END_EXAMPLE
+  为yes就是插着网线的。
+  
+  在执行下面命令时，需要先把网卡都 =up= 起来，没有 =up= 起来的网卡，插
+  上网线灯都不会亮的。
+  #+BEGIN_EXAMPLE
+    cd /sys/class/net
+    for i in `ls`;do echo $i;ethtool $i|ip l set up dev $i; done
+  #+END_EXAMPLE
+
+  ubuntu下全部的网卡信息都在 =/sys/class/net= 下面。所以可以使用这个命
+  令直接全部查询出来，不过需要root权限哦：
+  #+BEGIN_EXAMPLE
+    root@box:/sys/class/net# for i in `ls /sys/class/net/`;do echo $i; ethtool $i|grep Link;done
+    eth0
+            Link detected: yes
+    eth1
+            Link detected: yes
+    eth2
+            Link detected: yes
+    lo
+            Link detected: yes
+    root@box:/sys/class/net#
+  #+END_EXAMPLE
+  
+* 给ubuntu安装boot loader（grub2）
+  一般都是安装grub2。
+  
+  [[http://howtoubuntu.org/how-to-repair-restore-reinstall-grub-2-with-a-ubuntu-live-cd][可以参考这里来搞]]
+  
+  但是我在chroot的时候一直进不去。总是出现这样的错：
+  #+BEGIN_EXAMPLE
+    chroot: failed to run command '/bin/bash': No such file or directory
+  #+END_EXAMPLE
+  
+  开始以为是在新环境中找不到 =/bin/bash= ，于是把 =/bin/= 目录也mount
+  到新环境中去：
+  #+BEGIN_SRC sh
+    mkdir /mnt/bin
+    mount --bind /bin /mnt/bin
+  #+END_SRC
+  
+  这样还是不行，原来 =/bin/bash= 还需要一些动态库，也需要搞进去，可以
+  使用 =ldd /bin/bash= 来查看它需要哪些动态库及它们的地址。
+  #+BEGIN_EXAMPLE
+    root@box:/tmp# ldd /bin/bash
+            linux-vdso.so.1 =>  (0x00007ffd15725000)
+            libtinfo.so.5 => /lib/x86_64-linux-gnu/libtinfo.so.5 (0x00007fc2057fa000)
+            libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fc2055f6000)
+            libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc205230000)
+            /lib64/ld-linux-x86-64.so.2 (0x000055abb8b54000)
+    root@box:/tmp#
+  #+END_EXAMPLE
+  再把 =lib= 和 =lib64= 目录按照同样方法搞进去，终于可以chroot了。
+* ubuntu配置nic名字
+  有时候nic的名字不是eth0,可以这样来配置，写一个
+  =/etc/udev/rules.d/70-net.rules= 这样的文件：
+  #+BEGIN_EXAMPLE
+    compute@compute13:/sys/class/net$ cat /etc/udev/rules.d/70-net.rules
+    #
+    # NIC mapping
+    #
+    # @author zhang jian ming
+    #
+
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="*", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNELS=="0000:02:00.0", NAME="eth0"
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="*", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNELS=="0000:03:00.0", NAME="eth1"
+
+    compute@compute13:/sys/class/net$ udevadm info -qpath /sys/class/net/eth0|grep KERNEL
+    compute@compute13:/sys/class/net$ udevadm info -qpath -a /sys/class/net/eth0|grep KERNEL
+        KERNEL=="eth0"
+        KERNELS=="0000:02:00.0"
+        KERNELS=="0000:00:1c.2"
+        KERNELS=="pci0000:00"
+    compute@compute13:/sys/class/net$ udevadm info -qpath -a /sys/class/net/eth1|grep KERNEL
+        KERNEL=="eth1"
+        KERNELS=="0000:03:00.0"
+        KERNELS=="0000:00:1c.3"
+        KERNELS=="pci0000:00"
+    compute@compute13:/sys/class/net$
+  #+END_EXAMPLE
+* interface设置
+  =/etc/network/interface= 例子：
+  #+BEGIN_EXAMPLE
+    auto eth0
+    iface eth0 inet static
+            address 192.168.57.100
+            netmask 255.255.255.0
+            post-up ip route add 0.0.0.0/0 via 192.168.57.1 dev eth0 || true
+    auto eth1
+    iface eth1 inet dhcp
+    auto eth2
+    iface eth2 inet static
+            address 192.168.56.100
+            netmask 255.255.255.0
+    auto lo
+    iface lo inet loopback
+
+    dns-nameservers 7.7.7.7
+  #+END_EXAMPLE
+* pandoc
+  pandoc可以各种转格式，我主要使用它来转org文件。
+
+  从org主件转到markdown，在emacs中本身是支持的。但是转出来以后，在
+  github上table of content不能跳转。但是使用pandoc来转可以跳。
+  
+  使用pandoc来实现 =org->markdown= ，看文档需要加入 =--toc= 来在生成的
+  markdown文件中加目录。实际使用还是不行，需要加上 =-s -s= 选项才行。
+  #+BEGIN_SRC sh
+    pandoc -s -s -o kk.md --toc kk.org
+  #+END_SRC
+  
+  pandoc还有一个 =--reference-docx= 选项。可以指定导出docx文件的格式。
+
+  *注意是修改docx文件的样式而不是直接修改文字内容* 。
+
+  [[http://www.helongfei.com/blog/2016/0104/pandoc-ru-he-zi-ding-yi-docxyang-shi/][这里]] 有一个使用指导。
+** 编码问题
+   pandoc默认输入和输出都是使用utf-8编码，有时候输入不是utf-8编码时，
+   可以使用 =iconv= 来转一下：
+   #+BEGIN_EXAMPLE
+用法： iconv [选项...] [文件...]
+转换给定文件的编码。
+
+ 输入/输出格式规范：
+  -f, --from-code=名称     原始文本编码
+  -t, --to-code=名称       输出编码
+
+ 信息：
+  -l, --list                 列举所有已知的字符集
+
+ 输出控制：
+  -c                         从输出中忽略无效的字符
+  -o, --output=文件        输出文件
+  -s, --silent               关闭警告
+      --verbose              打印进度信息
+
+  -?, --help                 给出此帮助列表
+      --usage                给出简要的用法信息
+  -V, --version              打印程序版本号
+
+长选项的强制或可选参数对对应的短选项也是强制或可选的。
+
+要知道错误报告指令，请参看：
+<http://www.debian.org/Bugs/>。
+   
+   #+END_EXAMPLE
+* lvm
+  https://en.wikipedia.org/wiki/Logical_volume_management
+  
+  [[./images/lvm_architecture.png]]
+  
+  基本的单元是PE，每个LV都指到许多PE就可以了。文章里面说的LE我没明白是
+  什么东西。
+
+  PV（physical volumes）是一个磁盘或者一个分区，需要使用 =pvcreate
+  XXX= 来对该磁盘或分区创建一些元数据。这样 =pvscan= 才能找到它们。只
+  有 =pvscan= 扫出来的磁盘才可做lvm磁盘使用。
+  
+  VG（volume group），可以把多个PV合到一个VG里面来使用。
+
+  LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来说就是一
+  个可用的分区。可以直接挂载使用。
+  
+  #+BEGIN_EXAMPLE
+    root@compute14:/home/compute# pvscan
+      PV /dev/sdc1   VG vg_var          lvm2 [15.00 GiB / 0    free]
+      PV /dev/sdb5   VG compute-vg      lvm2 [7.52 GiB / 0    free]
+      PV /dev/sdb3   VG compute-vg      lvm2 [200.00 GiB / 0    free]
+      PV /dev/sdb2   VG compute-vg      lvm2 [350.79 GiB / 0    free]
+      Total: 4 [573.30 GiB] / in use: 4 [573.30 GiB] / in no VG: 0 [0   ]
+    root@compute14:/home/compute#
+  #+END_EXAMPLE
+  一个个的PV就是每个磁盘啦。
+  
+  #+BEGIN_EXAMPLE
+    root@compute14:/home/compute# vgdisplay
+      --- Volume group ---
+      VG Name               vg_var
+      System ID
+      Format                lvm2
+      Metadata Areas        1
+      Metadata Sequence No  2
+      VG Access             read/write
+      VG Status             resizable
+      MAX LV                0
+      Cur LV                1
+      Open LV               0
+      Max PV                0
+      Cur PV                1
+      Act PV                1
+      VG Size               15.00 GiB
+      PE Size               4.00 MiB
+      Total PE              3839
+      Alloc PE / Size       3839 / 15.00 GiB
+      Free  PE / Size       0 / 0
+      VG UUID               EAeyML-nefF-Kudc-ciRI-FxIe-46cJ-BHWqef
+
+      --- Volume group ---
+      VG Name               compute-vg
+      System ID
+      Format                lvm2
+      Metadata Areas        3
+      Metadata Sequence No  7
+      VG Access             read/write
+      VG Status             resizable
+      MAX LV                0
+      Cur LV                2
+      Open LV               2
+      Max PV                0
+      Cur PV                3
+      Act PV                3
+      VG Size               558.31 GiB
+      PE Size               4.00 MiB
+      Total PE              142927
+      Alloc PE / Size       142927 / 558.31 GiB
+      Free  PE / Size       0 / 0
+      VG UUID               emnTms-wrXR-WZRS-MoW2-qev1-kGEr-Xf0Sll
+
+    root@compute14:/home/compute#
+  #+END_EXAMPLE
+  上述例子有两个VG： =compute-vg= 和 =vg_var= 。
+  #+BEGIN_EXAMPLE
+    root@compute14:/home/compute# ls /dev/compute-vg/
+    root  swap_1
+    root@compute14:/home/compute#
+  #+END_EXAMPLE
+  =compute-vg= 分为两个LV： =root= 和 =swap_1= 。 =swap_1= 是交换空间。
+  =df= 可以查出来 =root= LV是直接被挂载成了根：
+  #+BEGIN_EXAMPLE
+    root@compute14:/home/compute# df -lh
+    Filesystem            Size  Used Avail Use% Mounted on
+    udev                  126G     0  126G   0% /dev
+    tmpfs                  26G   35M   26G   1% /run
+    /dev/compute-vg/root  546G   87G  437G  17% /
+    tmpfs                 126G     0  126G   0% /dev/shm
+    tmpfs                 5.0M     0  5.0M   0% /run/lock
+    tmpfs                 126G     0  126G   0% /sys/fs/cgroup
+    /dev/sdb1             472M  117M  331M  27% /boot
+    cgmfs                 100K     0  100K   0% /run/cgmanager/fs
+    tmpfs                  26G     0   26G   0% /run/user/1000
+  #+END_EXAMPLE
+* sort 来排列ip地址
+  一个网络，就第四个位不同：
+  #+BEGIN_EXAMPLE
+    172.16.222.13
+    172.16.222.10
+    172.16.222.17
+    172.16.222.1
+  #+END_EXAMPLE
+  #+BEGIN_SRC sh
+    sort -n -t. -k 4
+  #+END_SRC
+* sudo不输密码
+  #+BEGIN_SRC sh
+    echo 'password'|sudo -S command
+  #+END_SRC
+* 查看cpu个数
+  #+BEGIN_EXAMPLE
+    # 总核数 = 物理CPU个数 X 每颗物理CPU的核数 
+    # 总逻辑CPU数 = 物理CPU个数 X 每颗物理CPU的核数 X 超线程数
+
+    # 查看物理CPU个数
+    cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
+
+    # 查看每个物理CPU中core的个数(即核数)
+    cat /proc/cpuinfo| grep "cpu cores"| uniq
+
+    # 查看逻辑CPU的个数
+    cat /proc/cpuinfo| grep "processor"| wc -l
+  #+END_EXAMPLE
+* ssh隧道
+  刚司机：
+  #+BEGIN_EXAMPLE
+    如何在只映射了20160端口的情况下，在浏览器中完成配置向导
+
+    启动微软云虚拟机(RAS镜像, 已经将20160端口做了端口映射)
+    查看内部IP地址 和 公用虚拟IP(VIP)地址
+    打开两个命令行终端
+    分别执行命令
+    ssh -p 20160 -L 20145:内部IP:20145 riversec@公用虚拟IP
+    ssh -p 20160 -L 20146:内部IP:20146 riversec@公用虚拟IP
+
+    例如
+    内部IP地址10.0.1.4
+    公用虚拟IP(VIP)地址139.219.185.47
+    则在两个终端分别执行
+    ssh -p 20160 -L 20145:10.0.1.4:20145 riversec@139.219.185.47
+    ssh -p 20160 -L 20145:10.0.1.4:20145 riversec@139.219.185.47
+
+    这样就建立了两个ssh隧道，将你本地的20146端口和虚拟机的20146端口映射起
+    来，本地的20145端口和虚拟机的20145端口映射起来，
+
+    这样你在浏览器中输入http://127.0.0.1:20146就可以走向导了（走完向导自动
+    跳转还是失败的，手动输入https://127.0.0.1:20145可访问web console）
+
+    要断开隧道链接请输入exit退出两个命令行终端即可
+  #+END_EXAMPLE
+* iperf测网速
+  #+BEGIN_SRC sh
+    # server:首先在 Server 端，我们运行以下命令使 iPerf 监听 5001 端口，每
+    # 2 秒输出一次结果。
+    iperf -s -p 5001 -t 2
+    # client:当终端显示 Server listening on 5001 时，就表示 Server 已经正
+    # 常运行，等待测试了。 然后在 Client 端，我们并发 4 个数据流，测试总时
+    # 长为 30 秒，每 2 秒输出一次结果。以下为测试所使用的命令。
+    iperf  -c 172.16.222.10 -p 5001 -P 4 -t 30 -i 2
+
+  #+END_SRC
+* VirtualBox使用共享文件夹
+  默认Linux客户机中的用户是没有权限访问共享文件夹 =/media/sf_xxx= 。需
+  要加入到vboxsf这个组里。
+  #+BEGIN_SRC sh
+    sudo usermod -aG vboxsf $(whoami)
+  #+END_SRC
+  
+  可以把这些共享文件夹mount到自己希望的位置：
+  #+BEGIN_SRC sh
+    sudo mount -t vboxsf New ~/new
+  #+END_SRC
+* date命令
+  常用的需要在脚本中使用date来生成今天的日期：
+  #+BEGIN_SRC sh
+    date +'%m/%d/%Y'
+  #+END_SRC
+** 使用date命令修改时间
+   #+BEGIN_EXAMPLE
+     date -s '2017-06-19 10:30:00'
+     hwclock --systohc
+   #+END_EXAMPLE
+   date设置的是系统时间，还有一个硬件时间可以用 =hwclock= 来查。
+
+   硬件时间是在启动的时候读入系统的，如果只用 =date= 设置了系统时间而
+   没有设置硬件时间，重启后应该时间应该还是原来的硬件时间。可以像上面
+   一样使用hwclock来根据系统时间刷新一下硬件时间。也可以根据硬件时间来
+   刷一下系统时间，查下 =help= 就知道了：
+   #+BEGIN_EXAMPLE
+      -s, --hctosys        set the system time from the hardware clock
+      -w, --systohc        set the hardware clock from the current system time
+   #+END_EXAMPLE
+
+* ps找程序
+** 根据pid找parrent：
+   #+BEGIN_EXAMPLE
+    ps -o ppid= 2072
+   #+END_EXAMPLE
+
+** TODO 根据pid找child:
+
+* sudo不输密码
+  使用 =visudo= 来编辑，然后在对应地方加入下面这句：
+  #+BEGIN_EXAMPLE
+    username ALL=(ALL) NOPASSWD:ALL
+  #+END_EXAMPLE
+
+* asscii font
+  #+BEGIN_EXAMPLE
+     ~/github/pengpengxp.github.io/ [master] figlet "xiepeng"
+          _
+    __  _(_) ___ _ __   ___ _ __   __ _
+    \ \/ / |/ _ \ '_ \ / _ \ '_ \ / _` |
+     >  <| |  __/ |_) |  __/ | | | (_| |
+    /_/\_\_|\___| .__/ \___|_| |_|\__, |
+                |_|               |___/
+     ~/github/pengpengxp.github.io/ [master]
+  #+END_EXAMPLE
+* wget
+  #+BEGIN_SRC sh
+    wget -r -p -np -k 
+  #+END_SRC
+
+  manual:
+  #+BEGIN_EXAMPLE
+
+    -k
+    --convert-links
+
+    After the download is complete, convert the links in the document to
+    make them suitable for local viewing.  This affects not only the
+    visible hyperlinks, but any part of the document that links to
+    external content, such as embedded images, links to style sheets,
+    hyperlinks to non-HTML content, etc.
+
+    Each link will be changed in one of the two ways:
+
+    1) 
+
+    The links to files that have been downloaded by Wget will be changed
+    to refer to the file they point to as a relative link.
+
+    Example: if the downloaded file /foo/doc.html links to /bar/img.gif,
+    also downloaded, then the link in doc.html will be modified to point
+    to ../bar/img.gif.  This kind of transformation works reliably for
+    arbitrary combinations of directories.
+
+    2) 
+
+    The links to files that have not been downloaded by Wget will be
+    changed to include host name and absolute path of the location they
+    point to.
+
+    Example: if the downloaded file /foo/doc.html links to /bar/img.gif
+    (or to ../bar/img.gif), then the link in doc.html will be modified to
+    point to http://hostname/bar/img.gif.
+
+    Because of this, local browsing works reliably: if a linked file was
+    downloaded, the link will refer to its local name; if it was not
+    downloaded, the link will refer to its full Internet address rather
+    than presenting a broken link.  The fact that the former links are
+    converted to relative links ensures that you can move the downloaded
+    hierarchy to another directory.
+
+    Note that only at the end of the download can Wget know which links
+    have been downloaded.  Because of that, the work done by -k will be
+    performed at the end of all the downloads.
+
+  #+END_EXAMPLE
+  
+  wget这样用很爽，可以直接把网站下载到本地，里面的链接也改为本地的了，
+  比如下载这样的一个网站：
+  #+BEGIN_SRC sh
+    wget -r -p -np -k http://vpim.rubyforge.org/
+  #+END_SRC
+
+* 十六进制表示说明
+  =0xFF= 表示一个字节。gdb中的x打出来的、wireshark中的和tcpdump中输出
+  的都是这种形式。因为一个十六进制数可以使用四个位表示，两个十六进制数
+  使用8位也就是一个字节就可以表示了。
+
+* 配置vnc4server
+  安装：
+  #+BEGIN_SRC sh
+    sudo apt-get install vnc4server xfce4 -y
+  #+END_SRC
+  
+  直接启动会默认使用 =:1= 号display。
+  
+  修改 =~/.vnc/xstartup= ，让它最后启动 =xfce4= ：
+  #+BEGIN_SRC sh
+    #!/bin/sh
+    [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+    [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+    xsetroot -solid grey
+    vncconfig -iconic &
+    x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
+    #x-window-manager &
+    startxfce4 &
+  #+END_SRC
+  
+  这个脚本一定要让它可执行：
+  #+BEGIN_SRC sh
+chmod a+x ~/.vnc/xstartup  
+  #+END_SRC
+  
+  放一个这样的脚本到 =/etc/init.d/vncserver= ：
+  #+BEGIN_SRC sh
+!/bin/bash
+#### BEGIN INIT INFO
+# Provides:          pengpengxp
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# X-Stop-After:      kdm gdm3 xdm lightdm
+# Default-Start:     2 3 4 5
+# Default-Stop:      
+### END INIT INFO
+
+USER="pengpengxp"
+
+case "$1" in
+    start)
+        echo "Starting vncserver for user '${USER}' on :2"
+        su ${USER} -c "/usr/bin/vnc4server :2"
+        ;;
+    stop)
+        echo "Stopping vncserver for user '${USER}' on :2"
+        su ${USER} -c "/usr/bin/vnc4server -kill :2"
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        ;;
+esac
+exit 0
+  #+END_SRC
+  
+  修改为可执行：
+  #+BEGIN_SRC sh
+    sudo chmod a+x /etc/init.d/vncserver
+  #+END_SRC
+  
+  先需要手动运行一下设置密码：
+  #+BEGIN_SRC sh
+/usr/bin/vnc4server :2 
+  #+END_SRC
+
+  然后就可以启动服务：
+  #+BEGIN_SRC sh
+    sudo service vncserver restart
+  #+END_SRC
+
+  设置开机启动：
+  #+BEGIN_SRC sh
+    sudo update-rc.d vncserver defaults
+  #+END_SRC
+
+  *问题* ：
+  1. [ ] 老是需要启动在 =:2= 上才可以， =:1= 就不行。搞不明白。
+
+* TODO cp命令你真的懂吗？
+** =-a= 选项
+   相关的东西都在这里：
+   #+BEGIN_EXAMPLE
+    -a, --archive
+           same as -dR --preserve=all
+    -d     same as --no-dereference --preserve=links
+    -P, --no-dereference
+           never follow symbolic links in SOURCE
+    --preserve[=ATTR_LIST]
+           preserve the specified attributes (default: mode,ownership,timestamps), if possible additional attributes: context, links, xattr, all
+    -R, -r, --recursive
+           copy directories recursively
+   #+END_EXAMPLE
+   =-a= 选项什么属性都会保留，比如所属用户等。
+   例子：
+   #+BEGIN_EXAMPLE
+    riversec@rcs:/tmp$ ll main.py
+    -rw-rw-r-- 1 riversec riversec 52 Jun 12 14:35 main.py
+    riversec@rcs:/tmp$ sudo cp main.py main.py_1
+    riversec@rcs:/tmp$ sudo cp -a main.py main.py_2
+    riversec@rcs:/tmp$ ll main.py*
+    -rw-rw-r-- 1 riversec riversec 52 Jun 12 14:35 main.py
+    -rw-r--r-- 1 root     root     52 Jun 13 16:06 main.py_1
+    -rw-rw-r-- 1 riversec riversec 52 Jun 12 14:35 main.py_2
+    riversec@rcs:/tmp$
+   #+END_EXAMPLE
+   可以看到，没有加 =-a= 参数，使用root来copy， =main.py_1= 的文件属生
+   和修改时间这些都改变了。而加上 =-a= 参数后， =main.py_2= 文件的属性
+   和原文件看起来是一样的。
+  
+   另外， =-a= 还可以拷贝目录，和 =-r= 一样。
+  
+   1. [ ] 有一个问题，对应manual所说的 =symbolic links= ，我测试出来都
+      会复制。
+** =-f= 选项
+   如果目标有同样的文件，直接覆盖它。
+
+** =-n= 选项
+   不要覆盖已存在的文件。
+
+* TODO [0/1] 特殊的文件权限
+** =st_uid= 
+  
+   可以这样设置文件的 =st_uid= 。
+   #+BEGIN_EXAMPLE
+   riversec@rcs:/tmp$ ll a.out
+   -rwsr-xr-x 1 root root 8816 Jun 19 17:11 a.out*
+   riversec@rcs:/tmp$
+   #+END_EXAMPLE
+ 
+   其作用在于：当执行此文件时，将进程的有效用户ID设置为文件所有者的用户
+   id。
+ 
+   举例：若文件的所有者是超级用户，而且设置了该文件的“设置用户ID位”，
+   然后当该程序由一个进程执行时，则该程序具有超级权限。这个最常见的例子
+   其实是 =passwd= 程序：每个用户都可以修改自己的密码，但是它又需要修改
+   =/etc/passwd= 这个属于root的文件。所以它需要使用“设置用户ID”的特征。
+   #+BEGIN_EXAMPLE
+   riversec@rcs:/tmp$ ll /usr/bin/passwd
+   -rwsr-xr-x 1 root root 54256 May 17 07:37 /usr/bin/passwd*
+   #+END_EXAMPLE
+ 
+   *注意*
+   1. *权限提升，安全问题就得重视。*
+   2. *由于这是文件的特殊属性，这种特征只能用于二进制文件。脚本这些是不行的。*
+
+** TODO =st_gid= 
+   - State "TODO"       from              [2017-06-19 Mon 17:14]
+
+* ubuntu下载一个软件所有依赖的包
+  [[https://stackoverflow.com/questions/13756800/how-to-download-all-dependencies-and-packages-to-directory][这里]] 讲了如何下载到所有的安装包到一个目录：
+  
+  一种解法是这样：
+  #+BEGIN_EXAMPLE
+    # aptitude clean
+    # aptitude --download-only install <your_package_here>
+    # cp /var/cache/apt/archives/*.deb <your_directory_here>
+  #+END_EXAMPLE
+  但是如果你的机器是一台已经使用过很久的机器了。需要它可能已经安装了好
+  多软件了。这样可能下载不到最完的依赖，因为很多软件已经安装了就不会再
+  下载了。
+
+  需要先安装 =apt-rdepends= ：
+  #+BEGIN_SRC sh
+    sudo apt-get install apt-rdepends
+  #+END_SRC
+  #+BEGIN_SRC sh
+    apt-get download $(apt-rdepends <package>|grep -v "^ ")
+  #+END_SRC
+  这样会有些报错。可能有些包没有对应的下载的地方。
+  
+  [[https://superuser.com/questions/1112525/ignore-apt-get-download-errors][这里]] 有人写了这样的脚本来忽略这些下载不到的包：
+  #+BEGIN_SRC sh :tangle /tmp/kk.sh
+    #!/bin/bash
+    export MAXPARAMETERS=255
+
+    function array_contains_find_index() {
+        local n=$#
+        local i=0
+        local value=${!n}
+
+        for (( i=1; i < n; i++ )) { 
+            if [ "${!i}" == "${value}" ]; then
+                echo "REMOVING $i: ${!i} = ${value}"
+                return $i
+            fi
+        }
+        return $MAXPARAMETERS
+    }
+
+    function Pause() { 
+        if [[ -z $1 ]]; then
+                read -n1 -r -p "continue..." 
+        else
+                read -n1 -r -p "$1" 
+        fi
+    }
+
+    export IFS=$'\n'
+    # Store all reverse dependencies in an indexed array and output them to STDOUT & a log file 
+    # for easy checking later
+    LIST=( $( apt-rdepends $1 | grep -v "^ " ) )
+    echo ${LIST[*]}
+    echo ${LIST[*]} > getdepends.log.results
+    Pause "... Packages that will be downloaded (Continue or CTRL+C) ..."
+
+    # Try to download the dependencies
+    RESULTS=( $( apt-get download ${LIST[*]} |& cut -d' ' -f 8 ) ) 
+
+    # If RESULTS contains any items that means we have packages that are
+    # problematic that need to be removed from LIST. (note: `|&` is shortform for `2>&1 |`)
+
+    LISTLEN=${#LIST[@]}                                     #Array elements aren't removed so the size is constant
+
+    while [ ${#RESULTS[@]} -gt 0 ]; do
+        for (( i=0; i < $LISTLEN; i++ )); do
+                array_contains_find_index ${RESULTS[@]} ${LIST[$i]}
+                ret=$?
+
+                if (( $ret != $MAXPARAMETERS )); then
+                    unset LIST[$i]
+                fi
+        done
+
+        FULLRESULTS=$( apt-get download ${LIST[*]} 2>&1  )
+        RESULTS=( $( echo $FULLRESULTS |& cut -d' ' -f 11 | sed -r "s/'(.*?):(.*$)/\1/g" ) )
+
+        echo ${LIST[*]} > getdepends.list                                   #Log of downloaded packages
+        echo ${FULLRESULTS[*]} >> getdepends.fullresults    #Verbose log of skipped packages
+        echo ${RESULTS[*]} >> getdepends.results                    #Just the name of skipped packages
+    done 
+
+    apt-get download ${LIST[*]}
+  #+END_SRC
+
+* 保存国内ubuntu的源 
+  =/etc/apt/sources.list=
+
+  14.04 163:
+  #+BEGIN_EXAMPLE
+    deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+  #+END_EXAMPLE
+  
+  16.04 阿里：
+  #+BEGIN_EXAMPLE
+    # deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted
+    deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+    deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse #Added by software-properties
+    deb http://archive.canonical.com/ubuntu xenial partner
+    deb-src http://archive.canonical.com/ubuntu xenial partner
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse
+  #+END_EXAMPLE
+
+* 挂载远程目录到本机
+  需要安装 =sshfs= 。
+  
+  1. 写一个脚本可以把远程的目录挂载到编译机上：
+     #+BEGIN_SRC sh
+       #!/bin/bash
+
+       mkdir -p remote-asp
+
+       if [ ! $# -eq 3 ]
+       then
+       echo "usage: ./mount.sh username ip path-to-mount"
+       echo "for example: "
+       echo "./mount.sh pengpengxp 172.16.23.215 /Users/pengpengxp/src/asp"
+       fi
+
+       sshfs $1@$2:$3 /home/openstack/remote-asp/
+
+       exit 0
+     #+END_SRC
+  2. 对应的卸载脚本：
+     #+BEGIN_SRC sh
+       #!/bin/bash
+       fusermount -u remote-asp
+     #+END_SRC
+* 可以这样查ip的详细信息
+  #+BEGIN_SRC sh
+    curl ipinfo.io/json
+  #+END_SRC
+* TODO ubuntu manage battery
+  - State "TODO"       from              [2017-08-22 二 22:24]
+  
+  http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#start
+* unzip解压乱码问题
+  在windows上压缩的文件，是以系统默认编码中文来压缩文件。由于zip文件中
+  没有声明其编码，所以linux上的unzip一般以默认编码解压，中文文件名会出
+  现乱码。虽然2005年就有人把这报告为bug, 但是info-zip的官方网站没有把
+  自动识别编码列入计划，可能他们不认为这是个问题。Sun对java中存在N年的
+  zip编码问题，采用了同样的处理方式。
+
+  有2种方式解决问题：
+
+  1. 通过unzip行命令解压，指定字符集
+  unzip -O CP936 xxx.zip (用GBK, GB18030也可以)
+  有趣的是unzip的manual中并无这个选项的说明, unzip --help对这个参数有一行简单的说明。
+
+  2. 在环境变量中，指定unzip参数：
+  
+  我是在 =~/.bashrc= 这些shell启动会以加载的文件中设置下面的两个环境变
+  量，则shell中解压可以不再乱码：
+  #+BEGIN_SRC sh
+    export UNZIP="-O CP936"
+    export ZIPINFO="-O CP936"
+  #+END_SRC
+  
+  在emacs中这样设置：
+  #+BEGIN_SRC elisp
+    ;; for unzip chinese charactor file which are ziped on windows
+    (setenv "UNZIP" "-O CP936")
+    (setenv "ZIPINFO" "-O CP936")
+  #+END_SRC
+
+  总是以指定的字符集显示和解压文件 =/etc/environment= 中加入2行
+  #+BEGIN_EXAMPLE
+    UNZIP="-O CP936"
+    ZIPINFO="-O CP936"
+  #+END_EXAMPLE
+
+  这样Gnome桌面的归档文件管理器(file-roller)可以正常使用unzip解压中文，
+  但是file-roller本身并不能设置编码传递给unzip。
+* grep只输出匹配的内容
+  就是 =-o= 选项：
+  #+BEGIN_EXAMPLE
+     ~/ echo 'xiepeng'|grep peng
+    xiepeng
+     ~/ echo 'xiepeng'|grep -o peng
+    peng
+  #+END_EXAMPLE
+* 使用tmux                                                             :tmux:
+  tmux启动后是一个damon，如果不小心iterm2退出了或对应的标签页半闭了。
+  可以使用 =tmux attach= attach到原来的daemon上。注意，异常关闭后，默
+  认会有一个tmux还在attach。需要把原来的tmux attach的干掉。但是别把
+  tmux进程干掉了，具体的说，就是干掉下面的第一个，别干掉第二个：
+  #+BEGIN_EXAMPLE
+    pengpengxp        2108   0.0  0.0  2458016    744 s000  S+   10:43下午   0:00.01 tmux attach
+    pengpengxp        1480   0.0  0.0  2498212   4712   ??  Ss   10:43下午   0:04.60 tmux new-session -d -s 0 -n demo-openstack -x204 -y59
+  #+END_EXAMPLE
+
+  然后再 =tmux attach= 就ok了。
+  
+  重启呢？网上下载了一个 =tmux-session= 脚本，如下：
+  #+BEGIN_SRC sh
+    #!/usr/bin/env bash
+    # Save and restore the state of tmux sessions and windows.
+    # TODO: persist and restore the state & position of panes.
+    set -e
+
+    dump() {
+      local d=$'\t'
+      tmux list-windows -a -F "#S${d}#W${d}#{pane_current_path}"
+    }
+
+    save() {
+      dump > ~/.tmux-session
+    }
+
+    terminal_size() {
+      stty size 2>/dev/null | awk '{ printf "-x%d -y%d", $2, $1 }'
+    }
+
+    session_exists() {
+      tmux has-session -t "$1" 2>/dev/null
+    }
+
+    add_window() {
+      tmux new-window -d -t "$1:" -n "$2" -c "$3"
+    }
+
+    new_session() {
+      cd "$3" &&
+      tmux new-session -d -s "$1" -n "$2" $4
+    }
+
+    restore() {
+      tmux start-server
+      local count=0
+      local dimensions="$(terminal_size)"
+
+      while IFS=$'\t' read session_name window_name dir; do
+        if [[ -d "$dir" && $window_name != "log" && $window_name != "man" ]]; then
+          if session_exists "$session_name"; then
+            add_window "$session_name" "$window_name" "$dir"
+          else
+            new_session "$session_name" "$window_name" "$dir" "$dimensions"
+            count=$(( count + 1 ))
+          fi
+        fi
+      done < ~/.tmux-session
+
+      echo "restored $count sessions"
+    }
+
+    case "$1" in
+    save | restore )
+      $1
+      ;;
+    ,* )
+      echo "valid commands: save, restore" >&2
+      exit 1
+    esac
+
+  #+END_SRC
+  
+  + 重启前： =tmux-session save= 。
+  + 重启后： =tmux-session restore=
+  + 然后就可以 =attach= 了。
+
+  tmux的配置在 =~/.tmux.conf= ：
+  #+BEGIN_SRC conf-space
+    ################################################################
+    #### original setting
+    ################################################################
+    # #设置前缀为Ctrl + a
+    # set -g prefix C-a
+    # # 与此同时，取消默认的前缀按键：
+    # #解除Ctrl+b 与前缀的对应关系
+    # unbind C-b
+
+    ################################################################
+    #### copy from others
+    ################################################################
+    #use UTF8
+    #set -g utf8
+    #set-window-option -g utf8 on
+
+
+    bind C-e command-prompt -p "session?,message?" "run-shell \"tmux list-windows -t %1 \| cut -d: -f1\|xargs -I\{\} tmux send-keys -t %1:\{\} %2\""
+
+
+    # make tmux display things in 256 colors
+    set -g default-terminal "screen-256color"
+
+    # set scrollback history to 10000 (10k)
+    set -g history-limit 10000
+
+    # set Ctrl-a as the default prefix key combination
+    # and unbind C-b to free it up
+    # set -g prefix C-a
+    set -g prefix `
+    unbind C-b
+
+    # use send-prefix to pass C-a through to application
+    # bind C-a send-prefix
+    bind ` send-prefix
+
+    # shorten command delay
+    set -sg escape-time 1
+
+    # set window and pane index to 1 (0 by default)
+    set-option -g base-index 1
+    setw -g pane-base-index 1
+
+    # reload ~/.tmux.conf using PREFIX r
+    bind r source-file ~/.tmux.conf \; display "Reloaded!"
+
+    # use PREFIX | to split window horizontally and PREFIX - to split vertically
+    bind | split-window -h
+    bind - split-window -v
+
+    # set default windows name
+    bind c new-window -n 'Main'
+
+    # Make the current window the first window
+    bind T swap-window -t 1
+
+    bind-key ( swap-window -t -1
+    bind-key ) swap-window -t +1
+
+    bind-key -n S-Left select-window -t :-
+    bind-key -n S-Right select-window -t :+
+    bind-key -n C-S-Left swap-window -t -1
+    bind-key -n C-S-Right swap-window -t +1
+
+    # switch to last-window, I bind M-S to send hex code 0x60 0x53
+    bind-key S last-window
+    bind-key -n C-s  last-window
+    # switch to last-window, I bind M-s to send hex code 0x60 0x73
+    bind-key s last-pane
+    bind-key X kill-pane
+
+    bind-key -n m-s last-pane
+
+    # map Vi movement keys as pane movement keys
+    bind h select-pane -L
+    bind j select-pane -D
+    bind k select-pane -U
+    bind l select-pane -R
+
+    # bind tab choose-window
+    bind tab display-panes
+
+    unbind p
+    bind p previous-window
+
+    # set display time to 5 seconds
+    set -g display-panes-time 5000
+
+
+    # and use C-h and C-l to cycle thru panes
+    bind -r C-h select-window -t :-
+    bind -r C-l select-window -t :+
+
+
+    # 在iterm2中设置'Ctrl+1'为send hexcode 0x60 0x31就相当于调用 '前缀`+1'
+    # (`的hexcode就是 0x60)
+    bind 1 select-window -t 1
+    bind 2 select-window -t 2
+    bind 3 select-window -t 3
+    bind 4 select-window -t 4
+    bind 5 select-window -t 5
+    bind 6 select-window -t 6
+    bind 7 select-window -t 7
+    bind 8 select-window -t 8
+    bind 9 select-window -t 9
+    bind 0 select-window -t 10
+    # -n 不需要加前缀就可以使用
+    bind -n F1 select-window -t 1
+    bind -n F2 select-window -t 2
+    bind -n F3 select-window -t 3
+    bind -n F4 select-window -t 4
+    bind -n F5 select-window -t 5
+    bind -n F6 select-window -t 6
+    bind -n F7 select-window -t 7
+    bind -n F8 select-window -t 8
+    bind -n F9 select-window -t 9
+
+    bind -n PPage copy-mode -u
+
+    # bind 0 select-window -t 10
+    # bind 1 select-window -t 11
+    # bind 2 select-window -t 12
+    # bind 3 select-window -t 13
+    # bind 4 select-window -t 14
+    # bind 5 select-window -t 15
+    # bind 6 select-window -t 16
+    # bind 7 select-window -t 17
+    # bind 8 select-window -t 18
+
+    # resize panes using PREFIX H, J, K, L
+    bind H resize-pane -L 5
+    bind J resize-pane -D 5
+    bind K resize-pane -U 5
+    bind L resize-pane -R 5
+
+
+    # bind S set synchronize-panes on
+    # bind s set synchronize-panes off
+
+    # for mouse support, 这个模式开启后，iterm2中需要按option才能像原来一
+    # 样选中，所以现在先禁止
+    # set -g mouse on
+
+    # The panes {
+
+    set -g pane-border-bg colour235
+    set -g pane-border-fg colour238
+    set -g pane-active-border-bg colour236
+    set -g pane-active-border-fg colour51
+
+    # }
+    # The statusbar {
+
+    set -g status-position bottom
+    set -g status-bg colour234
+    set -g status-fg colour137
+    set -g status-attr dim
+    set -g status-left ''
+    set -g status-right '#[fg=colour233,bg=colour241,bold] %d/%m #[fg=colour233,bg=colour245,bold] %H:%M:%S '
+    set -g status-right-length 50
+    set -g status-left-length 20
+
+    setw -g window-status-current-fg colour81
+    setw -g window-status-current-bg colour238
+    setw -g window-status-current-attr bold
+    setw -g window-status-current-format ' #I#[fg=colour250]:#[fg=colour255]#W#[fg=colour50]#F '
+
+    setw -g window-status-fg colour138
+    setw -g window-status-bg colour235
+    setw -g window-status-attr none
+    setw -g window-status-format ' #I#[fg=colour237]:#[fg=colour250]#W#[fg=colour244]#F '
+
+    setw -g window-status-bell-attr bold
+    setw -g window-status-bell-fg colour255
+    setw -g window-status-bell-bg colour1
+
+    # }
+
+    # The messages {
+
+    set -g message-attr bold
+    set -g message-fg colour232
+    set -g message-bg colour166
+
+    # }
+
+    # set copy mode to use vi-like moving, space begin selete and Enter
+    # copy
+    set-window-option -g mode-keys vi
+  #+END_SRC
+** Mac中的配置
+   在iterm2中，可以使用 =Control-number= 来切换windows。iterm2可以设置
+   =C-number= 来发送hex code。上面我把tmux的prefix设置为 =`= 。切换
+   windows默认使用 =` nubmers= 。可以设置 =C-numbers= 发送对应的hex
+   code达到目的。比如 =C-1= 发送 =0x60 0x31= ， =C-2= 发送 =0x60 0x32=。
+
+   配置里还使用了 =reattach-to-user-namespace= 这个应该是修复一个os x
+   上tmux中不用使用系统open系统打开文件的bug。据说这个bug几年了都没人
+   修。
+** tmux中的session
+   一个session可以看做是多个窗口的集合。可以不同的session来干不同的事
+   情：
+   #+BEGIN_SRC sh
+     # 查询当前所有session
+     tmux list-sessions
+   #+END_SRC
+
+   #+RESULTS:
+   | cloud:  | 7 | windows | (created | Mon | Jan |  9 | 10:02:17 | 2017) | [255x64] | (attached) |
+   | docker: | 1 | windows | (created | Tue | Jan | 10 | 11:06:57 | 2017) | [283x67] | (attached) |
+
+   #+BEGIN_SRC sh
+     # attach到对庆的session，这里的<session>就是上面查出来的第一列
+     tmux attach -t <session>
+   #+END_SRC
+
+   需要注意的是tmux多次attach同一个session可能会导致卡死。需要退出来把
+   所有attach到对应session的tmux进程都干掉重新attach才行。
+
+   一些快捷键：
+   |-------------------+----------|
+   | 操作              | 快捷键   |
+   |-------------------+----------|
+   | 查看/切换session  | prefix s |
+   | 离开Session       | prefix d |
+   | 重命名当前Session | prefix $ |
+   |-------------------+----------|
+
+** 多个pane中实现同时输入
+   可以这样：
+   #+BEGIN_EXAMPLE
+     Have you tried following in tmux window with multiple panes
+
+     <prefix> :
+
+     setw synchronize-panes on
+
+     clear history
+   #+END_EXAMPLE
+
+** copy-mode
+   [[https://awhan.wordpress.com/2010/06/20/copy-paste-in-tmux/][referenced here]]
+   
+   #+BEGIN_EXAMPLE
+     i m assuming that the tmux prefix is Control+b and that you have emacs style key bindings on
+
+     1) enter copy mode using Control+b [
+     2) navigate to beginning of text, you want to select and hit Control+Space
+     3) move around using arrow keys to select region
+     4) when you reach end of region simply hit Alt+w to copy the region
+     5) now Control+b ] will paste the selection
+
+     you can navigate the text using the emacs style navigation key
+     Control+p, Control+n, Control+f, Control+b etc.
+
+     Dan in the comments informs me that if you have vi style key bindings on then the following applies:
+
+     1) enter copy mode using Control+b [
+     2) navigate to beginning of text, you want to select and hit Space
+     3) move around using arrow keys to select region
+     4) when you reach end of region simply hit Enter to copy the region
+     5) now Control+b ] will paste the selection
+
+     To enable vi like cursor movement in copy mode put the following in your ~/.tmux.conf:
+
+     set-window-option -g mode-keys vi
+
+     more over what ever you copy, you may dump that out in your terminal using
+
+     tmux show-buffer
+
+     and even save to a file(say, foo.txt) using
+
+     tmux save-buffer foo.txt
+
+     To see all the paste buffers try Control + b #. To dump out the varios buffers on to the terminal or file you may use
+
+     tmux list-buffers
+     tmux show-buffer -b n
+     tmux save-buffer -b n foo.txt
+
+     where n is the index of the paste buffer.
+   #+END_EXAMPLE
+
+** 开启了mouse mode后如何使用鼠标选择区域来copy
+   使用 =set mouse on= 开启鼠标输入后可以方便很多，但是选择区域就需要
+   按住 =shift= 后再使用鼠标选择了。
+
+* 命令行中转换电子书格式
+  =epub to mobi=
+  #+BEGIN_SRC sh
+    ebook-convert program-think.epub program-think.mobi
+  #+END_SRC
+
+  =epub to azw3=
+  #+BEGIN_SRC sh
+    ebook-convert program-think.epub program-think.azw3
+  #+END_SRC
+
+  我想转info文件到kindle上看，试了一下这个流程：
+  #+BEGIN_EXAMPLE
+texinfo -> HTML -> ebook-convert -> mobi
+
+texi2html org.texi
+ebook-convert org.html org.mobi
+  #+END_EXAMPLE
+
+* 命令行转换视频格式
+  #+BEGIN_SRC sh
+    HandBrakeCLI -i xxx.avi -o xxx.mp4
+  #+END_SRC
+* 命令行网页视频下载工具you-get
+
+  http://www.appinn.com/you-get/
+
+  #+BEGIN_SRC sh
+    you-get https://www.bilibili.com/video/av14185130
+  #+END_SRC
+  
+  https://rg3.github.io/youtube-dl/
+  
+  =sudo pip install --upgrade youtube_dl= 来安装。
+* web servers in one line                                              :http:
+  Each of these commands will run an ad hoc http static server in your
+  current (or specified) directory, available at
+  http://localhost:8000.  Use this power wisely.
+
+  [[http://www.reddit.com/r/webdev/comments/1fs45z/list_of_ad_hoc_http_server_oneliners/][Discussion on reddit]].
+
+** Python 2.x
+
+   #+BEGIN_EXAMPLE
+       $ python -m SimpleHTTPServer 8000
+   #+END_EXAMPLE
+
+** Python 3.x
+
+   #+BEGIN_EXAMPLE
+       $ python -m http.server 8000
+   #+END_EXAMPLE
+
+** Twisted (Python)
+
+   #+BEGIN_EXAMPLE
+       $ twistd -n web -p 8000 --path .
+   #+END_EXAMPLE
+
+   Or:
+
+   #+BEGIN_EXAMPLE
+       $ python -c 'from twisted.web.server import Site; from twisted.web.static import File; from twisted.internet import reactor; reactor.listenTCP(8000, Site(File("."))); reactor.run()'
+   #+END_EXAMPLE
+
+   Depends on [[http://twistedmatrix.com/trac/wiki/Downloads][Twisted]].
+
+** Ruby
+
+   #+BEGIN_EXAMPLE
+       $ ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'
+   #+END_EXAMPLE
+
+   Credit:
+   [[http://barkingiguana.com/2010/04/11/a-one-line-web-server-in-ruby/][Barking
+   Iguana]]
+
+** Ruby 1.9.2+
+
+   #+BEGIN_EXAMPLE
+       $ ruby -run -ehttpd . -p8000
+   #+END_EXAMPLE
+
+   Credit: [[https://gist.github.com/willurd/5720255#comment-855952][nobu]]
+
+** adsf (Ruby)
+
+   #+BEGIN_EXAMPLE
+       $ gem install adsf   # install dependency
+       $ adsf -p 8000
+   #+END_EXAMPLE
+
+   Credit:
+   [[https://gist.github.com/willurd/5720255/#comment-841393][twome]]
+
+   /No directory listings./
+
+** Sinatra (Ruby)
+
+   #+BEGIN_EXAMPLE
+       $ gem install sinatra   # install dependency
+       $ ruby -rsinatra -e'set :public_folder, "."; set :port, 8000'
+   #+END_EXAMPLE
+
+   /No directory listings./
+
+** Perl
+
+   #+BEGIN_EXAMPLE
+       $ cpan HTTP::Server::Brick   # install dependency
+       $ perl -MHTTP::Server::Brick -e '$s=HTTP::Server::Brick->new(port=>8000); $s->mount("/"=>{path=>"."}); $s->start'
+   #+END_EXAMPLE
+
+   Credit: [[http://www.perlmonks.org/?node_id=865239][Anonymous Monk]]
+
+** Plack (Perl)
+
+   #+BEGIN_EXAMPLE
+       $ cpan Plack   # install dependency
+       $ plackup -MPlack::App::Directory -e 'Plack::App::Directory->new(root=>".");' -p 8000
+   #+END_EXAMPLE
+
+   Credit:
+   [[http://advent.plackperl.org/2009/12/day-5-run-a-static-file-web-server-with-plack.html][miyagawa]]
+
+** Mojolicious (Perl)
+
+   #+BEGIN_EXAMPLE
+       $ cpan Mojolicious::Lite   # install dependency
+       $ perl -MMojolicious::Lite -MCwd -e 'app->static->paths->[0]=getcwd; app->start' daemon -l http://*:8000
+   #+END_EXAMPLE
+
+   /No directory listings./
+
+** http-server (Node.js)
+
+   #+BEGIN_EXAMPLE
+       $ npm install -g http-server   # install dependency
+       $ http-server -p 8000
+   #+END_EXAMPLE
+
+   /Note: This server does funky things with relative paths. For example,
+   if you have a file =/tests/index.html=, it will load =index.html= if you
+   go to =/test=, but will treat relative paths as if they were coming from
+   =/=./
+
+** node-static (Node.js)
+
+   #+BEGIN_EXAMPLE
+       $ npm install -g node-static   # install dependency
+       $ static -p 8000
+   #+END_EXAMPLE
+
+   /No directory listings./
+
+** PHP (>= 5.4)
+
+   #+BEGIN_EXAMPLE
+       $ php -S 127.0.0.1:8000
+   #+END_EXAMPLE
+
+   Credit:
+   [[http://www.reddit.com/r/webdev/comments/1fs45z/list_of_ad_hoc_http_server_oneliners/cad9ew3][/u/prawnsalad]]
+   and
+   [[https://gist.github.com/willurd/5720255#comment-841131][MattLicense]]
+
+   /No directory listings./
+
+** Erlang
+
+   #+BEGIN_EXAMPLE
+       $ erl -s inets -eval 'inets:start(httpd,[{server_name,"NAME"},{document_root, "."},{server_root, "."},{port, 8000},{mime_types,[{"html","text/html"},{"htm","text/html"},{"js","text/javascript"},{"css","text/css"},{"gif","image/gif"},{"jpg","image/jpeg"},{"jpeg","image/jpeg"},{"png","image/png"}]}]).'
+   #+END_EXAMPLE
+
+   Credit:
+   [[https://gist.github.com/willurd/5720255/#comment-841166][nivertech]]
+   (with the addition of some basic mime types)
+
+   /No directory listings./
+
+** busybox httpd
+
+   #+BEGIN_EXAMPLE
+       $ busybox httpd -f -p 8000
+   #+END_EXAMPLE
+
+   Credit: [[https://gist.github.com/willurd/5720255#comment-841915][lvm]]
+
+** webfs
+   #+BEGIN_EXAMPLE
+       $ webfsd -F -p 8000
+   #+END_EXAMPLE
+
+   Depends on [[http://linux.bytesex.org/misc/webfs.html][webfs]].
+
+** IIS Express
+
+   #+BEGIN_EXAMPLE
+       C:\> "C:\Program Files (x86)\IIS Express\iisexpress.exe" /path:C:\MyWeb /port:8000
+   #+END_EXAMPLE
+
+   Depends on
+   [[http://www.iis.net/learn/extensions/introduction-to-iis-express/iis-express-overview][IIS
+   Express]].
+
+   Credit:
+   [[http://www.reddit.com/r/webdev/comments/1fs45z/list_of_ad_hoc_http_server_oneliners/cada8no][/u/fjantomen]]
+
+   /No directory listings. =/path= must be an absolute path./
+
+** Meta
+
+   If you have any suggestions, drop them in the comments below or on the
+   reddit discussion. To get on this list, a solution must:
+
+   1. serve static files using your current directory (or a specified
+      directory) as the server root,
+   2. be able to be run with a single, one line command (dependencies are
+      fine if they're a one-time thing),
+   3. serve basic file types (html, css, js, images) with proper mime
+      types,
+   4. require no configuration (from files or otherwise) beyond the command
+      itself (no framework-specific servers, etc)
+   5. must run, or have a mode where it can run, in the foreground (i.e. no
+      daemons)
+
+* ruby gem使用国内源
+  #+BEGIN_EXAMPLE
+    $ gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
+    $ gem sources -l
+    https://gems.ruby-china.org
+    # 确保只有 gems.ruby-china.org
+
+  #+END_EXAMPLE
+
+* 修改linux的改键绑定
++ console下，用showkeys查看键值，用dumpkey来查看当前的绑定（可以直接重
+   定向到一个文件peng.kmap），然后一定保留peng.kmap的第一行。其他都可以
+   删除。按照dumpkey的输出来定制自己的键位就可以。最后用loadkey来加载自
+   己的peng.kmap就好。例子：
+#+BEGIN_EXAMPLE
+keymaps 0-2,4-6,8-9,12
+keycode  56 = Alt             
+keycode 100 = Alt
+keycode  58 = Control
+keycode 104 = Caps_Lock
+#+END_EXAMPLE
+用loadkey加载一下就OK。
+
++ X-windows下：用xev来查看键值和对应的名字。用xmodmap来查看当前和修改
+  所有。（在fedora在用xev成功，ubuntu下没测）。有两个层次。需要都修改。
+  例子：
+
+  #+BEGIN_EXAMPLE
+  clear lock
+  remove mod1 = Alt_L
+  remove mod4 = Super_R
+   
+  add control = Alt_L
+  add control = Super_R
+  add control = Menu
+  add control = Caps_Lock
+  add lock = Insert
+   
+   
+  keycode 64 = Control_L
+  keycode 134 = Control_L
+  keycode 135 = Control_L
+  keycode 66 = Control_L
+  keycode 118 = Control_L
+  #+END_EXAMPLE
+
+  用xmodmap加载。
+* 分区设定
+** 给新分区设置label
+   ext4:
+   #+BEGIN_SRC sh
+mkfs.ext4 -L label /dev/xxx  
+   #+END_SRC
+
+   fat：
+   #+BEGIN_SRC sh
+fatlabel device [label]
+
+   #+END_SRC
+** 格式化为 =fat32=
+   #+BEGIN_SRC sh
+sudo mkfs.vfat -F 32 /dev/sdXn
+   #+END_SRC
+   
+   [[https://unix.stackexchange.com/questions/263606/why-the-v-in-mkfs-vfat][command line - Why the "v" in mkfs.vfat? - Unix & Linux Stack Exchange]]
+   #+BEGIN_EXAMPLE
+FAT is a family of filesystems, comprising at least, in chronological order:
+
+    FAT12, a filesystem used on floppies since the late 1980s, in particular by MS-DOS;
+    FAT16, a small modification of FAT12 supporting larger media, introduced to support hard disks;
+    vFAT, which is backward compatible with FAT, but allows files to have longer names which only vFAT-aware applications running on vFAT-aware operating systems can see;
+    FAT32, another modification of FAT16 designed to support larger disk sizes. In practice FAT32 is almost always used with vFAT long file name support, but technically 16/32 and long-file-names-yes/no are independent.
+
+Because those filesystems are very similar, they're usually handled by the same drivers and tools. mkfs.vfat and mkfs.fat are the same tool; an empty FAT16 filesystem and an empty vFAT filesystem look exactly the same, so mkfs doesn't need to distinguish between them. (You can think of FAT16 and vFAT as two different ways of seeing the same filesystem rather than two separate filesystem formats.)
+   #+END_EXAMPLE
+** change ntfs label
+   =ntfslabel=
+** TODO change ext label
+* rsync不同步某些文件
+  有些编译出来的 =.o= 文件等我不想同步。可以使用rsync的 =--exclude= 选
+  项。如果有多个或多种文件不想同步，可以使用rsync的 =--exclude-from=
+  选项来指定一个文件。在该文件指定不想同步的内容即可。
+  
+  #+BEGIN_SRC sh
+rsync -avz --exclude "*.o" from to  
+rsync -avz --exclude-from "exclude-list-file.txt" from to  
+  #+END_SRC
+  
+  =exclude-list-file.txt= 可以长这样：
+  #+BEGIN_EXAMPLE
+  ,*.o
+  ,*.so
+  ,*.la
+  #+END_EXAMPLE
+  
+  # 后面找到另一种更好的方法，rsync支持 =-C= 选项：
+  # #+BEGIN_EXAMPLE
+  # -C, --cvs-exclude           auto-ignore files in the same way CVS does
+  # -C, --cvs-exclude
+  #        This  is a useful shorthand for excluding a broad range of files that you often don’t want to transfer between systems. It uses
+  #        a similar algorithm to CVS to determine if a file should be ignored.
+
+  #        The exclude list is initialized to exclude the following items (these initial items are marked as perishable -- see the  FILTER
+  #        RULES section):
+
+  #               RCS  SCCS  CVS  CVS.adm  RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig
+  #               ,*.rej .del-* *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/
+
+  #        then, files listed in a $HOME/.cvsignore are added to the list and any files listed in the CVSIGNORE environment variable  (all
+  #        cvsignore names are delimited by whitespace).
+
+  #        Finally,  any  file  is  ignored  if  it  is  in the same directory as a .cvsignore file and matches one of the patterns listed
+  #        therein.  Unlike rsync’s filter/exclude files, these patterns are split on whitespace.  See the cvs(1) manual for more informa‐
+  #        tion.
+
+  #        If  you’re  combining  -C with your own --filter rules, you should note that these CVS excludes are appended at the end of your
+  #        own rules, regardless of where the -C was placed on the command-line.  This makes them a lower  priority  than  any  rules  you
+  #        specified explicitly.  If you want to control where these CVS excludes get inserted into your filter rules, you should omit the
+  #        -C as a command-line option and use a combination of --filter=:C and --filter=-C (either on your command-line or by putting the
+  #        ":C"  and  "-C"  rules into a filter file with your other rules).  The first option turns on the per-directory scanning for the
+  #        .cvsignore file.  The second option does a one-time import of the CVS excludes mentioned above.
+
+  # #+END_EXAMPLE
+  # 可以使rsync支持和git一样把git忽略的文件都忽略掉。
+  最后找到这种办法：
+  #+BEGIN_EXAMPLE
+You can use git ls-files to build the list of files excluded by the repository's .gitignore files. https://git-scm.com/docs/git-ls-files
+
+Options:
+
+    --exclude-standard Consider all .gitignore files.
+    -o Don't ignore unstaged changes.
+    -i Only output ignored files.
+    --directory Only output the directory path if the entire directory is ignored.
+
+The only thing I left to ignore was .git.
+
+# 这一条命令其实是有问题的
+rsync -azP --exclude=.git --exclude=`git -C <SRC> ls-files --exclude-standard -oi
+
+# 下面这条命令才可以
+this doesn't work. it excludes the first file from the git subcommand and then treats the rest as part of the SRC list. this works: rsync -azP --exclude-from="$(git -C SRC ls-files --exclude-standard -oi --directory > /tmp/excludes; echo /tmp/excludes)" SRC DEST
+  #+END_EXAMPLE
+
+  于是我参考了它写了我的脚本：
+  #+BEGIN_SRC sh
+#!/bin/bash
+
+SRC="/home/pengpengxp/src/fhos/"
+DES="cdyq-pc-p:/home/pengpengxp/fhos/"
+TEMPFILE="/tmp/pengrsynctemp"
+
+rsync -azP --exclude=.git --exclude-from=$(git -C ${SRC} ls-files --exclude-standard -oi --directory > ${TEMPFILE};echo ${TEMPFILE}) ${SRC} ${DES}
+  #+END_SRC
+* wmctrl来控制窗口
+  ubuntu 16.04中可以直接使用apt来安装：
+  #+BEGIN_SRC sh
+    sudo apt-get install wmctrl
+  #+END_SRC
+  
+  打开了emacs后，可以直接使用下面的命令来激活emacs，firefox，terminal：
+  #+BEGIN_SRC sh
+    wmctrl -a emacs
+    wmctrl -a firefox
+    wmctrl -a terminal
+  #+END_SRC
+
+  然后在对应的键盘设置中把对应的shell-command绑定到按键上就可以了。
+* irony-mode和rtags等等都需要 =compile_commands.json= 文件
+
+  使用 =bear make= 就可以了。有时只需要得到这个文件，可以忽略所有的
+  warning。加入 =-w= 选项就可以了。 
+  #+BEGIN_EXAMPLE
+bear make  CFLAGS+=-w
+  #+END_EXAMPLE
+
+  cmake也可以生成 =compile_commands.json= 文件，如下做就可以啦：
+  #+BEGIN_EXAMPLE
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 /path/to/src
+  #+END_EXAMPLE
+* lunar，ccal命令行下的日历
+
+  查一天的详情：
+  lunar 2018 2 15
+  
+  
+  ccal可能更好用一点：
+  #+BEGIN_SRC sh
+ccal
+  #+END_SRC
+
+  #+RESULTS:
+  | January | 2018   |   (Year | DingYou,  |    Month | 12D    |     S17) |       |         |      |    |      |    |      |    |      |      |    |      |
+  |  Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday |       |         |      |    |      |    |      |    |      |      |    |      |
+  |       1 | [15]   |       2 | [16]      |        3 | [17]   |        4 | [18]  |       5 | [XH] |  6 | [20] |    |      |    |      |      |    |      |
+  |       7 | [21]   |       8 | [22]      |        9 | [23]   |  [7m10 | [24]  | [0m11 | [25] | 12 | [26] | 13 | [27] |    |      |      |    |      |
+  |      14 | [28]   |      15 | [29]      |       16 | [30]   |       17 | [12]Y |      18 | [    | 2] | 19   |  [ | 3]   | 20 | [DH] |      |    |      |
+  |      21 | [      |      5] | 22        |        [ | 6]     |       23 | [     |      7] | 24   |  [ | 8]   | 25 | [    | 9] |   26 | [10] | 27 | [11] |
+  |      28 | [12]   |      29 | [13]      |       30 | [14]   |       31 | [15]  |         |      |    |      |    |      |    |      |      |    |      |
+
+  更好地显示中文：
+  #+BEGIN_SRC sh
+ccal -b -u
+  #+END_SRC
+
+  #+RESULTS:
+  | January | 2018 | 丁酉年十二月大17日始 |      |     |      |         |        |         |      |     |      |     |      |
+  |     Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六   |
+  |       1 | 十五 |                    2 | 十六 |   3 | 十七 |       4 | 十八   |       5 | 小寒 |   6 | 二十 |     |      |
+  |       7 | 廿一 |                    8 | 廿二 |   9 | 廿三 | [7m10 | 廿四   | [0m11 | 廿五 |  12 | 廿六 |  13 | 廿七 |
+  |      14 | 廿八 |                   15 | 廿九 |  16 | 三十 |      17 | 十二月 |      18 | 初二 |  19 | 初三 |  20 | 大寒 |
+  |      21 | 初五 |                   22 | 初六 |  23 | 初七 |      24 | 初八   |      25 | 初九 |  26 | 初十 |  27 | 十一 |
+  |      28 | 十二 |                   29 | 十三 |  30 | 十四 |      31 | 十五   |         |      |     |      |     |      |
+
+  查2018年
+  #+BEGIN_SRC sh
+ccal -b -u 2018
+  #+END_SRC
+
+  #+RESULTS:
+  |   January | 2018 | 丁酉年十二月大17日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十五 |                    2 | 十六 |   3 | 十七 |       4 | 十八   |       5 | 小寒 |   6 | 二十 |     |        |
+  |         7 | 廿一 |                    8 | 廿二 |   9 | 廿三 | [7m10 | 廿四   | [0m11 | 廿五 |  12 | 廿六 |  13 | 廿七   |
+  |        14 | 廿八 |                   15 | 廿九 |  16 | 三十 |      17 | 十二月 |      18 | 初二 |  19 | 初三 |  20 | 大寒   |
+  |        21 | 初五 |                   22 | 初六 |  23 | 初七 |      24 | 初八   |      25 | 初九 |  26 | 初十 |  27 | 十一   |
+  |        28 | 十二 |                   29 | 十三 |  30 | 十四 |      31 | 十五   |         |      |     |      |     |        |
+  |  February | 2018 |   戊戌年正月小16日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十六 |                    2 | 十七 |   3 | 十八 |         |        |         |      |     |      |     |        |
+  |         4 | 立春 |                    5 | 二十 |   6 | 廿一 |       7 | 廿二   |       8 | 廿三 |   9 | 廿四 |  10 | 廿五   |
+  |        11 | 廿六 |                   12 | 廿七 |  13 | 廿八 |      14 | 廿九   |      15 | 三十 |  16 | 正月 |  17 | 初二   |
+  |        18 | 初三 |                   19 | 雨水 |  20 | 初五 |      21 | 初六   |      22 | 初七 |  23 | 初八 |  24 | 初九   |
+  |        25 | 初十 |                   26 | 十一 |  27 | 十二 |      28 | 十三   |         |      |     |      |     |        |
+  |     March | 2018 |   戊戌年二月大17日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十四 |                    2 | 十五 |   3 | 十六 |         |        |         |      |     |      |     |        |
+  |         4 | 十七 |                    5 | 驚蟄 |   6 | 十九 |       7 | 二十   |       8 | 廿一 |   9 | 廿二 |  10 | 廿三   |
+  |        11 | 廿四 |                   12 | 廿五 |  13 | 廿六 |      14 | 廿七   |      15 | 廿八 |  16 | 廿九 |  17 | 二月   |
+  |        18 | 初二 |                   19 | 初三 |  20 | 初四 |      21 | 春分   |      22 | 初六 |  23 | 初七 |  24 | 初八   |
+  |        25 | 初九 |                   26 | 初十 |  27 | 十一 |      28 | 十二   |      29 | 十三 |  30 | 十四 |  31 | 十五   |
+  |     April | 2018 |   戊戌年三月小16日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十六 |                    2 | 十七 |   3 | 十八 |       4 | 十九   |       5 | 清明 |   6 | 廿一 |   7 | 廿二   |
+  |         8 | 廿三 |                    9 | 廿四 |  10 | 廿五 |      11 | 廿六   |      12 | 廿七 |  13 | 廿八 |  14 | 廿九   |
+  |        15 | 三十 |                   16 | 三月 |  17 | 初二 |      18 | 初三   |      19 | 初四 |  20 | 穀雨 |  21 | 初六   |
+  |        22 | 初七 |                   23 | 初八 |  24 | 初九 |      25 | 初十   |      26 | 十一 |  27 | 十二 |  28 | 十三   |
+  |        29 | 十四 |                   30 | 十五 |     |      |         |        |         |      |     |      |     |        |
+  |       May | 2018 |   戊戌年四月大15日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十六 |                    2 | 十七 |   3 | 十八 |       4 | 十九   |       5 | 立夏 |     |      |     |        |
+  |         6 | 廿一 |                    7 | 廿二 |   8 | 廿三 |       9 | 廿四   |      10 | 廿五 |  11 | 廿六 |  12 | 廿七   |
+  |        13 | 廿八 |                   14 | 廿九 |  15 | 四月 |      16 | 初二   |      17 | 初三 |  18 | 初四 |  19 | 初五   |
+  |        20 | 初六 |                   21 | 小滿 |  22 | 初八 |      23 | 初九   |      24 | 初十 |  25 | 十一 |  26 | 十二   |
+  |        27 | 十三 |                   28 | 十四 |  29 | 十五 |      30 | 十六   |      31 | 十七 |     |      |     |        |
+  |      June | 2018 |   戊戌年五月小14日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十八 |                    2 | 十九 |     |      |         |        |         |      |     |      |     |        |
+  |         3 | 二十 |                    4 | 廿一 |   5 | 廿二 |       6 | 芒種   |       7 | 廿四 |   8 | 廿五 |   9 | 廿六   |
+  |        10 | 廿七 |                   11 | 廿八 |  12 | 廿九 |      13 | 三十   |      14 | 五月 |  15 | 初二 |  16 | 初三   |
+  |        17 | 初四 |                   18 | 初五 |  19 | 初六 |      20 | 初七   |      21 | 夏至 |  22 | 初九 |  23 | 初十   |
+  |        24 | 十一 |                   25 | 十二 |  26 | 十三 |      27 | 十四   |      28 | 十五 |  29 | 十六 |  30 | 十七   |
+  |      July | 2018 |   戊戌年六月小13日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 十八 |                    2 | 十九 |   3 | 二十 |       4 | 廿一   |       5 | 廿二 |   6 | 廿三 |   7 | 小暑   |
+  |         8 | 廿五 |                    9 | 廿六 |  10 | 廿七 |      11 | 廿八   |      12 | 廿九 |  13 | 六月 |  14 | 初二   |
+  |        15 | 初三 |                   16 | 初四 |  17 | 初五 |      18 | 初六   |      19 | 初七 |  20 | 初八 |  21 | 初九   |
+  |        22 | 初十 |                   23 | 大暑 |  24 | 十二 |      25 | 十三   |      26 | 十四 |  27 | 十五 |  28 | 十六   |
+  |        29 | 十七 |                   30 | 十八 |  31 | 十九 |         |        |         |      |     |      |     |        |
+  |    August | 2018 |   戊戌年七月大11日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 二十 |                    2 | 廿一 |   3 | 廿二 |       4 | 廿三   |         |      |     |      |     |        |
+  |         5 | 廿四 |                    6 | 廿五 |   7 | 立秋 |       8 | 廿七   |       9 | 廿八 |  10 | 廿九 |  11 | 七月   |
+  |        12 | 初二 |                   13 | 初三 |  14 | 初四 |      15 | 初五   |      16 | 初六 |  17 | 初七 |  18 | 初八   |
+  |        19 | 初九 |                   20 | 初十 |  21 | 十一 |      22 | 十二   |      23 | 處暑 |  24 | 十四 |  25 | 十五   |
+  |        26 | 十六 |                   27 | 十七 |  28 | 十八 |      29 | 十九   |      30 | 二十 |  31 | 廿一 |     |        |
+  | September | 2018 |   戊戌年八月小10日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 廿二 |                      |      |     |      |         |        |         |      |     |      |     |        |
+  |         2 | 廿三 |                    3 | 廿四 |   4 | 廿五 |       5 | 廿六   |       6 | 廿七 |   7 | 廿八 |   8 | 白露   |
+  |         9 | 三十 |                   10 | 八月 |  11 | 初二 |      12 | 初三   |      13 | 初四 |  14 | 初五 |  15 | 初六   |
+  |        16 | 初七 |                   17 | 初八 |  18 | 初九 |      19 | 初十   |      20 | 十一 |  21 | 十二 |  22 | 十三   |
+  |        23 | 秋分 |                   24 | 十五 |  25 | 十六 |      26 | 十七   |      27 | 十八 |  28 | 十九 |  29 | 二十   |
+  |        30 | 廿一 |                      |      |     |      |         |        |         |      |     |      |     |        |
+  |   October | 2018 |    戊戌年九月大9日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 廿二 |                    2 | 廿三 |   3 | 廿四 |       4 | 廿五   |       5 | 廿六 |   6 | 廿七 |     |        |
+  |         7 | 廿八 |                    8 | 寒露 |   9 | 九月 |      10 | 初二   |      11 | 初三 |  12 | 初四 |  13 | 初五   |
+  |        14 | 初六 |                   15 | 初七 |  16 | 初八 |      17 | 初九   |      18 | 初十 |  19 | 十一 |  20 | 十二   |
+  |        21 | 十三 |                   22 | 十四 |  23 | 霜降 |      24 | 十六   |      25 | 十七 |  26 | 十八 |  27 | 十九   |
+  |        28 | 二十 |                   29 | 廿一 |  30 | 廿二 |      31 | 廿三   |         |      |     |      |     |        |
+  |  November | 2018 |    戊戌年十月小8日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 廿四 |                    2 | 廿五 |   3 | 廿六 |         |        |         |      |     |      |     |        |
+  |         4 | 廿七 |                    5 | 廿八 |   6 | 廿九 |       7 | 立冬   |       8 | 十月 |   9 | 初二 |  10 | 初三   |
+  |        11 | 初四 |                   12 | 初五 |  13 | 初六 |      14 | 初七   |      15 | 初八 |  16 | 初九 |  17 | 初十   |
+  |        18 | 十一 |                   19 | 十二 |  20 | 十三 |      21 | 十四   |      22 | 小雪 |  23 | 十六 |  24 | 十七   |
+  |        25 | 十八 |                   26 | 十九 |  27 | 二十 |      28 | 廿一   |      29 | 廿二 |  30 | 廿三 |     |        |
+  |  December | 2018 |  戊戌年十一月大7日始 |      |     |      |         |        |         |      |     |      |     |        |
+  |       Sun | 日   |                  Mon | 一   | Tue | 二   |     Wed | 三     |     Thu | 四   | Fri | 五   | Sat | 六     |
+  |         1 | 廿四 |                      |      |     |      |         |        |         |      |     |      |     |        |
+  |         2 | 廿五 |                    3 | 廿六 |   4 | 廿七 |       5 | 廿八   |       6 | 廿九 |   7 | 大雪 |   8 | 十一月 |
+  |         9 | 初三 |                   10 | 初四 |  11 | 初五 |      12 | 初六   |      13 | 初七 |  14 | 初八 |  15 | 初九   |
+  |        16 | 初十 |                   17 | 十一 |  18 | 十二 |      19 | 十三   |      20 | 十四 |  21 | 十五 |  22 | 冬至   |
+  |        23 | 十七 |                   24 | 十八 |  25 | 十九 |      26 | 二十   |      27 | 廿一 |  28 | 廿二 |  29 | 廿三   |
+  |        30 | 廿四 |                   31 | 廿五 |     |      |         |        |         |      |     |      |     |        |
+
+  查2018年2月
+  #+BEGIN_SRC sh
+ccal -b -u 2 2018
+  #+END_SRC
+
+  #+RESULTS:
+  | February | 2018 | 戊戌年正月小16日始 |      |     |      |     |      |     |      |     |      |     |      |
+  |      Sun | 日   |                Mon | 一   | Tue | 二   | Wed | 三   | Thu | 四   | Fri | 五   | Sat | 六   |
+  |        1 | 十六 |                  2 | 十七 |   3 | 十八 |     |      |     |      |     |      |     |      |
+  |        4 | 立春 |                  5 | 二十 |   6 | 廿一 |   7 | 廿二 |   8 | 廿三 |   9 | 廿四 |  10 | 廿五 |
+  |       11 | 廿六 |                 12 | 廿七 |  13 | 廿八 |  14 | 廿九 |  15 | 三十 |  16 | 正月 |  17 | 初二 |
+  |       18 | 初三 |                 19 | 雨水 |  20 | 初五 |  21 | 初六 |  22 | 初七 |  23 | 初八 |  24 | 初九 |
+  |       25 | 初十 |                 26 | 十一 |  27 | 十二 |  28 | 十三 |     |      |     |      |     |      |
+* 不重启也不使用udev来修改系统中网卡的名字
+  #+BEGIN_SRC sh
+ifconfig peth0 down  
+ip link set peth0 name eth0  
+ifconfig eth0 up  
+  #+END_SRC
+* 打开coredump选项，debug的时候比较方便
+  这样就会产生coredump文件啦：
+  #+BEGIN_SRC sh
+ulimit -c unlimited  
+  #+END_SRC
+  可以这样查询一下配置成功没有：
+  #+BEGIN_SRC sh
+ulimit -a  
+  #+END_SRC
+* ssh不用每次都添加到known_hosts
+  有时debug，有些设置一直都在重启，不需要每次都加进去。这样写ssh的配置：
+  #+BEGIN_SRC conf-space
+Host switch-free
+        Hostname 10.0.0.69
+        UserKnownHostsFile /dev/null
+        StrictHostKeyChecking no
+        User root
+        Port 22
+  #+END_SRC
+  
+  =UserKnownHostsFile= 是不加入 =~/.ssh/known_hosts= 文件，
+  =StrictHostKeyChecking= 是不用每次都输 =yes or no= 。
+* aria2一个命令行下载工具
+#+BEGIN_EXAMPLE
+Download from WEB:
+
+$ aria2c http://example.org/mylinux.iso
+
+Download from 2 sources:
+
+$ aria2c http://a/f.iso ftp://b/f.iso
+
+Download using 2 connections per host:
+
+$ aria2c -x2 http://a/f.iso
+
+BitTorrent:
+
+$ aria2c http://example.org/mylinux.torrent
+
+BitTorrent Magnet URI:
+
+$ aria2c 'magnet:?xt=urn:btih:248D0A1CD08284299DE78D5C1ED359BB46717D8C'
+
+Metalink:
+
+$ aria2c http://example.org/mylinux.metalink
+
+Download URIs found in text file:
+
+$ aria2c -i uris.txt
+#+END_EXAMPLE

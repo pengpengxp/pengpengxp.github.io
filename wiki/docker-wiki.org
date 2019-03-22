@@ -1,0 +1,98 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+TITLE: Docker wiki
+
+
+* [[https://hub.daocloud.io/][国内镜像市场daocloud]]
+  
+  直接ssh登进去：
+  #+BEGIN_SRC sh
+    docker run -i -t --entrypoint /bin/bash <imageID>
+  #+END_SRC
+
+  映射端口：
+  #+BEGIN_SRC sh
+    docker run -d --name=web1 -p 80:80 nginx
+
+    docker exec <name-or-id> ifconfig
+
+    docker exec -it <name-or-id> sh
+
+    docker run -d -P nginx
+  #+END_SRC
+
+  上面的 -P 参数就是告诉 docker 要把容器暴露的端口映射到主机上。用
+  =docker ps= 也可以看到 =0.0.0.0:32769->80/tcp,
+  0.0.0.0:32768->443/tcp=，说明容器暴露了两个端口 80 和 443 到主机上。
+  也可以通过 =docker port= 命令查看k。
+
+  从host拷贝文件到container。
+  #+BEGIN_SRC sh
+    docker cp file.txt container:/home/
+  #+END_SRC
+
+* install docker on ubuntu 14.04
+  ubuntu 14.04里安装，是安装 =docker.io= 这个包。然后还需要把当前用户
+  加入docker组才行：
+  #+BEGIN_SRC sh
+    sudo apt-get install docker.io
+    sudo usermod -a -G docker <username>
+    sudo service docker start
+  #+END_SRC
+
+* 网桥配置相关命令
+  #+BEGIN_SRC sh
+    # 查看当前所有网桥信息
+    brctl show
+
+    # 把对应的网卡接到网桥上
+    brctl addif <bridge-name> <interface-name>
+    # 把对应的网卡从网桥上删除
+    brctl delif <bridge-name> <interface-name>
+
+    # 添加一个网桥
+    brctl addbr
+    # 删除一个网桥
+    brctl delbr
+
+    # 把对应的eth0网卡上的ip清空
+    ip a flush dev eth0
+
+    # 设置网桥的ip地址，几种方式都可以
+    ifconfig <bridge-name> 172.16.2.1/24
+    ifconfig <bridge-name> 172.16.2.1 netmask 255.255.255.0
+    ip a add 172.16.2.1/24 dev <bridge-name>
+  #+END_SRC
+
+* docker on mac
+  [[https://docs.docker.com/docker-for-mac/networking/][docker在mac的网络方面可以看这里]]
+
+  Mac上host是ping不通container的。坑！！
+
+  [[./images/2017-06-28-docker-wiki.org-can-not-ping.png]]
+
+* 存入导出镜像
+  docker save -o image.tar <contanier>:latest
+  docker load --input image.tar
+
+* 容器导入导出
+  docker export XXX > ubuntu.tar
+  cat ubuntu.tar|docker import - containername:latest
+
+* 虚拟机中使用ras搞docker
+  1. 一定要桥接。
+  2. 桥接的网卡需要设置为混杂模式。
+* SaaS, PaaS, IaaS
+  1. SaaS(Software as a Service): 应用做为服务提供给用户。主要面向普通
+     用户。
+  2. PaaS(Platform as a Service): 一个开发平台做服务提供给用户，如果用
+     户是开发人员。
+  3. IaaS(Infrastracture as a Service): 把虚拟机或者其它经资源做为服务
+     提供给用户。主要的用户是系统管理员。
+     
+  它们之间的关系主要可以从两个角度进行分析：其一是用户体验角度，从这个
+  角度而言，它们之间关系是独立的，因为它们面对不同类型的用户。其二是技
+  术角度，从这个角度而言，它们并不是简单的继承关系(SaaS基于PaaS，而
+  PaaS基于IaaS)，因为首先SaaS可以是基于PaaS或者直接部署于IaaS之上，其
+  次PaaS可以构建于IaaS之上，也可以直接构建在物理资源之上。
+
+  

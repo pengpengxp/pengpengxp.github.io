@@ -1,0 +1,106 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE:  syslog tutorial
+
+* hello world
+  ubuntu中确定syslogd进程运行着， =ubuntu 16.04= 中是叫 =rsyslog= ：
+  #+BEGIN_SRC C :tangle /tmp/syslog_example.c :main no
+#include <syslog.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main()
+{
+	setlogmask (LOG_UPTO (LOG_NOTICE));
+	openlog ("exampleprog", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+
+	syslog (LOG_NOTICE | LOG_FTP, "[pengtest] Program started by User %d, with facility ftp.", getuid ());
+
+	syslog (LOG_NOTICE, "Program started by User %d, with default facility.", getuid ());
+
+	syslog (LOG_INFO, "A tree falls in a forest");
+	closelog ();
+	return 0;
+}
+  #+END_SRC
+  执行后可以到 =/var/log/syslog= 文件中找到对应的打印。
+
+* 自己根据syslog封装一个日志接口
+  #+BEGIN_SRC C :tangle /tmp/syslog_example_my_log.c :main no
+#include <syslog.h>
+#include <unistd.h>
+#include <stdarg.h>
+
+int my_log(int level, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vsyslog(level | LOG_LOCAL0, format, args);
+    va_end(args);
+
+    return 0;
+}
+
+int main()
+{
+	openlog ("my_log", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+
+        my_log(LOG_NOTICE, "This is test,%d%s\n", 5, "nihao");
+
+	closelog ();
+	return 0;
+}
+  #+END_SRC
+* 配置远程日志服务器
+  假设当前有两台ubuntu机器，在日志server上需要开启rsyslog接收远程日志
+  的功能，具体做法是修改 =/etc/rsyslog.conf= 文件，保证有下面两行：
+  #+BEGIN_SRC conf-space
+# provides TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+  #+END_SRC
+
+  然后重启一下rsyslog服务 =sudo service rsyslog restart= 。
+
+  在日志的client上，直接指定rsyslog的远程server的ip和端口就可以了，比
+  如这样：
+  #+BEGIN_SRC conf-space
+,*.* @@10.0.0.50:514
+  #+END_SRC
+
+* 配置syslog的格式
+
+  可以定义多种格式，然后使用即可，参考的 [[https://www.rsyslog.com/doc/v8-stable/configuration/templates.html][这里]] ：
+  #+BEGIN_SRC conf-space
+# 这种是新的方式来定义template的
+template(name="ForwardFormat" type="list") {
+    constant(value="<")
+    property(name="pri")
+    constant(value=">")
+    property(name="timestamp" dateFormat="rfc3339")
+    constant(value=" ")
+    property(name="hostname")
+    constant(value=" ")
+    property(name="syslogtag" position.from="1" position.to="32")
+    property(name="msg" spifno1stsp="on" )
+    property(name="msg")
+    }
+
+# 旧的方式来定义template
+$template myTraditionalFormatWithPRI,"%pri-text%: %timegenerated% %HOSTNAME% %syslogtag%%msg:::drop-last-lf%\n"
+
+# 设置为对应的template的名字就可以修改了
+$ActionFileDefaultTemplate myTraditionalFormatWithPRI
+  #+END_SRC
+
+  [[https://www.rsyslog.com/doc/master/configuration/properties.html][这里]] 有 =syslog= 的所有property，可能参考来写template。
+
+* syglog, syslog-ng和rsyslog
+  这三个其实都差不多。
+
+  [[https://serverfault.com/questions/692309/what-is-the-difference-between-syslog-rsyslog-and-syslog-ng][stackoverflow]] 上有回答。
+
+  简单说，先有syslog，然后是syslog-ng然后是rsyslog。这三个并行在发展，
+  相互也进行参考。都差不多。

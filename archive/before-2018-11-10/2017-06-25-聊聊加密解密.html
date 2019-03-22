@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>聊聊加密解密</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">聊聊加密解密</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org25b9465">1. 哈希算法（摘要算法）</a></li>
+<li><a href="#org0d9cdb9">2. 数字签名</a></li>
+<li><a href="#orgae1f258">3. AES加密解密</a></li>
+<li><a href="#org0b62525">4. https认证过程</a></li>
+<li><a href="#org282c432">5. 公钥私钥</a></li>
+</ul>
+</div>
+</div>
+<p>
+这两天搞一个包的加密解密，大概了解了一下对应的算法。这里面的学问太大啦。
+我准备先记录个笔记在这里。后面再来完善它。
+</p>
+
+<div id="outline-container-org25b9465" class="outline-2">
+<h2 id="org25b9465"><span class="section-number-2">1</span> 哈希算法（摘要算法）</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868328251266d86585fc9514536a638f06b41908d44000">廖雪峰有一篇很棒的文章</a>
+</p>
+
+<p>
+常见的有md5和SHA等。就是一个函数f()，它通过一个函数，把任意长度的数
+据转换为一个长度固定的数据串（通常用16进制的字符串表示）。单向的，计
+算f(data)很容易，但通过digest反推data却非常困难。
+</p>
+
+<p>
+比SHA1更安全的算法是SHA256和SHA512，不过越安全的算法越慢，而且摘要长
+度更长。
+</p>
+
+<p>
+有没有可能两个不同的数据通过某个摘要算法得到了相同的摘要？完全有可能，
+因为任何摘要算法都是把无限多的数据集合映射到一个有限的集合中。这种情
+况称为碰撞，比如Bob试图根据你的摘要反推出一篇文章'how to learn
+hashlib in python - by Bob'，并且这篇文章的摘要恰好和你的文章完全一
+致，这种情况也并非不可能出现，但是非常非常困难。
+</p>
+
+<p>
+在后端数据库中，一般不存用户的明文密码，这样可能系统管理员能看到所有
+的密码。而是存它的密码的摘要，也就是hash之后的值。用户登陆时，过程应
+该是先计算它的密码的摘要，然后对比库中的。这样的好处是即使运维人员能
+访问数据库，也无法获知用户的明文口令。
+</p>
+
+<p>
+python中使用SHA是比较简单的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> hashlib
+
+    <span style="color: #ff8700;">sha1</span> = hashlib.sha1()
+    sha1.update(<span style="color: #ff4ea3;">'how to use sha1 in '</span>)
+    sha1.update(<span style="color: #ff4ea3;">'python hashlib?'</span>)
+    <span style="color: #a1db00;">print</span> sha1.hexdigest()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0d9cdb9" class="outline-2">
+<h2 id="org0d9cdb9"><span class="section-number-2">2</span> 数字签名</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+结合摘要算法，python中有一种RSA数字签名协议 <a href="https://www.dlitz.net/software/pycrypto/api/2.6/Crypto.Signature.PKCS1_v1_5-module.html">PKCS1_v1_5</a> ，它可以用私
+钥来签名，公钥来验证。<a href="https://en.wikipedia.org/wiki/PKCS">PKCS(Public Key Cryptography Standards)</a>。  发
+送方可能使用私钥来签名经过SHA-1后的消息：
+</p>
+<pre class="example">
+    &gt;&gt;&gt; from Crypto.Signature import PKCS1_v1_5
+    &gt;&gt;&gt; from Crypto.Hash import SHA
+    &gt;&gt;&gt; from Crypto.PublicKey import RSA
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; message = 'To be signed'
+    &gt;&gt;&gt; key = RSA.importKey(open('privkey.der').read())
+    &gt;&gt;&gt; h = SHA.new(message)
+    &gt;&gt;&gt; signer = PKCS1_v1_5.new(key)
+    &gt;&gt;&gt; signature = signer.sign(h)
+</pre>
+
+<p>
+接收方可以使用对应的公钥来进行验证：
+</p>
+<pre class="example">
+    &gt;&gt;&gt; key = RSA.importKey(open('pubkey.der').read())
+    &gt;&gt;&gt; h = SHA.new(message)
+    &gt;&gt;&gt; verifier = PKCS1_v1_5.new(key)
+    &gt;&gt;&gt; if verifier.verify(h, signature):
+    &gt;&gt;&gt;    print "The signature is authentic."
+    &gt;&gt;&gt; else:
+    &gt;&gt;&gt;    print "The signature is not authentic."
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgae1f258" class="outline-2">
+<h2 id="orgae1f258"><span class="section-number-2">3</span> AES加密解密</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+一种对称加密的算法。
+</p>
+
+<p>
+<a href="http://www.cnblogs.com/cmsd/p/3838269.html">在这里看到一些AES的讲解</a>
+</p>
+<pre class="example">
+    高级加密标准（Advanced Encryption Standard，AES），在密码学中又称
+    Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代
+    原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级
+    加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS
+    PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为
+    对称密钥加密中最流行的算法之一。AES只是个基本算法，实现AES有若干模式。
+    其中的CBC模式因为其安全性而被TLS（就是https的加密标准）和IPSec（win采
+    用的）作为技术标准。简单地说，CBC使用密码和salt（起扰乱作用）按固定算
+    法（md5）产生key和iv。然后用key和iv（初始向量，加密第一块明文）加密
+    （明文）和解密（密文）。
+</pre>
+
+<p>
+对称加密，我使用的是AES对称加密：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">from</span> Crypto.Cipher <span style="color: #a1db00;">import</span> AES
+    <span style="color: #ff8700;">obj</span> = AES.new(<span style="color: #ff4ea3;">'This is a key123'</span>, AES.MODE_CBC, <span style="color: #ff4ea3;">'tttttttttttttttt'</span>)
+    <span style="color: #ff8700;">message</span> = <span style="color: #ff4ea3;">"yyyyyyyyyyyyyyyy"</span>
+    <span style="color: #ff8700;">ciphertext</span> = obj.encrypt(message)
+    <span style="color: #ff8700;">obj2</span> = AES.new(<span style="color: #ff4ea3;">'This is a key123'</span>, AES.MODE_CBC, <span style="color: #ff4ea3;">'tttttttttttttttt'</span>)
+    <span style="color: #a1db00;">print</span> obj2.decrypt(ciphertext)
+</pre>
+</div>
+
+<p>
+AES加密有下面的要求：
+</p>
+<ol class="org-ol">
+<li><p>
+密码必须是16、24、32位的
+</p>
+<pre class="example">
+       ValueError: AES key must be either 16, 24, or 32 bytes long
+</pre></li>
+<li><p>
+加密的数据必须是16字节的倍数的
+</p>
+<pre class="example">
+       ValueError: Input strings must be a multiple of 16 in length
+</pre></li>
+<li><p>
+iv也必须是16位的 
+</p>
+<pre class="example">
+        ValueError: IV must be 16 bytes long
+</pre></li>
+</ol>
+
+<p>
+由于上面的这些要求，重写一下示例脚本，支持任何长度的数据加密：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> base64
+    <span style="color: #a1db00;">from</span> Crypto <span style="color: #a1db00;">import</span> Random
+    <span style="color: #a1db00;">from</span> Crypto.Cipher <span style="color: #a1db00;">import</span> AES
+
+    <span style="color: #ff8700;">password</span> = base64.b64encode(Random.new().read(24))
+    <span style="color: #ff8700;">buf</span> = <span style="color: #ff4ea3;">"any lentgh data haha"</span>
+
+    <span style="color: #ff8700;">padding_length</span> = 16 - (<span style="color: #d18aff;">len</span>(buf) % 16)
+    <span style="color: #ff8700;">padded_buf</span> = buf + <span style="color: #d18aff;">chr</span>(padding_length) * padding_length
+
+    <span style="color: #ff8700;">IV</span> = Random.new().read(16)
+    <span style="color: #ff8700;">aes</span> = AES.new(password, AES.MODE_CFB, IV)
+
+    <span style="color: #ff8700;">encrypt_buf</span> = aes.encrypt(padded_buf)
+
+    <span style="color: #ff8700;">decrypt_aes</span> = AES.new(password, AES.MODE_CFB, IV)
+    <span style="color: #ff8700;">out</span> = decrypt_aes.decrypt(encrypt_buf)
+    <span style="color: #ff8700;">out_padding_len</span> = <span style="color: #d18aff;">ord</span>(out[-1])
+    <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'padding data len = %s'</span> % out_padding_len
+    <span style="color: #ff8700;">out_plaintext</span> = out[:-out_padding_len]
+    <span style="color: #a1db00;">print</span> out_plaintext
+</pre>
+</div>
+
+<p>
+可以看到，解密时，除了需要加密时使用的 <code>password</code> 外，还需要对应的
+<code>iv</code> 值。有的做法是直接把ivy的值放到加密数据的后面。解密的时候先读出
+最后的16位的 <code>iv</code> 值。然后再用来解密前面的数据。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0b62525" class="outline-2">
+<h2 id="org0b62525"><span class="section-number-2">4</span> https认证过程</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+现在使用https比较多。阮一峰的这个博客讲得很形像：<a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议</a> 。
+</p>
+
+<p>
+爱丽丝是client，鲍勃是server。
+</p>
+
+<ol class="org-ol">
+<li>第一步，爱丽丝给出协议版本号、一个客户端生成的随机数（Client
+random），以及客户端支持的加密方法。</li>
+<li>第二步，鲍勃确认双方使用的加密方法，并给出数字证书、以及一个服务
+器生成的随机数（Server random）。</li>
+<li>第三步，爱丽丝确认数字证书有效，然后生成一个新的随机数（Premaster
+secret），并使用数字证书中的公钥，加密这个随机数，发给鲍勃。</li>
+<li>第四步，鲍勃使用自己的私钥，获取爱丽丝发来的随机数（即Premaster
+secret）。</li>
+<li>第五步，爱丽丝和鲍勃根据约定的加密方法，使用前面的三个随机数，生
+成"对话密钥"（session key），用来加密接下来的整个对话过程。</li>
+</ol>
+
+<p>
+握手阶段有三点需要注意。
+</p>
+<ol class="org-ol">
+<li>生成对话密钥一共需要三个随机数。</li>
+<li>握手之后的对话使用"对话密钥"加密（对称加密），服务器的公钥和私钥
+只用于加密和解密"对话密钥"（非对称加密），无其他作用。</li>
+<li>服务器公钥放在服务器的数字证书之中。</li>
+</ol>
+
+<p>
+其中第三步client确认证书有效，一般应该是去一个权威地第三方证书认证机
+构询问。
+</p>
+
+<p>
+我个人理解：证书中应该是已经包含公钥的信息了，客户在取得证书后，可以
+从中提取出publickey，如果验证证书是有效的情况下。就可以使用publickey
+来加密client random key了。
+</p>
+
+<p>
+证书生成的时候是需要私钥的（因为其实证书中有公钥信息了嘛），并且还含
+有公司信息，对应的url等信息。证书还可以参考 <a href="http://kb.cnblogs.com/page/194742/">数字证书及CA的扫盲介绍</a> 。
+</p>
+
+<p>
+可以参考这里手动自己生成证书： <a href="http://www.barretlee.com/blog/2015/10/05/how-to-build-a-https-server/">HTTPS证书生成原理和部署细节</a> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org282c432" class="outline-2">
+<h2 id="org282c432"><span class="section-number-2">5</span> 公钥私钥</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+维基百科上写得很清楚：<a href="https://zh.wikipedia.org/wiki/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">公开密钥加密</a> 。
+</p>
+
+<p>
+如果加密密钥是公开的，这用于客户给私钥所有者上传加密的数据，这被称作
+为公开密钥加密（狭义）。例如，网络银行的客户发给银行网站的账户操作的
+加密数据。
+</p>
+
+<p>
+如果解密密钥是公开的，用私钥加密的信息，可以用公钥对其解密，用于客户
+验证持有私钥一方发布的数据或文件是完整准确的，接收者由此可知这条信息
+确实来自于拥有私钥的某人，这被称作数字签名，公钥的形式就是数字证书。
+例如，从网上下载的安装程序，一般都带有程序制作者的数字签名，可以证明
+该程序的确是该作者（公司）发布的而不是第三方伪造的且未被篡改过（身份
+认证/验证）。
+</p>
+
+<p>
+常见的公钥加密算法有：RSA、ElGamal、背包算法、Rabin（RSA的特例）、迪
+菲－赫尔曼密钥交换协议中的公钥加密算法、椭圆曲线加密算法（英语：
+Elliptic Curve Cryptography, ECC）。使用最广泛的是RSA算法（由发明者
+Rivest、Shmir和Adleman姓氏首字母缩写而来）是著名的公开秘钥加密算法，
+ElGamal是另一种常用的非对称加密算法。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

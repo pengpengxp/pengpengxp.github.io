@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+
+    <title>具有Automake的程序和库</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>具有Automake的程序和库</h2>
+
+        <p>
+          接下来我们在源代码目录层面解释如果开发 Makefile.am 。
+          一个Makefile.am文件就是一堆赋值的集合。Makefile.am文件意味着Makefile文件：一些目标 、依赖和规则的文件。
+          而Makefile文件意味着构建的执行。
+        </p>
+
+        <p>开头的一堆赋值语句可能是这样的：
+        <pre class="code">INCLUDES = -I/dir1 -I/dir2 -I/dir3 ....
+LDFLAGS = -L/dir1 -L/dir2 -L/dir3 ....
+LDADD = -llib1 -llib2 -llib3 ...</pre>
+
+        <ul>
+
+
+          <li>
+            INCLUDE赋值表示您需要传递给您的编译器的-I参数。
+            如果一个目录中的内容依赖于相同包中另一个目录中的库，那么-I参数必须指到那个被依赖的目录。
+          </li>
+
+          <li>
+            LDFLAGS赋值表示：当您在最后把所有的目标文件链接成可执行文件的时候，您需要传递给您的编译器的-L参数。
+          </li>
+
+          <li>
+            LDADD赋值列出的是一长串已经安装好的库。在这里列出来就表示您希望在您所有可执行文件中都链接它们。
+            只对已经安装好的库使用-l参数。 您也可以列出已经构建好但是还没有安装的库，但是这需要您提供这些库的绝对路径。
+          </li>
+        </ul>
+        </p>
+
+        <p>
+          如果您想把软件包中一个子目录中的库链接到另一个子目录中，你需要传递'-I'和'-L'参数给上述两个变量。
+
+          要表示这些其它子目录的路径，可以使用'$(top_srcdir)'这个变量。
+          比如，如果您想在src/libfoo目录下的库，可以把下面的赋值语句加入任何想访问它的目录中的Makefile.am中：
+          <pre class="code">INCLUDES = ... -I$(top_srcdir)/src/libfoo ...
+LDFLAGS  = ... -L$(top_srcdir)/src/libfoo ...</pre>
+
+        </p>
+
+        <p>
+          另外，您也需要保证在构建依赖其它库的目录时，先构建这些库。
+          为确保这一点，可以在SUBDIRS中把库文件的目录放在需要依赖它的目录的前面。
+
+          一种做法是把所有库目录都放入一个lib目录中，所有可执行文件都放入一个bin目录中。
+          然后在包含它们的目录下的Makefile.am文件中这样包含lib和bin：
+          <pre class="code">SUBDIRS = lib bin</pre>
+        </p>
+
+        <p>
+          这样就可以保证在构建任何可执行文件的时候，所有库都已经就绪了。
+          另外，您也可以简单地给您的目录进行排序，先编译库目录。
+        </p>
+
+        <p>
+          接下来我们在目录层列出需要编译的东西：
+          <pre class="code">bin_PROGRAMS    = prog1 prog2 prog3 ....
+lib_LIBRARIES   = libfoo1.a libfoo2.a libfoo3.a ....
+check_PROGRAMS  = test1 test2 test3 ....
+TESTS           = $(check_PROGRAMS)
+include_HEADERS = header1.h header2.h ....</pre>
+
+
+          <ul>
+
+            <li>
+              'bin_PROGRAMS'一行列出所有需要被make编译，并且可以被make install安装到 /prefix/bin 目录下的所有可执行文件，
+              prefix通常是 /usr/local。
+            </li>
+
+            <li>'lib_LIBRARIES'一行列出所有需要被make编译，并且可以被make install安装到 /prefix/lib 目录下的所有库，
+            </li>
+
+
+            <li>'check_PROGRAMS'一行列出的是不会被make编译，只是会被make check编译的可执行文件。
+              这些程序是给您，用户使用的测试库的程序。
+            </li>
+
+
+            <li>'TESTS'一行列出的是在执行make check时被编译执行的可执行文件。
+              这些程序构成了测试套件。当您在开发一个库时，它们是必不可少的。常见的设置是：
+              <pre class="code">TESTS = $(check_PROGRAMS)</pre>
+              注释不注释这一行，可以改变make check的行为。
+              当您在debug您的测试套件时，您可能想把这一行注释掉。这样make check就不会执行它。
+              但是，在最终的发布版本中，您可能希望这行再添加回来。
+            </li>
+
+            <li>
+              'include_HEADERS'一行列出这个目录中的希望安装到 /prefix/include 目录的公共头文件。
+              您一定要把希望列出的头文件在这里列出来。
+              您也可以把它放在它所属的库的libfoo_a_SOURCES里面。
+              但是，公共的头文件是必须放在这里的，只有这样它们最后才会被安装。
+            </li>
+          </ul>
+        </p>
+
+        <p>
+          一个好的编程实践是把库和可执行文件放到不同的目录级别中。
+          但是，把库和测试这些库的可执行文件放到相同的目录中也是可以的，而且这样可以让您在链接这些库的时候更简单。
+        </p>
+
+        <p>
+
+          For each of these types of targets, we must state information that
+          will allow automake and make to infer the building process.
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

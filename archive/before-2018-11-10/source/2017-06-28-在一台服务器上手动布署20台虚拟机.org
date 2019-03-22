@@ -1,0 +1,250 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 在一台服务器上手动布署20台虚拟机
+
+
+* virsh拉起虚拟机
+  压力测试需要拉起20台机器做测试。云上拉起机器，磁盘可能不在本地，影响
+  测试结果。所以我们决定通过命令行工具 =virsh= 手动拉起20台机器。它能
+  根据 =xml= 文件来设置拉起机器的相应配置。使用下面的基本配置。
+  #+BEGIN_SRC xml
+    <domain type='kvm'>
+      <name>peng-test</name>
+      <memory>4194304</memory>
+      <currentMemory>4194304</currentMemory>
+      <vcpu>2</vcpu>
+      <os>
+        <type>hvm</type>
+    <!-- 从硬盘启动 -->
+        <boot dev='hd'/>
+      </os>
+
+      <features>
+        <acpi/>
+      </features>
+
+      <clock offset='utc'/>
+      <on_poweroff>destroy</on_poweroff>
+      <on_reboot>restart</on_reboot>
+      <on_crash>destroy</on_crash>
+
+      <devices>
+        <emulator>/usr/bin/kvm</emulator>
+
+        <disk type="file" device="disk">
+          <driver name="qemu" type="qcow2"/>
+          <source file="/home/compute/your_vm.img"/>
+          <target dev="vda" bus="virtio"/>
+          <address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
+        </disk>
+
+        <interface type='bridge'>
+          <source bridge='bridge-eth6'/>
+          <target dev='pengvnet0'/>
+          <model type='virtio'/>
+          <mac address="00:00:A3:B0:56:10"/>
+        </interface>
+
+        <controller type="ide" index="0">
+          <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x1"/>
+        </controller>
+        <input type='mouse' bus='ps2'/>
+        <graphics type='vnc' port='-1' autoport="yes" listen='0.0.0.0'/>
+        <console type='pty'>
+          <target port='0'/>
+        </console>
+
+      </devices>
+    </domain>
+  #+END_SRC
+  
+  直接使用 =virsh create XXX.xml= 就可以拉起一台虚拟机。删除可以这样：
+  #+BEGIN_SRC sh
+    virsh destroy ras-test
+    virsh undefine ras-test
+  #+END_SRC
+  
+  每个虚拟机都需要一个xml文件。把上面xml保存为 =base.xml= ，然后用
+  python基于它生成20份xml。python脚本如下：
+  #+BEGIN_SRC python
+    from bs4 import BeautifulSoup
+
+    for i in range(1,21):
+        with open('base.xml') as f:
+            soup = BeautifulSoup(f.read(), 'xml')
+            soup.find('name').string = 'vm-%s' % i
+            soup.find('devices').find('disk').find('source')['file'] = '/home/compute/your_vm_%s.img' % i
+            soup.find('devices').find('interface').find('target')['dev'] = 'ras-vnet-%s' % i
+            temp = hex(i).split('x')[-1]
+            temp = temp.zfill(2)
+            soup.find('devices').find('interface').find('mac')['address'] = '00:00:A3:B0:56:%s' % temp
+
+            out = open('ras-%s.xml' % i, 'w')
+            out.write(str(soup))
+            out.close()
+  #+END_SRC
+  
+  另外，xml文件中的 =your_vm.img= 是拉起虚拟机的镜像，qcow2格式。
+  20台机器，需要20个这样的镜像，也就是说需要copy20次。
+  #+BEGIN_SRC sh
+    for i in {1..20}
+    do
+        cp -af your_vm.img your_vm_$i.img
+    done
+  #+END_SRC
+
+* 网络设置
+** 网络拓扑
+   测试环境需要的是万兆网络。一体机上有一个万兆网卡。于是我们的模型应
+   该是这样的：
+   #+BEGIN_EXAMPLE
+           up1   up2   up3   up4                     Input Traffic
+            ^     ^     ^     ^                            |
+            |     |     |     |                            |
+            |     |     |     |                            |
+            v     v     v     v                            v
+     +-----+--+--+--+--+--+--+--+-------------------------+--+------------------+
+     |     |  |  |  |  |  |  |  | 1G/s                    |  | 10G/s            |
+     |     ++-+  ++-+  ++-+  ++-+ eth[0~3]                ++-+ eth6             |
+     |      ^     ^     ^     ^                            |                    |
+     |      |     |     |     |                            |                    |
+     |      |     |     |     |            +---------------+---------------+    |
+     |      |     |     |     |            |                               |    |
+     |      |     |     |     +----------->+                               |    |
+     |      |     |     |                  |                               |    |
+     |      |     |     +----------------->+                               |    |
+     |      |     |                        |           bridge-eth6         |    |
+     |      |     +----------------------->+                               |    |
+     |      |                              |                               |    |
+     |      +----------------------------->+                               |    |
+     |                                     +-+-------+-------+-------+-----+    |
+     |                                       |       |       |       |          |
+     |                                      ++-+    ++-+    ++-+    ++-+        |
+     |                                      |  |    |  |    |  |    |  |  ...   |
+     |                                      +--+    +--+    +--+    +--+        |
+     |                                      vm1     vm2     vm3     vm5         |
+     +--------------------------------------------------------------------------+
+   #+END_EXAMPLE
+
+   一体机的万兆网卡 =eth6= 和4个千兆网卡 =eth0, eth1, eth2, eth3= 以及
+   拉起虚拟机的网卡都连接在一个名为 =bridge-eth6= 的网桥上。它们就全都
+   在一个软件虚拟出来的交换机（就是 =bridge-eth6= ）上了。
+  
+   可能需要的命令：
+   #+BEGIN_SRC sh
+     # 新建网桥
+     brctl addbr bridge-eth6
+
+     # 把网卡eth6添加到网桥上
+     brctl addif bridge-eth6 eth6
+     brctl addif bridge-eth6 eth0
+     brctl addif bridge-eth6 eth1
+     brctl addif bridge-eth6 eth2
+     brctl addif bridge-eth6 eth3
+
+     # 查询网桥
+     brctl show
+
+     # 把网卡从桥上删除 
+     brctl delif bridge-eth6 eth3
+   #+END_SRC
+  
+   下面的脚本可以根据一个网卡，新建网桥，把原网卡的ip设置到新的网桥设备
+   并配置好路由：
+   #+BEGIN_SRC sh
+     #!/bin/bash
+     moveHostIntf(){
+         IFINDEX=$1
+         BRIDGE=bridge-$IFINDEX
+
+         bridge link show|cut -d\  -f 2|grep "^$IFINDEX\$"
+         #brctl show $BRIDGE | grep "\<$IFINDEX\>" >/dev/null
+         if [ $? = 0 ];then
+             echo "host interface $IFINDEX already in bridge $BRIDGE"
+             return 1
+         fi
+
+         #save route table related to this interface
+         myRoute=$(ip route show scope global dev $IFINDEX | while read dst via gw;do if [ "$via" = "via" ]; then echo "route add -net $dst gw $gw";fi;done;)
+
+         #save IP of this interface
+         myIp=$(getIpAddr $IFINDEX)
+
+
+         brctl addbr $BRIDGE
+         ip addr flush dev $IFINDEX
+         brctl addif $BRIDGE $IFINDEX
+
+         #restore IP of the old interface to new one
+         ifconfig $BRIDGE $myIp
+
+         #restore route table related to this interface
+         for r in "$myRoute";do
+             $r
+         done
+
+     }
+
+     getIpAddr(){
+         ip addr show $1|grep -o "inet [^[:space:]]*"|cut -d\  -f2
+     }
+
+
+     moveHostIntf $1
+   #+END_SRC
+
+** 拉起的虚拟机的ip设置
+   拉起的机器，希望它们都有静态ip。 =libvirsh= 默认使用 =dnamasq= 提供
+   dhcp服务。这样配置 =/etc/dnsmasq.conf= ：
+   #+BEGIN_SRC conf-space
+     strict-order
+     user=libvirt-dnsmasq
+     except-interface=lo,eth0,eth1
+
+     #bind-dynamic
+     bind-interfaces
+     interface=bridge-eth6
+     listen-address=192.168.1.1
+
+     dhcp-range=192.168.1.2,192.168.1.21
+     dhcp-no-override
+     dhcp-leasefile=/var/lib/libvirt/dnsmasq/default.leases
+     dhcp-lease-max=253
+     dhcp-hostsfile=/var/lib/libvirt/dnsmasq/default.hostsfile
+     addn-hosts=/var/lib/libvirt/dnsmasq/default.addnhosts
+
+     dhcp-host=00:00:A3:B0:56:01,192.168.1.2
+     dhcp-host=00:00:A3:B0:56:02,192.168.1.3
+     dhcp-host=00:00:A3:B0:56:03,192.168.1.4
+     dhcp-host=00:00:A3:B0:56:04,192.168.1.5
+     dhcp-host=00:00:A3:B0:56:05,192.168.1.6
+     dhcp-host=00:00:A3:B0:56:06,192.168.1.7
+     dhcp-host=00:00:A3:B0:56:07,192.168.1.8
+     dhcp-host=00:00:A3:B0:56:08,192.168.1.9
+     dhcp-host=00:00:A3:B0:56:09,192.168.1.10
+     dhcp-host=00:00:A3:B0:56:0a,192.168.1.11
+     dhcp-host=00:00:A3:B0:56:0b,192.168.1.12
+     dhcp-host=00:00:A3:B0:56:0c,192.168.1.13
+     dhcp-host=00:00:A3:B0:56:0d,192.168.1.14
+     dhcp-host=00:00:A3:B0:56:0e,192.168.1.15
+     dhcp-host=00:00:A3:B0:56:0f,192.168.1.16
+     dhcp-host=00:00:A3:B0:56:10,192.168.1.17
+     dhcp-host=00:00:A3:B0:56:11,192.168.1.18
+     dhcp-host=00:00:A3:B0:56:12,192.168.1.19
+     dhcp-host=00:00:A3:B0:56:13,192.168.1.20
+     dhcp-host=00:00:A3:B0:56:14,192.168.1.21
+   #+END_SRC
+   最后是绑定了mac和ip的。而这些mac是在前文的xml中设置的，写死了。拉起
+   机器前，可以kill掉所有dnsmasq进程，然后手动启动一个 =dnsmasq= 。
+
+* 瓶颈
+  经测试发现，该模型达不到万兆的测试要求。
+
+  实际测试中，虽然eth6是一个万兆网卡，添加到网桥上后，实际测试就只有千
+  兆的带宽了。
+  
+  把eth6从网桥上删除，直接使用确实有万兆的带宽。
+
+  瓶颈应该是在网桥上。我暂时还没找到解决办法。

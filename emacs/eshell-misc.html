@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+    <script defer src="../js/main.js"></script>
+
+    <title>eshell相关笔记</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="emacs_blog.html">Emacs Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+
+        <h1>eshell相关笔记</h1>
+
+        <h2>eshell中的循环</h2>
+        <p>一直以在我都习惯bash中的一行流，其中对于循环我使用得很多。
+          我在 <a href="../linux/shell_script_loop.html">shell脚本中的循环</a> 中还专门记录了一下。</p>
+
+        <p>有时在emacs就完全不想出来，所认总是想在eshell中也做类似的事情。
+          bash中的一行循环：<pre class="bash"><span class="keyword">for</span> i<span class="keyword"> in</span> <span class="sh-quoted-exec">`ls`</span>; <span class="keyword">do </span><span class="builtin">echo</span> $<span class="variable-name">i</span>;<span class="keyword">done</span></pre> ，对应写出来的eshell如下：
+        <pre class="code">for i in {ls|sort} {message <span class="string">"%s"</span> $i}</pre></p>
+
+        <p>可以看出来，在eshell中，我觉得echo就最好让message来替换。
+          然后现在对elisp也相对熟悉一些了，其实循环中的很多功能可以直接使用elisp来做了。</p>
+
+
+        <p>eshell的一行流中，我个人觉得和bash的思路不同，主要的操作是在这个i值的取得上。
+          比如bash中我可能是在取得了i后，在后面的do中再对这个i进行加工。
+          在eshell中，应该事先就把i加工好。比如可以直接使用elisp来加工i：
+        <pre class="emacs-lisp"><span class="hl-line">for i in {(</span><span class="keyword"><span class="hl-line">let</span></span><span class="hl-line"> (result) (</span><span class="keyword"><span class="hl-line">setq</span></span><span class="hl-line"> result (</span><span class="function-name"><span class="hl-line">shell-command-to-string</span></span><span class="hl-line"> </span><span class="string"><span class="hl-line">"ls"</span></span><span class="hl-line">)))} {message </span><span class="string"><span class="hl-line">"%s.temp"</span></span><span class="hl-line"> </span><span class="xah-elisp-dollar-symbol"><span class="hl-line">$i</span></span><span class="hl-line">}</span></pre></p>
+
+
+        <p>如果需要两个变量怎么办呢？我找到一个这样的办法：
+        <pre class="emacs-lisp"><span class="hl-line">for i in {(</span><span class="function-name"><span class="hl-line">list</span></span><span class="hl-line"> </span><span class="string"><span class="hl-line">"xiepeng peng"</span></span><span class="hl-line">)} {message </span><span class="string"><span class="hl-line">"%s, %s"</span></span><span class="hl-line"> </span><span class="xah-elisp-dollar-symbol"><span class="hl-line">$i</span></span><span class="hl-line">[0] </span><span class="xah-elisp-dollar-symbol"><span class="hl-line">$i</span></span><span class="hl-line">[1]}</span></pre></p>
+
+        <p>这个办法是在eshell的manual里面看到这样说的：
+        <pre class="code">&#8216;$var[i]&#8217;
+     Expands to the &#8216;i&#8217;th element of the value bound to &#8216;var&#8217;.  If the
+     value is a string, it will be split at whitespace to make it a
+     list.  Again, raises an error if the value is not a sequence.
+</pre></p>
+
+        <p>我只找到这样切字符串的方法，它默认会以空格来切开，然后当成一个数组返回。
+          最后就可以使用下标来访问了。其实这样的话，数字也是可以的：
+        <pre class="emacs-lisp"><span class="hl-line">for i in {(</span><span class="function-name"><span class="hl-line">list</span></span><span class="hl-line"> </span><span class="string"><span class="hl-line">"1 2"</span></span><span class="hl-line">)} {message </span><span class="string"><span class="hl-line">"%d, %d"</span></span><span class="hl-line"> </span><span class="xah-elisp-dollar-symbol"><span class="hl-line">$i</span></span><span class="hl-line">[0] </span><span class="xah-elisp-dollar-symbol"><span class="hl-line">$i</span></span><span class="hl-line">[1]}</span></pre></p>
+
+        <p>通过这样操作，可以使用多个变量。不过我觉得这样还是不太完美。看看后面能不能找到更好的办法。</p>
+
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+      clientID: '3c74db23d6478d210434',
+      clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+      repo: 'pengpengxp.github.io',
+      owner: 'pengpengxp',
+      admin: ['pengpengxp'],
+      id: 'emacs/eshell-misc.html',
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    </div>
+
+  </body>
+
+</html>

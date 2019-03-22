@@ -1,0 +1,1953 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Python wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Python wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgff451fb">1. 序列</a></li>
+<li><a href="#org8d0d37f">2. 字典</a></li>
+<li><a href="#orgb4ad47c">3. 对象赋值：</a></li>
+<li><a href="#org3f07aa2">4. 列表解析式</a></li>
+<li><a href="#orgb25df02">5. 生成器表达式</a></li>
+<li><a href="#orge942df4">6. 包和搜索路径</a></li>
+<li><a href="#org212b933">7. pycharm快捷键</a></li>
+<li><a href="#org4b56ca5">8. help</a></li>
+<li><a href="#org9a53ffe">9. pdb的一种特殊用法</a></li>
+<li><a href="#org872d089">10. 一个难搞的bug</a></li>
+<li><a href="#org61cc98f">11. json的使用</a></li>
+<li><a href="#orgfb7f7bc">12. 编程规范</a>
+<ul>
+<li><a href="#orgf01b735">12.1. 函数注释</a></li>
+<li><a href="#orgf115f07">12.2. 类注释</a></li>
+<li><a href="#orgd4bf33b">12.3. 命名规范</a></li>
+</ul>
+</li>
+<li><a href="#org2bdd328">13. use gnu global for python</a></li>
+<li><a href="#org65fd451">14. 使用setuptools作egg包</a></li>
+<li><a href="#orgaa96855">15. staticmethod和classmethod的区别</a></li>
+<li><a href="#org5f2e7e0">16. <span class="todo TODO">TODO</span> compile exec eval</a></li>
+<li><a href="#org8f8c122">17. 调用外部程序</a>
+<ul>
+<li><a href="#orgddd6fed">17.1. Popen</a></li>
+</ul>
+</li>
+<li><a href="#org93ec437">18. float保留小数点后两位</a></li>
+<li><a href="#orgaa7f951">19. pip和easy_install的区别</a></li>
+<li><a href="#orgd1ebc84">20. sort</a></li>
+<li><a href="#org9c73ea4">21. 哈希算法（摘要算法）</a></li>
+<li><a href="#orgeced9a5">22. struct</a></li>
+<li><a href="#orged2083b">23. 得到当前执行文件的绝对路径</a></li>
+<li><a href="#orgd58d46d">24. base64和random</a></li>
+<li><a href="#org8f602d3">25. pip 相关</a>
+<ul>
+<li><a href="#orgf4297eb">25.1. wheel是个什么东西</a></li>
+<li><a href="#org50e6e4c">25.2. pip install后不使用cache安装</a></li>
+<li><a href="#org300327f">25.3. 结合pip进行离线安装</a></li>
+<li><a href="#orge968c1f">25.4. 使用阿里源</a></li>
+</ul>
+</li>
+<li><a href="#org434cfad">26. print打印字典的特殊用法</a></li>
+<li><a href="#org0342341">27. 设置源文件编码</a></li>
+<li><a href="#org5d1911a">28. python多继承的查找顺序</a></li>
+<li><a href="#org1e91e19">29. 使用dis模块来查看python字节码</a></li>
+<li><a href="#org5120c7e">30. tornado</a></li>
+<li><a href="#orgb911510">31. vobject可以操作vCards文件</a></li>
+<li><a href="#orgcf6934a">32. python解析html</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgff451fb" class="outline-2">
+<h2 id="orgff451fb"><span class="section-number-2">1</span> 序列</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+元组中的元素是不可对其赋值的。
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ff8700;">a</span> = (1,2,3)
+<span style="color: #a1db00;">print</span>(a)
+</pre>
+</div>
+
+<p>
+列表中的元素可以被赋值。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">a</span> = [ 1,2,3 ]
+    <span style="color: #a1db00;">print</span>(a)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8d0d37f" class="outline-2">
+<h2 id="org8d0d37f"><span class="section-number-2">2</span> 字典</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+使用dict和copy.copy来从已存在的字典里复制内容来生成新字典，新字典是
+浅拷贝版本。
+</p>
+
+<p>
+字典是hash。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">tel</span> = {<span style="color: #ff4ea3;">'jack'</span>: 4098, <span style="color: #ff4ea3;">'sape'</span>: 4139}
+    <span style="color: #a1db00;">print</span>(tel[<span style="color: #ff4ea3;">'jack'</span>])
+</pre>
+</div>
+
+<p>
+字典的keys默认是无序的，所以如果对顺序有要求，遍历字典的时候最好先排
+序一下， <code>python 2.4</code> 后可以使用 <code>sorted</code> 函数来搞定：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">a</span> = <span style="color: #d18aff;">dict</span>(x=1,y=3)
+    <span style="color: #a1db00;">print</span> a
+
+    <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">sorted</span>(a):
+        <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'%s is %s'</span> % (i, a[i])
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb4ad47c" class="outline-2">
+<h2 id="orgb4ad47c"><span class="section-number-2">3</span> 对象赋值：</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">will</span> = [<span style="color: #ff4ea3;">"Will"</span>, 28, [<span style="color: #ff4ea3;">"Python"</span>, <span style="color: #ff4ea3;">"C#"</span>, <span style="color: #ff4ea3;">"JavaScript"</span>]]
+    <span style="color: #ff8700;">wilber</span> = will
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">id</span>(will)
+    <span style="color: #a1db00;">print</span> will
+    <span style="color: #a1db00;">print</span> [<span style="color: #d18aff;">id</span>(ele) <span style="color: #a1db00;">for</span> ele <span style="color: #a1db00;">in</span> will]
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">id</span>(wilber)
+    <span style="color: #a1db00;">print</span> wilber
+    <span style="color: #a1db00;">print</span> [<span style="color: #d18aff;">id</span>(ele) <span style="color: #a1db00;">for</span> ele <span style="color: #a1db00;">in</span> wilber]
+
+    <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">''</span>
+
+    <span style="color: #ff8700;">will</span>[0] = <span style="color: #ff4ea3;">"Wilber"</span>
+    will[2].append(<span style="color: #ff4ea3;">"CSS"</span>)
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">id</span>(will)
+    <span style="color: #a1db00;">print</span> will
+    <span style="color: #a1db00;">print</span> [<span style="color: #d18aff;">id</span>(ele) <span style="color: #a1db00;">for</span> ele <span style="color: #a1db00;">in</span> will]
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">id</span>(wilber)
+    <span style="color: #a1db00;">print</span> wilber
+    <span style="color: #a1db00;">print</span> [<span style="color: #d18aff;">id</span>(ele) <span style="color: #a1db00;">for</span> ele <span style="color: #a1db00;">in</span> wilber]
+</pre>
+</div>
+
+<div class="figure">
+<p><img src="./images/./365qOe.png" alt="365qOe.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org3f07aa2" class="outline-2">
+<h2 id="org3f07aa2"><span class="section-number-2">4</span> 列表解析式</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+其实就是一个把一个lambda表达式map到列表中的每个元素。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">map</span>(<span style="color: #a1db00;">lambda</span> x: x ** 2, <span style="color: #d18aff;">range</span>(6))
+    <span style="color: #a1db00;">print</span> [x ** 2 <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(6)]
+</pre>
+</div>
+
+<p>
+加上if也就是加了一个过滤器：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">filter</span>(<span style="color: #a1db00;">lambda</span> x: x % 2, <span style="color: #d18aff;">range</span>(10))
+    <span style="color: #a1db00;">print</span> [x <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">range</span>(10) <span style="color: #a1db00;">if</span> x % 2]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb25df02" class="outline-2">
+<h2 id="orgb25df02"><span class="section-number-2">5</span> 生成器表达式</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+和列表表达式差不多，只不过通过延迟计算，可以更加省内存，下面这段代码
+会把 <code>/etc/hosts</code> 全部读入内存：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">f</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">'/etc/hosts'</span>)
+    <span style="color: #ff8700;">allLineLens</span> = [<span style="color: #d18aff;">len</span>(x) <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> f]
+    f.close()
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">max</span>(allLineLens)
+</pre>
+</div>
+
+<p>
+改成生成器表达式能优化：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">f</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">'/etc/hosts'</span>)
+    <span style="color: #ff8700;">longest</span> = <span style="color: #d18aff;">max</span>(<span style="color: #d18aff;">len</span>(x) <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> f)
+    f.close()
+    <span style="color: #a1db00;">print</span> longest
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge942df4" class="outline-2">
+<h2 id="orge942df4"><span class="section-number-2">6</span> 包和搜索路径</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+python有自己的默认的一些搜索路径。shell中的搜索路径新增可以在
+<code>PYTHONPATH</code> 这个环境变量中加入。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">PYTHONPATH</span>=<span style="color: #ff4ea3;">'/path'</span>:$<span style="color: #ff8700;">PYTHONPATH</span>
+</pre>
+</div>
+
+<p>
+python代码中可以在sys.path中加入：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> sys
+    sys.path.append(<span style="color: #ff4ea3;">'path'</span>)
+</pre>
+</div>
+
+<p>
+如果一个目录中有名为 <code>__init__.py</code> 的文件，哪怕它里面什么都没有。
+python都会把它当成一个包。子目录中也有该文件，则子目录就是它的子包。
+如果把一个包（如rcs）的路径加入 <code>PYTHONPATH</code> 中后，就可以直接引用包
+中的内容了：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">from</span>  rcs.service.xxx <span style="color: #a1db00;">import</span> xxx
+</pre>
+</div>
+<p>
+这上面，rcs为一个包，service是它的子包，xxx是service中的子包。
+</p>
+</div>
+</div>
+<div id="outline-container-org212b933" class="outline-2">
+<h2 id="org212b933"><span class="section-number-2">7</span> <a href="http://www.jianshu.com/p/be0bdc02f7da">pycharm快捷键</a></h2>
+<div class="outline-text-2" id="text-7">
+<ol class="org-ol">
+<li>cmd b 跳转到声明处（cmd加鼠标）</li>
+<li>opt + 空格 显示符号代码 （esc退出窗口 回车进入代码）</li>
+<li>cmd []光标之前/后的位置</li>
+<li>opt + F7 find usage</li>
+<li>cmd backspace 删除当前行</li>
+<li>cmd +c 复制光标当前行,剪切同理</li>
+<li>cmd + f 当前文件搜索（回车下一个 shift回车上一个）</li>
+<li>cmd + r 当前文件替换</li>
+<li>shift + cmd + f 全局搜索</li>
+<li>shift + cmd + R 全局替换</li>
+<li>cmd+o 搜索class</li>
+<li>shift + cmd + o 搜索文件</li>
+<li>opt + cmd + o 搜索符号（函数等)</li>
+<li>cmd + l 指定行数跳转</li>
+<li>shift enter 在行中的时候直接到下一行</li>
+<li>cmd + 展开当前</li>
+<li>cmd - 折叠当前</li>
+<li>shift cmd + 展开所有</li>
+<li>shift cmd - 折叠所有</li>
+<li>cmd / 注释/取消注释一行</li>
+<li>opt + cmd + / 批量注释(pycharm不生效)</li>
+<li>ctr + tab 史上最NB的导航窗口（工程文件列表、文件结构列表、命令行模式、代码检查、VCS等，下面两个是可以被替换的）</li>
+<li>alt + F12 打开命令行栏</li>
+<li>cmd + F12 显示文件结构</li>
+<li>cmd j 代码智能补全</li>
+<li>alt + F1 定位编辑文件所在位置:</li>
+<li>cmd + F6 更改变量</li>
+<li>opt + cmd + t 指定代码被注释语句或者逻辑结构、函数包围</li>
+<li>Tab / Shift + Tab 缩进、不缩进当前行</li>
+<li>opt + cmd + l 代码块对齐</li>
+<li>cmd+d 在下一行复制本行的内容</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org4b56ca5" class="outline-2">
+<h2 id="org4b56ca5"><span class="section-number-2">8</span> help</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+python终端里面使用help函数来查询。不过首先得把对应的模块import进来。
+</p>
+<pre class="example">
+    &gt;&gt;&gt; import time
+    &gt;&gt;&gt; help(time)
+</pre>
+
+<p>
+emacs中可以使用 elpy-doc函数来查询。
+</p>
+</div>
+</div>
+<div id="outline-container-org9a53ffe" class="outline-2">
+<h2 id="org9a53ffe"><span class="section-number-2">9</span> pdb的一种特殊用法</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+通过pdb直接打断点来调试就不说了。下面这样写，程序一直运行时，通过发
+送一个 <code>SIGUSR1</code> 信号来停住程序。只是记录一下。但是如果程序不是当前
+终端拉起的，还不知道怎么可以进到pdb中去。如果是当前终端拉起的，直接
+使用fg把程序调到前台来就是了。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> os
+    <span style="color: #a1db00;">import</span> signal
+    <span style="color: #a1db00;">import</span> sys
+    <span style="color: #a1db00;">import</span> time
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">handle_pdb</span>(sig, frame):
+        <span style="color: #a1db00;">import</span> pdb
+        pdb.Pdb().set_trace(frame)
+
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">loop</span>():
+        <span style="color: #a1db00;">while</span> <span style="color: #5fafd7;">True</span>:
+            <span style="color: #ff8700;">x</span> = <span style="color: #ff4ea3;">'foo'</span>
+            time.sleep(0.2)
+
+    <span style="color: #a1db00;">if</span> <span style="color: #d18aff;">__name__</span> == <span style="color: #ff4ea3;">'__main__'</span>:
+        signal.signal(signal.SIGUSR1, handle_pdb)
+        <span style="color: #a1db00;">print</span>(os.getpid())
+        loop()
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org872d089" class="outline-2">
+<h2 id="org872d089"><span class="section-number-2">10</span> 一个难搞的bug</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+错误的写法，最后 <code>collection</code> 中的内容全是一样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">a</span> = <span style="color: #d18aff;">range</span>(10)
+    <span style="color: #ff8700;">collection</span> = []
+    <span style="color: #ff8700;">temp</span> = {}
+    <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> a:
+        <span style="color: #ff8700;">temp</span>[<span style="color: #ff4ea3;">'site'</span>] = i
+        collection.append(temp)
+    <span style="color: #a1db00;">print</span> collection
+</pre>
+</div>
+
+<p>
+正确的写法：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">a</span> = <span style="color: #d18aff;">range</span>(10)
+    <span style="color: #ff8700;">collection</span> = []
+    <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> a:
+        <span style="color: #ff8700;">temp</span> = {}
+        <span style="color: #ff8700;">temp</span>[<span style="color: #ff4ea3;">'site'</span>] = i
+        collection.append(temp)
+    <span style="color: #a1db00;">print</span> collection
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org61cc98f" class="outline-2">
+<h2 id="org61cc98f"><span class="section-number-2">11</span> json的使用</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+具体有两个函数： <code>json.loads</code> 和 <code>json.dumps</code> 。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">json_string</span> = <span style="color: #ff4ea3;">'{"first_name": "Guido", "last_name":"Rossum"}'</span>
+    <span style="color: #a1db00;">import</span> json
+    <span style="color: #ff8700;">parsed_json</span> = json.loads(json_string)
+    <span style="color: #a1db00;">print</span>(parsed_json[<span style="color: #ff4ea3;">'first_name'</span>])
+    <span style="color: #ff8700;">d</span> = {
+        <span style="color: #ff4ea3;">'first_name'</span>: <span style="color: #ff4ea3;">'Guido'</span>,
+        <span style="color: #ff4ea3;">'second_name'</span>: <span style="color: #ff4ea3;">'Rossum'</span>,
+        <span style="color: #ff4ea3;">'titles'</span>: [<span style="color: #ff4ea3;">'BDFL'</span>, <span style="color: #ff4ea3;">'Developer'</span>],
+    }
+
+    <span style="color: #a1db00;">print</span>(json.dumps(d))
+    <span style="color: #a1db00;">print</span>(<span style="color: #d18aff;">type</span>(json.dumps(d)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfb7f7bc" class="outline-2">
+<h2 id="orgfb7f7bc"><span class="section-number-2">12</span> 编程规范</h2>
+<div class="outline-text-2" id="text-12">
+</div>
+<div id="outline-container-orgf01b735" class="outline-3">
+<h3 id="orgf01b735"><span class="section-number-3">12.1</span> 函数注释</h3>
+<div class="outline-text-3" id="text-12-1">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">fetch_bigtable_rows</span>(big_table, keys, other_silly_variable=<span style="color: #5fafd7;">None</span>):
+        <span style="color: #ff4b4b;">"""Fetches rows from a Bigtable.</span>
+
+<span style="color: #ff4b4b;">        Retrieves rows pertaining to the given keys from the Table instance</span>
+<span style="color: #ff4b4b;">        represented by big_table.  Silly things may happen if</span>
+<span style="color: #ff4b4b;">        other_silly_variable is not None.</span>
+
+<span style="color: #ff4b4b;">        Args:</span>
+<span style="color: #ff4b4b;">            big_table: An open Bigtable Table instance.</span>
+<span style="color: #ff4b4b;">            keys: A sequence of strings representing the key of each table row</span>
+<span style="color: #ff4b4b;">                to fetch.</span>
+<span style="color: #ff4b4b;">            other_silly_variable: Another optional variable, that has a much</span>
+<span style="color: #ff4b4b;">                longer name than the other args, and which does nothing.</span>
+
+<span style="color: #ff4b4b;">        Returns:</span>
+<span style="color: #ff4b4b;">            A dict mapping keys to the corresponding table row data</span>
+<span style="color: #ff4b4b;">            fetched. Each row is represented as a tuple of strings. For</span>
+<span style="color: #ff4b4b;">            example:</span>
+
+<span style="color: #ff4b4b;">            {'Serak': ('Rigel VII', 'Preparer'),</span>
+<span style="color: #ff4b4b;">             'Zim': ('Irk', 'Invader'),</span>
+<span style="color: #ff4b4b;">             'Lrrr': ('Omicron Persei 8', 'Emperor')}</span>
+
+<span style="color: #ff4b4b;">            If a key from the keys argument is missing from the dictionary,</span>
+<span style="color: #ff4b4b;">            then that row was not found in the table.</span>
+
+<span style="color: #ff4b4b;">        Raises:</span>
+<span style="color: #ff4b4b;">            IOError: An error occurred accessing the bigtable.Table object.</span>
+<span style="color: #ff4b4b;">        """</span>
+        <span style="color: #a1db00;">pass</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf115f07" class="outline-3">
+<h3 id="orgf115f07"><span class="section-number-3">12.2</span> 类注释</h3>
+<div class="outline-text-3" id="text-12-2">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">SampleClass</span>(<span style="color: #d18aff;">object</span>):
+        <span style="color: #ff4b4b;">"""Summary of class here.</span>
+
+<span style="color: #ff4b4b;">        Longer class information....</span>
+<span style="color: #ff4b4b;">        Longer class information....</span>
+
+<span style="color: #ff4b4b;">        Attributes:</span>
+<span style="color: #ff4b4b;">            likes_spam: A boolean indicating if we like SPAM or not.</span>
+<span style="color: #ff4b4b;">            eggs: An integer count of the eggs we have laid.</span>
+<span style="color: #ff4b4b;">        """</span>
+
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>, likes_spam=<span style="color: #5fafd7;">False</span>):
+            <span style="color: #ff4b4b;">"""Inits SampleClass with blah."""</span>
+            <span style="color: #a1db00;">self</span>.likes_spam = likes_spam
+            <span style="color: #a1db00;">self</span>.eggs = 0
+
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">public_method</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #ff4b4b;">"""Performs operation blah."""</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd4bf33b" class="outline-3">
+<h3 id="orgd4bf33b"><span class="section-number-3">12.3</span> 命名规范</h3>
+<div class="outline-text-3" id="text-12-3">
+<pre class="example">
+    module_name, package_name, ClassName, method_name, ExceptionName,
+    function_name, GLOBAL_VAR_NAME, instance_var_name,
+    function_parameter_name, local_var_name.
+
+    命名约定
+
+    所谓”内部(Internal)”表示仅模块内可用, 或者, 在类内是保护或私有的. 用
+    单下划线(_)开头表示模块变量或函数是protected的(使用import * from时不会
+    包含). 用双下划线(__)开头的实例变量或方法表示类内私有. 将相关的类和顶
+    级函数放在同一个模块里. 不像Java, 没必要限制一个类一个模块. 对类名使用
+    大写字母开头的单词(如CapWords, 即Pascal风格), 但是模块名应该用小写加下
+    划线的方式(如lower_with_under.py). 尽管已经有很多现存的模块使用类似于
+    CapWords.py这样的命名, 但现在已经不鼓励这样做, 因为如果模块名碰巧和类
+    名一致, 这会让人困扰.
+</pre>
+
+<p>
+Python之父Guido推荐的规范:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Modules</td>
+<td class="org-left">lower_with_under</td>
+<td class="org-left">_lower_with_under</td>
+</tr>
+
+<tr>
+<td class="org-left">Packages</td>
+<td class="org-left">lower_with_under</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Classes</td>
+<td class="org-left">CapWords</td>
+<td class="org-left">_CapWords</td>
+</tr>
+
+<tr>
+<td class="org-left">Exceptions</td>
+<td class="org-left">CapWords</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Functions</td>
+<td class="org-left">lower_with_under()</td>
+<td class="org-left">_lower_with_under()</td>
+</tr>
+
+<tr>
+<td class="org-left">Global/Class Constants</td>
+<td class="org-left">CAPS_WITH_UNDER</td>
+<td class="org-left">_CAPS_WITH_UNDER</td>
+</tr>
+
+<tr>
+<td class="org-left">Global/Class Variables</td>
+<td class="org-left">lower_with_under</td>
+<td class="org-left">_lower_with_under</td>
+</tr>
+
+<tr>
+<td class="org-left">Instance Variables</td>
+<td class="org-left">lower_with_under</td>
+<td class="org-left">_lower_with_under (protected) or __lower_with_under (private)</td>
+</tr>
+
+<tr>
+<td class="org-left">Method Names</td>
+<td class="org-left">lower_with_under()</td>
+<td class="org-left">_lower_with_under() (protected) or __lower_with_under() (private)</td>
+</tr>
+
+<tr>
+<td class="org-left">Function/Method Parameters</td>
+<td class="org-left">lower_with_under</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Local Variables</td>
+<td class="org-left">lower_with_under</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2bdd328" class="outline-2">
+<h2 id="org2bdd328"><span class="section-number-2">13</span> use gnu global for python</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+as official doc says:
+</p>
+<pre class="example">
+    supports 6 languages by built-in parser. (definition and reference) C,
+    C++, Yacc, Java, PHP4 and assembly.
+
+    supports 25 languages by Pygments + Universal Ctags plug-in
+    parser. (definition and reference) Awk, Dos batch, COBOL, C, C++, C#,
+    Erlang, Fortran, Java, JavaScript, Lisp, Lua, Pascal, Perl, PHP,
+    Python, Ruby, Matlab, OCaml, Scheme, Tcl, TeX, Verilog, Vhdl and Vim.
+    To use the parser, please see the file
+    'plugin-factory/PLUGIN_HOWTO.pygments' in the package.
+</pre>
+
+<pre class="example">
+    ___________________________________
+    |      |  |  |     |  _  |     |  |
+    |  |___|  |  |  |  |    _|  |  |  |    GNU GLOBAL source code tag system
+    |  |   |  |  |  |  |     |     |  |
+    |  ~~  |   ~~|     |  ~  |  |  |   ~~|          for all hackers.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Copyright (c) 2014 Tama Communications Corporation
+
+     This file is free software; as a special exception the author gives
+     unlimited permission to copy and/or distribute it, with or without
+     modifications, as long as this notice is preserved.
+
+     This program is distributed in the hope that it will be useful, but
+     WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+     implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+                    ----------------------------------
+
+    How to use Pygments Plug-in Parser
+
+    Pygments is a generic syntax highlighter for wide variety of
+    programming languages. This plug-in use Pygments and Exuberant
+    Ctags as a parser to treat both definitions and references.
+
+    You need the following software:
+    o Python 2.6 or later (3 is also supported)
+    o Pygments python package 1.6 or later
+    o Exuberant Ctags 5.5 or later (optional)
+
+    [Installation]
+
+    1. Check
+
+    Make sure python and ctags can be invoked in your command line.
+    $ type python
+    python is /usr/bin/python
+    $ type ctags
+    ctags is /usr/local/bin/ctags
+
+    2. Installation of GLOBAL
+
+    $ ./configure
+    $ make
+    $ sudo make install
+
+    3. Setup of Pygments plug-in parser
+
+    The definition of Pygments plug-in parser is prepared
+    in the default configuration file. Please specify it.
+
+    $ export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+    $ export GTAGSLABEL=pygments
+
+    [Execution of gtags]
+
+    Please execute gtags(1) as usual.
+
+    $ gtags
+
+    If it is doubtful whether Pygments plug-in parser is used,
+    please try --explain option. It shows the libraries used by
+    gtags.
+
+    $ gtags --explain
+    ...
+    File './lib/xmalloc.c' is handled as follows:
+            suffix:   |.c|
+            language: |C|
+            parser:   |parser|
+            library:  |/usr/local/lib/gtags/pygments-parser.la|
+
+                    ----------------------------------
+
+    Pygments plug-in parser was written by Yoshitaro MAKISE.
+    For detals, please see the following site:
+    [https://github.com/yoshizow/global-pygments-plugin]
+
+    Though it is considered a separate package, not part of GLOBAL proper,
+    we included it for user's convenience.
+</pre>
+
+<p>
+I think use the two `export' command is ok.
+</p>
+
+<p>
+但是这个我尝试了一下，效果还是不太好。还是使用`cscope'。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org65fd451" class="outline-2">
+<h2 id="org65fd451"><span class="section-number-2">14</span> 使用setuptools作egg包</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+<a href="http://yansu.org/2013/06/07/learn-python-setuptools-in-detail.html">参考的这里</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">    mkdir demo
+    <span style="color: #d18aff;">cd</span> demo/
+    ls
+    f setup.py
+    python setup.py bdist_egg
+</pre>
+</div>
+<p>
+这个可以在dist目录中做出来一个egg包。然后使用 <code>python setup.py
+  install</code> 可以直接安装这个包。
+</p>
+
+<p>
+setup.py里面可以是这样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">from</span> setuptools <span style="color: #a1db00;">import</span> setup, find_packages
+    setup(
+        name = <span style="color: #ff4ea3;">"demo"</span>,
+        version = <span style="color: #ff4ea3;">"0.1"</span>,
+        packages = find_packages(),
+    )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgaa96855" class="outline-2">
+<h2 id="orgaa96855"><span class="section-number-2">15</span> staticmethod和classmethod的区别</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+<a href="http://blog.csdn.net/handsomekang/article/details/9615239">参考的这里</a>
+</p>
+
+<ul class="org-ul">
+<li><code>@staticmethod</code> 不需要表示自身对象的self和自身类的cls参数，就跟使
+用函数一样。</li>
+<li><code>@classmethod</code> 也不需要self参数，但第一个参数需要是表示自身类的cls
+参数。</li>
+</ul>
+
+<p>
+如果在@staticmethod中要调用到这个类的一些属性方法，只能直接类名.属性
+名或类名.方法名。而@classmethod因为持有cls参数，可以来调用类的属性，
+类的方法，实例化对象等，避免硬编码。下面上代码。可以看到，
+<code>@classmethod</code> 的cls可以是其它任何值，但这里它其实就是指类型A。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">A</span>(<span style="color: #d18aff;">object</span>):
+        <span style="color: #ff8700;">bar</span> = 1
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'foo'</span>
+
+        <span style="color: #00d7af;">@staticmethod</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">static_foo</span>():
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'static_foo'</span>
+            <span style="color: #a1db00;">print</span> A.bar
+
+        <span style="color: #00d7af;">@classmethod</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">class_foo</span>(cls):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'class_foo'</span>
+            <span style="color: #a1db00;">print</span> cls.bar
+            cls().foo()
+
+        <span style="color: #00d7af;">@classmethod</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">class_foo_2</span>(clsa):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'class_foo 2'</span>
+            <span style="color: #a1db00;">print</span> clsa.bar
+            clsa().foo()
+
+    A.static_foo()
+    A.class_foo()
+    A.class_foo_2()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5f2e7e0" class="outline-2">
+<h2 id="org5f2e7e0"><span class="section-number-2">16</span> <span class="todo TODO">TODO</span> compile exec eval</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+compile可以把一段代码搞成一个可以执行的对象。
+</p>
+
+<p>
+<code>compile(source, filename, mode[, flags[, dont_inherit]])¶</code> source是
+指需要执行的代码。这中间的filename我没搞懂是干啥的。flags可以是
+<code>exec</code> <code>single</code> 和 <code>eval</code> 中的任一个。
+</p>
+
+<p>
+我还没有搞懂：
+</p>
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> eval, exec和single的区别</li>
+</ol>
+
+<pre class="example">
+    The mode argument specifies what kind of code must be compiled;
+    it can be 'exec' if source consists of a sequence of statements,
+    'eval' if it consists of a single expression, or 'single' if it
+    consists of a single interactive statement (in the latter case,
+    expression statements that evaluate to something other than None
+    will be printed).
+</pre>
+
+<p>
+下面是例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">a</span> = <span style="color: #d18aff;">compile</span>(<span style="color: #ff4ea3;">'print 3'</span>, <span style="color: #ff4ea3;">''</span>, <span style="color: #ff4ea3;">'exec'</span>)
+    <span style="color: #a1db00;">exec</span>(a)
+
+    <span style="color: #ff8700;">a</span> = <span style="color: #d18aff;">compile</span>(<span style="color: #ff4ea3;">'print 3 * 3'</span>, <span style="color: #ff4ea3;">''</span>, <span style="color: #ff4ea3;">'exec'</span>)
+    <span style="color: #a1db00;">exec</span>(a)
+</pre>
+</div>
+
+<p>
+execfile可以执行一个文件。假如 <code>/tmp/test.py</code> 是这样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">A</span>(<span style="color: #d18aff;">object</span>):
+        <span style="color: #ff8700;">bar</span> = 1
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'foo'</span>
+
+        <span style="color: #00d7af;">@staticmethod</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">static_foo</span>():
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'static_foo'</span>
+            <span style="color: #a1db00;">print</span> A.bar
+
+        <span style="color: #00d7af;">@classmethod</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">class_foo</span>(cls):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'class_foo'</span>
+            <span style="color: #a1db00;">print</span> cls.bar
+            cls().foo()
+
+        <span style="color: #00d7af;">@classmethod</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">class_foo_2</span>(clsa):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'class_foo 2'</span>
+            <span style="color: #a1db00;">print</span> clsa.bar
+            clsa().foo()
+
+    A.static_foo()
+    A.class_foo()
+    A.class_foo_2()
+
+    <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'end'</span>
+
+    <span style="color: #ff8700;">x</span> = <span style="color: #ff4ea3;">'xiepeng'</span>
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #d18aff;">execfile</span>(<span style="color: #ff4ea3;">'/tmp/test.py'</span>)
+</pre>
+</div>
+
+<p>
+也可以使把源文件读出来，然后使用compile编一下，再执行：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">with</span> <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">'/tmp/test.py'</span>) <span style="color: #a1db00;">as</span> fn:
+        <span style="color: #ff8700;">a</span> = fn.read()
+        <span style="color: #ff8700;">c</span> = <span style="color: #d18aff;">compile</span>(a, <span style="color: #ff4ea3;">''</span>, <span style="color: #ff4ea3;">'exec'</span>)
+        <span style="color: #a1db00;">exec</span>(c)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f8c122" class="outline-2">
+<h2 id="org8f8c122"><span class="section-number-2">17</span> 调用外部程序</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+使用 <code>subprocess</code> ：
+</p>
+<pre class="example">
+    Examples:
+
+        &gt;&gt;&gt; subprocess.call(["ls", "-l"])
+        0
+
+        &gt;&gt;&gt; subprocess.call("exit 1", shell=True)
+        1
+</pre>
+
+<p>
+<code>shell=True</code> 的时候会把程序结果弄出来。比如：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> subprocess
+
+    subprocess.call(<span style="color: #ff4ea3;">'ls /tmp/'</span>, shell=<span style="color: #5fafd7;">True</span>)
+</pre>
+</div>
+
+<p>
+<b>注意</b> ： !shell=True! 可能会存在安全问题。 但是使用 !shell=False!
+，第一个参数就不能再是string了。需要是一个list。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> subprocess
+
+    subprocess.call([<span style="color: #ff4ea3;">'ls'</span>, <span style="color: #ff4ea3;">'/tmp'</span>], shell=<span style="color: #5fafd7;">False</span>)
+</pre>
+</div>
+
+<p>
+一般是配合 <code>shlex</code> 来使用：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> shlex
+    <span style="color: #a1db00;">import</span> subprocess
+
+    <span style="color: #ff8700;">cmd</span> = <span style="color: #ff4ea3;">"ls /tmp/"</span>
+    <span style="color: #a1db00;">print</span> shlex.split(cmd)
+    subprocess.call(shlex.split(cmd), shell=<span style="color: #5fafd7;">False</span>)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgddd6fed" class="outline-3">
+<h3 id="orgddd6fed"><span class="section-number-3">17.1</span> Popen</h3>
+<div class="outline-text-3" id="text-17-1">
+<pre class="example">
+     Warning
+
+         This will deadlock when using stdout=PIPE and/or stderr=PIPE and
+         the child process generates enough output to a pipe such that it
+         blocks waiting for the OS pipe buffer to accept more data. Use
+         communicate() to avoid that.
+</pre>
+
+<p>
+比如这样可能就要锁死：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> subprocess
+
+     <span style="color: #ff8700;">s</span> = subprocess.Popen([<span style="color: #ff4ea3;">"ps"</span>, <span style="color: #ff4ea3;">"aux"</span>], stdout=subprocess.PIPE)
+     s.wait()
+</pre>
+</div>
+
+<p>
+需要使用 <code>comunicate</code> 来等待就可以：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">     <span style="color: #a1db00;">import</span> subprocess
+
+     <span style="color: #ff8700;">i</span> = 0
+     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">s = subprocess.Popen(["ps", "aux"], stdout=subprocess.PIPE)</span>
+     <span style="color: #ff8700;">s</span> = subprocess.Popen([<span style="color: #ff4ea3;">'date'</span>], stdout=subprocess.PIPE)
+     <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'begin'</span>
+     <span style="color: #ff8700;">result</span> = s.communicate()
+     <span style="color: #a1db00;">print</span> s.returncode
+     <span style="color: #a1db00;">for</span> line <span style="color: #a1db00;">in</span> result[0].split(<span style="color: #ff4ea3;">'\n'</span>):
+         <span style="color: #a1db00;">print</span> i, line
+         <span style="color: #ff8700;">i</span> = i + 1
+</pre>
+</div>
+
+<pre class="example">
+     Popen.communicate(input=None)¶
+
+         Interact with process: Send data to stdin. Read data from stdout
+         and stderr, until end-of-file is reached. Wait for process to
+         terminate. The optional input argument should be a string to be
+         sent to the child process, or None, if no data should be sent to
+         the child.
+
+         communicate() returns a tuple (stdoutdata, stderrdata).
+
+         Note that if you want to send data to the process’s stdin, you
+         need to create the Popen object with stdin=PIPE. Similarly, to
+         get anything other than None in the result tuple, you need to
+         give stdout=PIPE and/or stderr=PIPE too.
+
+         Note
+
+         The data read is buffered in memory, so do not use this method if
+         the data size is large or unlimited.
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org93ec437" class="outline-2">
+<h2 id="org93ec437"><span class="section-number-2">18</span> float保留小数点后两位</h2>
+<div class="outline-text-2" id="text-18">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">s</span> = <span style="color: #ff4ea3;">'17.23532'</span>
+    <span style="color: #ff8700;">a</span> = (<span style="color: #ff4ea3;">"%.2f GB"</span> % <span style="color: #d18aff;">float</span>(s))
+    <span style="color: #a1db00;">print</span> a
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">type</span>(a)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgaa7f951" class="outline-2">
+<h2 id="orgaa7f951"><span class="section-number-2">19</span> pip和easy_install的区别</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+<a href="https://packaging.python.org/discussions/pip-vs-easy-install/">参考这里</a>
+</p>
+
+<p>
+<code>easy_install</code> 是在2004发布的，做为python的包管理器，能自动从 <code>PyPi</code>
+安装包，自动解决依赖。
+</p>
+
+<p>
+<code>pip</code> 于2008年发布。目的是做为 <code>easy_install</code> 的替代品。它不再从egg
+文件中安装包。而是简单地将软件包从sdist中搞出来。
+</p>
+
+<p>
+下面列出一些这两者之间重要的区别：
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">pip</th>
+<th scope="col" class="org-left">easy_install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Installs from Wheels</td>
+<td class="org-left">Yes</td>
+<td class="org-left">No</td>
+</tr>
+
+<tr>
+<td class="org-left">Uninstall Packages</td>
+<td class="org-left">Yes (pip uninstall)</td>
+<td class="org-left">No</td>
+</tr>
+
+<tr>
+<td class="org-left">Dependency Overrides</td>
+<td class="org-left">Yes (Requirements Files)</td>
+<td class="org-left">No</td>
+</tr>
+
+<tr>
+<td class="org-left">List Installed Packages</td>
+<td class="org-left">Yes (pip list and pip freeze)</td>
+<td class="org-left">No</td>
+</tr>
+
+<tr>
+<td class="org-left">PEP 438 Support       Yes</td>
+<td class="org-left">No</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Installation format</td>
+<td class="org-left">‘Flat’ packages with egg-info metadata.</td>
+<td class="org-left">Encapsulated Egg format</td>
+</tr>
+
+<tr>
+<td class="org-left">sys.path modification</td>
+<td class="org-left">No</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">Installs from Eggs</td>
+<td class="org-left">No</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">pylauncher support</td>
+<td class="org-left">No</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">Multi-version Installs</td>
+<td class="org-left">No</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">Exclude scripts during install</td>
+<td class="org-left">No</td>
+<td class="org-left">Yes</td>
+</tr>
+
+<tr>
+<td class="org-left">per project index</td>
+<td class="org-left">Only in virtualenv</td>
+<td class="org-left">Yes, via setup.cfg</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgd1ebc84" class="outline-2">
+<h2 id="orgd1ebc84"><span class="section-number-2">20</span> sort</h2>
+<div class="outline-text-2" id="text-20">
+<pre class="example">
+    &gt;&gt;&gt; sorted([5, 2, 3, 1, 4])
+    [1, 2, 3, 4, 5]
+
+    list.sort() will change the list:
+    &gt;&gt;&gt; a = [5, 2, 3, 1, 4]
+    &gt;&gt;&gt; a.sort()
+    &gt;&gt;&gt; a
+    [1, 2, 3, 4, 5]
+
+    list.sort() is defined for list only. sorted functiona accept any
+    iterable:
+    &gt;&gt;&gt; sorted({1: 'D', 2: 'B', 3: 'B', 4: 'E', 5: 'A'})
+    [1, 2, 3, 4, 5]
+
+    &gt;&gt;&gt; sorted("This is a test string from Andrew".split(), key=str.lower)
+    ['a', 'Andrew', 'from', 'is', 'string', 'test', 'This']
+
+    more complicated:
+    &gt;&gt;&gt; student_tuples = [
+    ...     ('john', 'A', 15),
+    ...     ('jane', 'B', 12),
+    ...     ('dave', 'B', 10),
+    ... ]
+    &gt;&gt;&gt; sorted(student_tuples, key=lambda student: student[2])   # sort by age
+    [('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+
+    &gt;&gt;&gt; class Student:
+    ...     def __init__(self, name, grade, age):
+    ...         self.name = name
+    ...         self.grade = grade
+    ...         self.age = age
+    ...     def __repr__(self):
+    ...         return repr((self.name, self.grade, self.age))
+
+    &gt;&gt;&gt; student_objects = [
+    ...     Student('john', 'A', 15),
+    ...     Student('jane', 'B', 12),
+    ...     Student('dave', 'B', 10),
+    ... ]
+    &gt;&gt;&gt; sorted(student_objects, key=lambda student: student.age)   # sort by age
+    [('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+
+</pre>
+
+<p>
+还可以通过加 <code>reverse</code> 参数来反向排序。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">person</span>(<span style="color: #d18aff;">object</span>):
+        <span style="color: #ff4b4b;">"""Documentation for person</span>
+
+<span style="color: #ff4b4b;">        """</span>
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">__init__</span>(<span style="color: #a1db00;">self</span>, name, age):
+            <span style="color: #d18aff;">super</span>(person, <span style="color: #a1db00;">self</span>).__init__()
+            <span style="color: #a1db00;">self</span>.age = age
+            <span style="color: #a1db00;">self</span>.name = name
+
+    <span style="color: #ff8700;">a</span> = person(<span style="color: #ff4ea3;">'xie'</span>, 2)
+    <span style="color: #ff8700;">b</span> = person(<span style="color: #ff4ea3;">'peng'</span>, 8)
+    <span style="color: #ff8700;">c</span> = person(<span style="color: #ff4ea3;">'ni'</span>, 4)
+    <span style="color: #ff8700;">d</span> = person(<span style="color: #ff4ea3;">'hao'</span>, 3)
+
+    <span style="color: #ff8700;">l</span> = [a, b, c, d]
+    <span style="color: #a1db00;">print</span> [x.name <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> l]
+    <span style="color: #a1db00;">print</span> [x.name <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">sorted</span>(l, key=<span style="color: #a1db00;">lambda</span> x: x.age)]
+    <span style="color: #a1db00;">print</span> [x.name <span style="color: #a1db00;">for</span> x <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">sorted</span>(l, key=<span style="color: #a1db00;">lambda</span> x: x.age, reverse=<span style="color: #5fafd7;">True</span>)]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9c73ea4" class="outline-2">
+<h2 id="org9c73ea4"><span class="section-number-2">21</span> 哈希算法（摘要算法）</h2>
+<div class="outline-text-2" id="text-21">
+<p>
+<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868328251266d86585fc9514536a638f06b41908d44000">这里有一篇很棒的文章</a>
+</p>
+
+<p>
+常见的有md5和sha1等。就是一个函数f()，它通过一个函数，把任意长度的数
+据转换为一个长度固定的数据串（通常用16进制的字符串表示）。单向的，计
+算f(data)很容易，但通过digest反推data却非常困难。
+</p>
+
+<p>
+比SHA1更安全的算法是SHA256和SHA512，不过越安全的算法越慢，而且摘要长
+度更长。
+</p>
+
+<p>
+有没有可能两个不同的数据通过某个摘要算法得到了相同的摘要？完全有可能，
+因为任何摘要算法都是把无限多的数据集合映射到一个有限的集合中。这种情
+况称为碰撞，比如Bob试图根据你的摘要反推出一篇文章'how to learn
+hashlib in python - by Bob'，并且这篇文章的摘要恰好和你的文章完全一
+致，这种情况也并非不可能出现，但是非常非常困难。
+</p>
+
+<p>
+在后端数据库中，一般不存用户的明文密码，这样可能系统管理员能看到所有
+的密码。而是存它的密码的摘要，也就是hash之后的值。用户登陆时，过程应
+该是先计算它的密码的摘要，然后对比库中的。这样的好处是即使运维人员能
+访问数据库，也无法获知用户的明文口令。
+</p>
+</div>
+</div>
+<div id="outline-container-orgeced9a5" class="outline-2">
+<h2 id="orgeced9a5"><span class="section-number-2">22</span> struct</h2>
+<div class="outline-text-2" id="text-22">
+<p>
+<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013994173393204e80af1f8fa94c8e9d094d229395ea43000">廖雪峰的博客写得很详细</a> 我直接引用了。
+</p>
+
+<pre class="example">
+  准确地讲，Python没有专门处理字节的数据类型。但由于str既是字符串，又
+  可以表示字节，所以，字节数组＝str。而在C语言中，我们可以很方便地用
+  struct、union来处理字节，以及字节和int，float的转换。
+
+  在Python中，比方说要把一个32位无符号整数变成字节，也就是4个长度的str，
+  你得配合位运算符这么写：
+
+    &gt;&gt;&gt; n = 10240099
+    &gt;&gt;&gt; b1 = chr((n &amp; 0xff000000) &gt;&gt; 24)
+    &gt;&gt;&gt; b2 = chr((n &amp; 0xff0000) &gt;&gt; 16)
+    &gt;&gt;&gt; b3 = chr((n &amp; 0xff00) &gt;&gt; 8)
+    &gt;&gt;&gt; b4 = chr(n &amp; 0xff)
+    &gt;&gt;&gt; s = b1 + b2 + b3 + b4
+    &gt;&gt;&gt; s
+    '\x00\x9c@c'
+
+  非常麻烦。如果换成浮点数就无能为力了。
+
+  好在Python提供了一个struct模块来解决str和其他二进制数据类型的转换。
+
+  struct的pack函数把任意数据类型变成字符串：
+
+    &gt;&gt;&gt; import struct
+    &gt;&gt;&gt; struct.pack('&gt;I', 10240099)
+    '\x00\x9c@c'
+
+</pre>
+</div>
+</div>
+<div id="outline-container-orged2083b" class="outline-2">
+<h2 id="orged2083b"><span class="section-number-2">23</span> 得到当前执行文件的绝对路径</h2>
+<div class="outline-text-2" id="text-23">
+<p>
+有时候需要根据当前执行文件的路径和相对路径来找文件。首先需要得到可执
+行文件的绝对路径：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> os
+    <span style="color: #a1db00;">print</span> os.path.abspath(os.path.dirname(__file__))
+    <span style="color: #ff8700;">absolute_path</span> = os.path.abspath(os.path.dirname(__file__))
+    <span style="color: #ff8700;">other_path</span> = os.path.join(os.path.abspath(os.path.dirname(__file__)), <span style="color: #ff4ea3;">"../xiepeng"</span>)
+    <span style="color: #a1db00;">print</span> other_path
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd58d46d" class="outline-2">
+<h2 id="orgd58d46d"><span class="section-number-2">24</span> base64和random</h2>
+<div class="outline-text-2" id="text-24">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> base64
+    <span style="color: #a1db00;">from</span> Crypto <span style="color: #a1db00;">import</span> Random
+
+    <span style="color: #a1db00;">print</span> base64.b64encode(Random.new().read(24))
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">len</span>(base64.b64encode(Random.new().read(24)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8f602d3" class="outline-2">
+<h2 id="org8f602d3"><span class="section-number-2">25</span> <a href="https://pip.pypa.io/en/stable/quickstart/">pip</a> 相关</h2>
+<div class="outline-text-2" id="text-25">
+</div>
+<div id="outline-container-orgf4297eb" class="outline-3">
+<h3 id="orgf4297eb"><span class="section-number-3">25.1</span> wheel是个什么东西</h3>
+<div class="outline-text-3" id="text-25-1">
+<p>
+wheel其实是一种内置的归档格式。它比起从源代码编译再安装快很多。pip一
+般是优先安装的wheel。使用 <code>--no-binary</code> 可以禁止从wheel安装。如果没
+有找到对应的wheel，pip才会选择从源代码安装。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org50e6e4c" class="outline-3">
+<h3 id="org50e6e4c"><span class="section-number-3">25.2</span> pip install后不使用cache安装</h3>
+<div class="outline-text-3" id="text-25-2">
+<p>
+<a href="https://stackoverflow.com/questions/9510474/removing-pips-cache">这里</a> 提的一个问题：pip安装一个版本的包，发现版本安装错了，使用 <code>pip
+   uninstall</code> 删除后重新安装，发现还是安装原来错误版本的包。原来pip默认
+cache了。
+要强制不从 <code>cache</code> 安装，需要这样：
+</p>
+<pre class="example">
+     If using pip 6.0 or newer, try adding the --no-cache-dir option.
+     If using pip older than pip 6.0, upgrade it with pip install -U pip.
+</pre>
+
+<p>
+各平台cahce的dir为：
+</p>
+<pre class="example">
+     Unix
+     ~/.cache/pip and it respects the XDG_CACHE_HOME directory.
+     macOS
+     ~/Library/Caches/pip.
+     Windows
+     &lt;CSIDL_LOCAL_APPDATA&gt;\pip\Cache
+</pre>
+
+<p>
+<a href="https://pip.pypa.io/en/latest/reference/pip_install/#caching">官方文档在这里</a> 默认cache都是打开的
+</p>
+</div>
+</div>
+
+<div id="outline-container-org300327f" class="outline-3">
+<h3 id="org300327f"><span class="section-number-3">25.3</span> 结合pip进行离线安装</h3>
+<div class="outline-text-3" id="text-25-3">
+<p>
+特殊情况下，电脑不能连接外网。需要通过离线的方式安装package。
+</p>
+
+<p>
+<a href="https://pip.pypa.io/en/stable/user_guide/#installing-from-local-packages">官网教程在这里</a> 。
+</p>
+
+<p>
+为了做示例，使用 <code>virtualenv</code> 新建一个全新的python环境。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #d18aff;">cd</span> /tmp/
+     mkdir temp
+     virtualenv temp
+     <span style="color: #d18aff;">source</span> temp/bin/activate
+     <span style="color: #d18aff;">which</span> pip
+</pre>
+</div>
+
+<p>
+需要先把对应的包全部下载下来（如果只有一个包，后面直接跟包名就可以
+了。不需要 <code>-r</code> 选项）：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     mkdir -p /tmp/downloads
+     pip install --download /tmp/downloads -r requirements.txt
+</pre>
+</div>
+<p>
+<code>pip install --download</code> 会先看看 <code>wheel cache</code> 中有没有对应的软件，
+有就用cache中的，没有才从 <code>pypi</code> 下载。如果之前没安装过这些包，那肯
+定是没有对应的 <code>wheel cache</code> 的。在这种情况下，有些包在 <code>pypi</code> 中又
+不是 <code>wheel</code> 的形式发布的，但是你又确实希望得到 <code>wheel</code> 形式的包。
+可以执行下面的命令：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     pip wheel --wheel-dir /tmp/downloads_wheel -r requirements.txt
+</pre>
+</div>
+
+<p>
+<b>注意</b> ： <code>pip 9.0</code> 提供了 <code>pip download</code> 命令，它默认下载到当前目
+录：它可以取代 <code>pip install --downlaod</code> ，后者会在 <code>pip 10</code> 中被
+remove。
+</p>
+
+<p>
+下面看看这两个命令的区别， <code>downlaods</code> 目录中有 <code>tar.gz</code> ，
+<code>downloads_wheel</code> 目录全是 <code>wheel</code> 包：
+</p>
+<pre class="example">
+     $ ls downloads_wheel/
+     appdirs-1.4.3-py2.py3-none-any.whl             iso8601-0.1.11-py2.py3-none-any.whl           pbr-3.1.1-py2.py3-none-any.whl            requestsexceptions-1.2.0-py2.py3-none-any.whl
+     certifi-2017.4.17-py2.py3-none-any.whl         jsonpatch-1.16-py2.py3-none-any.whl           positional-1.1.1-py2.py3-none-any.whl     six-1.10.0-py2.py3-none-any.whl
+     cffi-1.10.0-cp27-cp27mu-manylinux1_x86_64.whl  jsonpointer-1.10-py2-none-any.whl             pycparser-2.17-py2.py3-none-any.whl       stevedore-1.23.0-py2.py3-none-any.whl
+     chardet-3.0.4-py2.py3-none-any.whl             keystoneauth1-2.21.0-py2.py3-none-any.whl     PyYAML-3.12-cp27-cp27mu-linux_x86_64.whl  urllib3-1.21.1-py2.py3-none-any.whl
+     deprecation-1.0.1-py2-none-any.whl             openstacksdk-0.9.17-py2.py3-none-any.whl      rabbitmq-0.2.0-py2.py3-none-any.whl       wrapt-1.10.10-cp27-cp27mu-linux_x86_64.whl
+     idna-2.5-py2.py3-none-any.whl                  os_client_config-1.27.0-py2.py3-none-any.whl  requests-2.18.1-py2.py3-none-any.whl
+     $ ls downloads
+     appdirs-1.4.3-py2.py3-none-any.whl             iso8601-0.1.11-py2.py3-none-any.whl           pbr-3.1.1-py2.py3-none-any.whl        requestsexceptions-1.2.0-py2.py3-none-any.whl
+     certifi-2017.4.17-py2.py3-none-any.whl         jsonpatch-1.16-py2.py3-none-any.whl           positional-1.1.1.tar.gz               six-1.10.0-py2.py3-none-any.whl
+     cffi-1.10.0-cp27-cp27mu-manylinux1_x86_64.whl  jsonpointer-1.10-py2-none-any.whl             pycparser-2.17.tar.gz                 stevedore-1.23.0-py2.py3-none-any.whl
+     chardet-3.0.4-py2.py3-none-any.whl             keystoneauth1-2.21.0-py2.py3-none-any.whl     PyYAML-3.12.tar.gz                    urllib3-1.21.1-py2.py3-none-any.whl
+     deprecation-1.0.1.tar.gz                       openstacksdk-0.9.17-py2.py3-none-any.whl      rabbitmq-0.2.0-py2.py3-none-any.whl   wrapt-1.10.10.tar.gz
+     idna-2.5-py2.py3-none-any.whl                  os_client_config-1.27.0-py2.py3-none-any.whl  requests-2.18.1-py2.py3-none-any.whl
+</pre>
+
+<p>
+其中 <code>requiements.txt</code> 可能长这样，也就是所有希望安装的包：
+</p>
+<pre class="example">
+     openstacksdk
+     rabbitmq
+</pre>
+
+<p>
+参考 <a href="https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format">官方文档</a> ， <code>requirements.txt</code> 可能这么写：
+</p>
+<pre class="example">
+     SomeProject
+     SomeProject == 1.3
+     SomeProject &gt;=1.2,&lt;.2.0
+     SomeProject[foo, bar]
+     SomeProject~=1.4.2
+</pre>
+<p>
+<code>pip 6.0</code> 后的版本还可以支持“环境标记”：
+</p>
+<pre class="example">
+     SomeProject ==5.4 ; python_version &lt; '2.7'
+     SomeProject; sys_platform == 'win32'
+</pre>
+
+<p>
+完成下载后，直接加参数安装即可：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     pip install --no-index --find-links=/tmp/downloads -r requirements.txt
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge968c1f" class="outline-3">
+<h3 id="orge968c1f"><span class="section-number-3">25.4</span> 使用阿里源</h3>
+<div class="outline-text-3" id="text-25-4">
+<p>
+这样可以全局修改，修改 =~/.pip/pip.conf=：
+</p>
+<div class="org-src-container">
+<pre class="src src-conf-space">     [<span style="color: #00d7af;">global</span>]
+     <span style="color: #ff8700;">trusted-host</span> =  mirrors.aliyun.com
+     <span style="color: #ff8700;">index-url</span> = http://mirrors.aliyun.com/pypi/simple
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org434cfad" class="outline-2">
+<h2 id="org434cfad"><span class="section-number-2">26</span> print打印字典的特殊用法</h2>
+<div class="outline-text-2" id="text-26">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #ff8700;">d</span> = {
+        <span style="color: #ff4ea3;">'xie'</span>: <span style="color: #ff4ea3;">'peng'</span>,
+        <span style="color: #ff4ea3;">'peng'</span>: <span style="color: #ff4ea3;">'nihao'</span>
+    }
+
+    <span style="color: #a1db00;">print</span> d
+
+    <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'%(xie)s'</span> % d
+    <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'%(peng)s'</span> % d
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0342341" class="outline-2">
+<h2 id="org0342341"><span class="section-number-2">27</span> 设置源文件编码</h2>
+<div class="outline-text-2" id="text-27">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">-*- coding: utf-8; -*-</span>
+    <span style="color: #a1db00;">from</span> collections <span style="color: #a1db00;">import</span> namedtuple
+    <span style="color: #a1db00;">from</span> enum <span style="color: #a1db00;">import</span> Enum
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">Species</span>(Enum):
+        <span style="color: #ff8700;">cat</span> = 1
+        <span style="color: #ff8700;">dog</span> = 2
+        <span style="color: #ff8700;">horse</span> = 3
+        <span style="color: #ff8700;">aardvark</span> = 4
+        <span style="color: #ff8700;">butterfly</span> = 5
+        <span style="color: #ff8700;">owl</span> = 6
+        <span style="color: #ff8700;">platypus</span> = 7
+        <span style="color: #ff8700;">dragon</span> = 8
+        <span style="color: #ff8700;">unicorn</span> = 9
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20381;&#27425;&#31867;&#25512;</span>
+
+        <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#20294;&#25105;&#20204;&#24182;&#19981;&#24819;&#20851;&#24515;&#21516;&#19968;&#29289;&#31181;&#30340;&#24180;&#40836;&#65292;&#25152;&#20197;&#25105;&#20204;&#21487;&#20197;&#20351;&#29992;&#19968;&#20010;&#21035;&#21517;</span>
+        <span style="color: #ff8700;">kitten</span> = 1  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">(&#35793;&#32773;&#27880;&#65306;&#24188;&#23567;&#30340;&#29483;&#21674;)</span>
+        <span style="color: #ff8700;">puppy</span> = 2   <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">(&#35793;&#32773;&#27880;&#65306;&#24188;&#23567;&#30340;&#29399;&#29399;)</span>
+
+    <span style="color: #ff8700;">Animal</span> = namedtuple(<span style="color: #ff4ea3;">'Animal'</span>, <span style="color: #ff4ea3;">'name age type'</span>)
+    <span style="color: #ff8700;">perry</span> = Animal(name=<span style="color: #ff4ea3;">"Perry"</span>, age=31, <span style="color: #d18aff;">type</span>=Species.cat)
+    <span style="color: #ff8700;">drogon</span> = Animal(name=<span style="color: #ff4ea3;">"Drogon"</span>, age=4, <span style="color: #d18aff;">type</span>=Species.dragon)
+    <span style="color: #ff8700;">tom</span> = Animal(name=<span style="color: #ff4ea3;">"Tom"</span>, age=75, <span style="color: #d18aff;">type</span>=Species.cat)
+    <span style="color: #ff8700;">charlie</span> = Animal(name=<span style="color: #ff4ea3;">"Charlie"</span>, age=2, <span style="color: #d18aff;">type</span>=Species.kitten)
+
+    <span style="color: #a1db00;">print</span> charlie.<span style="color: #d18aff;">type</span> == tom.<span style="color: #d18aff;">type</span>
+    <span style="color: #a1db00;">print</span> charlie.<span style="color: #d18aff;">type</span>
+
+    <span style="color: #a1db00;">print</span> Species(1)
+    <span style="color: #a1db00;">print</span> Species[<span style="color: #ff4ea3;">'cat'</span>]
+    <span style="color: #a1db00;">print</span> Species.cat
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5d1911a" class="outline-2">
+<h2 id="org5d1911a"><span class="section-number-2">28</span> python多继承的查找顺序</h2>
+<div class="outline-text-2" id="text-28">
+<div class="org-src-container">
+<pre class="src src-artist">        (foo) P1                P2 (foo, bar)
+              \                 /
+              |\-             -/|
+              |  \-         -/  |
+              |    \-     -/    |
+              |      \- -/      |
+              |       -X-       |
+              |     -/   \-     |
+              |   -/       \-   |
+              | -/           \- |
+              |/               \|
+              C1                C2 (bar)
+              \                 /
+               \               /
+                \            -/
+                 \          /
+                 |         /
+                  \      -/
+                   \    /
+                    \  /
+                     GC
+</pre>
+</div>
+
+<p>
+新式类（广度优先）：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">P1</span>(<span style="color: #d18aff;">object</span>):
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called P1-foo()'</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">P2</span>(<span style="color: #d18aff;">object</span>):
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called P2-foo()'</span>
+
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called P2-bar()'</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">C1</span>(P1, P2):
+        <span style="color: #a1db00;">pass</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">C2</span>(P1, P2):
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called C2-bar'</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">GC</span>(C1, C2):
+        <span style="color: #a1db00;">pass</span>
+
+    <span style="color: #ff8700;">gc</span> = GC()
+    gc.foo()
+    gc.bar()
+    <span style="color: #a1db00;">print</span> GC.__mro__
+
+</pre>
+</div>
+
+<p>
+从新式类中的 <code>__mro__</code> 属性可以知道查找顺序是怎样的。
+</p>
+
+<p>
+旧式类（深度优先）：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">P1</span>():
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called P1-foo()'</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">P2</span>():
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">foo</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called P2-foo()'</span>
+
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called P2-bar()'</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">C1</span>(P1, P2):
+        <span style="color: #a1db00;">pass</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">C2</span>(P1, P2):
+        <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">bar</span>(<span style="color: #a1db00;">self</span>):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'called C2-bar'</span>
+
+    <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">GC</span>(C1, C2):
+        <span style="color: #a1db00;">pass</span>
+
+    <span style="color: #ff8700;">gc</span> = GC()
+    gc.foo()
+    gc.bar()
+
+</pre>
+</div>
+
+<p>
+旧式类中没有 <code>__mro__</code> 属性。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1e91e19" class="outline-2">
+<h2 id="org1e91e19"><span class="section-number-2">29</span> 使用dis模块来查看python字节码</h2>
+<div class="outline-text-2" id="text-29">
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> dis
+    <span style="color: #ff8700;">code_obj</span> = <span style="color: #d18aff;">compile</span>(<span style="color: #ff4ea3;">'sum([1,2,3])'</span>,  <span style="color: #ff4ea3;">''</span>, <span style="color: #ff4ea3;">'single'</span>)
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">exec(code_obj)</span>
+    dis.dis(code_obj)
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> dis
+    <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">f</span>():
+        <span style="color: #ff8700;">i</span> = 0
+        <span style="color: #a1db00;">print</span> i
+
+    dis.dis(f.func_code)
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5120c7e" class="outline-2">
+<h2 id="org5120c7e"><span class="section-number-2">30</span> tornado</h2>
+<div class="outline-text-2" id="text-30">
+<p>
+这是一个 <code>tornado</code> 的hello,world的例子。
+</p>
+<div class="org-src-container">
+<pre class="src src-python">  <span style="color: #a1db00;">import</span> tornado.ioloop
+  <span style="color: #a1db00;">import</span> tornado.web
+
+  <span style="color: #a1db00;">class</span> <span style="color: #00d7af;">MainHandler</span>(tornado.web.RequestHandler):
+      <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">get</span>(<span style="color: #a1db00;">self</span>):
+          <span style="color: #a1db00;">self</span>.write(<span style="color: #ff4ea3;">"Hello, world, this is test haha"</span>)
+
+  <span style="color: #a1db00;">def</span> <span style="color: #ffd700;">make_app</span>():
+      <span style="color: #a1db00;">return</span> tornado.web.Application([
+          (r<span style="color: #ff4ea3;">"/"</span>, MainHandler),
+      ])
+
+  <span style="color: #a1db00;">if</span> <span style="color: #d18aff;">__name__</span> == <span style="color: #ff4ea3;">"__main__"</span>:
+      <span style="color: #ff8700;">app</span> = make_app()
+      app.listen(8888)
+      tornado.ioloop.IOLoop.current().start()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb911510" class="outline-2">
+<h2 id="orgb911510"><span class="section-number-2">31</span> vobject可以操作vCards文件</h2>
+<div class="outline-text-2" id="text-31">
+<p>
+读：
+</p>
+<div class="org-src-container">
+<pre class="src src-python">    <span style="color: #a1db00;">import</span> vobject
+
+    <span style="color: #ff8700;">card</span> = vobject.vCard()
+
+    <span style="color: #ff8700;">s</span> = <span style="color: #d18aff;">open</span>(<span style="color: #ff4ea3;">'test.vcf'</span>, <span style="color: #ff4ea3;">'r'</span>).read()
+
+    <span style="color: #a1db00;">print</span> <span style="color: #d18aff;">dir</span>(vobject)
+    <span style="color: #ff8700;">v</span> = vobject.readComponents( s )
+    <span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> v:
+        <span style="color: #a1db00;">if</span> <span style="color: #a1db00;">not</span> (<span style="color: #ff4ea3;">'fuhuayuqi'</span> <span style="color: #a1db00;">in</span> <span style="color: #d18aff;">str</span>(i.contents.get(<span style="color: #ff4ea3;">'n'</span>)[0].value)):
+            <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">'not fuhuayuqi contacts'</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcf6934a" class="outline-2">
+<h2 id="orgcf6934a"><span class="section-number-2">32</span> python解析html</h2>
+<div class="outline-text-2" id="text-32">
+<p>
+取得所有的a标签：
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">-*- coding: utf-8; -*-</span>
+<span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/bin/python</span>
+<span style="color: #a1db00;">from</span> bs4 <span style="color: #a1db00;">import</span> BeautifulSoup
+
+<span style="color: #a1db00;">import</span> sys
+<span style="color: #a1db00;">import</span> urllib2
+<span style="color: #d18aff;">reload</span>(sys)
+sys.setdefaultencoding(<span style="color: #ff4ea3;">'utf8'</span>)
+
+<span style="color: #ff8700;">html</span> = <span style="color: #ff4ea3;">"""</span>
+
+<span style="color: #ff4ea3;">&lt;a href="http://www.baidu.com"&gt;this_is_test_1&lt;/a&gt;</span>
+
+<span style="color: #ff4ea3;">&lt;a href="http://www.baidu.com2"&gt;this_is_test_2&lt;/a&gt;</span>
+
+<span style="color: #ff4ea3;">"""</span>
+
+<span style="color: #ff8700;">soup</span> = BeautifulSoup(html, <span style="color: #ff4ea3;">"html.parser"</span>)
+
+<span style="color: #a1db00;">for</span> i <span style="color: #a1db00;">in</span> [tag <span style="color: #a1db00;">for</span> tag <span style="color: #a1db00;">in</span> soup.find_all(<span style="color: #ff4ea3;">'a'</span>)]:
+    <span style="color: #ff8700;">url</span> = i[<span style="color: #ff4ea3;">'href'</span>].strip()
+    <span style="color: #ff8700;">name</span> = i.string.strip() + <span style="color: #ff4ea3;">".mp3"</span>
+    <span style="color: #a1db00;">print</span> <span style="color: #ff4ea3;">"download "</span> + name + <span style="color: #ff4ea3;">" from "</span> + url + <span style="color: #ff4ea3;">"..."</span>
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

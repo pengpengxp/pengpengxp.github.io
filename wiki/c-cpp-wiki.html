@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-18 一 16:38 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>c-cpp-wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">c-cpp-wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge629ea0">1. <code>C++</code> 中的多态</a></li>
+<li><a href="#orgf70ac4a">2. memmove</a></li>
+<li><a href="#org9e9ae09">3. 实用函数</a>
+<ul>
+<li><a href="#orgcb92c06">3.1. debug时打印日志到文件中</a></li>
+</ul>
+</li>
+<li><a href="#org83d7d3c">4. 子进程和父进程共享已打开的描述符</a></li>
+<li><a href="#org6c3a98a">5. 动态链接库可以多个进程共同使用，但是extern出来的变量每个进程都是独一个</a></li>
+<li><a href="#org6495da4">6. 一个简单的telnet服务器例子</a></li>
+<li><a href="#org30f8f66">7. <span class="todo TODO">TODO</span> 动态分配二维矩阵</a></li>
+<li><a href="#org74662bc">8. <span class="todo TODO">TODO</span> 主要说明c和c++中的static和const关键字的区别联系。</a>
+<ul>
+<li><a href="#org556c6ea">8.1. c</a></li>
+<li><a href="#org99bf8b4">8.2. c++</a>
+<ul>
+<li><a href="#org6e13bff">8.2.1. static</a></li>
+<li><a href="#orgde9e46b">8.2.2. const</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org3804c79">9. show ip address detail</a></li>
+<li><a href="#orge3674f4">10. 带参数的宏的扩展</a></li>
+<li><a href="#org76184c7">11. volatile关键字</a></li>
+<li><a href="#org9ec5d95">12. 使用strsep来切分字符串</a></li>
+<li><a href="#org468cb93">13. makefile中的两个冒号</a></li>
+<li><a href="#org1074e48">14. 测试系统是大端还是小端</a></li>
+<li><a href="#org7e0a66b">15. 查看gcc默认定义的宏</a></li>
+<li><a href="#org3f5f57e">16. 固定结构体以1字节对齐</a></li>
+<li><a href="#orgc88adad">17. 统计一段操作的耗时</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge629ea0" class="outline-2">
+<h2 id="orge629ea0"><span class="section-number-2">1</span> <code>C++</code> 中的多态</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<a href="http://www.jianshu.com/p/c8e74ef95091">这里讲得不错。</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;iostream.h&gt;</span>
+<span style="color: #00ff00;">use</span> <span style="color: PaleYellow;">namespace</span> <span style="color: #7fffd4;">std</span>;
+
+<span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">animal</span>
+{
+<span style="color: PaleYellow;">public</span>:
+    <span style="color: #00ff00;">void</span> <span style="color: #9acd32;">sleep</span>(){cout&lt;&lt;<span style="color: #ffa500;">"animal sleep"</span>&lt;&lt;endl;}
+    <span style="color: #00ff00;">void</span> <span style="color: #9acd32;">breathe</span>(){cout&lt;&lt;<span style="color: #ffa500;">"animal breathe"</span>&lt;&lt;endl;}
+};
+<span style="color: PaleYellow;">class</span> <span style="color: #00ff00;">fish</span>:<span style="color: PaleYellow;">public</span> <span style="color: #00ff00;">animal</span>
+{
+<span style="color: PaleYellow;">public</span>:
+    <span style="color: #00ff00;">void</span> <span style="color: #9acd32;">breathe</span>(){cout&lt;&lt;<span style="color: #ffa500;">"fish bubble"</span>&lt;&lt;endl;}
+};
+<span style="color: #00ff00;">void</span> <span style="color: #9acd32;">main</span>()
+{
+    <span style="color: #00ff00;">fish</span> <span style="color: #8fbc8f;">fh</span>;
+    <span style="color: #00ff00;">animal</span> *<span style="color: #8fbc8f;">pAn</span>=&amp;fh;
+    pAn-&gt;breathe();
+}
+</pre>
+</div>
+
+<p>
+<a href="http://www.jianshu.com/p/31373b52902d">C++继承时内存对象模型</a>
+</p>
+
+
+<div class="figure">
+<p><img src="./images/virtual-function-point-table.png" alt="virtual-function-point-table.png" />
+</p>
+</div>
+
+<p>
+如上图，虚函数表在最前面。它是一个指针。虚函数表是在对象初始化的时候
+（构造函数中）去设置的它。继承后的初始化是这样的：
+</p>
+<ol class="org-ol">
+<li>子类先调父类的构造函数，父类先设置了虚表指针，此时虚表指针指向父
+类的虚函数列表。</li>
+<li>子类调用自己的构造函数时，重新设置了虚表指针，此时虚表指针指向子
+类自己的虚函数列表。</li>
+<li>通过指针或引用调用虚函数时，其实是查的虚函数指针指向的虚函数列表。</li>
+</ol>
+
+<p>
+以上，就是 <code>C++</code> 动态绑定的原理。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf70ac4a" class="outline-2">
+<h2 id="orgf70ac4a"><span class="section-number-2">2</span> memmove</h2>
+<div class="outline-text-2" id="text-2">
+<pre class="example">
+    #include &lt;string.h&gt;
+
+    void *memmove(void *dest, const void *src, size_t n);
+</pre>
+<p>
+目的和源的指针可以重叠，它会先把src指向的内容copy到临时空间暂存，然
+后再从临时空间copy到dest。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9e9ae09" class="outline-2">
+<h2 id="org9e9ae09"><span class="section-number-2">3</span> 实用函数</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgcb92c06" class="outline-3">
+<h3 id="orgcb92c06"><span class="section-number-3">3.1</span> debug时打印日志到文件中</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">     #include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">     #include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">     #include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+
+
+     <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">peng_log_to_file</span>(<span style="color: PaleYellow;">const</span> <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">file_name</span>, <span style="color: PaleYellow;">const</span> <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">output</span>)
+     {
+         <span style="color: #00ff00;">FILE</span> *<span style="color: #8fbc8f;">fp</span> = fopen(file_name, <span style="color: #ffa500;">"a+"</span>);
+         fprintf(fp, <span style="color: #ffa500;">"%s\n"</span>, output);
+         fclose(fp);
+     }
+
+     <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+     {
+         <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">b</span> = <span style="color: #ffa500;">"nihao wo shi test"</span>;
+         peng_log_to_file(<span style="color: #ffa500;">"/tmp/kk.log"</span>, b);
+         <span style="color: PaleYellow;">return</span> 0;
+     }
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org83d7d3c" class="outline-2">
+<h2 id="org83d7d3c"><span class="section-number-2">4</span> 子进程和父进程共享已打开的描述符</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;unistd.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;sys/types.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;sys/stat.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;fcntl.h&gt;</span>
+
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+    {
+        <span style="color: #00ff00;">pid_t</span> <span style="color: #8fbc8f;">childpid</span>;
+
+        <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">fd</span> = open(<span style="color: #ffa500;">"/tmp/child_share_desc_with_parrent.log"</span>, O_RDWR | O_APPEND | O_CREAT, S_IRWXU);
+
+        <span style="color: PaleYellow;">if</span> ((childpid = fork()) == 0)
+        {
+            <span style="color: #00ff00;">char</span> <span style="color: #8fbc8f;">buf</span>[] = <span style="color: #ffa500;">"from clild\n"</span>;
+            write(fd, buf, strlen(buf));
+            close(fd);
+            printf(<span style="color: #ffa500;">"This is child\n"</span>);
+            exit(0);
+        }
+        <span style="color: PaleYellow;">else</span>
+        {
+            <span style="color: #00ff00;">char</span> <span style="color: #8fbc8f;">buf</span>[] = <span style="color: #ffa500;">"from parrent\n"</span>;
+            write(fd, buf, strlen(buf));
+            close(fd);
+            printf(<span style="color: #ffa500;">"This is parrent\n"</span>);
+        }
+
+        <span style="color: PaleYellow;">return</span> 0;
+    }
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6c3a98a" class="outline-2">
+<h2 id="org6c3a98a"><span class="section-number-2">5</span> 动态链接库可以多个进程共同使用，但是extern出来的变量每个进程都是独一个</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+<code>lib.c</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+
+<span style="color: PaleYellow;">static</span> <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">buf</span>;
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">from_lib</span>()
+{
+    printf(<span style="color: #ffa500;">"This is hello world from lib\n"</span>);
+    <span style="color: PaleYellow;">return</span> 0;
+}
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">install_buf</span>(<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">str</span>)
+{
+    buf = str;
+    <span style="color: PaleYellow;">return</span> 0;
+}
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">echo_buf</span>()
+{
+    printf(<span style="color: #ffa500;">"buf is %s\n"</span>, buf);
+    <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+写一个 <code>change_buf.c</code> 先修改一下 <code>buf</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;unistd.h&gt;</span>
+
+<span style="color: PaleYellow;">extern</span> <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">from_lib</span>();
+<span style="color: PaleYellow;">extern</span> <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">install_buf</span>(<span style="color: PaleYellow;">const</span> <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">str</span>);
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+    <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">b</span> = (<span style="color: #00ff00;">char</span> *)malloc(1024);
+    sprintf(b, <span style="color: #ffa500;">"Hi this is test\n"</span>);
+    install_buf(b);
+
+    printf(<span style="color: #ffa500;">"I have install %s\n"</span>, b);
+
+    <span style="color: PaleYellow;">while</span>(1)
+    {
+        sleep(1);
+    }
+    <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+然后 <code>main.c</code> 中再来查看一下 <code>buf</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;unistd.h&gt;</span>
+
+<span style="color: PaleYellow;">extern</span> <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">from_lib</span>();
+<span style="color: PaleYellow;">extern</span> <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">install_buf</span>(<span style="color: PaleYellow;">const</span> <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">str</span>);
+<span style="color: PaleYellow;">extern</span> <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">echo_buf</span>();
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+    echo_buf();
+    <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+<code>Makefile</code> 如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile-gmake"><span style="color: #9acd32;">.PHONY</span>:libtest a.out change
+<span style="color: #9acd32;">all</span>:a.out change libtest
+<span style="color: #9acd32;">change</span>:libtest
+        echo <span style="color: #ffa500;">"compil change"</span>
+        gcc change_buf.c -L. -ltest -o change
+<span style="color: #9acd32;">a.out</span>:libtest
+        echo <span style="color: #ffa500;">"compil a.out"</span>
+        gcc main.c -L. -ltest -o a.out
+<span style="color: #9acd32;">libtest</span>:
+        gcc lib.c -fPIC -shared -o libtest.so
+<span style="color: #9acd32;">clean</span>:
+        rm -rfv libtest.so a.out change
+</pre>
+</div>
+
+<p>
+编译好后先执行 <code>change</code> 然后执行 <code>a.out</code> ：
+</p>
+<pre class="example">
+➜  dynamic LD_LIBRARY_PATH="." ./change
+I have install Hi this is test
+</pre>
+
+<pre class="example">
+➜  dynamic LD_LIBRARY_PATH="." ./a.out
+buf is (null)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6495da4" class="outline-2">
+<h2 id="org6495da4"><span class="section-number-2">6</span> 一个简单的telnet服务器例子</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+<code>server.c</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #cd5c5c;">/*</span>
+<span style="color: #cd5c5c;">  C socket server example</span>
+<span style="color: #cd5c5c;">*/</span>
+
+<span style="color: #7fffd4;">#include</span><span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">#include</span><span style="color: #ffa500;">&lt;string.h&gt;</span>    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">strlen</span>
+<span style="color: #7fffd4;">#include</span><span style="color: #ffa500;">&lt;sys/socket.h&gt;</span>
+<span style="color: #7fffd4;">#include</span><span style="color: #ffa500;">&lt;arpa/inet.h&gt;</span> <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">inet_addr</span>
+<span style="color: #7fffd4;">#include</span><span style="color: #ffa500;">&lt;unistd.h&gt;</span>    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">write</span>
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">argc</span> , <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+    <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">socket_desc</span> , <span style="color: #8fbc8f;">client_sock</span> , <span style="color: #8fbc8f;">c</span> , <span style="color: #8fbc8f;">read_size</span>;
+    <span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">sockaddr_in</span> <span style="color: #8fbc8f;">server</span> , <span style="color: #8fbc8f;">client</span>;
+    <span style="color: #00ff00;">char</span> <span style="color: #8fbc8f;">client_message</span>[2000];
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Create socket</span>
+    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+    <span style="color: PaleYellow;">if</span> (socket_desc == -1)
+    {
+        printf(<span style="color: #ffa500;">"Could not create socket"</span>);
+    }
+    puts(<span style="color: #ffa500;">"Socket created"</span>);
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Prepare the sockaddr_in structure</span>
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons(8888);
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Bind</span>
+    <span style="color: PaleYellow;">if</span>( bind(socket_desc,(<span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">sockaddr</span> *)&amp;server , <span style="color: PaleYellow;">sizeof</span>(server)) &lt; 0)
+    {
+        <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">print the error message</span>
+        perror(<span style="color: #ffa500;">"bind failed. Error"</span>);
+        <span style="color: PaleYellow;">return</span> 1;
+    }
+    puts(<span style="color: #ffa500;">"bind done"</span>);
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Listen</span>
+    listen(socket_desc , 3);
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Accept and incoming connection</span>
+    puts(<span style="color: #ffa500;">"Waiting for incoming connections..."</span>);
+    c = <span style="color: PaleYellow;">sizeof</span>(<span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">sockaddr_in</span>);
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">accept connection from an incoming client</span>
+    client_sock = accept(socket_desc, (<span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">sockaddr</span> *)&amp;client, (<span style="color: #00ff00;">socklen_t</span>*)&amp;c);
+    <span style="color: PaleYellow;">if</span> (client_sock &lt; 0)
+    {
+        perror(<span style="color: #ffa500;">"accept failed"</span>);
+        <span style="color: PaleYellow;">return</span> 1;
+    }
+    puts(<span style="color: #ffa500;">"Connection accepted"</span>);
+
+    <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Receive a message from client</span>
+    <span style="color: PaleYellow;">while</span>( (read_size = recv(client_sock , client_message , 2000 , 0)) &gt; 0 )
+    {
+        <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">Send the message back to client</span>
+        write(client_sock , client_message , strlen(client_message));
+    }
+
+    <span style="color: PaleYellow;">if</span>(read_size == 0)
+    {
+        puts(<span style="color: #ffa500;">"Client disconnected"</span>);
+        fflush(stdout);
+    }
+    <span style="color: PaleYellow;">else</span> <span style="color: PaleYellow;">if</span>(read_size == -1)
+    {
+        perror(<span style="color: #ffa500;">"recv failed"</span>);
+    }
+
+    <span style="color: PaleYellow;">return</span> 0;
+}
+
+</pre>
+</div>
+
+<p>
+<code>Makefile</code> :
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile-gmake"><span style="color: #9acd32;">.PHONY</span>:all server
+<span style="color: #9acd32;">all</span>:server
+<span style="color: #9acd32;">server</span>:
+        cc server.c -o server
+<span style="color: #9acd32;">clean</span>:
+        rm -rfv server a.out *.o
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org30f8f66" class="outline-2">
+<h2 id="org30f8f66"><span class="section-number-2">7</span> <span class="todo TODO">TODO</span> 动态分配二维矩阵</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+C语言中，动态分配一个矩阵的话。我现在找到了一个“模拟”的方法：使用指
+针数组。为每个指针动态分配？但是有缺陷。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #7fffd4;">  #define</span> <span style="color: #8fbc8f;">N</span> 10
+  <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">peng</span>[N];
+  <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">i</span>;
+  <span style="color: PaleYellow;">for</span>(i = 0;i &lt; N;i++)
+  {
+       peng[i] = (<span style="color: #00ff00;">char</span>*)malloc(<span style="color: #00ff00;">N</span> * <span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">char</span>));
+  }
+</pre>
+</div>
+<p>
+然后可以使用。不过这是因为char和int可以通用。所以只能算是模拟的。没有
+找到完美解决方案。
+</p>
+
+<p>
+还是解决了：
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #7fffd4;">  #include</span><span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">  #include</span><span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">  #define</span> <span style="color: #8fbc8f;">N</span> 4
+  <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>()
+  {
+       <span style="color: #00ff00;">int</span> **<span style="color: #8fbc8f;">peng</span>;
+       peng = (<span style="color: #00ff00;">int</span> **)malloc(2*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>*));
+       peng[0] = (<span style="color: #00ff00;">int</span>*)malloc(2*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>));
+       peng[1] = (<span style="color: #00ff00;">int</span>*)malloc(2*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>));
+       <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">i</span>,<span style="color: #8fbc8f;">j</span>;
+
+       <span style="color: PaleYellow;">for</span>(i = 0;i &lt; 2;i++)
+       {
+            <span style="color: PaleYellow;">for</span>(j = 0;j &lt; 2;j++)
+            {
+                 peng[i][j] = 1;
+            }
+       }
+
+       <span style="color: PaleYellow;">for</span>(i = 0;i &lt; 2;i++)
+       {
+            <span style="color: PaleYellow;">for</span>(j = 0;j &lt; 2;j++)
+            {
+                 printf(<span style="color: #ffa500;">"%d\t"</span>,peng[i][j]);
+            }
+            printf(<span style="color: #ffa500;">"\n"</span>);
+       }
+       free(peng[0]);
+       free(peng[1]);
+       free(peng);
+  }
+</pre>
+</div>
+
+
+<p>
+另外：
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #7fffd4;">  #include</span><span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">  #include</span><span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">  #define</span> <span style="color: #8fbc8f;">N</span> 4
+  <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>()
+  {
+       <span style="color: #00ff00;">int</span> *<span style="color: #8fbc8f;">peng</span>[N];
+       <span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">peng = (int **)malloc(N*sizeof(int*)); </span><span style="color: #cd5c5c;">*/</span>
+       peng[0] = (<span style="color: #00ff00;">int</span>*)malloc(<span style="color: #00ff00;">N</span>*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>));
+       peng[1] = (<span style="color: #00ff00;">int</span>*)malloc(<span style="color: #00ff00;">N</span>*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>));
+       peng[2] = (<span style="color: #00ff00;">int</span>*)malloc(<span style="color: #00ff00;">N</span>*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>));
+       peng[3] = (<span style="color: #00ff00;">int</span>*)malloc(<span style="color: #00ff00;">N</span>*<span style="color: PaleYellow;">sizeof</span>(<span style="color: #00ff00;">int</span>));
+       <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">i</span>,<span style="color: #8fbc8f;">j</span>;
+
+       <span style="color: PaleYellow;">for</span>(i = 0;i &lt; N;i++)
+       {
+            <span style="color: PaleYellow;">for</span>(j = 0;j &lt; N;j++)
+            {
+                 peng[i][j] = N * i + j;
+            }
+       }
+
+       <span style="color: PaleYellow;">for</span>(i = 0;i &lt; N;i++)
+       {
+            <span style="color: PaleYellow;">for</span>(j = 0;j &lt; N;j++)
+            {
+                 printf(<span style="color: #ffa500;">"%d\t"</span>,peng[i][j]);
+            }
+            printf(<span style="color: #ffa500;">"\n"</span>);
+       }
+       free(peng[0]);
+       free(peng[1]);
+       free(peng[2]);
+       free(peng[3]);
+       <span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">free(peng); </span><span style="color: #cd5c5c;">*/</span>
+  }
+</pre>
+</div>
+<p>
+也就是说：int *peng[N] 和int **peng的区别就是前者是确定了一维的。动态
+分配只能分配一维，而后者是完全动态分配的。这些都可以帮助理解：指向指针
+的指针和指针数组。另外。多维数组的话，就是完全静态分配的了;比如：
+</p>
+<div class="org-src-container">
+<pre class="src src-c">  <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">peng</span>[10][10];
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org74662bc" class="outline-2">
+<h2 id="org74662bc"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> 主要说明c和c++中的static和const关键字的区别联系。</h2>
+<div class="outline-text-2" id="text-8">
+</div>
+<div id="outline-container-org556c6ea" class="outline-3">
+<h3 id="org556c6ea"><span class="section-number-3">8.1</span> c</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+c中static针对变量来说主要两个作用:
+</p>
+
+<p>
+1:对于局部变量，static定义的变量作用域不变，即只能在该函数中访问。生
+存期却不随函数调用的结束而结束。总结起来static类型的内部变量是一种只
+能在某个特定函数中使用但一直占用存储空间的变量。另外，static类型的内
+部变量会自动初始化为"0"，反之，普通内部变量不会进行初始化。
+</p>
+
+<p>
+2：对于外部变量：作用域生存期都没有改变。static外部变量只能在本文件
+中使用。不能通过extern到其他文件中使用。这样可以避免因为文件过多产生
+重名。
+</p>
+
+<p>
+c中static针对函数来说就一个作用：因为函数默认都是“外部的”，所以
+static类型的函数就只能在本文件中使用，也是为了避免重名。
+</p>
+
+<p>
+测试用程序如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">file1 </span><span style="color: #cd5c5c;">*/</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+    <span style="color: PaleYellow;">static</span> <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">d</span> = 45;
+    <span style="color: PaleYellow;">static</span> <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">a</span> = 34;
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun3</span>();
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun2</span>();
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun</span>();
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">argc</span>, <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+    {
+         printf(<span style="color: #ffa500;">"file1\n"</span>);
+         fun();
+         printf(<span style="color: #ffa500;">"in main a = %d\n"</span>,a);
+         fun2();
+
+         <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">b</span>;
+         printf(<span style="color: #ffa500;">"b = %d\n"</span>,b);
+         <span style="color: PaleYellow;">static</span> <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">c</span>;
+         printf(<span style="color: #ffa500;">"static c = %d\n"</span>,c);
+
+         printf(<span style="color: #ffa500;">"int main d = %d\n"</span>,d);
+
+<span style="color: #7fffd4;">    #ifdef</span> ERROR
+         fun3();
+<span style="color: #7fffd4;">    #endif</span>
+
+         <span style="color: PaleYellow;">return</span> 0;
+    }
+
+    <span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">file2 </span><span style="color: #cd5c5c;">*/</span>
+<span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+    <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">a</span> = 888;
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun</span>()
+    {
+         printf(<span style="color: #ffa500;">"function\n"</span>);
+         <span style="color: PaleYellow;">static</span> <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">a</span> = 3;
+         printf(<span style="color: #ffa500;">"in fun a = %d\n"</span>,a);
+         <span style="color: PaleYellow;">return</span> 0;
+    }
+
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun2</span>()
+    {
+         printf(<span style="color: #ffa500;">"in fun2 a = %d\n"</span>,a);
+         <span style="color: PaleYellow;">return</span> 0;
+    }
+
+<span style="color: #7fffd4;">    #ifdef</span> ERROR
+    <span style="color: PaleYellow;">extern</span> <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">d</span>;
+    <span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun3</span>()
+    {
+         printf(<span style="color: #ffa500;">"in function d = %d\n"</span>,d);
+         <span style="color: PaleYellow;">return</span> 0;
+    }
+<span style="color: #7fffd4;">    #endif</span>
+
+</pre>
+</div>
+
+<p>
+makefile如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">    <span style="color: #9acd32;">a.out</span>:file2.o file1.c
+            cc -g file2.o file1.c
+    <span style="color: #9acd32;">file2.o</span>:file2.c
+            cc -g -c file2.c
+    <span style="color: #9acd32;">clean</span>:
+            rm -rfv a.out *.o
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org99bf8b4" class="outline-3">
+<h3 id="org99bf8b4"><span class="section-number-3">8.2</span> c++</h3>
+<div class="outline-text-3" id="text-8-2">
+</div>
+<div id="outline-container-org6e13bff" class="outline-4">
+<h4 id="org6e13bff"><span class="section-number-4">8.2.1</span> static</h4>
+<div class="outline-text-4" id="text-8-2-1">
+<p>
+c++中static应该和c是兼容的。但是这个我还没有实际测试过。另外，c++中
+static在类中使用的时候是另一种特殊的方式。类中的static变量或者函数
+表示它是属于类型本身的，而不属于任何对象。例如统计某类型对象的个数
+的时候就可以用到这样的static变量。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgde9e46b" class="outline-4">
+<h4 id="orgde9e46b"><span class="section-number-4">8.2.2</span> const</h4>
+<div class="outline-text-4" id="text-8-2-2">
+<p>
+c++中const其实有了一些static的功能。另外，const还有一些特殊的功能。
+</p>
+
+<p>
+cosnt定义的外部变量本身是局部的。不能直接通过extern就在其他文件中使
+用。但是可以在定义的时候使用extern const这样来定义。在其他文件中就
+可以通过extern const来声明并使用该变量了。
+</p>
+
+<p>
+在c++中，定义常量的话一般都用const，而在c中一般是用宏#define来实现。
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3804c79" class="outline-2">
+<h2 id="org3804c79"><span class="section-number-2">9</span> show ip address detail</h2>
+<div class="outline-text-2" id="text-9">
+<div class="org-src-container">
+<pre class="src src-C">
+<span style="color: #cd5c5c;">//   </span><span style="color: #cd5c5c;">to show ip details; wrotten by pengpengxp 2014-10-14</span>
+
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;iostream&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;cstdio&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;cstring&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;cstdlib&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;cctype&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;bitset&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;arpa/inet.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;string&gt;</span>
+using <span style="color: #00ff00;">namespace</span> <span style="color: #8fbc8f;">std</span>;
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">fun</span>(<span style="color: PaleYellow;">const</span> <span style="color: #00ff00;">string</span> <span style="color: #8fbc8f;">IP</span>)
+{
+     <span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">in_addr</span> <span style="color: #8fbc8f;">in</span>;
+     <span style="color: #00ff00;">unsigned</span> <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">t</span>;
+     inet_aton(IP.c_str(),&amp;in);
+     <span style="color: #00ff00;">string</span> <span style="color: #9acd32;">s</span>(<span style="color: #00ff00;">inet_ntoa</span>(<span style="color: #8fbc8f;">in</span>));
+     cout&lt;&lt;s&lt;&lt;endl;
+
+     memcpy(&amp;t,&amp;in,<span style="color: PaleYellow;">sizeof</span>(<span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">in_addr</span>));
+     t = ntohl(t);
+     printf(<span style="color: #ffa500;">"%#x\n"</span>,t);
+     bitset&lt;32&gt; a(t);
+     cout&lt;&lt;a&lt;&lt;endl;
+
+     bitset&lt;8&gt; a1(t&gt;&gt;24);
+     bitset&lt;8&gt; a2(t&gt;&gt;16);
+     bitset&lt;8&gt; a3(t&gt;&gt;8);
+     bitset&lt;8&gt; a4(t);
+
+     cout&lt;&lt;a1&lt;&lt;<span style="color: #ffa500;">"\t"</span>&lt;&lt;a1.to_ulong()&lt;&lt;endl;
+     cout&lt;&lt;a2&lt;&lt;<span style="color: #ffa500;">"\t"</span>&lt;&lt;a2.to_ulong()&lt;&lt;endl;
+     cout&lt;&lt;a3&lt;&lt;<span style="color: #ffa500;">"\t"</span>&lt;&lt;a3.to_ulong()&lt;&lt;endl;
+     cout&lt;&lt;a4&lt;&lt;<span style="color: #ffa500;">"\t"</span>&lt;&lt;a4.to_ulong()&lt;&lt;endl;
+
+     cout&lt;&lt;endl;
+     <span style="color: PaleYellow;">return</span> 0;
+}
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">argc</span>, <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+     <span style="color: PaleYellow;">if</span>(argc &lt;= 1)
+     {
+          cout&lt;&lt;<span style="color: #ffa500;">"usage: "</span>&lt;&lt;argv[0]&lt;&lt;<span style="color: #ffa500;">" IP_address"</span>&lt;&lt;endl;
+          exit(-1);
+     }
+     <span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">i</span>;
+     <span style="color: PaleYellow;">for</span> (i = 1; i &lt; argc; i++)
+     {
+          fun(argv[i]);
+     }
+
+     <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge3674f4" class="outline-2">
+<h2 id="orge3674f4"><span class="section-number-2">10</span> 带参数的宏的扩展</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+带参数的宏，后面可能有一个 <code>#</code> 和两个 <code>##</code> 。意思如下：
+</p>
+
+<ol class="org-ol">
+<li>一个 <code>#</code> ：会给对应的参数两边加上 <code>""</code> ，然后去掉前面的 <code>#</code> 。我
+理解其实就是把它转成了字符串。</li>
+<li>两个 <code>##</code> ：直接就是把参数带入，一般就是用来形成新的变量。</li>
+</ol>
+
+<p>
+下面的例子：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">this is test for macro </span><span style="color: #cd5c5c;">*/</span>
+
+<span style="color: #7fffd4;">#define</span> <span style="color: #9acd32;">N</span>(<span style="color: #8fbc8f;">name</span>) <span style="color: #00ff00;">char</span> * <span style="color: #8fbc8f;">a_</span>##name = #name;
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+        N(pengpeng);
+        printf(<span style="color: #ffa500;">"a = %s\n"</span>, a_pengpeng);
+
+        N(xiepeng);
+        printf(<span style="color: #ffa500;">"a = %s\n"</span>, a_xiepeng);
+        <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+<p>
+两个 <code>##</code> 形成新的变量名。一个 <code>#</code> 号把参数转成了字符串值。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org76184c7" class="outline-2">
+<h2 id="org76184c7"><span class="section-number-2">11</span> volatile关键字</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+<a href="http://www.cnblogs.com/yc_sunniwell/archive/2010/06/24/1764231.html">参考：详解C中volatile关键字</a>
+</p>
+
+<p>
+volatile提醒编译器它后面所定义的变量随时都有可能改变，因此编译后的程
+序每次需要存储或读取这个变量的时候，都会直接从变量地址中读取数据。如
+果没有volatile关键字，则编译器可能优化读取和存储，可能暂时使用寄存器
+中的值，如果这个变量由别的程序更新了的话，将出现不一致的现象。下面举
+例说明。在DSP开发中，经常需要等待某个事件的触发，所以经常会写出这样
+的程序：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #00ff00;">short</span> <span style="color: #8fbc8f;">flag</span>;
+<span style="color: #00ff00;">void</span> <span style="color: #9acd32;">test</span>()
+{
+        do1();
+        <span style="color: PaleYellow;">while</span>(flag==0);
+        do2();
+}
+</pre>
+</div>
+<p>
+这段程序等待内存变量flag的值变为1(怀疑此处是0,有点疑问,)之后才运行
+do2()。变量flag的值由别的程序更改，这个程序可能是某个硬件中断服务程
+序。例如：如果某个按钮按下的话，就会对DSP产生中断，在按键中断程序中
+修改flag为1，这样上面的程序就能够得以继续运行。但是，编译器并不知道
+flag的值会被别的程序修改，因此在它进行优化的时候，可能会把flag的值先
+读入某个寄存器，然后等待那个寄存器变为1。如果不幸进行了这样的优化，
+那么while循环就变成了死循环，因为寄存器的内容不可能被中断服务程序修
+改。为了让程序每次都读取真正flag变量的值，就需要定义为如下形式：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: PaleYellow;">volatile</span> <span style="color: #00ff00;">short</span> <span style="color: #8fbc8f;">flag</span>;
+</pre>
+</div>
+<p>
+需要注意的是，没有volatile也可能能正常运行，但是可能修改了编译器
+的优化级别之后就又不能正常运行了。因此经常会出现debug版本正常，
+但是release版本却不能正常的问题。所以为了安全起见，只要是等待别
+的程序修改某个变量的话，就加上volatile关键字。
+</p>
+
+<p>
+一般说来，volatile用在如下的几个地方：
+</p>
+<ol class="org-ol">
+<li>中断服务程序中修改的供其它程序检测的变量需要加volatile；</li>
+<li>多任务环境下各任务间共享的标志应该加volatile；</li>
+<li>存储器映射的硬件寄存器通常也要加volatile说明，因为每次对它的读写
+都可能由不同意义；</li>
+</ol>
+<p>
+另外，以上这几种情况经常还要同时考虑数据的完整性（相互关联的几个标志
+读了一半被打断了重写），在1中可以通过关中断来实现，2中可以禁止任务调
+度，3中则只能依靠硬件的良好设计了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9ec5d95" class="outline-2">
+<h2 id="org9ec5d95"><span class="section-number-2">12</span> 使用strsep来切分字符串</h2>
+<div class="outline-text-2" id="text-12">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+        <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">c</span>, *<span style="color: #8fbc8f;">end</span>;
+        <span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">tok</span>;
+
+        <span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">&#36825;&#37324;&#24517;&#39035;&#20351;&#29992;c&#26469;&#20445;&#23384;&#21407;&#22987;&#22320;&#22336;&#65292;&#22914;&#26524;&#19981;&#29992;c&#65292;&#21407;&#22987;&#22320;&#22336;&#20002;&#22833;&#21487;&#33021;&#23548;</span>
+<span style="color: #cd5c5c;">         * &#33268;&#27573;&#38169;&#35823; </span><span style="color: #cd5c5c;">*/</span>
+        c = end = strdup(<span style="color: #ffa500;">"xie\npeng\n"</span>);
+        tok = strsep(&amp;end, <span style="color: #ffa500;">"\n"</span>);
+        printf(<span style="color: #ffa500;">"tok = %s\n"</span>, tok);
+        printf(<span style="color: #ffa500;">"end = %s\n"</span>, end);
+
+        tok = strsep(&amp;end, <span style="color: #ffa500;">"\n"</span>);
+        printf(<span style="color: #ffa500;">"tok = %s\n"</span>, tok);
+        printf(<span style="color: #ffa500;">"end = %s\n"</span>, end);
+
+        free(c);
+        <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org468cb93" class="outline-2">
+<h2 id="org468cb93"><span class="section-number-2">13</span> makefile中的两个冒号</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+两个冒号比一个冒号就是可以定义同名的目标。比如下面的makefile的输出是
+这样的
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #9acd32;">xie</span>::
+        echo <span style="color: #ffa500;">"first"</span>
+<span style="color: #9acd32;">xie</span>::
+        echo <span style="color: #ffa500;">"second"</span>
+</pre>
+</div>
+<pre class="example">
+/tmp $ make
+echo "first"
+first
+echo "second"
+second
+</pre>
+
+<p>
+单个冒号会有warning，且只执行最后一个。
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #9acd32;">xie</span>:
+        echo <span style="color: #ffa500;">"first"</span>
+<span style="color: #9acd32;">xie</span>:
+        echo <span style="color: #ffa500;">"second"</span>
+</pre>
+</div>
+<pre class="example">
+/tmp $ make
+Makefile:4: warning: overriding recipe for target 'xie'
+Makefile:2: warning: ignoring old recipe for target 'xie'
+echo "second"
+second
+</pre>
+
+<p>
+所以这样方式主要用在数组中，比如下面我可以通过数组定义 <code>xie, peng</code> 两
+个target。然后单独定义一个 <code>xie</code> 也不会出错。
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #8fbc8f;">subdirs</span> = xie peng
+<span style="color: #9acd32;">${</span><span style="color: #9acd32;">subdirs</span><span style="color: #9acd32;">}</span>::
+        @(for dir in $(<span style="color: #8fbc8f;">subdirs</span>); do  echo $$dir; done)
+
+<span style="color: #9acd32;">xie</span>::
+        echo <span style="color: #ffa500;">"haha"</span>
+
+</pre>
+</div>
+<p>
+<code>make xie</code> 输出如下：
+</p>
+<pre class="example">
+/tmp $ make xie
+xie
+peng
+echo "haha"
+haha
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1074e48" class="outline-2">
+<h2 id="org1074e48"><span class="section-number-2">14</span> 测试系统是大端还是小端</h2>
+<div class="outline-text-2" id="text-14">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+
+
+
+<span style="color: #00ff00;">void</span> <span style="color: #9acd32;">Little_Big_Endian_Check</span>()
+{
+    <span style="color: #00ff00;">int</span>  <span style="color: #8fbc8f;">m</span>= 0x12345678;
+    <span style="color: #00ff00;">char</span> <span style="color: #8fbc8f;">c</span> =  *(<span style="color: #00ff00;">char</span> *)&amp;m;  <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">&#36890;&#36807;&#23558;int(4&#23383;&#33410;)&#24378;&#21046;&#31867;&#22411;&#36716;&#25442;&#25104;char&#21333;&#23383;&#33410;&#65292;c&#25351;&#21521;m&#30340;&#36215;&#22987;&#23383;&#33410;&#65288;&#20302;&#23383;&#33410;&#65289;</span>
+
+
+    printf(<span style="color: #ffa500;">"the size of integer is %ld \n"</span>,<span style="color: PaleYellow;">sizeof</span>(m));
+    printf(<span style="color: #ffa500;">"*((char *)&amp;m + 0):0x%x\n"</span>, *((<span style="color: #00ff00;">char</span> *)&amp;m + 0));
+    printf(<span style="color: #ffa500;">"*((char *)&amp;m + 1):0x%x\n"</span>, *((<span style="color: #00ff00;">char</span> *)&amp;m + 1));
+    printf(<span style="color: #ffa500;">"*((char *)&amp;m + 2):0x%x\n"</span>, *((<span style="color: #00ff00;">char</span> *)&amp;m + 2));
+    printf(<span style="color: #ffa500;">"*((char *)&amp;m + 3):0x%x\n"</span>, *((<span style="color: #00ff00;">char</span> *)&amp;m + 3));
+
+
+    <span style="color: PaleYellow;">if</span>(c == 0x12) <span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">&#20302;&#23383;&#33410;&#23384;&#30340;&#26159;&#25968;&#25454;&#30340;&#39640;&#23383;&#33410;&#25968;&#25454;</span>
+    {
+        printf(<span style="color: #ffa500;">"It is Big-Endian!\n"</span>);<span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">&#26159;&#22823;&#31471;&#27169;&#24335;</span>
+    }
+    <span style="color: PaleYellow;">else</span>
+    {
+        printf(<span style="color: #ffa500;">"It is Little-Endian!\n"</span>);<span style="color: #cd5c5c;">//</span><span style="color: #cd5c5c;">&#26159;&#23567;&#31471;&#27169;&#24335;</span>
+    }
+}
+
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>()
+{
+    printf(<span style="color: #ffa500;">"the program is used to test big or small!\n"</span>);
+
+    Little_Big_Endian_Check();
+
+    <span style="color: PaleYellow;">return</span> 0;
+}
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7e0a66b" class="outline-2">
+<h2 id="org7e0a66b"><span class="section-number-2">15</span> 查看gcc默认定义的宏</h2>
+<div class="outline-text-2" id="text-15">
+<div class="org-src-container">
+<pre class="src src-sh">gcc -E -dM - &lt;/dev/null
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3f5f57e" class="outline-2">
+<h2 id="org3f5f57e"><span class="section-number-2">16</span> 固定结构体以1字节对齐</h2>
+<div class="outline-text-2" id="text-16">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdlib.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;string.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdint.h&gt;</span>
+
+
+<span style="color: #7fffd4;">#define</span> <span style="color: #8fbc8f;">FHOS_CFG_HEADER_LEN</span> 32
+
+<span style="color: PaleYellow;">typedef</span> <span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">fhos_cfg_header_s</span>
+{
+    <span style="color: #00ff00;">uint8_t</span>  <span style="color: #8fbc8f;">ver</span>;
+    <span style="color: #00ff00;">uint32_t</span> <span style="color: #8fbc8f;">crc</span>;
+    <span style="color: #00ff00;">uint32_t</span> <span style="color: #8fbc8f;">time</span>;
+    <span style="color: #00ff00;">uint32_t</span> <span style="color: #8fbc8f;">size</span>;
+    <span style="color: #00ff00;">char</span>     <span style="color: #8fbc8f;">reserved</span>[FHOS_CFG_HEADER_LEN - 13];
+} <span style="color: PaleYellow;">__attribute__</span>((packed, aligned(1))) <span style="color: #00ff00;">fhos_cfg_header_t</span> ;
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">int</span> <span style="color: #8fbc8f;">args</span>,<span style="color: #00ff00;">char</span> *<span style="color: #8fbc8f;">argv</span>[])
+{
+    printf(<span style="color: #ffa500;">"sizeof(fhos_cfg_head) = %ld\n"</span>, <span style="color: PaleYellow;">sizeof</span>(fhos_cfg_header_t));
+
+    <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc88adad" class="outline-2">
+<h2 id="orgc88adad"><span class="section-number-2">17</span> 统计一段操作的耗时</h2>
+<div class="outline-text-2" id="text-17">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;sys/time.h&gt;</span>
+<span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
+
+<span style="color: #00ff00;">float</span> <span style="color: #9acd32;">timedifference_msec</span>(<span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">timeval</span> <span style="color: #8fbc8f;">t0</span>, <span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">timeval</span> <span style="color: #8fbc8f;">t1</span>)
+{
+    <span style="color: PaleYellow;">return</span> (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
+}
+
+<span style="color: #00ff00;">int</span> <span style="color: #9acd32;">main</span>(<span style="color: #00ff00;">void</span>)
+{
+    <span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">timeval</span> <span style="color: #8fbc8f;">t0</span>;
+    <span style="color: PaleYellow;">struct</span> <span style="color: #00ff00;">timeval</span> <span style="color: #8fbc8f;">t1</span>;
+    <span style="color: #00ff00;">float</span> <span style="color: #8fbc8f;">elapsed</span>;
+
+    gettimeofday(&amp;t0, 0);
+    <span style="color: #cd5c5c;">/* </span><span style="color: #cd5c5c;">... YOUR CODE HERE ... </span><span style="color: #cd5c5c;">*/</span>
+    gettimeofday(&amp;t1, 0);
+
+    elapsed = timedifference_msec(t0, t1);
+
+    printf(<span style="color: #ffa500;">"Code executed in %f milliseconds.\n"</span>, elapsed);
+
+    <span style="color: PaleYellow;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2019-03-18 一 16:38</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

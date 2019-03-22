@@ -1,0 +1,3246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-10-01 Mon 21:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linux wiki</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="pengpengxp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
+<script src="styles/lib/js/jquery.min.js"></script>
+<script src="styles/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Linux wiki</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgfdd9236">1. <span class="done DONE">DONE</span> 使用percol配置文件管理器。</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org8ab2842">1.0.1. 主要讲解在ubuntu 14.04中怎么配置：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org79fb6e8">2. 使用pgrep可以更好的找到正在运行的程序</a></li>
+<li><a href="#orgf97c99c">3. 配置hostapd共享无线网络&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hostapd">hostapd</span></span></a>
+<ul>
+<li>
+<ul>
+<li><a href="#org6f882be">3.0.1. 出现过的错误</a></li>
+<li><a href="#org8990b9f">3.0.2. <span class="todo TODO">TODO</span> 使用wpa加密方式用户名验证不能通过</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org27ff4bc">4. xrandr设置linux分辨率</a></li>
+<li><a href="#orgbe7af6a">5. ubuntu 安装virtualbox第三方增强</a></li>
+<li><a href="#org692a42c">6. linux下显示dd命令的进度：</a></li>
+<li><a href="#orgcd7d816">7. enca change file encoding&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enca">enca</span></span></a></li>
+<li><a href="#orgc142440">8. mosh</a></li>
+<li><a href="#org81f24b9">9. ubuntu配置开机启动</a></li>
+<li><a href="#org917752d">10. ubuntu配置ssh</a>
+<ul>
+<li><a href="#org88946f6">10.1. 允许root登陆</a></li>
+<li><a href="#org4d62411">10.2. ssh login慢</a></li>
+<li><a href="#org3f52f8c">10.3. client端</a></li>
+<li><a href="#org0e368e5">10.4. 只能使用公钥来登陆</a></li>
+</ul>
+</li>
+<li><a href="#orgb7b1a89">11. 在一个多网卡机器上确定哪个网卡上面插着网线</a></li>
+<li><a href="#org058d565">12. 给ubuntu安装boot loader（grub2）</a></li>
+<li><a href="#org26e0889">13. ubuntu配置nic名字</a></li>
+<li><a href="#org47ad07f">14. interface设置</a></li>
+<li><a href="#org12b09fd">15. pandoc</a>
+<ul>
+<li><a href="#org34f1dc6">15.1. 编码问题</a></li>
+</ul>
+</li>
+<li><a href="#org382aa4b">16. lvm</a></li>
+<li><a href="#orgc58fbe5">17. sort 来排列ip地址</a></li>
+<li><a href="#orgc995c3b">18. sudo不输密码</a></li>
+<li><a href="#orged1092d">19. 查看cpu个数</a></li>
+<li><a href="#orgccac615">20. ssh隧道</a></li>
+<li><a href="#orgb387404">21. iperf测网速</a></li>
+<li><a href="#orgf08fd30">22. VirtualBox使用共享文件夹</a></li>
+<li><a href="#org37741db">23. date命令</a>
+<ul>
+<li><a href="#org1698e48">23.1. 使用date命令修改时间</a></li>
+</ul>
+</li>
+<li><a href="#org375f024">24. ps找程序</a>
+<ul>
+<li><a href="#orgc3bd80b">24.1. 根据pid找parrent：</a></li>
+<li><a href="#org07c92fd">24.2. <span class="todo TODO">TODO</span> 根据pid找child:</a></li>
+</ul>
+</li>
+<li><a href="#orgfd01cf8">25. sudo不输密码</a></li>
+<li><a href="#org1f61971">26. asscii font</a></li>
+<li><a href="#org4c3877f">27. wget</a></li>
+<li><a href="#orgac589e4">28. 十六进制表示说明</a></li>
+<li><a href="#orgcee9430">29. 配置vnc4server</a></li>
+<li><a href="#orgec97d8d">30. <span class="todo TODO">TODO</span> cp命令你真的懂吗？</a>
+<ul>
+<li><a href="#org836378e">30.1. <code>-a</code> 选项</a></li>
+<li><a href="#orgdbe099a">30.2. <code>-f</code> 选项</a></li>
+<li><a href="#orgeae2809">30.3. <code>-n</code> 选项</a></li>
+</ul>
+</li>
+<li><a href="#orgf2feff8">31. <span class="todo TODO">TODO</span> <code>[0/1]</code> 特殊的文件权限</a>
+<ul>
+<li><a href="#org278bfa1">31.1. <code>st_uid</code></a></li>
+<li><a href="#orgd829fac">31.2. <span class="todo TODO">TODO</span> <code>st_gid</code></a></li>
+</ul>
+</li>
+<li><a href="#orga780d1e">32. ubuntu下载一个软件所有依赖的包</a></li>
+<li><a href="#orgc1b61e5">33. 保存国内ubuntu的源</a></li>
+<li><a href="#org70e6aa5">34. 挂载远程目录到本机</a></li>
+<li><a href="#orgdf920cd">35. 可以这样查ip的详细信息</a></li>
+<li><a href="#orgbf9d109">36. <span class="todo TODO">TODO</span> ubuntu manage battery</a></li>
+<li><a href="#org09d4ab1">37. unzip解压乱码问题</a></li>
+<li><a href="#orgf107bcf">38. grep只输出匹配的内容</a></li>
+<li><a href="#org9009120">39. 使用tmux&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tmux">tmux</span></span></a>
+<ul>
+<li><a href="#org69bdba3">39.1. Mac中的配置</a></li>
+<li><a href="#org0b29d3e">39.2. tmux中的session</a></li>
+<li><a href="#org7c4ad3b">39.3. 多个pane中实现同时输入</a></li>
+<li><a href="#org02681c5">39.4. copy-mode</a></li>
+<li><a href="#orgfa44fee">39.5. 开启了mouse mode后如何使用鼠标选择区域来copy</a></li>
+</ul>
+</li>
+<li><a href="#orged97ba6">40. 命令行中转换电子书格式</a></li>
+<li><a href="#orgee501b5">41. 命令行转换视频格式</a></li>
+<li><a href="#org12bc090">42. 命令行网页视频下载工具you-get</a></li>
+<li><a href="#org0e5e7da">43. web servers in one line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="http">http</span></span></a>
+<ul>
+<li><a href="#orgd600a5d">43.1. Python 2.x</a></li>
+<li><a href="#org34a856c">43.2. Python 3.x</a></li>
+<li><a href="#orga7e376a">43.3. Twisted (Python)</a></li>
+<li><a href="#org2fdaaa4">43.4. Ruby</a></li>
+<li><a href="#org692ec50">43.5. Ruby 1.9.2+</a></li>
+<li><a href="#orgb6e19e6">43.6. adsf (Ruby)</a></li>
+<li><a href="#org95bae3f">43.7. Sinatra (Ruby)</a></li>
+<li><a href="#org0742e47">43.8. Perl</a></li>
+<li><a href="#org9f0cceb">43.9. Plack (Perl)</a></li>
+<li><a href="#org5809ddd">43.10. Mojolicious (Perl)</a></li>
+<li><a href="#org3edec2e">43.11. http-server (Node.js)</a></li>
+<li><a href="#org287afa7">43.12. node-static (Node.js)</a></li>
+<li><a href="#org550b21d">43.13. PHP (&gt;= 5.4)</a></li>
+<li><a href="#org7def7d7">43.14. Erlang</a></li>
+<li><a href="#orgb64b7ad">43.15. busybox httpd</a></li>
+<li><a href="#orgdfe8bcc">43.16. webfs</a></li>
+<li><a href="#org05a5492">43.17. IIS Express</a></li>
+<li><a href="#orgdea63a6">43.18. Meta</a></li>
+</ul>
+</li>
+<li><a href="#org297e0c9">44. ruby gem使用国内源</a></li>
+<li><a href="#org8866b26">45. 修改linux的改键绑定</a></li>
+<li><a href="#orgb31f113">46. 分区设定</a>
+<ul>
+<li><a href="#org2315099">46.1. 给新分区设置label</a></li>
+<li><a href="#orge502aa0">46.2. 格式化为 <code>fat32</code></a></li>
+<li><a href="#orga4a00c6">46.3. change ntfs label</a></li>
+<li><a href="#org9f45813">46.4. <span class="todo TODO">TODO</span> change ext label</a></li>
+</ul>
+</li>
+<li><a href="#orgcdb3490">47. rsync不同步某些文件</a></li>
+<li><a href="#orgcee0117">48. wmctrl来控制窗口</a></li>
+<li><a href="#org6b3e293">49. irony-mode和rtags等等都需要 <code>compile_commands.json</code> 文件</a></li>
+<li><a href="#org118cf0c">50. lunar，ccal命令行下的日历</a></li>
+<li><a href="#org0e69a2d">51. 不重启也不使用udev来修改系统中网卡的名字</a></li>
+<li><a href="#org3180791">52. 打开coredump选项，debug的时候比较方便</a></li>
+<li><a href="#org6193120">53. ssh不用每次都添加到known_hosts</a></li>
+<li><a href="#orgeafc1bd">54. aria2一个命令行下载工具</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgfdd9236" class="outline-2">
+<h2 id="orgfdd9236"><span class="section-number-2">1</span> <span class="done DONE">DONE</span> 使用percol配置文件管理器。</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>State "DONE"       from "DONE"       <span class="timestamp-wrapper"><span class="timestamp">[2014-11-09 Sun 17:02] </span></span> <br />
+percol支持正则表达式还没有结果！！</li>
+</ul>
+<p>
+据说这个是终极文件管理器？刚配置好开始使用。用一段时间再写。
+</p>
+</div>
+<div id="outline-container-org8ab2842" class="outline-4">
+<h4 id="org8ab2842"><span class="section-number-4">1.0.1</span> 主要讲解在ubuntu 14.04中怎么配置：</h4>
+<div class="outline-text-4" id="text-1-0-1">
+<p>
+这个东西是python写的。我直接在ubuntu上使用：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">  sudo apt-get install python-pip
+</pre>
+</div>
+<p>
+安装了pip之后。pip（install python package）使用：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">  pip install percol
+</pre>
+</div>
+<p>
+安装上了percol。还可以手动安装。具体可以参考<a href="https://github.com/mooz/percol#whats-this">这里</a>
+</p>
+
+<p>
+然后根据网上的<a href="http://blog.binchen.org/posts/how-to-do-the-file-navigation-efficiently.html">How to do the file navigation efficiently</a>，在.bashrc中加
+入这两个函数：
+</p>
+<div class="org-src-container">
+<pre class="src src-shell-script">  [ $(uname -s | grep -c CYGWIN) -eq 1 ] &amp;&amp; <span style="color: #ff8700;">OS_NAME</span>=<span style="color: #ff4ea3;">"CYGWIN"</span> || <span style="color: #ff8700;">OS_NAME</span>=<span style="color: #fa8072;">`uname -s`</span>
+  <span style="color: #a1db00;">function</span> <span style="color: #ffd700;">pclip</span>() {
+      <span style="color: #a1db00;">if</span> [ $<span style="color: #ff8700;">OS_NAME</span> == CYGWIN ]; <span style="color: #a1db00;">then</span>
+          putclip $<span style="color: #ff8700;">@</span>;
+      <span style="color: #a1db00;">elif</span> [ $<span style="color: #ff8700;">OS_NAME</span> == Darwin ]; <span style="color: #a1db00;">then</span>
+          pbcopy $<span style="color: #ff8700;">@</span>;
+      <span style="color: #a1db00;">else</span>
+          <span style="color: #a1db00;">if</span> [ -x /usr/bin/xsel ]; <span style="color: #a1db00;">then</span>
+              xsel -ib $<span style="color: #ff8700;">@</span>;
+          <span style="color: #a1db00;">else</span>
+              <span style="color: #a1db00;">if</span> [ -x /usr/bin/xclip ]; <span style="color: #a1db00;">then</span>
+                  xclip -selection c $<span style="color: #ff8700;">@</span>;
+              <span style="color: #a1db00;">else</span>
+                  <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"Neither xsel or xclip is installed!"</span>
+              <span style="color: #a1db00;">fi</span>
+          <span style="color: #a1db00;">fi</span>
+      <span style="color: #a1db00;">fi</span>
+  }
+
+  <span style="color: #a1db00;">function</span> <span style="color: #ffd700;">ff</span>()
+  {
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">fullpath</span>=$<span style="color: #ff8700;">*</span>
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">filename</span>=${<span style="color: #ff8700;">fullpath</span>##*/} <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">remove "/" from the beginning</span>
+      <span style="color: #ff8700;">filename</span>=${<span style="color: #ff8700;">filename</span>##*./} <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">remove  ".../" from the beginning</span>
+      <span style="color: #d18aff;">echo</span> <span style="color: #ff8700;">file</span>=$<span style="color: #ff8700;">filename</span>
+      <span style="color: #6c6c6c; font-style: italic;">#  </span><span style="color: #6c6c6c; font-style: italic;">only the filename without path is needed</span>
+      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">filename should be reasonable</span>
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">cli</span>=<span style="color: #fa8072;">`find $PWD -not -iwholename '*/target/*' -not -iwholename '*.svn*' -not -iwholename '*.git*' -not -iwholename '*.sass-cache*' -not -iwholename '*.hg*' -type f -iwholename '*'${filename}'*' -print | percol`</span>
+      <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">cli</span>}
+      <span style="color: #d18aff;">echo</span> -n ${<span style="color: #ff8700;">cli</span>} |pclip;
+  }
+</pre>
+</div>
+
+<p>
+然后就可以在bash中使用ff来查找当前目录下的东西了。可以在.emacs.d中使用
+ff el试一下。
+</p>
+
+<p>
+其实ff主要还是调用了percol。percol才是真的强。它可以用与管道中接收标准
+输入然后给你一个过滤的窗口。也可以直接接文件作为参数。然后过滤其中的
+文本。
+</p>
+
+<p>
+ff中还调用了自己写的一个pclip函数。目的是每次filter出来的东西就自动加
+入到了系统剪切板中了。很方便。这需要使用xsel或者xclip这种工具。在linux
+下不成问题。
+</p>
+
+<p>
+<b>Question</b>
+</p>
+<hr />
+<ol class="org-ol">
+<li>使用ff的时候，如果当前目录内容太多。或者有权限不足的错误的时候，会
+出现问题</li>
+<li>percol中不支持正则表达式。暂时没有能力定制。</li>
+</ol>
+<hr />
+<p>
+<b>Solved</b>
+</p>
+<hr />
+<ol class="org-ol">
+<li>其实是ff函数中find中的问题。直接在find中把错误输出到/dev/null就行了。</li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-shell-script">  <span style="color: #a1db00;">function</span> <span style="color: #ffd700;">ff</span>()
+  {
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">fullpath</span>=$<span style="color: #ff8700;">*</span>
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">filename</span>=${<span style="color: #ff8700;">fullpath</span>##*/} <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">remove "/" from the beginning</span>
+      <span style="color: #ff8700;">filename</span>=${<span style="color: #ff8700;">filename</span>##*./} <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">remove  ".../" from the beginning</span>
+      <span style="color: #d18aff;">echo</span> <span style="color: #ff8700;">file</span>=$<span style="color: #ff8700;">filename</span>
+      <span style="color: #6c6c6c; font-style: italic;">#  </span><span style="color: #6c6c6c; font-style: italic;">only the filename without path is needed</span>
+      <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">filename should be reasonable</span>
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">cli</span>=<span style="color: #fa8072;">`find $PWD -not -iwholename '*/target/*' -not -iwholename '*.svn*' -not -iwholename '*.git*' -not -iwholename '*.sass-cache*' -not -iwholename '*.hg*' -type f -iwholename '*'${filename}'*' -print 2&gt;/dev/null | percol `</span>
+      <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">cli</span>}
+      <span style="color: #d18aff;">echo</span> -n ${<span style="color: #ff8700;">cli</span>} |pclip;
+  }
+</pre>
+</div>
+<hr />
+
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2014-11-08 Sat 21:20&gt;</span></span>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org79fb6e8" class="outline-2">
+<h2 id="org79fb6e8"><span class="section-number-2">2</span> 使用pgrep可以更好的找到正在运行的程序</h2>
+<div class="outline-text-2" id="text-2">
+<pre class="example">
+  pgrep -l emacs
+</pre>
+</div>
+</div>
+<div id="outline-container-orgf97c99c" class="outline-2">
+<h2 id="orgf97c99c"><span class="section-number-2">3</span> 配置hostapd共享无线网络&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hostapd">hostapd</span></span></h2>
+<div class="outline-text-2" id="text-3">
+<p>
+参考的 <a href="https://nims11.wordpress.com/2012/04/27/hostapd-the-linux-way-to-create-virtual-wifi-access-point/">这里</a> 和 <a href="https://nims11.wordpress.com/2013/05/22/using-hostapd-with-dnsmasq-to-create-virtual-wifi-access-point-in-linux/">这里</a>
+</p>
+
+<p>
+其中第一篇是使用dhcp的，第二篇是使用dnsmasq。我是使用dnsmasq配置成功的。
+</p>
+
+<p>
+必要条件是你的无线网卡一定要能支持AP的功能，使用下面的命令查询一下：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">  iw list
+</pre>
+</div>
+
+<p>
+输出中有这样的：
+</p>
+<pre class="example">
+          Supported interface modes:
+                   * IBSS
+                   * managed
+                   * AP
+                   * AP/VLAN
+                   * WDS
+                   * monitor
+                   * mesh point
+          software interface modes (can always be added):
+                   * AP/VLAN
+                   * monitor
+          valid interface combinations:
+                   * #{ AP, mesh point } &lt;= 4,
+                     total &lt;= 4, #channels &lt;= 1
+</pre>
+<p>
+就是支持AP功能罗。
+</p>
+
+<p>
+首先下载：dhcp,dnsmasq,hostapd。
+</p>
+
+<p>
+hostapd的配置文件是这样的：
+</p>
+<pre class="example">
+  interface=wlan0
+  # driver=nl80211
+  ssid=pengpengxp
+  hw_mode=g
+  channel=6
+  macaddr_acl=0
+  auth_algs=1
+  ignore_broadcast_ssid=0
+  wpa=3
+  wpa_passphrase=1234567890
+  wpa_key_mgmt=WPA-PSK
+  wpa_pairwise=TKIP
+  rsn_pairwise=CCMP
+</pre>
+<p>
+很明显，ssid和wpa_passphrase分别是用户名和密码。设置好以后。可以保存该配置在任意文件中，我是保存在/etc/hostapd/hostapd.conf中的。然后可以使用命令
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">  hostapd /etc/hostapd/hostapd.conf
+</pre>
+</div>
+
+<p>
+这时还不能上网，还需要做一个NAT转换。参考网面的作者写了个脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Initial wifi interface configuration</span>
+  ifconfig $<span style="color: #ff8700;">1</span> up 10.0.0.1 netmask 255.255.255.0
+  sleep 2
+
+  <span style="color: #6c6c6c; font-style: italic;">###########</span><span style="color: #6c6c6c; font-style: italic;">Start dnsmasq, modify if required##########</span>
+  <span style="color: #a1db00;">if</span> [ -z <span style="color: #ff4ea3;">"$(ps -e | grep dnsmasq)"</span> ]
+  <span style="color: #a1db00;">then</span>
+      dnsmasq
+  <span style="color: #a1db00;">fi</span>
+  <span style="color: #6c6c6c; font-style: italic;">###########</span>
+
+  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Enable NAT</span>
+  iptables --flush
+  iptables --table nat --flush
+  iptables --delete-chain
+  iptables --table nat --delete-chain
+  iptables --table nat --append POSTROUTING --out-interface $<span style="color: #ff8700;">2</span> -j MASQUERADE
+  iptables --append FORWARD --in-interface $<span style="color: #ff8700;">1</span> -j ACCEPT
+
+  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Thanks to lorenzo</span>
+  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Uncomment the line below if facing problems while sharing PPPoE, see lorenzo's comment for more details</span>
+  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu</span>
+
+  sysctl -w net.ipv4.ip_forward=1
+
+  <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">start hostapd</span>
+  hostapd /etc/hostapd/hostapd.conf 1&gt; /dev/null
+  <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">hostapd -B /etc/hostapd/hostapd.conf </span>
+  killall dnsmasq
+
+</pre>
+</div>
+
+<p>
+保存为p_start_hostapd.sh。在pppoe拔上号情况下，使用：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">  p_start_hostapd.sh wlan0 ppp0
+</pre>
+</div>
+
+<p>
+然后就可以使用啦。
+</p>
+</div>
+<div id="outline-container-org6f882be" class="outline-4">
+<h4 id="org6f882be"><span class="section-number-4">3.0.1</span> 出现过的错误</h4>
+<div class="outline-text-4" id="text-3-0-1">
+<p>
+使用第一种方法配置出来不能正常上网。使用第二种方法，网上说不能有太多的设备连接。我本来使用的就不多，这就OK啦。
+</p>
+
+<p>
+中途还出现本来hostapd configfile能开启的。突然就不行了。网上发现是NetworkManager开启了以后，它接管了网络管理。hostapd不能对网卡进行配置。我直接kill还不行，总是会重复出现，最后直接删掉了。
+</p>
+
+<p>
+会出现一直验证用户名。登录不上的情况。
+</p>
+</div>
+</div>
+<div id="outline-container-org8990b9f" class="outline-4">
+<h4 id="org8990b9f"><span class="section-number-4">3.0.2</span> <span class="todo TODO">TODO</span> 使用wpa加密方式用户名验证不能通过</h4>
+<div class="outline-text-4" id="text-3-0-2">
+<p>
+我直接没有要密码了。使用静态IP的方式来上。本来也就是进行一个补充的。最后hostapd的配置如下：
+</p>
+<pre class="example">
+  interface=wlan0
+  driver=nl80211
+  ssid=pengpengxp
+  hw_mode=g
+  channel=6
+  macaddr_acl=0
+  auth_algs=1
+  ignore_broadcast_ssid=0
+
+  #wpa=3
+  #wpa_passphrase=1234567890
+  #wpa_key_mgmt=WPA-PSK
+  #wpa_pairwise=TKIP
+  #rsn_pairwise=CCMP
+</pre>
+<p>
+就不加密了。但是要手动配置默认的网关。将就用吧。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org27ff4bc" class="outline-2">
+<h2 id="org27ff4bc"><span class="section-number-2">4</span> xrandr设置linux分辨率</h2>
+</div>
+<div id="outline-container-orgbe7af6a" class="outline-2">
+<h2 id="orgbe7af6a"><span class="section-number-2">5</span> ubuntu 安装virtualbox第三方增强</h2>
+<div class="outline-text-2" id="text-5">
+<pre class="example">
+     sudo apt-get install virtualbox-guest-utils
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-sh">      xrandr --output VGA-0 --mode 1920x1440
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org692a42c" class="outline-2">
+<h2 id="org692a42c"><span class="section-number-2">6</span> linux下显示dd命令的进度：</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+dd if=/dev/zero of=/tmp/zero.img bs=10M count=100000
+想要查看上面的dd命令的执行进度，可以使用下面几种方法：
+</p>
+
+<p>
+比如：每5秒输出dd的进度
+</p>
+
+<p>
+方法一：
+</p>
+
+<p>
+watch -n 5 pkill -USR1 ^dd$
+方法二：
+</p>
+
+<p>
+watch -n 5 killall -USR1 dd
+方法三：
+</p>
+
+<p>
+while killall -USR1 dd; do sleep 5; done
+方法四：
+</p>
+
+<p>
+while (ps auxww |grep " dd " |grep -v grep |awk '{print $2}' |while read pid; do kill -USR1 $pid; done) ; do sleep 5; done
+上述四种方法中使用三个命令：pkill、killall、kill向dd命令发送SIGUSR1信息，dd命令进程接收到信号之后就打印出自己当前的进度。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcd7d816" class="outline-2">
+<h2 id="orgcd7d816"><span class="section-number-2">7</span> enca change file encoding&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enca">enca</span></span></h2>
+<div class="outline-text-2" id="text-7">
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">list supported charsets</span>
+     enca --list charsets
+     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">query file charset</span>
+     enca -L zh_cn filename
+     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">convert file to utf-8</span>
+     enca -L zh_cn -x utf-8 filename
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc142440" class="outline-2">
+<h2 id="orgc142440"><span class="section-number-2">8</span> mosh</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+安装完mosh后，需要配置一下防火墙，允许这些udp端口流量进来：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT
+</pre>
+</div>
+<p>
+最坑的是openstack环境这样的云中，是有网络安全组的。需要把安全组中的
+端口也开放。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org81f24b9" class="outline-2">
+<h2 id="org81f24b9"><span class="section-number-2">9</span> ubuntu配置开机启动</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+<a href="http://blog.csdn.net/hcx25909/article/details/9068497">这里讲得还可以</a>
+</p>
+
+<p>
+这里start-mosh是一个脚本，开头的这些注释是 <code>ubuntu16.04</code> 需要加上的
+所谓的 <code>LSB信息</code> 不加没法设置：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+    <span style="color: #6c6c6c; font-style: italic;">### </span><span style="color: #6c6c6c; font-style: italic;">BEGIN INIT INFO</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Provides:          svnd.sh</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Required-start:    $local_fs $remote_fs $network $syslog</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Required-Stop:     $local_fs $remote_fs $network $syslog</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Default-Start:     2 3 4 5</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Default-Stop:      0 1 6</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Short-Description: starts the svnd.sh daemon</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Description:       starts svnd.sh using start-stop-daemon</span>
+    <span style="color: #6c6c6c; font-style: italic;">### </span><span style="color: #6c6c6c; font-style: italic;">END INIT INFO</span>
+
+    mosh-server
+</pre>
+</div>
+<p>
+需要把该脚本放到 <code>/etc/init.d/</code> 目录下：
+</p>
+
+<p>
+设置开机启动：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    update-rc.d start-mosh defaults 90
+</pre>
+</div>
+
+<p>
+取消开机启动：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    update-rc.d -f start-mosh remove
+</pre>
+</div>
+
+<p>
+更加常见是应该是写一个这样的可以接 <code>start, stop, restart</code> 等参数的脚
+本，比如配置开机自启动 <code>vnc4server</code> 时的这修脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+
+    <span style="color: #ff8700;">USER</span>=<span style="color: #ff4ea3;">"jenkins"</span>
+
+    <span style="color: #a1db00;">case</span> <span style="color: #ff4ea3;">"$1"</span><span style="color: #a1db00;"> in</span>
+        start)
+            <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"Starting vncserver for user '${USER}' on :2"</span>
+            su ${<span style="color: #ff8700;">USER</span>} -c <span style="color: #ff4ea3;">"/usr/bin/vnc4server :2"</span>
+            ;;
+        stop)
+            <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"Stopping vncserver for user '${USER}' on :2"</span>
+            su ${<span style="color: #ff8700;">USER</span>} -c <span style="color: #ff4ea3;">"/usr/bin/vnc4server -kill :2"</span>
+            ;;
+        restart)
+            $<span style="color: #ff8700;">0</span> stop
+            $<span style="color: #ff8700;">0</span> start
+            ;;
+    <span style="color: #a1db00;">esac</span>
+    <span style="color: #a1db00;">exit</span> 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org917752d" class="outline-2">
+<h2 id="org917752d"><span class="section-number-2">10</span> ubuntu配置ssh</h2>
+<div class="outline-text-2" id="text-10">
+</div>
+<div id="outline-container-org88946f6" class="outline-3">
+<h3 id="org88946f6"><span class="section-number-3">10.1</span> 允许root登陆</h3>
+<div class="outline-text-3" id="text-10-1">
+<p>
+Simply adding a password for root is not enough for Ubuntu 14.04 Server.
+</p>
+
+<p>
+You also need to edit <code>/etc/ssh/sshd_config</code> , and comment out the
+following line:
+</p>
+
+<p>
+PermitRootLogin without-password
+Just below it, add the following line:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">     PermitRootLogin yes
+</pre>
+</div>
+
+<p>
+Then restart SSH:
+</p>
+
+<p>
+service ssh restart
+</p>
+</div>
+</div>
+<div id="outline-container-org4d62411" class="outline-3">
+<h3 id="org4d62411"><span class="section-number-3">10.2</span> ssh login慢</h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+有时候ssh登陆server的时候特别慢，要等半天。可能是server的原因，也可
+能是client。当然，很多时候是server啦。查了一下 <a href="http://askubuntu.com/questions/246323/why-does-sshs-password-prompt-take-so-long-to-appear">这里</a> 。估计是dns相关
+的。可以 <code>add UseDNS no to /etc/ssh/sshd_config</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-org3f52f8c" class="outline-3">
+<h3 id="org3f52f8c"><span class="section-number-3">10.3</span> client端</h3>
+<div class="outline-text-3" id="text-10-3">
+<p>
+ssh使用 <code>-p</code> 选项可以指定去连接的server的端口。scp需要使用大写 <code>-P</code>
+。
+</p>
+
+<p>
+也可以在自己的 <code>~/.ssh/config</code> 文件中这样写来指定用户名和端口。如下
+就可以直接使用 <code>ssh b</code> 来访问：
+</p>
+<pre class="example">
+     Host b
+             Hostname 192.168.56.111
+             User root
+             Port 20160
+</pre>
+</div>
+</div>
+<div id="outline-container-org0e368e5" class="outline-3">
+<h3 id="org0e368e5"><span class="section-number-3">10.4</span> 只能使用公钥来登陆</h3>
+<div class="outline-text-3" id="text-10-4">
+<p>
+我自己的电脑在局域网里面我只希望通过我的公钥来登陆，禁止通过输入用
+户名密码来登陆。
+</p>
+
+<p>
+需要把 <code>/etc/ssh/sshd_config</code> 中的这一项配置为no（默认是注释掉的）：
+</p>
+<pre class="example">
+     # Change to no to disable tunnelled clear text passwords
+     PasswordAuthentication no
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb7b1a89" class="outline-2">
+<h2 id="orgb7b1a89"><span class="section-number-2">11</span> 在一个多网卡机器上确定哪个网卡上面插着网线</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+现实中有这么一个需求：在台机器有多个网卡，需要配置某个网卡为静态ip。
+但是给某个网卡插上网线后，如何知道在ubuntu系统中中对应的是哪个网卡呢？
+</p>
+
+<p>
+可以使用 <code>ethtool</code> 。
+</p>
+<pre class="example">
+    riversec@box:~$ ethtool eth0|grep Link
+            Link detected: yes
+    riversec@box:~$
+</pre>
+<p>
+为yes就是插着网线的。
+</p>
+
+<p>
+在执行下面命令时，需要先把网卡都 <code>up</code> 起来，没有 <code>up</code> 起来的网卡，插
+上网线灯都不会亮的。
+</p>
+<pre class="example">
+    cd /sys/class/net
+    for i in `ls`;do echo $i;ethtool $i|ip l set up dev $i; done
+</pre>
+
+<p>
+ubuntu下全部的网卡信息都在 <code>/sys/class/net</code> 下面。所以可以使用这个命
+令直接全部查询出来，不过需要root权限哦：
+</p>
+<pre class="example">
+    root@box:/sys/class/net# for i in `ls /sys/class/net/`;do echo $i; ethtool $i|grep Link;done
+    eth0
+            Link detected: yes
+    eth1
+            Link detected: yes
+    eth2
+            Link detected: yes
+    lo
+            Link detected: yes
+    root@box:/sys/class/net#
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org058d565" class="outline-2">
+<h2 id="org058d565"><span class="section-number-2">12</span> 给ubuntu安装boot loader（grub2）</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+一般都是安装grub2。
+</p>
+
+<p>
+<a href="http://howtoubuntu.org/how-to-repair-restore-reinstall-grub-2-with-a-ubuntu-live-cd">可以参考这里来搞</a>
+</p>
+
+<p>
+但是我在chroot的时候一直进不去。总是出现这样的错：
+</p>
+<pre class="example">
+    chroot: failed to run command '/bin/bash': No such file or directory
+</pre>
+
+<p>
+开始以为是在新环境中找不到 <code>/bin/bash</code> ，于是把 <code>/bin/</code> 目录也mount
+到新环境中去：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    mkdir /mnt/bin
+    mount --bind /bin /mnt/bin
+</pre>
+</div>
+
+<p>
+这样还是不行，原来 <code>/bin/bash</code> 还需要一些动态库，也需要搞进去，可以
+使用 <code>ldd /bin/bash</code> 来查看它需要哪些动态库及它们的地址。
+</p>
+<pre class="example">
+    root@box:/tmp# ldd /bin/bash
+            linux-vdso.so.1 =&gt;  (0x00007ffd15725000)
+            libtinfo.so.5 =&gt; /lib/x86_64-linux-gnu/libtinfo.so.5 (0x00007fc2057fa000)
+            libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fc2055f6000)
+            libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc205230000)
+            /lib64/ld-linux-x86-64.so.2 (0x000055abb8b54000)
+    root@box:/tmp#
+</pre>
+<p>
+再把 <code>lib</code> 和 <code>lib64</code> 目录按照同样方法搞进去，终于可以chroot了。
+</p>
+</div>
+</div>
+<div id="outline-container-org26e0889" class="outline-2">
+<h2 id="org26e0889"><span class="section-number-2">13</span> ubuntu配置nic名字</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+有时候nic的名字不是eth0,可以这样来配置，写一个
+<code>/etc/udev/rules.d/70-net.rules</code> 这样的文件：
+</p>
+<pre class="example">
+    compute@compute13:/sys/class/net$ cat /etc/udev/rules.d/70-net.rules
+    #
+    # NIC mapping
+    #
+    # @author zhang jian ming
+    #
+
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="*", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNELS=="0000:02:00.0", NAME="eth0"
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="*", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNELS=="0000:03:00.0", NAME="eth1"
+
+    compute@compute13:/sys/class/net$ udevadm info -qpath /sys/class/net/eth0|grep KERNEL
+    compute@compute13:/sys/class/net$ udevadm info -qpath -a /sys/class/net/eth0|grep KERNEL
+        KERNEL=="eth0"
+        KERNELS=="0000:02:00.0"
+        KERNELS=="0000:00:1c.2"
+        KERNELS=="pci0000:00"
+    compute@compute13:/sys/class/net$ udevadm info -qpath -a /sys/class/net/eth1|grep KERNEL
+        KERNEL=="eth1"
+        KERNELS=="0000:03:00.0"
+        KERNELS=="0000:00:1c.3"
+        KERNELS=="pci0000:00"
+    compute@compute13:/sys/class/net$
+</pre>
+</div>
+</div>
+<div id="outline-container-org47ad07f" class="outline-2">
+<h2 id="org47ad07f"><span class="section-number-2">14</span> interface设置</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+<code>/etc/network/interface</code> 例子：
+</p>
+<pre class="example">
+    auto eth0
+    iface eth0 inet static
+            address 192.168.57.100
+            netmask 255.255.255.0
+            post-up ip route add 0.0.0.0/0 via 192.168.57.1 dev eth0 || true
+    auto eth1
+    iface eth1 inet dhcp
+    auto eth2
+    iface eth2 inet static
+            address 192.168.56.100
+            netmask 255.255.255.0
+    auto lo
+    iface lo inet loopback
+
+    dns-nameservers 7.7.7.7
+</pre>
+</div>
+</div>
+<div id="outline-container-org12b09fd" class="outline-2">
+<h2 id="org12b09fd"><span class="section-number-2">15</span> pandoc</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+pandoc可以各种转格式，我主要使用它来转org文件。
+</p>
+
+<p>
+从org主件转到markdown，在emacs中本身是支持的。但是转出来以后，在
+github上table of content不能跳转。但是使用pandoc来转可以跳。
+</p>
+
+<p>
+使用pandoc来实现 <code>org-&gt;markdown</code> ，看文档需要加入 <code>--toc</code> 来在生成的
+markdown文件中加目录。实际使用还是不行，需要加上 <code>-s -s</code> 选项才行。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    pandoc -s -s -o kk.md --toc kk.org
+</pre>
+</div>
+
+<p>
+pandoc还有一个 <code>--reference-docx</code> 选项。可以指定导出docx文件的格式。
+</p>
+
+<p>
+<b>注意是修改docx文件的样式而不是直接修改文字内容</b> 。
+</p>
+
+<p>
+<a href="http://www.helongfei.com/blog/2016/0104/pandoc-ru-he-zi-ding-yi-docxyang-shi/">这里</a> 有一个使用指导。
+</p>
+</div>
+<div id="outline-container-org34f1dc6" class="outline-3">
+<h3 id="org34f1dc6"><span class="section-number-3">15.1</span> 编码问题</h3>
+<div class="outline-text-3" id="text-15-1">
+<p>
+pandoc默认输入和输出都是使用utf-8编码，有时候输入不是utf-8编码时，
+可以使用 <code>iconv</code> 来转一下：
+</p>
+<pre class="example">
+用法： iconv [选项...] [文件...]
+转换给定文件的编码。
+
+ 输入/输出格式规范：
+  -f, --from-code=名称     原始文本编码
+  -t, --to-code=名称       输出编码
+
+ 信息：
+  -l, --list                 列举所有已知的字符集
+
+ 输出控制：
+  -c                         从输出中忽略无效的字符
+  -o, --output=文件        输出文件
+  -s, --silent               关闭警告
+      --verbose              打印进度信息
+
+  -?, --help                 给出此帮助列表
+      --usage                给出简要的用法信息
+  -V, --version              打印程序版本号
+
+长选项的强制或可选参数对对应的短选项也是强制或可选的。
+
+要知道错误报告指令，请参看：
+&lt;http://www.debian.org/Bugs/&gt;。
+   
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org382aa4b" class="outline-2">
+<h2 id="org382aa4b"><span class="section-number-2">16</span> lvm</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+<a href="https://en.wikipedia.org/wiki/Logical_volume_management">https://en.wikipedia.org/wiki/Logical_volume_management</a>
+</p>
+
+
+<div class="figure">
+<p><img src="./images/lvm_architecture.png" alt="lvm_architecture.png" />
+</p>
+</div>
+
+<p>
+基本的单元是PE，每个LV都指到许多PE就可以了。文章里面说的LE我没明白是
+什么东西。
+</p>
+
+<p>
+PV（physical volumes）是一个磁盘或者一个分区，需要使用 <code>pvcreate
+  XXX</code> 来对该磁盘或分区创建一些元数据。这样 <code>pvscan</code> 才能找到它们。只
+有 <code>pvscan</code> 扫出来的磁盘才可做lvm磁盘使用。
+</p>
+
+<p>
+VG（volume group），可以把多个PV合到一个VG里面来使用。
+</p>
+
+<p>
+LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来说就是一
+个可用的分区。可以直接挂载使用。
+</p>
+
+<pre class="example">
+    root@compute14:/home/compute# pvscan
+      PV /dev/sdc1   VG vg_var          lvm2 [15.00 GiB / 0    free]
+      PV /dev/sdb5   VG compute-vg      lvm2 [7.52 GiB / 0    free]
+      PV /dev/sdb3   VG compute-vg      lvm2 [200.00 GiB / 0    free]
+      PV /dev/sdb2   VG compute-vg      lvm2 [350.79 GiB / 0    free]
+      Total: 4 [573.30 GiB] / in use: 4 [573.30 GiB] / in no VG: 0 [0   ]
+    root@compute14:/home/compute#
+</pre>
+<p>
+一个个的PV就是每个磁盘啦。
+</p>
+
+<pre class="example">
+    root@compute14:/home/compute# vgdisplay
+      --- Volume group ---
+      VG Name               vg_var
+      System ID
+      Format                lvm2
+      Metadata Areas        1
+      Metadata Sequence No  2
+      VG Access             read/write
+      VG Status             resizable
+      MAX LV                0
+      Cur LV                1
+      Open LV               0
+      Max PV                0
+      Cur PV                1
+      Act PV                1
+      VG Size               15.00 GiB
+      PE Size               4.00 MiB
+      Total PE              3839
+      Alloc PE / Size       3839 / 15.00 GiB
+      Free  PE / Size       0 / 0
+      VG UUID               EAeyML-nefF-Kudc-ciRI-FxIe-46cJ-BHWqef
+
+      --- Volume group ---
+      VG Name               compute-vg
+      System ID
+      Format                lvm2
+      Metadata Areas        3
+      Metadata Sequence No  7
+      VG Access             read/write
+      VG Status             resizable
+      MAX LV                0
+      Cur LV                2
+      Open LV               2
+      Max PV                0
+      Cur PV                3
+      Act PV                3
+      VG Size               558.31 GiB
+      PE Size               4.00 MiB
+      Total PE              142927
+      Alloc PE / Size       142927 / 558.31 GiB
+      Free  PE / Size       0 / 0
+      VG UUID               emnTms-wrXR-WZRS-MoW2-qev1-kGEr-Xf0Sll
+
+    root@compute14:/home/compute#
+</pre>
+<p>
+上述例子有两个VG： <code>compute-vg</code> 和 <code>vg_var</code> 。
+</p>
+<pre class="example">
+    root@compute14:/home/compute# ls /dev/compute-vg/
+    root  swap_1
+    root@compute14:/home/compute#
+</pre>
+<p>
+<code>compute-vg</code> 分为两个LV： <code>root</code> 和 <code>swap_1</code> 。 <code>swap_1</code> 是交换空间。
+<code>df</code> 可以查出来 <code>root</code> LV是直接被挂载成了根：
+</p>
+<pre class="example">
+    root@compute14:/home/compute# df -lh
+    Filesystem            Size  Used Avail Use% Mounted on
+    udev                  126G     0  126G   0% /dev
+    tmpfs                  26G   35M   26G   1% /run
+    /dev/compute-vg/root  546G   87G  437G  17% /
+    tmpfs                 126G     0  126G   0% /dev/shm
+    tmpfs                 5.0M     0  5.0M   0% /run/lock
+    tmpfs                 126G     0  126G   0% /sys/fs/cgroup
+    /dev/sdb1             472M  117M  331M  27% /boot
+    cgmfs                 100K     0  100K   0% /run/cgmanager/fs
+    tmpfs                  26G     0   26G   0% /run/user/1000
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc58fbe5" class="outline-2">
+<h2 id="orgc58fbe5"><span class="section-number-2">17</span> sort 来排列ip地址</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+一个网络，就第四个位不同：
+</p>
+<pre class="example">
+    172.16.222.13
+    172.16.222.10
+    172.16.222.17
+    172.16.222.1
+</pre>
+<div class="org-src-container">
+<pre class="src src-sh">    sort -n -t. -k 4
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc995c3b" class="outline-2">
+<h2 id="orgc995c3b"><span class="section-number-2">18</span> sudo不输密码</h2>
+<div class="outline-text-2" id="text-18">
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">'password'</span>|sudo -S command
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orged1092d" class="outline-2">
+<h2 id="orged1092d"><span class="section-number-2">19</span> 查看cpu个数</h2>
+<div class="outline-text-2" id="text-19">
+<pre class="example">
+    # 总核数 = 物理CPU个数 X 每颗物理CPU的核数 
+    # 总逻辑CPU数 = 物理CPU个数 X 每颗物理CPU的核数 X 超线程数
+
+    # 查看物理CPU个数
+    cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
+
+    # 查看每个物理CPU中core的个数(即核数)
+    cat /proc/cpuinfo| grep "cpu cores"| uniq
+
+    # 查看逻辑CPU的个数
+    cat /proc/cpuinfo| grep "processor"| wc -l
+</pre>
+</div>
+</div>
+<div id="outline-container-orgccac615" class="outline-2">
+<h2 id="orgccac615"><span class="section-number-2">20</span> ssh隧道</h2>
+<div class="outline-text-2" id="text-20">
+<p>
+刚司机：
+</p>
+<pre class="example">
+    如何在只映射了20160端口的情况下，在浏览器中完成配置向导
+
+    启动微软云虚拟机(RAS镜像, 已经将20160端口做了端口映射)
+    查看内部IP地址 和 公用虚拟IP(VIP)地址
+    打开两个命令行终端
+    分别执行命令
+    ssh -p 20160 -L 20145:内部IP:20145 riversec@公用虚拟IP
+    ssh -p 20160 -L 20146:内部IP:20146 riversec@公用虚拟IP
+
+    例如
+    内部IP地址10.0.1.4
+    公用虚拟IP(VIP)地址139.219.185.47
+    则在两个终端分别执行
+    ssh -p 20160 -L 20145:10.0.1.4:20145 riversec@139.219.185.47
+    ssh -p 20160 -L 20145:10.0.1.4:20145 riversec@139.219.185.47
+
+    这样就建立了两个ssh隧道，将你本地的20146端口和虚拟机的20146端口映射起
+    来，本地的20145端口和虚拟机的20145端口映射起来，
+
+    这样你在浏览器中输入http://127.0.0.1:20146就可以走向导了（走完向导自动
+    跳转还是失败的，手动输入https://127.0.0.1:20145可访问web console）
+
+    要断开隧道链接请输入exit退出两个命令行终端即可
+</pre>
+</div>
+</div>
+<div id="outline-container-orgb387404" class="outline-2">
+<h2 id="orgb387404"><span class="section-number-2">21</span> iperf测网速</h2>
+<div class="outline-text-2" id="text-21">
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">server:&#39318;&#20808;&#22312; Server &#31471;&#65292;&#25105;&#20204;&#36816;&#34892;&#20197;&#19979;&#21629;&#20196;&#20351; iPerf &#30417;&#21548; 5001 &#31471;&#21475;&#65292;&#27599;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">2 &#31186;&#36755;&#20986;&#19968;&#27425;&#32467;&#26524;&#12290;</span>
+    iperf -s -p 5001 -t 2
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">client:&#24403;&#32456;&#31471;&#26174;&#31034; Server listening on 5001 &#26102;&#65292;&#23601;&#34920;&#31034; Server &#24050;&#32463;&#27491;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#24120;&#36816;&#34892;&#65292;&#31561;&#24453;&#27979;&#35797;&#20102;&#12290; &#28982;&#21518;&#22312; Client &#31471;&#65292;&#25105;&#20204;&#24182;&#21457; 4 &#20010;&#25968;&#25454;&#27969;&#65292;&#27979;&#35797;&#24635;&#26102;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#38271;&#20026; 30 &#31186;&#65292;&#27599; 2 &#31186;&#36755;&#20986;&#19968;&#27425;&#32467;&#26524;&#12290;&#20197;&#19979;&#20026;&#27979;&#35797;&#25152;&#20351;&#29992;&#30340;&#21629;&#20196;&#12290;</span>
+    iperf  -c 172.16.222.10 -p 5001 -P 4 -t 30 -i 2
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf08fd30" class="outline-2">
+<h2 id="orgf08fd30"><span class="section-number-2">22</span> VirtualBox使用共享文件夹</h2>
+<div class="outline-text-2" id="text-22">
+<p>
+默认Linux客户机中的用户是没有权限访问共享文件夹 <code>/media/sf_xxx</code> 。需
+要加入到vboxsf这个组里。
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo usermod -aG vboxsf $(whoami)
+</pre>
+</div>
+
+<p>
+可以把这些共享文件夹mount到自己希望的位置：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo mount -t vboxsf New ~/new
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org37741db" class="outline-2">
+<h2 id="org37741db"><span class="section-number-2">23</span> date命令</h2>
+<div class="outline-text-2" id="text-23">
+<p>
+常用的需要在脚本中使用date来生成今天的日期：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    date +<span style="color: #ff4ea3;">'%m/%d/%Y'</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-org1698e48" class="outline-3">
+<h3 id="org1698e48"><span class="section-number-3">23.1</span> 使用date命令修改时间</h3>
+<div class="outline-text-3" id="text-23-1">
+<pre class="example">
+     date -s '2017-06-19 10:30:00'
+     hwclock --systohc
+</pre>
+<p>
+date设置的是系统时间，还有一个硬件时间可以用 <code>hwclock</code> 来查。
+</p>
+
+<p>
+硬件时间是在启动的时候读入系统的，如果只用 <code>date</code> 设置了系统时间而
+没有设置硬件时间，重启后应该时间应该还是原来的硬件时间。可以像上面
+一样使用hwclock来根据系统时间刷新一下硬件时间。也可以根据硬件时间来
+刷一下系统时间，查下 <code>help</code> 就知道了：
+</p>
+<pre class="example">
+      -s, --hctosys        set the system time from the hardware clock
+      -w, --systohc        set the hardware clock from the current system time
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org375f024" class="outline-2">
+<h2 id="org375f024"><span class="section-number-2">24</span> ps找程序</h2>
+<div class="outline-text-2" id="text-24">
+</div>
+<div id="outline-container-orgc3bd80b" class="outline-3">
+<h3 id="orgc3bd80b"><span class="section-number-3">24.1</span> 根据pid找parrent：</h3>
+<div class="outline-text-3" id="text-24-1">
+<pre class="example">
+    ps -o ppid= 2072
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org07c92fd" class="outline-3">
+<h3 id="org07c92fd"><span class="section-number-3">24.2</span> <span class="todo TODO">TODO</span> 根据pid找child:</h3>
+</div>
+</div>
+
+<div id="outline-container-orgfd01cf8" class="outline-2">
+<h2 id="orgfd01cf8"><span class="section-number-2">25</span> sudo不输密码</h2>
+<div class="outline-text-2" id="text-25">
+<p>
+使用 <code>visudo</code> 来编辑，然后在对应地方加入下面这句：
+</p>
+<pre class="example">
+    username ALL=(ALL) NOPASSWD:ALL
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1f61971" class="outline-2">
+<h2 id="org1f61971"><span class="section-number-2">26</span> asscii font</h2>
+<div class="outline-text-2" id="text-26">
+<pre class="example">
+     ~/github/pengpengxp.github.io/ [master] figlet "xiepeng"
+          _
+    __  _(_) ___ _ __   ___ _ __   __ _
+    \ \/ / |/ _ \ '_ \ / _ \ '_ \ / _` |
+     &gt;  &lt;| |  __/ |_) |  __/ | | | (_| |
+    /_/\_\_|\___| .__/ \___|_| |_|\__, |
+                |_|               |___/
+     ~/github/pengpengxp.github.io/ [master]
+</pre>
+</div>
+</div>
+<div id="outline-container-org4c3877f" class="outline-2">
+<h2 id="org4c3877f"><span class="section-number-2">27</span> wget</h2>
+<div class="outline-text-2" id="text-27">
+<div class="org-src-container">
+<pre class="src src-sh">    wget -r -p -np -k 
+</pre>
+</div>
+
+<p>
+manual:
+</p>
+<pre class="example">
+
+    -k
+    --convert-links
+
+    After the download is complete, convert the links in the document to
+    make them suitable for local viewing.  This affects not only the
+    visible hyperlinks, but any part of the document that links to
+    external content, such as embedded images, links to style sheets,
+    hyperlinks to non-HTML content, etc.
+
+    Each link will be changed in one of the two ways:
+
+    1) 
+
+    The links to files that have been downloaded by Wget will be changed
+    to refer to the file they point to as a relative link.
+
+    Example: if the downloaded file /foo/doc.html links to /bar/img.gif,
+    also downloaded, then the link in doc.html will be modified to point
+    to ../bar/img.gif.  This kind of transformation works reliably for
+    arbitrary combinations of directories.
+
+    2) 
+
+    The links to files that have not been downloaded by Wget will be
+    changed to include host name and absolute path of the location they
+    point to.
+
+    Example: if the downloaded file /foo/doc.html links to /bar/img.gif
+    (or to ../bar/img.gif), then the link in doc.html will be modified to
+    point to http://hostname/bar/img.gif.
+
+    Because of this, local browsing works reliably: if a linked file was
+    downloaded, the link will refer to its local name; if it was not
+    downloaded, the link will refer to its full Internet address rather
+    than presenting a broken link.  The fact that the former links are
+    converted to relative links ensures that you can move the downloaded
+    hierarchy to another directory.
+
+    Note that only at the end of the download can Wget know which links
+    have been downloaded.  Because of that, the work done by -k will be
+    performed at the end of all the downloads.
+
+</pre>
+
+<p>
+wget这样用很爽，可以直接把网站下载到本地，里面的链接也改为本地的了，
+比如下载这样的一个网站：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    wget -r -p -np -k http://vpim.rubyforge.org/
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgac589e4" class="outline-2">
+<h2 id="orgac589e4"><span class="section-number-2">28</span> 十六进制表示说明</h2>
+<div class="outline-text-2" id="text-28">
+<p>
+<code>0xFF</code> 表示一个字节。gdb中的x打出来的、wireshark中的和tcpdump中输出
+的都是这种形式。因为一个十六进制数可以使用四个位表示，两个十六进制数
+使用8位也就是一个字节就可以表示了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcee9430" class="outline-2">
+<h2 id="orgcee9430"><span class="section-number-2">29</span> 配置vnc4server</h2>
+<div class="outline-text-2" id="text-29">
+<p>
+安装：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo apt-get install vnc4server xfce4 -y
+</pre>
+</div>
+
+<p>
+直接启动会默认使用 <code>:1</code> 号display。
+</p>
+
+<p>
+修改 <code>~/.vnc/xstartup</code> ，让它最后启动 <code>xfce4</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/sh</span>
+    [ -x /etc/vnc/xstartup ] &amp;&amp; <span style="color: #a1db00;">exec</span> /etc/vnc/xstartup
+    [ -r $<span style="color: #ff8700;">HOME</span>/.Xresources ] &amp;&amp; xrdb $<span style="color: #ff8700;">HOME</span>/.Xresources
+    xsetroot -solid grey
+    vncconfig -iconic &amp;
+    x-terminal-emulator -geometry 80x24+10+10 -ls -title <span style="color: #ff4ea3;">"$VNCDESKTOP Desktop"</span> &amp;
+    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">x-window-manager &amp;</span>
+    startxfce4 &amp;
+</pre>
+</div>
+
+<p>
+这个脚本一定要让它可执行：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">chmod a+x ~/.vnc/xstartup  
+</pre>
+</div>
+
+<p>
+放一个这样的脚本到 <code>/etc/init.d/vncserver</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ff4b4b;">!</span>/bin/bash
+<span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">BEGIN INIT INFO</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Provides:          pengpengxp</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Required-Start:    $remote_fs $syslog</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Required-Stop:     $remote_fs $syslog</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">X-Stop-After:      kdm gdm3 xdm lightdm</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Default-Start:     2 3 4 5</span>
+<span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Default-Stop:      </span>
+<span style="color: #6c6c6c; font-style: italic;">### </span><span style="color: #6c6c6c; font-style: italic;">END INIT INFO</span>
+
+<span style="color: #ff8700;">USER</span>=<span style="color: #ff4ea3;">"pengpengxp"</span>
+
+<span style="color: #a1db00;">case</span> <span style="color: #ff4ea3;">"$1"</span><span style="color: #a1db00;"> in</span>
+    start)
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"Starting vncserver for user '${USER}' on :2"</span>
+        su ${<span style="color: #ff8700;">USER</span>} -c <span style="color: #ff4ea3;">"/usr/bin/vnc4server :2"</span>
+        ;;
+    stop)
+        <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"Stopping vncserver for user '${USER}' on :2"</span>
+        su ${<span style="color: #ff8700;">USER</span>} -c <span style="color: #ff4ea3;">"/usr/bin/vnc4server -kill :2"</span>
+        ;;
+    restart)
+        $<span style="color: #ff8700;">0</span> stop
+        $<span style="color: #ff8700;">0</span> start
+        ;;
+<span style="color: #a1db00;">esac</span>
+<span style="color: #a1db00;">exit</span> 0
+</pre>
+</div>
+
+<p>
+修改为可执行：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo chmod a+x /etc/init.d/vncserver
+</pre>
+</div>
+
+<p>
+先需要手动运行一下设置密码：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">/usr/bin/vnc4server :2 
+</pre>
+</div>
+
+<p>
+然后就可以启动服务：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo service vncserver restart
+</pre>
+</div>
+
+<p>
+设置开机启动：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo update-rc.d vncserver defaults
+</pre>
+</div>
+
+<p>
+<b>问题</b> ：
+</p>
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> 老是需要启动在 <code>:2</code> 上才可以， <code>:1</code> 就不行。搞不明白。</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgec97d8d" class="outline-2">
+<h2 id="orgec97d8d"><span class="section-number-2">30</span> <span class="todo TODO">TODO</span> cp命令你真的懂吗？</h2>
+<div class="outline-text-2" id="text-30">
+</div>
+<div id="outline-container-org836378e" class="outline-3">
+<h3 id="org836378e"><span class="section-number-3">30.1</span> <code>-a</code> 选项</h3>
+<div class="outline-text-3" id="text-30-1">
+<p>
+相关的东西都在这里：
+</p>
+<pre class="example">
+    -a, --archive
+           same as -dR --preserve=all
+    -d     same as --no-dereference --preserve=links
+    -P, --no-dereference
+           never follow symbolic links in SOURCE
+    --preserve[=ATTR_LIST]
+           preserve the specified attributes (default: mode,ownership,timestamps), if possible additional attributes: context, links, xattr, all
+    -R, -r, --recursive
+           copy directories recursively
+</pre>
+<p>
+<code>-a</code> 选项什么属性都会保留，比如所属用户等。
+例子：
+</p>
+<pre class="example">
+    riversec@rcs:/tmp$ ll main.py
+    -rw-rw-r-- 1 riversec riversec 52 Jun 12 14:35 main.py
+    riversec@rcs:/tmp$ sudo cp main.py main.py_1
+    riversec@rcs:/tmp$ sudo cp -a main.py main.py_2
+    riversec@rcs:/tmp$ ll main.py*
+    -rw-rw-r-- 1 riversec riversec 52 Jun 12 14:35 main.py
+    -rw-r--r-- 1 root     root     52 Jun 13 16:06 main.py_1
+    -rw-rw-r-- 1 riversec riversec 52 Jun 12 14:35 main.py_2
+    riversec@rcs:/tmp$
+</pre>
+<p>
+可以看到，没有加 <code>-a</code> 参数，使用root来copy， <code>main.py_1</code> 的文件属生
+和修改时间这些都改变了。而加上 <code>-a</code> 参数后， <code>main.py_2</code> 文件的属性
+和原文件看起来是一样的。
+</p>
+
+<p>
+另外， <code>-a</code> 还可以拷贝目录，和 <code>-r</code> 一样。
+</p>
+
+<ol class="org-ol">
+<li class="off"><code>[&#xa0;]</code> 有一个问题，对应manual所说的 <code>symbolic links</code> ，我测试出来都
+会复制。</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orgdbe099a" class="outline-3">
+<h3 id="orgdbe099a"><span class="section-number-3">30.2</span> <code>-f</code> 选项</h3>
+<div class="outline-text-3" id="text-30-2">
+<p>
+如果目标有同样的文件，直接覆盖它。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgeae2809" class="outline-3">
+<h3 id="orgeae2809"><span class="section-number-3">30.3</span> <code>-n</code> 选项</h3>
+<div class="outline-text-3" id="text-30-3">
+<p>
+不要覆盖已存在的文件。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf2feff8" class="outline-2">
+<h2 id="orgf2feff8"><span class="section-number-2">31</span> <span class="todo TODO">TODO</span> <code>[0/1]</code> 特殊的文件权限</h2>
+<div class="outline-text-2" id="text-31">
+</div>
+<div id="outline-container-org278bfa1" class="outline-3">
+<h3 id="org278bfa1"><span class="section-number-3">31.1</span> <code>st_uid</code></h3>
+<div class="outline-text-3" id="text-31-1">
+<p>
+可以这样设置文件的 <code>st_uid</code> 。
+</p>
+<pre class="example">
+   riversec@rcs:/tmp$ ll a.out
+   -rwsr-xr-x 1 root root 8816 Jun 19 17:11 a.out*
+   riversec@rcs:/tmp$
+</pre>
+
+<p>
+其作用在于：当执行此文件时，将进程的有效用户ID设置为文件所有者的用户
+id。
+</p>
+
+<p>
+举例：若文件的所有者是超级用户，而且设置了该文件的“设置用户ID位”，
+然后当该程序由一个进程执行时，则该程序具有超级权限。这个最常见的例子
+其实是 <code>passwd</code> 程序：每个用户都可以修改自己的密码，但是它又需要修改
+<code>/etc/passwd</code> 这个属于root的文件。所以它需要使用“设置用户ID”的特征。
+</p>
+<pre class="example">
+   riversec@rcs:/tmp$ ll /usr/bin/passwd
+   -rwsr-xr-x 1 root root 54256 May 17 07:37 /usr/bin/passwd*
+</pre>
+
+<p>
+<b>注意</b>
+</p>
+<ol class="org-ol">
+<li><b>权限提升，安全问题就得重视。</b></li>
+<li><b>由于这是文件的特殊属性，这种特征只能用于二进制文件。脚本这些是不行的。</b></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgd829fac" class="outline-3">
+<h3 id="orgd829fac"><span class="section-number-3">31.2</span> <span class="todo TODO">TODO</span> <code>st_gid</code></h3>
+<div class="outline-text-3" id="text-31-2">
+<ul class="org-ul">
+<li>State "TODO"       from              <span class="timestamp-wrapper"><span class="timestamp">[2017-06-19 Mon 17:14]</span></span></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga780d1e" class="outline-2">
+<h2 id="orga780d1e"><span class="section-number-2">32</span> ubuntu下载一个软件所有依赖的包</h2>
+<div class="outline-text-2" id="text-32">
+<p>
+<a href="https://stackoverflow.com/questions/13756800/how-to-download-all-dependencies-and-packages-to-directory">这里</a> 讲了如何下载到所有的安装包到一个目录：
+</p>
+
+<p>
+一种解法是这样：
+</p>
+<pre class="example">
+    # aptitude clean
+    # aptitude --download-only install &lt;your_package_here&gt;
+    # cp /var/cache/apt/archives/*.deb &lt;your_directory_here&gt;
+</pre>
+<p>
+但是如果你的机器是一台已经使用过很久的机器了。需要它可能已经安装了好
+多软件了。这样可能下载不到最完的依赖，因为很多软件已经安装了就不会再
+下载了。
+</p>
+
+<p>
+需要先安装 <code>apt-rdepends</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo apt-get install apt-rdepends
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sh">    apt-get download $(apt-rdepends &lt;package&gt;|grep -v <span style="color: #ff4ea3;">"^ "</span>)
+</pre>
+</div>
+<p>
+这样会有些报错。可能有些包没有对应的下载的地方。
+</p>
+
+<p>
+<a href="https://superuser.com/questions/1112525/ignore-apt-get-download-errors">这里</a> 有人写了这样的脚本来忽略这些下载不到的包：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">MAXPARAMETERS</span>=255
+
+    <span style="color: #a1db00;">function</span> <span style="color: #ffd700;">array_contains_find_index</span>() {
+        <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">n</span>=$<span style="color: #ff8700;">#</span>
+        <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">i</span>=0
+        <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">value</span>=${<span style="color: #ff8700;">!</span>n}
+
+        <span style="color: #a1db00;">for</span> (( <span style="color: #ff8700;">i</span>=1; i &lt; n; i++ )) { 
+            <span style="color: #a1db00;">if</span> [ <span style="color: #ff4ea3;">"${!i}"</span> == <span style="color: #ff4ea3;">"${value}"</span> ]; <span style="color: #a1db00;">then</span>
+                <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"REMOVING $i: ${!i} = ${value}"</span>
+                <span style="color: #a1db00;">return</span> $<span style="color: #ff8700;">i</span>
+            <span style="color: #a1db00;">fi</span>
+        }
+        <span style="color: #a1db00;">return</span> $<span style="color: #ff8700;">MAXPARAMETERS</span>
+    }
+
+    <span style="color: #a1db00;">function</span> <span style="color: #ffd700;">Pause</span>() { 
+        <span style="color: #a1db00;">if</span> [[ -z $<span style="color: #ff8700;">1</span> ]]; <span style="color: #a1db00;">then</span>
+                <span style="color: #d18aff;">read</span> -n1 -r -p <span style="color: #ff4ea3;">"continue..."</span> 
+        <span style="color: #a1db00;">else</span>
+                <span style="color: #d18aff;">read</span> -n1 -r -p <span style="color: #ff4ea3;">"$1"</span> 
+        <span style="color: #a1db00;">fi</span>
+    }
+
+    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">IFS</span>=$<span style="color: #ff4ea3;">'\n'</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Store all reverse dependencies in an indexed array and output them to STDOUT &amp; a log file </span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">for easy checking later</span>
+    <span style="color: #ff8700;">LIST</span>=( $( apt-rdepends $<span style="color: #ff8700;">1</span> | grep -v <span style="color: #ff4ea3;">"^ "</span> ) )
+    <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">LIST</span>[*]}
+    <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">LIST</span>[*]} &gt; getdepends.log.results
+    Pause <span style="color: #ff4ea3;">"... Packages that will be downloaded (Continue or CTRL+C) ..."</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Try to download the dependencies</span>
+    <span style="color: #ff8700;">RESULTS</span>=( $( apt-get download ${<span style="color: #ff8700;">LIST</span>[*]} |&amp; cut -d<span style="color: #ff4ea3;">' '</span> -f 8 ) ) 
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">If RESULTS contains any items that means we have packages that are</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">problematic that need to be removed from LIST. (note: `|&amp;` is shortform for `2&gt;&amp;1 |`)</span>
+
+    <span style="color: #ff8700;">LISTLEN</span>=${#<span style="color: #ff8700;">LIST</span>[@]}                                     <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Array elements aren't removed so the size is constant</span>
+
+    <span style="color: #a1db00;">while</span> [ ${#<span style="color: #ff8700;">RESULTS</span>[@]} -gt 0 ]; <span style="color: #a1db00;">do</span>
+        <span style="color: #a1db00;">for</span> (( <span style="color: #ff8700;">i</span>=0; i &lt; $<span style="color: #ff8700;">LISTLEN</span>; i++ )); <span style="color: #a1db00;">do</span>
+                array_contains_find_index ${<span style="color: #ff8700;">RESULTS</span>[@]} ${<span style="color: #ff8700;">LIST</span>[$<span style="color: #ff8700;">i</span>]}
+                <span style="color: #ff8700;">ret</span>=$<span style="color: #ff8700;">?</span>
+
+                <span style="color: #a1db00;">if</span> (( $<span style="color: #ff8700;">ret</span> != $<span style="color: #ff8700;">MAXPARAMETERS</span> )); <span style="color: #a1db00;">then</span>
+                    <span style="color: #d18aff;">unset</span> LIST[$<span style="color: #ff8700;">i</span>]
+                <span style="color: #a1db00;">fi</span>
+        <span style="color: #a1db00;">done</span>
+
+        <span style="color: #ff8700;">FULLRESULTS</span>=$( apt-get download ${<span style="color: #ff8700;">LIST</span>[*]} 2&gt;&amp;1  )
+        <span style="color: #ff8700;">RESULTS</span>=( $( <span style="color: #d18aff;">echo</span> $<span style="color: #ff8700;">FULLRESULTS</span> |&amp; cut -d<span style="color: #ff4ea3;">' '</span> -f 11 | sed -r <span style="color: #ff4ea3;">"s/'(.*?):(.*$)/\1/g"</span> ) )
+
+        <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">LIST</span>[*]} &gt; getdepends.list                                   <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Log of downloaded packages</span>
+        <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">FULLRESULTS</span>[*]} &gt;&gt; getdepends.fullresults    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Verbose log of skipped packages</span>
+        <span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">RESULTS</span>[*]} &gt;&gt; getdepends.results                    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">Just the name of skipped packages</span>
+    <span style="color: #a1db00;">done</span> 
+
+    apt-get download ${<span style="color: #ff8700;">LIST</span>[*]}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc1b61e5" class="outline-2">
+<h2 id="orgc1b61e5"><span class="section-number-2">33</span> 保存国内ubuntu的源</h2>
+<div class="outline-text-2" id="text-33">
+<p>
+<code>/etc/apt/sources.list</code>
+</p>
+
+<p>
+14.04 163:
+</p>
+<pre class="example">
+    deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+    deb http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+    deb-src http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+</pre>
+
+<p>
+16.04 阿里：
+</p>
+<pre class="example">
+    # deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted
+    deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+    deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse #Added by software-properties
+    deb http://archive.canonical.com/ubuntu xenial partner
+    deb-src http://archive.canonical.com/ubuntu xenial partner
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted
+    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+    deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org70e6aa5" class="outline-2">
+<h2 id="org70e6aa5"><span class="section-number-2">34</span> 挂载远程目录到本机</h2>
+<div class="outline-text-2" id="text-34">
+<p>
+需要安装 <code>sshfs</code> 。
+</p>
+
+<ol class="org-ol">
+<li><p>
+写一个脚本可以把远程的目录挂载到编译机上：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+
+       mkdir -p remote-asp
+
+       <span style="color: #a1db00;">if</span> [ <span style="color: #ff4b4b;">!</span> $<span style="color: #ff8700;">#</span> -eq 3 ]
+       <span style="color: #a1db00;">then</span>
+       <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"usage: ./mount.sh username ip path-to-mount"</span>
+       <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"for example: "</span>
+       <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"./mount.sh pengpengxp 172.16.23.215 /Users/pengpengxp/src/asp"</span>
+       <span style="color: #a1db00;">fi</span>
+
+       sshfs $<span style="color: #ff8700;">1</span>@$<span style="color: #ff8700;">2</span>:$<span style="color: #ff8700;">3</span> /home/openstack/remote-asp/
+
+       <span style="color: #a1db00;">exit</span> 0
+</pre>
+</div></li>
+<li><p>
+对应的卸载脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">       <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/bash</span>
+       fusermount -u remote-asp
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orgdf920cd" class="outline-2">
+<h2 id="orgdf920cd"><span class="section-number-2">35</span> 可以这样查ip的详细信息</h2>
+<div class="outline-text-2" id="text-35">
+<div class="org-src-container">
+<pre class="src src-sh">    curl ipinfo.io/json
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbf9d109" class="outline-2">
+<h2 id="orgbf9d109"><span class="section-number-2">36</span> <span class="todo TODO">TODO</span> ubuntu manage battery</h2>
+<div class="outline-text-2" id="text-36">
+<ul class="org-ul">
+<li>State "TODO"       from              <span class="timestamp-wrapper"><span class="timestamp">[2017-08-22 Tue 22:24]</span></span></li>
+</ul>
+
+<p>
+<a href="http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#start">http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#start</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org09d4ab1" class="outline-2">
+<h2 id="org09d4ab1"><span class="section-number-2">37</span> unzip解压乱码问题</h2>
+<div class="outline-text-2" id="text-37">
+<p>
+在windows上压缩的文件，是以系统默认编码中文来压缩文件。由于zip文件中
+没有声明其编码，所以linux上的unzip一般以默认编码解压，中文文件名会出
+现乱码。虽然2005年就有人把这报告为bug, 但是info-zip的官方网站没有把
+自动识别编码列入计划，可能他们不认为这是个问题。Sun对java中存在N年的
+zip编码问题，采用了同样的处理方式。
+</p>
+
+<p>
+有2种方式解决问题：
+</p>
+
+<ol class="org-ol">
+<li>通过unzip行命令解压，指定字符集</li>
+</ol>
+<p>
+unzip -O CP936 xxx.zip (用GBK, GB18030也可以)
+有趣的是unzip的manual中并无这个选项的说明, unzip &#x2013;help对这个参数有一行简单的说明。
+</p>
+
+<ol class="org-ol">
+<li>在环境变量中，指定unzip参数：</li>
+</ol>
+
+<p>
+我是在 <code>~/.bashrc</code> 这些shell启动会以加载的文件中设置下面的两个环境变
+量，则shell中解压可以不再乱码：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">UNZIP</span>=<span style="color: #ff4ea3;">"-O CP936"</span>
+    <span style="color: #d18aff;">export</span> <span style="color: #ff8700;">ZIPINFO</span>=<span style="color: #ff4ea3;">"-O CP936"</span>
+</pre>
+</div>
+
+<p>
+在emacs中这样设置：
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">    <span style="color: #6c6c6c; font-style: italic;">;; </span><span style="color: #6c6c6c; font-style: italic;">for unzip chinese charactor file which are ziped on windows</span>
+    (setenv <span style="color: #ff4ea3;">"UNZIP"</span> <span style="color: #ff4ea3;">"-O CP936"</span>)
+    (setenv <span style="color: #ff4ea3;">"ZIPINFO"</span> <span style="color: #ff4ea3;">"-O CP936"</span>)
+</pre>
+</div>
+
+<p>
+总是以指定的字符集显示和解压文件 <code>/etc/environment</code> 中加入2行
+</p>
+<pre class="example">
+    UNZIP="-O CP936"
+    ZIPINFO="-O CP936"
+</pre>
+
+<p>
+这样Gnome桌面的归档文件管理器(file-roller)可以正常使用unzip解压中文，
+但是file-roller本身并不能设置编码传递给unzip。
+</p>
+</div>
+</div>
+<div id="outline-container-orgf107bcf" class="outline-2">
+<h2 id="orgf107bcf"><span class="section-number-2">38</span> grep只输出匹配的内容</h2>
+<div class="outline-text-2" id="text-38">
+<p>
+就是 <code>-o</code> 选项：
+</p>
+<pre class="example">
+     ~/ echo 'xiepeng'|grep peng
+    xiepeng
+     ~/ echo 'xiepeng'|grep -o peng
+    peng
+</pre>
+</div>
+</div>
+<div id="outline-container-org9009120" class="outline-2">
+<h2 id="org9009120"><span class="section-number-2">39</span> 使用tmux&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tmux">tmux</span></span></h2>
+<div class="outline-text-2" id="text-39">
+<p>
+tmux启动后是一个damon，如果不小心iterm2退出了或对应的标签页半闭了。
+可以使用 <code>tmux attach</code> attach到原来的daemon上。注意，异常关闭后，默
+认会有一个tmux还在attach。需要把原来的tmux attach的干掉。但是别把
+tmux进程干掉了，具体的说，就是干掉下面的第一个，别干掉第二个：
+</p>
+<pre class="example">
+    pengpengxp        2108   0.0  0.0  2458016    744 s000  S+   10:43下午   0:00.01 tmux attach
+    pengpengxp        1480   0.0  0.0  2498212   4712   ??  Ss   10:43下午   0:04.60 tmux new-session -d -s 0 -n demo-openstack -x204 -y59
+</pre>
+
+<p>
+然后再 <code>tmux attach</code> 就ok了。
+</p>
+
+<p>
+重启呢？网上下载了一个 <code>tmux-session</code> 脚本，如下：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/usr/bin/env bash</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Save and restore the state of tmux sessions and windows.</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">TODO: persist and restore the state &amp; position of panes.</span>
+    <span style="color: #d18aff;">set</span> -e
+
+    dump() {
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">d</span>=$<span style="color: #ff4ea3;">'\t'</span>
+      tmux list-windows -a -F <span style="color: #ff4ea3;">"#S${d}#W${d}#{pane_current_path}"</span>
+    }
+
+    save() {
+      dump &gt; ~/.tmux-session
+    }
+
+    terminal_size() {
+      stty size 2&gt;/dev/null | awk <span style="color: #ff4ea3;">'{ printf "-x%d -y%d", $2, $1 }'</span>
+    }
+
+    session_exists() {
+      tmux has-session -t <span style="color: #ff4ea3;">"$1"</span> 2&gt;/dev/null
+    }
+
+    add_window() {
+      tmux new-window -d -t <span style="color: #ff4ea3;">"$1:"</span> -n <span style="color: #ff4ea3;">"$2"</span> -c <span style="color: #ff4ea3;">"$3"</span>
+    }
+
+    new_session() {
+      <span style="color: #d18aff;">cd</span> <span style="color: #ff4ea3;">"$3"</span> &amp;&amp;
+      tmux new-session -d -s <span style="color: #ff4ea3;">"$1"</span> -n <span style="color: #ff4ea3;">"$2"</span> $<span style="color: #ff8700;">4</span>
+    }
+
+    restore() {
+      tmux start-server
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">count</span>=0
+      <span style="color: #d18aff;">local</span> <span style="color: #ff8700;">dimensions</span>=<span style="color: #ff4ea3;">"$(terminal_size)"</span>
+
+      <span style="color: #a1db00;">while</span> <span style="color: #ff8700;">IFS</span>=$<span style="color: #ff4ea3;">'\t'</span> read session_name window_name dir; <span style="color: #a1db00;">do</span>
+        <span style="color: #a1db00;">if</span> [[ -d <span style="color: #ff4ea3;">"$dir"</span> &amp;&amp; $<span style="color: #ff8700;">window_name</span> != <span style="color: #ff4ea3;">"log"</span> &amp;&amp; $<span style="color: #ff8700;">window_name</span> != <span style="color: #ff4ea3;">"man"</span> ]]; <span style="color: #a1db00;">then</span>
+          <span style="color: #a1db00;">if</span> session_exists <span style="color: #ff4ea3;">"$session_name"</span>; <span style="color: #a1db00;">then</span>
+            add_window <span style="color: #ff4ea3;">"$session_name"</span> <span style="color: #ff4ea3;">"$window_name"</span> <span style="color: #ff4ea3;">"$dir"</span>
+          <span style="color: #a1db00;">else</span>
+            new_session <span style="color: #ff4ea3;">"$session_name"</span> <span style="color: #ff4ea3;">"$window_name"</span> <span style="color: #ff4ea3;">"$dir"</span> <span style="color: #ff4ea3;">"$dimensions"</span>
+            <span style="color: #ff8700;">count</span>=$(( count + 1 ))
+          <span style="color: #a1db00;">fi</span>
+        <span style="color: #a1db00;">fi</span>
+      <span style="color: #a1db00;">done</span> &lt; ~/.tmux-session
+
+      <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"restored $count sessions"</span>
+    }
+
+    <span style="color: #a1db00;">case</span> <span style="color: #ff4ea3;">"$1"</span><span style="color: #a1db00;"> in</span>
+    save | restore )
+      $<span style="color: #ff8700;">1</span>
+      ;;
+    * )
+      <span style="color: #d18aff;">echo</span> <span style="color: #ff4ea3;">"valid commands: save, restore"</span> &gt;&amp;2
+      <span style="color: #a1db00;">exit</span> 1
+    <span style="color: #a1db00;">esac</span>
+
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>重启前： <code>tmux-session save</code> 。</li>
+<li>重启后： <code>tmux-session restore</code></li>
+<li>然后就可以 <code>attach</code> 了。</li>
+</ul>
+
+<p>
+tmux的配置在 <code>~/.tmux.conf</code> ：
+</p>
+<div class="org-src-container">
+<pre class="src src-conf-space">    <span style="color: #6c6c6c; font-style: italic;">################################################################</span>
+    <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">original setting</span>
+    <span style="color: #6c6c6c; font-style: italic;">################################################################</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">#&#35774;&#32622;&#21069;&#32512;&#20026;Ctrl + a</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set -g prefix C-a</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;"># &#19982;&#27492;&#21516;&#26102;&#65292;&#21462;&#28040;&#40664;&#35748;&#30340;&#21069;&#32512;&#25353;&#38190;&#65306;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">#&#35299;&#38500;Ctrl+b &#19982;&#21069;&#32512;&#30340;&#23545;&#24212;&#20851;&#31995;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">unbind C-b</span>
+
+    <span style="color: #6c6c6c; font-style: italic;">################################################################</span>
+    <span style="color: #6c6c6c; font-style: italic;">#### </span><span style="color: #6c6c6c; font-style: italic;">copy from others</span>
+    <span style="color: #6c6c6c; font-style: italic;">################################################################</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">use UTF8</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">set -g utf8</span>
+    <span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">set-window-option -g utf8 on</span>
+
+
+    <span style="color: #ff8700;">bind</span> C-e command-prompt -p <span style="color: #ff4ea3;">"session?,message?"</span> <span style="color: #ff4ea3;">"run-shell \"tmux list-windows -t %1 \| cut -d: -f1\|xargs -I\{\} tmux send-keys -t %1:\{\} %2\""</span>
+
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">make tmux display things in 256 colors</span>
+    <span style="color: #ff8700;">set</span> -g default-terminal <span style="color: #ff4ea3;">"screen-256color"</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set scrollback history to 10000 (10k)</span>
+    <span style="color: #ff8700;">set</span> -g history-limit 10000
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set Ctrl-a as the default prefix key combination</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">and unbind C-b to free it up</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set -g prefix C-a</span>
+    <span style="color: #ff8700;">set</span> -g prefix `
+    <span style="color: #ff8700;">unbind</span> C-b
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">use send-prefix to pass C-a through to application</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind C-a send-prefix</span>
+    <span style="color: #ff8700;">bind</span> ` send-prefix
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">shorten command delay</span>
+    <span style="color: #ff8700;">set</span> -sg escape-time 1
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set window and pane index to 1 (0 by default)</span>
+    <span style="color: #ff8700;">set-option</span> -g base-index 1
+    <span style="color: #ff8700;">setw</span> -g pane-base-index 1
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">reload ~/.tmux.conf using PREFIX r</span>
+    <span style="color: #ff8700;">bind</span> r source-file ~/.tmux.conf \; display <span style="color: #ff4ea3;">"Reloaded!"</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">use PREFIX | to split window horizontally and PREFIX - to split vertically</span>
+    <span style="color: #ff8700;">bind</span> | split-window -h
+    <span style="color: #ff8700;">bind</span> - split-window -v
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set default windows name</span>
+    <span style="color: #ff8700;">bind</span> c new-window -n <span style="color: #ff4ea3;">'Main'</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">Make the current window the first window</span>
+    <span style="color: #ff8700;">bind</span> T swap-window -t 1
+
+    <span style="color: #ff8700;">bind-key</span> ( swap-window -t -1
+    <span style="color: #ff8700;">bind-key</span> ) swap-window -t +1
+
+    <span style="color: #ff8700;">bind-key</span> -n S-Left select-window -t :-
+    <span style="color: #ff8700;">bind-key</span> -n S-Right select-window -t :+
+    <span style="color: #ff8700;">bind-key</span> -n C-S-Left swap-window -t -1
+    <span style="color: #ff8700;">bind-key</span> -n C-S-Right swap-window -t +1
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">switch to last-window, I bind M-S to send hex code 0x60 0x53</span>
+    <span style="color: #ff8700;">bind-key</span> S last-window
+    <span style="color: #ff8700;">bind-key</span> -n C-s  last-window
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">switch to last-window, I bind M-s to send hex code 0x60 0x73</span>
+    <span style="color: #ff8700;">bind-key</span> s last-pane
+    <span style="color: #ff8700;">bind-key</span> X kill-pane
+
+    <span style="color: #ff8700;">bind-key</span> -n m-s last-pane
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">map Vi movement keys as pane movement keys</span>
+    <span style="color: #ff8700;">bind</span> h select-pane -L
+    <span style="color: #ff8700;">bind</span> j select-pane -D
+    <span style="color: #ff8700;">bind</span> k select-pane -U
+    <span style="color: #ff8700;">bind</span> l select-pane -R
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind tab choose-window</span>
+    <span style="color: #ff8700;">bind</span> tab display-panes
+
+    <span style="color: #ff8700;">unbind</span> p
+    <span style="color: #ff8700;">bind</span> p previous-window
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set display time to 5 seconds</span>
+    <span style="color: #ff8700;">set</span> -g display-panes-time 5000
+
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">and use C-h and C-l to cycle thru panes</span>
+    <span style="color: #ff8700;">bind</span> -r C-h select-window -t :-
+    <span style="color: #ff8700;">bind</span> -r C-l select-window -t :+
+
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#22312;iterm2&#20013;&#35774;&#32622;'Ctrl+1'&#20026;send hexcode 0x60 0x31&#23601;&#30456;&#24403;&#20110;&#35843;&#29992; '&#21069;&#32512;`+1'</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">(`&#30340;hexcode&#23601;&#26159; 0x60)</span>
+    <span style="color: #ff8700;">bind</span> 1 select-window -t 1
+    <span style="color: #ff8700;">bind</span> 2 select-window -t 2
+    <span style="color: #ff8700;">bind</span> 3 select-window -t 3
+    <span style="color: #ff8700;">bind</span> 4 select-window -t 4
+    <span style="color: #ff8700;">bind</span> 5 select-window -t 5
+    <span style="color: #ff8700;">bind</span> 6 select-window -t 6
+    <span style="color: #ff8700;">bind</span> 7 select-window -t 7
+    <span style="color: #ff8700;">bind</span> 8 select-window -t 8
+    <span style="color: #ff8700;">bind</span> 9 select-window -t 9
+    <span style="color: #ff8700;">bind</span> 0 select-window -t 10
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">-n &#19981;&#38656;&#35201;&#21152;&#21069;&#32512;&#23601;&#21487;&#20197;&#20351;&#29992;</span>
+    <span style="color: #ff8700;">bind</span> -n F1 select-window -t 1
+    <span style="color: #ff8700;">bind</span> -n F2 select-window -t 2
+    <span style="color: #ff8700;">bind</span> -n F3 select-window -t 3
+    <span style="color: #ff8700;">bind</span> -n F4 select-window -t 4
+    <span style="color: #ff8700;">bind</span> -n F5 select-window -t 5
+    <span style="color: #ff8700;">bind</span> -n F6 select-window -t 6
+    <span style="color: #ff8700;">bind</span> -n F7 select-window -t 7
+    <span style="color: #ff8700;">bind</span> -n F8 select-window -t 8
+    <span style="color: #ff8700;">bind</span> -n F9 select-window -t 9
+
+    <span style="color: #ff8700;">bind</span> -n PPage copy-mode -u
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 0 select-window -t 10</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 1 select-window -t 11</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 2 select-window -t 12</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 3 select-window -t 13</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 4 select-window -t 14</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 5 select-window -t 15</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 6 select-window -t 16</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 7 select-window -t 17</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind 8 select-window -t 18</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">resize panes using PREFIX H, J, K, L</span>
+    <span style="color: #ff8700;">bind</span> H resize-pane -L 5
+    <span style="color: #ff8700;">bind</span> J resize-pane -D 5
+    <span style="color: #ff8700;">bind</span> K resize-pane -U 5
+    <span style="color: #ff8700;">bind</span> L resize-pane -R 5
+
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind S set synchronize-panes on</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">bind s set synchronize-panes off</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">for mouse support, &#36825;&#20010;&#27169;&#24335;&#24320;&#21551;&#21518;&#65292;iterm2&#20013;&#38656;&#35201;&#25353;option&#25165;&#33021;&#20687;&#21407;&#26469;&#19968;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26679;&#36873;&#20013;&#65292;&#25152;&#20197;&#29616;&#22312;&#20808;&#31105;&#27490;</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set -g mouse on</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">The panes {</span>
+
+    <span style="color: #ff8700;">set</span> -g pane-border-bg colour235
+    <span style="color: #ff8700;">set</span> -g pane-border-fg colour238
+    <span style="color: #ff8700;">set</span> -g pane-active-border-bg colour236
+    <span style="color: #ff8700;">set</span> -g pane-active-border-fg colour51
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">}</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">The statusbar {</span>
+
+    <span style="color: #ff8700;">set</span> -g status-position bottom
+    <span style="color: #ff8700;">set</span> -g status-bg colour234
+    <span style="color: #ff8700;">set</span> -g status-fg colour137
+    <span style="color: #ff8700;">set</span> -g status-attr dim
+    <span style="color: #ff8700;">set</span> -g status-left <span style="color: #ff4ea3;">''</span>
+    <span style="color: #ff8700;">set</span> -g status-right <span style="color: #ff4ea3;">'#[fg=colour233,bg=colour241,bold] %d/%m #[fg=colour233,bg=colour245,bold] %H:%M:%S '</span>
+    <span style="color: #ff8700;">set</span> -g status-right-length 50
+    <span style="color: #ff8700;">set</span> -g status-left-length 20
+
+    <span style="color: #ff8700;">setw</span> -g window-status-current-fg colour81
+    <span style="color: #ff8700;">setw</span> -g window-status-current-bg colour238
+    <span style="color: #ff8700;">setw</span> -g window-status-current-attr bold
+    <span style="color: #ff8700;">setw</span> -g window-status-current-format <span style="color: #ff4ea3;">' #I#[fg=colour250]:#[fg=colour255]#W#[fg=colour50]#F '</span>
+
+    <span style="color: #ff8700;">setw</span> -g window-status-fg colour138
+    <span style="color: #ff8700;">setw</span> -g window-status-bg colour235
+    <span style="color: #ff8700;">setw</span> -g window-status-attr none
+    <span style="color: #ff8700;">setw</span> -g window-status-format <span style="color: #ff4ea3;">' #I#[fg=colour237]:#[fg=colour250]#W#[fg=colour244]#F '</span>
+
+    <span style="color: #ff8700;">setw</span> -g window-status-bell-attr bold
+    <span style="color: #ff8700;">setw</span> -g window-status-bell-fg colour255
+    <span style="color: #ff8700;">setw</span> -g window-status-bell-bg colour1
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">}</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">The messages {</span>
+
+    <span style="color: #ff8700;">set</span> -g message-attr bold
+    <span style="color: #ff8700;">set</span> -g message-fg colour232
+    <span style="color: #ff8700;">set</span> -g message-bg colour166
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">}</span>
+
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">set copy mode to use vi-like moving, space begin selete and Enter</span>
+    <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">copy</span>
+    <span style="color: #ff8700;">set-window-option</span> -g mode-keys vi
+</pre>
+</div>
+</div>
+<div id="outline-container-org69bdba3" class="outline-3">
+<h3 id="org69bdba3"><span class="section-number-3">39.1</span> Mac中的配置</h3>
+<div class="outline-text-3" id="text-39-1">
+<p>
+在iterm2中，可以使用 <code>Control-number</code> 来切换windows。iterm2可以设置
+<code>C-number</code> 来发送hex code。上面我把tmux的prefix设置为 <code>`</code> 。切换
+windows默认使用 <code>` nubmers</code> 。可以设置 <code>C-numbers</code> 发送对应的hex
+code达到目的。比如 <code>C-1</code> 发送 <code>0x60 0x31</code> ， <code>C-2</code> 发送 =0x60 0x32=。
+</p>
+
+<p>
+配置里还使用了 <code>reattach-to-user-namespace</code> 这个应该是修复一个os x
+上tmux中不用使用系统open系统打开文件的bug。据说这个bug几年了都没人
+修。
+</p>
+</div>
+</div>
+<div id="outline-container-org0b29d3e" class="outline-3">
+<h3 id="org0b29d3e"><span class="section-number-3">39.2</span> tmux中的session</h3>
+<div class="outline-text-3" id="text-39-2">
+<p>
+一个session可以看做是多个窗口的集合。可以不同的session来干不同的事
+情：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">&#26597;&#35810;&#24403;&#21069;&#25152;&#26377;session</span>
+     tmux list-sessions
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-sh">     <span style="color: #6c6c6c; font-style: italic;"># </span><span style="color: #6c6c6c; font-style: italic;">attach&#21040;&#23545;&#24198;&#30340;session&#65292;&#36825;&#37324;&#30340;&lt;session&gt;&#23601;&#26159;&#19978;&#38754;&#26597;&#20986;&#26469;&#30340;&#31532;&#19968;&#21015;</span>
+     tmux attach -t &lt;session&gt;
+</pre>
+</div>
+
+<p>
+需要注意的是tmux多次attach同一个session可能会导致卡死。需要退出来把
+所有attach到对应session的tmux进程都干掉重新attach才行。
+</p>
+
+<p>
+一些快捷键：
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">操作</th>
+<th scope="col" class="org-left">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">查看/切换session</td>
+<td class="org-left">prefix s</td>
+</tr>
+
+<tr>
+<td class="org-left">离开Session</td>
+<td class="org-left">prefix d</td>
+</tr>
+
+<tr>
+<td class="org-left">重命名当前Session</td>
+<td class="org-left">prefix $</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org7c4ad3b" class="outline-3">
+<h3 id="org7c4ad3b"><span class="section-number-3">39.3</span> 多个pane中实现同时输入</h3>
+<div class="outline-text-3" id="text-39-3">
+<p>
+可以这样：
+</p>
+<pre class="example">
+     Have you tried following in tmux window with multiple panes
+
+     &lt;prefix&gt; :
+
+     setw synchronize-panes on
+
+     clear history
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org02681c5" class="outline-3">
+<h3 id="org02681c5"><span class="section-number-3">39.4</span> copy-mode</h3>
+<div class="outline-text-3" id="text-39-4">
+<p>
+<a href="https://awhan.wordpress.com/2010/06/20/copy-paste-in-tmux/">referenced here</a>
+</p>
+
+<pre class="example">
+     i m assuming that the tmux prefix is Control+b and that you have emacs style key bindings on
+
+     1) enter copy mode using Control+b [
+     2) navigate to beginning of text, you want to select and hit Control+Space
+     3) move around using arrow keys to select region
+     4) when you reach end of region simply hit Alt+w to copy the region
+     5) now Control+b ] will paste the selection
+
+     you can navigate the text using the emacs style navigation key
+     Control+p, Control+n, Control+f, Control+b etc.
+
+     Dan in the comments informs me that if you have vi style key bindings on then the following applies:
+
+     1) enter copy mode using Control+b [
+     2) navigate to beginning of text, you want to select and hit Space
+     3) move around using arrow keys to select region
+     4) when you reach end of region simply hit Enter to copy the region
+     5) now Control+b ] will paste the selection
+
+     To enable vi like cursor movement in copy mode put the following in your ~/.tmux.conf:
+
+     set-window-option -g mode-keys vi
+
+     more over what ever you copy, you may dump that out in your terminal using
+
+     tmux show-buffer
+
+     and even save to a file(say, foo.txt) using
+
+     tmux save-buffer foo.txt
+
+     To see all the paste buffers try Control + b #. To dump out the varios buffers on to the terminal or file you may use
+
+     tmux list-buffers
+     tmux show-buffer -b n
+     tmux save-buffer -b n foo.txt
+
+     where n is the index of the paste buffer.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgfa44fee" class="outline-3">
+<h3 id="orgfa44fee"><span class="section-number-3">39.5</span> 开启了mouse mode后如何使用鼠标选择区域来copy</h3>
+<div class="outline-text-3" id="text-39-5">
+<p>
+使用 <code>set mouse on</code> 开启鼠标输入后可以方便很多，但是选择区域就需要
+按住 <code>shift</code> 后再使用鼠标选择了。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orged97ba6" class="outline-2">
+<h2 id="orged97ba6"><span class="section-number-2">40</span> 命令行中转换电子书格式</h2>
+<div class="outline-text-2" id="text-40">
+<p>
+<code>epub to mobi</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ebook-convert program-think.epub program-think.mobi
+</pre>
+</div>
+
+<p>
+<code>epub to azw3</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    ebook-convert program-think.epub program-think.azw3
+</pre>
+</div>
+
+<p>
+我想转info文件到kindle上看，试了一下这个流程：
+</p>
+<pre class="example">
+texinfo -&gt; HTML -&gt; ebook-convert -&gt; mobi
+
+texi2html org.texi
+ebook-convert org.html org.mobi
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgee501b5" class="outline-2">
+<h2 id="orgee501b5"><span class="section-number-2">41</span> 命令行转换视频格式</h2>
+<div class="outline-text-2" id="text-41">
+<div class="org-src-container">
+<pre class="src src-sh">    HandBrakeCLI -i xxx.avi -o xxx.mp4
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org12bc090" class="outline-2">
+<h2 id="org12bc090"><span class="section-number-2">42</span> 命令行网页视频下载工具you-get</h2>
+<div class="outline-text-2" id="text-42">
+<p>
+<a href="http://www.appinn.com/you-get/">http://www.appinn.com/you-get/</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">    you-get https://www.bilibili.com/video/av14185130
+</pre>
+</div>
+
+<p>
+<a href="https://rg3.github.io/youtube-dl/">https://rg3.github.io/youtube-dl/</a>
+</p>
+
+<p>
+<code>sudo pip install --upgrade youtube_dl</code> 来安装。
+</p>
+</div>
+</div>
+<div id="outline-container-org0e5e7da" class="outline-2">
+<h2 id="org0e5e7da"><span class="section-number-2">43</span> web servers in one line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="http">http</span></span></h2>
+<div class="outline-text-2" id="text-43">
+<p>
+Each of these commands will run an ad hoc http static server in your
+current (or specified) directory, available at
+<a href="http://localhost:8000">http://localhost:8000</a>.  Use this power wisely.
+</p>
+
+<p>
+<a href="http://www.reddit.com/r/webdev/comments/1fs45z/list_of_ad_hoc_http_server_oneliners/">Discussion on reddit</a>.
+</p>
+</div>
+
+<div id="outline-container-orgd600a5d" class="outline-3">
+<h3 id="orgd600a5d"><span class="section-number-3">43.1</span> Python 2.x</h3>
+<div class="outline-text-3" id="text-43-1">
+<pre class="example">
+       $ python -m SimpleHTTPServer 8000
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org34a856c" class="outline-3">
+<h3 id="org34a856c"><span class="section-number-3">43.2</span> Python 3.x</h3>
+<div class="outline-text-3" id="text-43-2">
+<pre class="example">
+       $ python -m http.server 8000
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orga7e376a" class="outline-3">
+<h3 id="orga7e376a"><span class="section-number-3">43.3</span> Twisted (Python)</h3>
+<div class="outline-text-3" id="text-43-3">
+<pre class="example">
+       $ twistd -n web -p 8000 --path .
+</pre>
+
+<p>
+Or:
+</p>
+
+<pre class="example">
+       $ python -c 'from twisted.web.server import Site; from twisted.web.static import File; from twisted.internet import reactor; reactor.listenTCP(8000, Site(File("."))); reactor.run()'
+</pre>
+
+<p>
+Depends on <a href="http://twistedmatrix.com/trac/wiki/Downloads">Twisted</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2fdaaa4" class="outline-3">
+<h3 id="org2fdaaa4"><span class="section-number-3">43.4</span> Ruby</h3>
+<div class="outline-text-3" id="text-43-4">
+<pre class="example">
+       $ ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port =&gt; 8000, :DocumentRoot =&gt; Dir.pwd).start'
+</pre>
+
+<p>
+Credit:
+<a href="http://barkingiguana.com/2010/04/11/a-one-line-web-server-in-ruby/">Barking
+Iguana</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org692ec50" class="outline-3">
+<h3 id="org692ec50"><span class="section-number-3">43.5</span> Ruby 1.9.2+</h3>
+<div class="outline-text-3" id="text-43-5">
+<pre class="example">
+       $ ruby -run -ehttpd . -p8000
+</pre>
+
+<p>
+Credit: <a href="https://gist.github.com/willurd/5720255#comment-855952">nobu</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb6e19e6" class="outline-3">
+<h3 id="orgb6e19e6"><span class="section-number-3">43.6</span> adsf (Ruby)</h3>
+<div class="outline-text-3" id="text-43-6">
+<pre class="example">
+       $ gem install adsf   # install dependency
+       $ adsf -p 8000
+</pre>
+
+<p>
+Credit:
+<a href="https://gist.github.com/willurd/5720255/#comment-841393">twome</a>
+</p>
+
+<p>
+<i>No directory listings.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org95bae3f" class="outline-3">
+<h3 id="org95bae3f"><span class="section-number-3">43.7</span> Sinatra (Ruby)</h3>
+<div class="outline-text-3" id="text-43-7">
+<pre class="example">
+       $ gem install sinatra   # install dependency
+       $ ruby -rsinatra -e'set :public_folder, "."; set :port, 8000'
+</pre>
+
+<p>
+<i>No directory listings.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0742e47" class="outline-3">
+<h3 id="org0742e47"><span class="section-number-3">43.8</span> Perl</h3>
+<div class="outline-text-3" id="text-43-8">
+<pre class="example">
+       $ cpan HTTP::Server::Brick   # install dependency
+       $ perl -MHTTP::Server::Brick -e '$s=HTTP::Server::Brick-&gt;new(port=&gt;8000); $s-&gt;mount("/"=&gt;{path=&gt;"."}); $s-&gt;start'
+</pre>
+
+<p>
+Credit: <a href="http://www.perlmonks.org/?node_id=865239">Anonymous Monk</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9f0cceb" class="outline-3">
+<h3 id="org9f0cceb"><span class="section-number-3">43.9</span> Plack (Perl)</h3>
+<div class="outline-text-3" id="text-43-9">
+<pre class="example">
+       $ cpan Plack   # install dependency
+       $ plackup -MPlack::App::Directory -e 'Plack::App::Directory-&gt;new(root=&gt;".");' -p 8000
+</pre>
+
+<p>
+Credit:
+<a href="http://advent.plackperl.org/2009/12/day-5-run-a-static-file-web-server-with-plack.html">miyagawa</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5809ddd" class="outline-3">
+<h3 id="org5809ddd"><span class="section-number-3">43.10</span> Mojolicious (Perl)</h3>
+<div class="outline-text-3" id="text-43-10">
+<pre class="example">
+       $ cpan Mojolicious::Lite   # install dependency
+       $ perl -MMojolicious::Lite -MCwd -e 'app-&gt;static-&gt;paths-&gt;[0]=getcwd; app-&gt;start' daemon -l http://*:8000
+</pre>
+
+<p>
+<i>No directory listings.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3edec2e" class="outline-3">
+<h3 id="org3edec2e"><span class="section-number-3">43.11</span> http-server (Node.js)</h3>
+<div class="outline-text-3" id="text-43-11">
+<pre class="example">
+       $ npm install -g http-server   # install dependency
+       $ http-server -p 8000
+</pre>
+
+<p>
+/Note: This server does funky things with relative paths. For example,
+if you have a file <code>/tests/index.html</code>, it will load <code>index.html</code> if you
+go to <code>/test</code>, but will treat relative paths as if they were coming from
+<code>/</code>./
+</p>
+</div>
+</div>
+
+<div id="outline-container-org287afa7" class="outline-3">
+<h3 id="org287afa7"><span class="section-number-3">43.12</span> node-static (Node.js)</h3>
+<div class="outline-text-3" id="text-43-12">
+<pre class="example">
+       $ npm install -g node-static   # install dependency
+       $ static -p 8000
+</pre>
+
+<p>
+<i>No directory listings.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org550b21d" class="outline-3">
+<h3 id="org550b21d"><span class="section-number-3">43.13</span> PHP (&gt;= 5.4)</h3>
+<div class="outline-text-3" id="text-43-13">
+<pre class="example">
+       $ php -S 127.0.0.1:8000
+</pre>
+
+<p>
+Credit:
+<a href="http://www.reddit.com/r/webdev/comments/1fs45z/list_of_ad_hoc_http_server_oneliners/cad9ew3">/u/prawnsalad</a>
+and
+<a href="https://gist.github.com/willurd/5720255#comment-841131">MattLicense</a>
+</p>
+
+<p>
+<i>No directory listings.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7def7d7" class="outline-3">
+<h3 id="org7def7d7"><span class="section-number-3">43.14</span> Erlang</h3>
+<div class="outline-text-3" id="text-43-14">
+<pre class="example">
+       $ erl -s inets -eval 'inets:start(httpd,[{server_name,"NAME"},{document_root, "."},{server_root, "."},{port, 8000},{mime_types,[{"html","text/html"},{"htm","text/html"},{"js","text/javascript"},{"css","text/css"},{"gif","image/gif"},{"jpg","image/jpeg"},{"jpeg","image/jpeg"},{"png","image/png"}]}]).'
+</pre>
+
+<p>
+Credit:
+<a href="https://gist.github.com/willurd/5720255/#comment-841166">nivertech</a>
+(with the addition of some basic mime types)
+</p>
+
+<p>
+<i>No directory listings.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb64b7ad" class="outline-3">
+<h3 id="orgb64b7ad"><span class="section-number-3">43.15</span> busybox httpd</h3>
+<div class="outline-text-3" id="text-43-15">
+<pre class="example">
+       $ busybox httpd -f -p 8000
+</pre>
+
+<p>
+Credit: <a href="https://gist.github.com/willurd/5720255#comment-841915">lvm</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdfe8bcc" class="outline-3">
+<h3 id="orgdfe8bcc"><span class="section-number-3">43.16</span> webfs</h3>
+<div class="outline-text-3" id="text-43-16">
+<pre class="example">
+       $ webfsd -F -p 8000
+</pre>
+
+<p>
+Depends on <a href="http://linux.bytesex.org/misc/webfs.html">webfs</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org05a5492" class="outline-3">
+<h3 id="org05a5492"><span class="section-number-3">43.17</span> IIS Express</h3>
+<div class="outline-text-3" id="text-43-17">
+<pre class="example">
+       C:\&gt; "C:\Program Files (x86)\IIS Express\iisexpress.exe" /path:C:\MyWeb /port:8000
+</pre>
+
+<p>
+Depends on
+<a href="http://www.iis.net/learn/extensions/introduction-to-iis-express/iis-express-overview">IIS
+Express</a>.
+</p>
+
+<p>
+Credit:
+<a href="http://www.reddit.com/r/webdev/comments/1fs45z/list_of_ad_hoc_http_server_oneliners/cada8no">/u/fjantomen</a>
+</p>
+
+<p>
+<i>No directory listings. <code>/path</code> must be an absolute path.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdea63a6" class="outline-3">
+<h3 id="orgdea63a6"><span class="section-number-3">43.18</span> Meta</h3>
+<div class="outline-text-3" id="text-43-18">
+<p>
+If you have any suggestions, drop them in the comments below or on the
+reddit discussion. To get on this list, a solution must:
+</p>
+
+<ol class="org-ol">
+<li>serve static files using your current directory (or a specified
+directory) as the server root,</li>
+<li>be able to be run with a single, one line command (dependencies are
+fine if they're a one-time thing),</li>
+<li>serve basic file types (html, css, js, images) with proper mime
+types,</li>
+<li>require no configuration (from files or otherwise) beyond the command
+itself (no framework-specific servers, etc)</li>
+<li>must run, or have a mode where it can run, in the foreground (i.e. no
+daemons)</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org297e0c9" class="outline-2">
+<h2 id="org297e0c9"><span class="section-number-2">44</span> ruby gem使用国内源</h2>
+<div class="outline-text-2" id="text-44">
+<pre class="example">
+    $ gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
+    $ gem sources -l
+    https://gems.ruby-china.org
+    # 确保只有 gems.ruby-china.org
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8866b26" class="outline-2">
+<h2 id="org8866b26"><span class="section-number-2">45</span> 修改linux的改键绑定</h2>
+<div class="outline-text-2" id="text-45">
+<ul class="org-ul">
+<li>console下，用showkeys查看键值，用dumpkey来查看当前的绑定（可以直接重
+定向到一个文件peng.kmap），然后一定保留peng.kmap的第一行。其他都可以
+删除。按照dumpkey的输出来定制自己的键位就可以。最后用loadkey来加载自
+己的peng.kmap就好。例子：</li>
+</ul>
+<pre class="example">
+keymaps 0-2,4-6,8-9,12
+keycode  56 = Alt             
+keycode 100 = Alt
+keycode  58 = Control
+keycode 104 = Caps_Lock
+</pre>
+<p>
+用loadkey加载一下就OK。
+</p>
+
+<ul class="org-ul">
+<li><p>
+X-windows下：用xev来查看键值和对应的名字。用xmodmap来查看当前和修改
+所有。（在fedora在用xev成功，ubuntu下没测）。有两个层次。需要都修改。
+例子：
+</p>
+
+<pre class="example">
+  clear lock
+  remove mod1 = Alt_L
+  remove mod4 = Super_R
+   
+  add control = Alt_L
+  add control = Super_R
+  add control = Menu
+  add control = Caps_Lock
+  add lock = Insert
+   
+   
+  keycode 64 = Control_L
+  keycode 134 = Control_L
+  keycode 135 = Control_L
+  keycode 66 = Control_L
+  keycode 118 = Control_L
+</pre>
+
+<p>
+用xmodmap加载。
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb31f113" class="outline-2">
+<h2 id="orgb31f113"><span class="section-number-2">46</span> 分区设定</h2>
+<div class="outline-text-2" id="text-46">
+</div>
+<div id="outline-container-org2315099" class="outline-3">
+<h3 id="org2315099"><span class="section-number-3">46.1</span> 给新分区设置label</h3>
+<div class="outline-text-3" id="text-46-1">
+<p>
+ext4:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">mkfs.ext4 -L label /dev/xxx  
+</pre>
+</div>
+
+<p>
+fat：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">fatlabel device [label]
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge502aa0" class="outline-3">
+<h3 id="orge502aa0"><span class="section-number-3">46.2</span> 格式化为 <code>fat32</code></h3>
+<div class="outline-text-3" id="text-46-2">
+<div class="org-src-container">
+<pre class="src src-sh">sudo mkfs.vfat -F 32 /dev/sdXn
+</pre>
+</div>
+
+<p>
+<a href="https://unix.stackexchange.com/questions/263606/why-the-v-in-mkfs-vfat">command line - Why the "v" in mkfs.vfat? - Unix &amp; Linux Stack Exchange</a>
+</p>
+<pre class="example">
+FAT is a family of filesystems, comprising at least, in chronological order:
+
+    FAT12, a filesystem used on floppies since the late 1980s, in particular by MS-DOS;
+    FAT16, a small modification of FAT12 supporting larger media, introduced to support hard disks;
+    vFAT, which is backward compatible with FAT, but allows files to have longer names which only vFAT-aware applications running on vFAT-aware operating systems can see;
+    FAT32, another modification of FAT16 designed to support larger disk sizes. In practice FAT32 is almost always used with vFAT long file name support, but technically 16/32 and long-file-names-yes/no are independent.
+
+Because those filesystems are very similar, they're usually handled by the same drivers and tools. mkfs.vfat and mkfs.fat are the same tool; an empty FAT16 filesystem and an empty vFAT filesystem look exactly the same, so mkfs doesn't need to distinguish between them. (You can think of FAT16 and vFAT as two different ways of seeing the same filesystem rather than two separate filesystem formats.)
+</pre>
+</div>
+</div>
+<div id="outline-container-orga4a00c6" class="outline-3">
+<h3 id="orga4a00c6"><span class="section-number-3">46.3</span> change ntfs label</h3>
+<div class="outline-text-3" id="text-46-3">
+<p>
+<code>ntfslabel</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org9f45813" class="outline-3">
+<h3 id="org9f45813"><span class="section-number-3">46.4</span> <span class="todo TODO">TODO</span> change ext label</h3>
+</div>
+</div>
+<div id="outline-container-orgcdb3490" class="outline-2">
+<h2 id="orgcdb3490"><span class="section-number-2">47</span> rsync不同步某些文件</h2>
+<div class="outline-text-2" id="text-47">
+<p>
+有些编译出来的 <code>.o</code> 文件等我不想同步。可以使用rsync的 <code>--exclude</code> 选
+项。如果有多个或多种文件不想同步，可以使用rsync的 <code>--exclude-from</code>
+选项来指定一个文件。在该文件指定不想同步的内容即可。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">rsync -avz --exclude <span style="color: #ff4ea3;">"*.o"</span> from to  
+rsync -avz --exclude-from <span style="color: #ff4ea3;">"exclude-list-file.txt"</span> from to  
+</pre>
+</div>
+
+<p>
+<code>exclude-list-file.txt</code> 可以长这样：
+</p>
+<pre class="example">
+  *.o
+  *.so
+  *.la
+</pre>
+
+<p>
+最后找到这种办法：
+</p>
+<pre class="example">
+You can use git ls-files to build the list of files excluded by the repository's .gitignore files. https://git-scm.com/docs/git-ls-files
+
+Options:
+
+    --exclude-standard Consider all .gitignore files.
+    -o Don't ignore unstaged changes.
+    -i Only output ignored files.
+    --directory Only output the directory path if the entire directory is ignored.
+
+The only thing I left to ignore was .git.
+
+# 这一条命令其实是有问题的
+rsync -azP --exclude=.git --exclude=`git -C &lt;SRC&gt; ls-files --exclude-standard -oi
+
+# 下面这条命令才可以
+this doesn't work. it excludes the first file from the git subcommand and then treats the rest as part of the SRC list. this works: rsync -azP --exclude-from="$(git -C SRC ls-files --exclude-standard -oi --directory &gt; /tmp/excludes; echo /tmp/excludes)" SRC DEST
+</pre>
+
+<p>
+于是我参考了它写了我的脚本：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #6c6c6c; font-style: italic;">#</span><span style="color: #6c6c6c; font-style: italic;">!/bin/</span><span style="color: #a1db00;">bash</span>
+
+<span style="color: #ff8700;">SRC</span>=<span style="color: #ff4ea3;">"/home/pengpengxp/src/fhos/"</span>
+<span style="color: #ff8700;">DES</span>=<span style="color: #ff4ea3;">"cdyq-pc-p:/home/pengpengxp/fhos/"</span>
+<span style="color: #ff8700;">TEMPFILE</span>=<span style="color: #ff4ea3;">"/tmp/pengrsynctemp"</span>
+
+rsync -azP --exclude=.git --exclude-from=$(git -C ${<span style="color: #ff8700;">SRC</span>} ls-files --exclude-standard -oi --directory &gt; ${<span style="color: #ff8700;">TEMPFILE</span>};<span style="color: #d18aff;">echo</span> ${<span style="color: #ff8700;">TEMPFILE</span>}) ${<span style="color: #ff8700;">SRC</span>} ${<span style="color: #ff8700;">DES</span>}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcee0117" class="outline-2">
+<h2 id="orgcee0117"><span class="section-number-2">48</span> wmctrl来控制窗口</h2>
+<div class="outline-text-2" id="text-48">
+<p>
+ubuntu 16.04中可以直接使用apt来安装：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    sudo apt-get install wmctrl
+</pre>
+</div>
+
+<p>
+打开了emacs后，可以直接使用下面的命令来激活emacs，firefox，terminal：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">    wmctrl -a emacs
+    wmctrl -a firefox
+    wmctrl -a terminal
+</pre>
+</div>
+
+<p>
+然后在对应的键盘设置中把对应的shell-command绑定到按键上就可以了。
+</p>
+</div>
+</div>
+<div id="outline-container-org6b3e293" class="outline-2">
+<h2 id="org6b3e293"><span class="section-number-2">49</span> irony-mode和rtags等等都需要 <code>compile_commands.json</code> 文件</h2>
+<div class="outline-text-2" id="text-49">
+<p>
+使用 <code>bear make</code> 就可以了。有时只需要得到这个文件，可以忽略所有的
+warning。加入 <code>-w</code> 选项就可以了。 
+</p>
+<pre class="example">
+bear make  CFLAGS+=-w
+</pre>
+
+<p>
+cmake也可以生成 <code>compile_commands.json</code> 文件，如下做就可以啦：
+</p>
+<pre class="example">
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 /path/to/src
+</pre>
+</div>
+</div>
+<div id="outline-container-org118cf0c" class="outline-2">
+<h2 id="org118cf0c"><span class="section-number-2">50</span> lunar，ccal命令行下的日历</h2>
+<div class="outline-text-2" id="text-50">
+<p>
+查一天的详情：
+lunar 2018 2 15
+</p>
+
+
+<p>
+ccal可能更好用一点：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ccal
+</pre>
+</div>
+
+<p>
+更好地显示中文：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ccal -b -u
+</pre>
+</div>
+
+<p>
+查2018年
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ccal -b -u 2018
+</pre>
+</div>
+
+<p>
+查2018年2月
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ccal -b -u 2 2018
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0e69a2d" class="outline-2">
+<h2 id="org0e69a2d"><span class="section-number-2">51</span> 不重启也不使用udev来修改系统中网卡的名字</h2>
+<div class="outline-text-2" id="text-51">
+<div class="org-src-container">
+<pre class="src src-sh">ifconfig peth0 down  
+ip link set peth0 name eth0  
+ifconfig eth0 up  
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3180791" class="outline-2">
+<h2 id="org3180791"><span class="section-number-2">52</span> 打开coredump选项，debug的时候比较方便</h2>
+<div class="outline-text-2" id="text-52">
+<p>
+这样就会产生coredump文件啦：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #d18aff;">ulimit</span> -c unlimited  
+</pre>
+</div>
+<p>
+可以这样查询一下配置成功没有：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #d18aff;">ulimit</span> -a  
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6193120" class="outline-2">
+<h2 id="org6193120"><span class="section-number-2">53</span> ssh不用每次都添加到known_hosts</h2>
+<div class="outline-text-2" id="text-53">
+<p>
+有时debug，有些设置一直都在重启，不需要每次都加进去。这样写ssh的配置：
+</p>
+<div class="org-src-container">
+<pre class="src src-conf-space"><span style="color: #ff8700;">Host</span> switch-free
+        <span style="color: #ff8700;">Hostname</span> 10.0.0.69
+        <span style="color: #ff8700;">UserKnownHostsFile</span> /dev/null
+        <span style="color: #ff8700;">StrictHostKeyChecking</span> no
+        <span style="color: #ff8700;">User</span> root
+        <span style="color: #ff8700;">Port</span> 22
+</pre>
+</div>
+
+<p>
+<code>UserKnownHostsFile</code> 是不加入 <code>~/.ssh/known_hosts</code> 文件，
+<code>StrictHostKeyChecking</code> 是不用每次都输 <code>yes or no</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-orgeafc1bd" class="outline-2">
+<h2 id="orgeafc1bd"><span class="section-number-2">54</span> aria2一个命令行下载工具</h2>
+<div class="outline-text-2" id="text-54">
+<pre class="example">
+Download from WEB:
+
+$ aria2c http://example.org/mylinux.iso
+
+Download from 2 sources:
+
+$ aria2c http://a/f.iso ftp://b/f.iso
+
+Download using 2 connections per host:
+
+$ aria2c -x2 http://a/f.iso
+
+BitTorrent:
+
+$ aria2c http://example.org/mylinux.torrent
+
+BitTorrent Magnet URI:
+
+$ aria2c 'magnet:?xt=urn:btih:248D0A1CD08284299DE78D5C1ED359BB46717D8C'
+
+Metalink:
+
+$ aria2c http://example.org/mylinux.metalink
+
+Download URIs found in text file:
+
+$ aria2c -i uris.txt
+</pre>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: pengpengxp</p>
+<p class="date">Created: 2018-10-01 Mon 21:36</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

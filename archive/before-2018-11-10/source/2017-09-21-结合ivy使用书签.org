@@ -1,0 +1,91 @@
+#+AUTHOR: Peng Xie
+#+EMAIL: pengpengxpplay@gmail.com
+#+SETUPFILE: theme.setup
+#+OPTIONS: ^:{}
+#+TITLE: 2017-09-21-结合ivy使用书签
+
+
+使用浏览器书签时，有时候太多了，找起来很麻烦。最近我开始使用emacs-w3m
+来存书签。默认保存到 =~/.w3m/bookmark.html= 文件中。
+
+然后我尝试了 [[https://github.com/emacs-helm/helm/blob/master/helm-bookmark.el][helm-bookmarks]] ，它可以使用helm来帮助选择书签。
+
+但我是 =ivy= 用户，平时少有使用helm。还有一个问题是我的书签中有很多中
+文标题，如果需要选择中文标题的书签时，还需要切换输入法。
+
+针对中文标题这个问题，由于之前我 [[https://github.com/pengpengxp/swiper/wiki/ivy-support-chinese-pinyin][hack]] 过一下ivy，使它可以支持拼音首字
+母搜索，可以参考一下 [[https://raw.githubusercontent.com/pengpengxp/.emacs.d/ubuntu16.04/lisp/init-ivy.el][我的配置]] 。所以我只需要使用ivy帮助我选择书签就可
+以了。
+
+首先需要解析我的书签文件，使用 =libxml-parse-html-region= 可以解析文件，
+返回一个 =DOM object= 。还需要 [[https://github.com/pengpengxp/.emacs.d/blob/ubuntu16.04/site-lisp/dom.el][dom.el]] 来解析 =DOM object= 。不过据说
+=Emacs 25= 已经内置了 =dom.el= 了。如果使用 =Emacs 24= 的同学可能需要
+自行下载一下。
+
+思路很简单，把所有的 =a= 标签全部解析出来，做出来一个 =((name1 url1)
+(name2 url2) ...)= 这样格式的列表。使用 =ivy-read= 来选择一个 =name=
+，最后根据 =name= 找到对应的 =url= 。
+
+代码如下：
+#+BEGIN_SRC elisp
+  ;;; use `ivy' to use w3m-bookmarks
+  (require 'dom)
+  ;;; where your bookmark file located
+  (setq peng-bookmark-file "~/.w3m/bookmark.html")
+
+  (defun peng-ivy-get-bookmarks ()
+    "use `ivy-read' to select bookmark and return its url
+  "
+    (let* ((dom (with-temp-buffer
+                  (insert-file-contents peng-bookmark-file)
+                  (libxml-parse-html-region (point-min)
+                                            (point-max))))
+           (a (dom-by-tag dom 'a))
+           (mylist (mapcar 'peng-parse-dom-tag-to-personal-format a))
+           (name (ivy-read "Jump to bookmarks:" (mapcar 'car mylist)))
+           ;; todo: I need to find `name' in mylist, if find, break the
+           ;; loop. But now, I just use `mapcar' to deal with every
+           ;; element in mylist and get `final-result' by removing all
+           ;; nil element in the list `result'. It's very ugly code!
+           (result (mapcar #'(lambda (data)
+                               (if (string= (car data)
+                                            name)
+                                   (cdr data)
+                                 nil))
+                           mylist))
+           (final-result (caar (remove nil result))))
+      final-result))
+
+  (defun peng-parse-dom-tag-to-personal-format (dom)
+    "parse a tag to `(name url) format'"
+    (let ((url (dom-attr dom 'href))
+          (name (dom-text dom)))
+      (list name url)))
+#+END_SRC
+
+最后，写几个 =interactive= 的函数来选择用不同的浏览器打开：
+#+BEGIN_SRC elisp
+  (defun peng-bookmarks-firefox ()
+    (interactive)
+    (let ((url (peng-ivy-get-bookmarks)))
+      (browse-url-firefox url)))
+
+  (defun peng-bookmarks-chrome ()
+    (interactive)
+    (let ((url (peng-ivy-get-bookmarks)))
+      (browse-url-chromium url)))
+
+  (defun peng-bookmarks-w3m ()
+    (interactive)
+    (let ((url (peng-ivy-get-bookmarks)))
+      (w3m-goto-url-new-session url)))
+#+END_SRC
+
+在函数 =peng-ivy-get-bookmarks= 中，得到标题名 =title= 后，从 =((name1
+url1) (name2 url2) ...)= 列表中找对应的url时，我写得很丑：用map返回一
+个 =(nil nil (URL) nil ...)= 这样的列表，然后又用 =remove= 把所有的
+=nil= 去掉。最后剩下的就是需要的 =url= 。其实应该是循环 =mylist= ，找
+到对应的 =name= 后就退出的。但我不知道怎么写。至少现在是可以工作了。
+
+最后，我尝试了把我 =firefox= 的书签导出到html中，使用上面的函数也可以
+工作。只需要把 =peng-bookmark-file= 改成对应的html文件就好。

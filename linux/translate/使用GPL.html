@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../../css/indexlayout.css" />
+    <script defer src="../../js/main.js"></script>
+
+    <title>使用GPL</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <div w3-include-html="学习GNU开发工具链_index.html"></div>
+      </div>
+
+      <div class="article">
+        <h2>使用GPL</h2>
+        <p>通用公共许可证（GPL）是应用程序应当属于公众的法律实施。
+          这意味着公众可以自由使用它，自由修改并重发分发它。
+          这也意味着没有人可以从公众手中窃取它，并在它的基础上创建一个不自由的派生软件。
+          这和公共领域不同，在公共领域，任何人都可以参与工作，进行一些更改，在其上发布版本声明，禁止公众在没有专有许可的情况下使用这些作品。
+          从这种意义上讲，作品由公众所有的这种想法通常被称为copyleft。</p>
+
+        <p>不幸的是，我们的法律系统并没有正确认识到这一点。
+          每件作品都必须要有一个所有者，并且该人或者实体是唯一个能执行版权的人。
+          所以，如果一个软件根据GPL进行分发时，根据它属于公众的精神，只有名义上的“所有者”才有权起诉使用这些软件来创建私有产品的囤积者。
+          不幸的是，法律并没有打这项权利扩展到公众。
+          尽管有这些缺点，GPL已经被证明是分发自由软件的一种非常有效的方式了。
+          几乎所有GNU系统的组件都是在GPL下分妇的。</p>
+
+        <p>为你的程序应用GPL，只需要做下面几件事情：</p>
+
+        <ol>
+          <li>在源代码最顶层目录的COPYING文件中附上GNU通用公共许可证的副本。</li>
+          <li>在每个你想被GPL包含的文件中包含一个法律声明，表明GPL涵盖了该文件。
+            构成源代码的所有文件都必须包含此声明，包括Makefile.am 、configure.in以及shell脚本等。
+            法律声明应该像下面这样：
+            <pre class="code">Copyright (C) (years) (Your Name) <your@email.address>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</pre>
+
+            如果你把你的版本赋与某组织，比如自由软件基金会，你应该像这样制做声明：
+              <pre class="code">Copyright (C) (years) Free Software Foundation
+(your name) <your@email.address> (initial year)
+etc...</pre>
+
+            这个法律声明类似于子程序。
+            如果调用它，就可以调用GNU通用许可证的全文，该文件过于冗长，无法包括在每个源文件中。
+            当你看到'year'的地方，你需要列出你实际发布的版本的所有年份，包括当前版本的前面所有版本。
+            这个列表应该是你的版本完成的时间，而不是发布的时间。
+            比如，你在1997年12月31号完成了这个版本，在1998年1月1号发布这个版本，你需要包括1997年，而不是1998年。
+            这个规则很复杂，但它受国际版本法的约束。
+
+            一些开发者不愿意在每个文件中都加入正确的法律声明，因为他们不想打字。
+              但是，只是简单地写上“本文件遵循GPL版本”是不够的。
+              必须有一个精确的声明，且必须包含整个样板文本才行。
+              幸运的是，你可以让Emacs来帮你插入版本信息。
+              具体请参阅 <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Inserting-copyright-notices-with-Emacs" data-accessed="2018-12-19">Inserting-copyright-notices-with-Emacs</a> 。
+          </li>
+
+          <li>
+            使用AUHHOR文件来记录谁做了什么事情。具体请参阅 <a href="维护文档文件.html">维护文档文件</a>。
+          </li>
+
+          <li>
+            如果你修改了其它开发者处于GPL下的文件，请确保遵循GPL的第2部分。
+            因此，你需要放入声明，说明你修改了文件以及修改文件的时间。
+            此外，你的程序也应该宣传它是自由软件的事实，没有保证，它可以在GPL的条件下被重新分发。
+            标准做法应该是，让你的程序在--version参数的输出中打印该声明。
+          </li>
+
+          <li>最后，写文档来帮助别人使用或改进你的程序。
+            一个没有文档的自由软件不是真正完整的。
+            为了让用户来更新文档以反映他们为该软件所做的修改，还必须让文档也“自由”。
+            但是，著作问题和软件问题还不一样。
+            请参阅
+            <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Why-free-software-needs-free-documentation" data-accessed="2018-12-19">Why-free-software-needs-free-documentation</a> 对于这个问题的讨论。
+            参阅 <a class="sorc" href="http://autotoolset.sourceforge.net/tutorial.html#Maintaining-Documentation" data-accessed="2018-12-19">Maintaining-Documentation</a> 介绍如何为你的程序写文档的技术性问题。 </li>
+
+        </ol>
+
+        <p></p>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

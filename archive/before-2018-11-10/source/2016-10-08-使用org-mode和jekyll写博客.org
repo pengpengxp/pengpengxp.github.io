@@ -1,0 +1,268 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: content
+#+STARTUP: align
+#+STARUP: hideblocks
+
+
+# #+STARTUP: showall indent
+# #+STARTUP: hidestars
+# #+OPTIONS: toc:nil 
+# #+BEGIN_HTML
+# ---
+# layout: post
+# title: 使用org-mode和jekyll写博客
+# excerpt: "描述本博客搭建过程"
+# modified: 2016-10-09
+# tags: [Org-mode, Jekyll, Blog]
+# categories: Tutorial
+# ---
+
+# #+END_HTML
+
+
+# #+TOC: headlines 1 local
+
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/github.css" />
+#+SETUPFILE: theme.setup
+#+Title: 使用org-mode和jekyll写博客
+
+
+* 前言
+  我一直使用org-mode记笔记，也试用过org-publish来直接发布。不过遇到中
+  文乱码等问题，一直没有弄好。也使用过org-page来搭建。也达不到我想的效
+  果。这次折腾一下jekyll。
+
+* jekyll
+  我的理解，这是一个静态博客的生成和发布工具。它支持markdown、html等。
+  鉴于我使用org-mode的，利用的就是它对html的支持。
+
+  jekyll有点像使用latex来写文章，有各种类型的模版。写作者只需要关注文
+  章本身。最后的样式都由模版来决定。
+
+  下载好jekyll后直接就可以使用的：
+  #+BEGIN_EXAMPLE
+    /tmp ᐅ mkdir jekyll
+    /tmp ᐅ cd jekyll
+    /tmp/jekyll ᐅ jekyll new .
+    New jekyll site installed in /private/tmp/jekyll.
+    /tmp/jekyll ᐅ jekyll serve
+    WARN: Unresolved specs during Gem::Specification.reset:
+    jekyll-watch (~> 1.1)
+    WARN: Clearing out unresolved specs.
+    Please report a bug if this causes problems.
+    Configuration file: /private/tmp/jekyll/_config.yml
+    Source: /private/tmp/jekyll
+    Destination: /private/tmp/jekyll/_site
+    Incremental build: disabled. Enable with --incremental
+    Generating...
+    done in 0.395 seconds.
+    Auto-regeneration: enabled for '/private/tmp/jekyll'
+    Configuration file: /private/tmp/jekyll/_config.yml
+    Server address: http://127.0.0.1:4000/
+    Server running... press ctrl-c to stop.
+  #+END_EXAMPLE
+  
+  然后就可以在 =http://127.0.0.1:4000/= 查看效果了。
+
+  当前目录结构：
+  #+BEGIN_EXAMPLE
+    .
+    ├── Gemfile
+    ├── Gemfile.lock
+    ├── _config.yml
+    ├── _posts
+    │   └── 2016-10-08-welcome-to-jekyll.markdown
+    ├── _site
+    │   ├── Gemfile
+    │   ├── Gemfile.lock
+    │   ├── about
+    │   │   └── index.html
+    │   ├── css
+    │   │   └── main.css
+    │   ├── feed.xml
+    │   ├── index.html
+    │   └── jekyll
+    │       └── update
+    │           └── 2016
+    │               └── 10
+    │                   └── 08
+    │                       └── welcome-to-jekyll.html
+    ├── about.md
+    ├── css
+    │   └── main.scss
+    ├── feed.xml
+    └── index.html
+
+    10 directories, 15 files
+  #+END_EXAMPLE
+
+  其中 =_config.yml= 为总体配置文件， =_posts= 文件夹存放源文件，最后
+  会配置org-mode自动把所有的文章都导出到这个目录。 =_site= 就是最后生
+  成的整个静态站点。
+
+  现在先手动新建一个文件 =_posts/2016-10-08-test.html= 。 *需要注意的
+  是，文件名必须是 =XXXX-XX-XX-name=* 的形式，这是jekyll的约定。
+  #+BEGIN_EXAMPLE
+    ---
+    layout: post
+    title:  "This is test"
+    date:   2016-10-08 22:44:36 +0800
+    categories: jekyll test
+    ---
+
+    <p>This is a test for jekyll</p>
+  #+END_EXAMPLE
+
+  保存好后在根目录 =/tmp/jekyll/= 下面执行 =jekyll serve= 再次生成站点，
+  你会发现这个html中的内容已经出现了。
+
+  这时的目录结构如下：
+  #+BEGIN_EXAMPLE
+    .
+    ├── Gemfile
+    ├── Gemfile.lock
+    ├── _config.yml
+    ├── _posts
+    │   ├── 2016-10-08-test.html
+    │   └── 2016-10-08-welcome-to-jekyll.markdown
+    ├── _site
+    │   ├── Gemfile
+    │   ├── Gemfile.lock
+    │   ├── about
+    │   │   └── index.html
+    │   ├── css
+    │   │   └── main.css
+    │   ├── feed.xml
+    │   ├── index.html
+    │   └── jekyll
+    │       ├── test
+    │       │   └── 2016
+    │       │       └── 10
+    │       │           └── 08
+    │       │               └── test.html
+    │       └── update
+    │           └── 2016
+    │               └── 10
+    │                   └── 08
+    │                       └── welcome-to-jekyll.html
+    ├── about.md
+    ├── css
+    │   └── main.scss
+    ├── feed.xml
+    └── index.html
+
+    14 directories, 17 files
+  #+END_EXAMPLE
+  
+  知道了这些，就可以选择模版了。我选择的是 [[http://jekyllthemes.org/themes/Less-Or-More/][LessOrMore]] 。
+
+* Org-mode设置
+  用于发布blog的org源文件开头需要加入下面这段：
+  #+BEGIN_EXAMPLE
+    ,#+OPTIONS: toc:nil 
+    ,#+BEGIN_HTML
+    ---
+    layout: post
+    title: 使用org-mode和jekyll写博客
+    excerpt: "描述本博客搭建过程"
+    modified: 2016-10-08
+    tags: [Orgmode, Jekyll, Blog]
+    categories: Blog
+    ---
+
+    ,#+END_HTML
+
+
+    ,#+TOC: headlines 1 local
+  #+END_EXAMPLE
+  
+  如果使用markdown的话，其实只需要在文间最前面加入下面这一段就可以了。
+  这就是设置layout[fn:1:也就是我前文提到的模版]，文章标题，简介等等啦。
+  我这个模版还支持tag和categories分类等。
+  #+BEGIN_EXAMPLE
+    ---
+    layout: post
+    title: 使用org-mode和jekyll写博客
+    ---
+    
+    正文。
+  #+END_EXAMPLE
+  
+  由于我是org-mode导出到html。 =#+BEGIN_HTML= 里面的内容不会加入到最前，
+  默认前面会有目录。
+
+  =#+OPTIONS: toc:nil= 这一句是先关闭目录。然后使用 =#+BEGIN_HTML= 设
+  置layout，标题等。
+
+  =#+TOC: headlines 1 local= 再把目录加入进来。这样导出来的html，就会
+  在最前面加入我们对layout等的设置。而且目录也不会少了。
+  
+  使用org-publish来把org文件全部发布为html，新增如下配置：
+  #+BEGIN_SRC lisp
+    (setq org-publish-project-alist
+          '(
+
+            ("org-source"
+             ;; Path to your org files.
+             :base-directory "~/blog/org/"
+             :base-extension "org"
+             ;; Path to your Jekyll project. This is where your template
+             ;; reside
+             :publishing-directory "~/blog/jekyll/"
+             :recursive t
+             :publishing-function org-html-publish-to-html
+             :headline-levels 4 
+             :html-extension "html"
+             :body-only t ;; Only export section between <body> </body>
+             )))
+  #+END_SRC
+  
+  配置比较简单，对应目录修改一下就可以了。 =:body-only t= 这一句表求只
+  需要html中的body啦。其它东西都不要[fn:2:因为其它样式等等都由jekyll搞
+  定了。]。
+  
+  配置好后，使用 =org-publish= 就可以发布写好的文档了。
+
+* 发布到github
+写好org源文件，发布到jekyll的 =_posts= 目录后，就可以在jekyll根目录执
+行 =jekyll serve= 命令来在本地查看结果了。如果不想查看结果，可以直接
+=jekyll build= 重新生成一下。执行任一操作后， =_site= 目录下就是一个完
+整的静态博客了。接下来就是如何在公网上显示的问题了。
+
+github有提供pages的功能。有两种方式可以使用。
+
+比如我的用户名是 =pengpengxp= ，一种方式是使用我的账户新建一个叫
+=pengpengxp.github.io= 的仓库。把 =_site= 目录下面的内容全部push到这个
+仓库，push的分支是master。然后直接访问 =pengpengxp.github.io= 这个地址
+就可以了。
+
+第二种方法，新建一个任意名字的仓库如 =jekyll= 。把 =_site= 目录下面的
+内容全部push到这个仓库，push的分支是gh-pages[fn:3:这是github规定的。]。
+然后就可以访问 =www.github.com/pengpengxp/jekyll= 。
+
+这里我使用的是第一种，第二种方法没有试过 :)
+
+* MISC
+  写博客的时候不需要手动输入时间，可以使用下面两个函数：
+  #+BEGIN_SRC lisp
+    (defun peng-insert-blog-timestamp ()
+      "insert time of today for writing blog"
+      (interactive)
+      (insert (format-time-string "%Y-%m-%d")))
+
+
+    (defun peng-write-blog ()
+      (interactive)
+      (let ((filename (concat "~/blog/org/_posts/"
+                       (format-time-string "%Y-%m-%d-")
+                              (read-from-minibuffer "Blog title: " )
+                              ".org")))
+        (progn
+          (find-file filename)
+          (message "%s" filename)
+          )))
+  #+END_SRC
+  
+* TODO 图片
+  图片现在还没有一种优雅的解决方案。

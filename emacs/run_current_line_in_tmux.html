@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+    <script defer src="../js/main.js"></script>
+
+
+    <title>使用tmux执行Emacs中的当前行</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="emacs_blog.html">Emacs Blog</a></li>
+          <li><a href="../archive/before-2018-11-10/2017-11-30-快捷键切换应用程序.html">快捷键切换应用程序</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <div class="peng-time">
+          <time>2019-03-19</time>
+        </div>
+
+        <h1>使用tmux执行Emacs中的当前行</h1>
+        <hr>
+
+        <p><b>我认为，如果一个操作每天重复太多，就得想办法让它自动化。</b></p>
+
+        <p>我在工作的时候，常常都是一边开terminal一边开emacs。有这样一个操作每天都在重复：在Emacs中copy一行，到terminal中粘贴执行。</p>
+
+        <p>注意这个操作和在Emacs中直接执行shell是不同的。因为，很多时候这一行不是shell脚本，对我来说，可能是交换机的命令，我需要放到串口去执行。
+          也可能，terminal是登陆到remote的，这时候直接在Emacs中执行shell脚本也达不到要求。</p>
+
+        <p>因为我的terminal中一定是在运行tmux的，tmux又可以借助xsel把系统clipboard中的内容放入当前的buffer中。实现自动化的方法就变得很简单了。</p>
+
+        <ol>
+          <li>在Emacs中拷贝当前行，注意在结尾加一个回车。</li>
+          <li>调用shell把系统clipboard中的内容放入tmux的当前buffer中。这点我搞了一个shell脚本来做，该脚本就是把当前系统clipboard中的内容放入当前tmux的buffer中：
+<pre class="bash" id="shell_script"><span class="comment-delimiter">#</span><span class="comment">!/bin/</span><span class="keyword">bash</span><span class="comment">
+</span>
+xsel -ob | tmux load-buffer - ; tmux paste-buffer
+
+<span class="keyword">exit</span> 0
+</pre></li>
+          <li>如果有需要，使用wmctrl切换到对应的窗口中。</li>
+        </ol>
+
+        <p>关于最后一点，是否切换到terminal窗口，我使用行尾空格来判断（反正行尾空格基本没什么用）。
+          如果行尾有空格，才切换到terminal，否则移动到下一行。Emacs可以开启行尾空格显示：<pre class="emacs-lisp"><span class="hl-line">(</span><span class="keyword"><span class="hl-line">setq</span></span><span class="hl-line"> show-trailing-whitespace </span><span class="builtin"><span class="hl-line">t</span></span><span class="hl-line">)</span></pre></p>
+
+        <p>我是在ubuntu下，terminal使用的是 <a class="sorc" href="https://lilyterm.luna.com.tw/" data-accessed="2019-03-19">lilyterm</a> 。
+        需要安装的软件如下：</p>
+        <pre class="bash">apt-get install wmctrl xsel</pre>
+
+        <p>其中xsel可以提取系统clipboard内容，wmctrl可以用来进行窗口切换。</p>
+
+        <p>最后函数如下：</p>
+
+<pre class="emacs-lisp">(<span class="keyword">defun</span> peng-lilyterm-tmux-run-current-line ()
+  <span class="string">"Run current line in tmux.
+If line is end up with space, switch to lilyterm. Else, just move to next line in Emacs."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">let*</span> ((origin-line (<span class="function-name">thing-at-point</span> 'line))
+         (switch-to (<span class="function-name">equal</span> (s-right 1 (s-chomp (<span class="function-name">thing-at-point</span> 'line))) <span class="string">" "</span>))
+         (line (<span class="function-name">concat</span> origin-line <span class="string">"\n"</span>)))
+    (<span class="function-name">kill-new</span> line)
+
+    (<span class="function-name">start-process</span> <span class="string">"paste"</span> <span class="builtin">nil</span> <span class="string">"bash"</span> <span class="string">"/home/pengpengxp/bin/p_paste_to_tmux.sh"</span>)
+    (<span class="keyword">if</span> switch-to
+        (shell-command <span class="string">"wmctrl -xa lilyterm.Lilyterm"</span>)
+      (next-line))))
+</pre>
+
+        <p>
+
+          <ol>
+            <li>函数中的脚本文件 /home/pengpengxp/bin/p_paste_to_tmux.sh 里就是 <a href="#shell_script">上文</a> 提到的。</li>
+            <li>如果你的terminal不是lilyterm，就改一下最后的 <b>lilyterm.Lilyterm</b> 就可以了。
+              可以使用<pre class="bash">wmctrl -xl</pre>命令来查当前打开的所有的窗口。</li>
+          </ol>
+
+        </p>
+
+        <section>
+          <div>
+            <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> </b></p>
+          </div>
+        </section>
+
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+        <script>
+          var gitalk = new Gitalk({
+              clientID: '3c74db23d6478d210434',
+              clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+              repo: 'pengpengxp.github.io',
+              owner: 'pengpengxp',
+              admin: ['pengpengxp'],
+              id: 'emacs/run_current_line_in_tmux.html',
+          })
+          gitalk.render('gitalk-container')
+        </script>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>
