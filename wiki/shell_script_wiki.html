@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:47 -->
+<!-- 2019-03-25 一 17:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Shell script wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,27 +235,27 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2fedb19">1. loop</a></li>
-<li><a href="#orgdbff225">2. 老一点的shell中的loop</a></li>
-<li><a href="#orgb01901e">3. shell脚本中的判断</a>
+<li><a href="#org6d23ac9">1. loop</a></li>
+<li><a href="#org120aff3">2. 老一点的shell中的loop</a></li>
+<li><a href="#orgae48048">3. shell脚本中的判断</a>
 <ul>
-<li><a href="#orgfe431a9">3.1. 总结</a></li>
+<li><a href="#org9765979">3.1. 总结</a></li>
 </ul>
 </li>
-<li><a href="#orgfbe2090">4. shell中的判断有时候可以不用写if，直接一行搞定</a></li>
-<li><a href="#org793a50c">5. 把标准输出给多个管道做为标准输入</a></li>
-<li><a href="#org9271de6">6. shell中去掉前缀和后缀</a></li>
-<li><a href="#org00947c9">7. 数组</a></li>
-<li><a href="#org8a8a818">8. 得到脚本存放的目录</a></li>
-<li><a href="#org1f936e8">9. 脚本中使用cat输入很多内容</a></li>
-<li><a href="#org52dbcd7">10. 根据进程是否启动来作不同的处理</a></li>
-<li><a href="#orgb99e99d">11. 方便地取得传入的参数</a></li>
+<li><a href="#org5bbe7d8">4. shell中的判断有时候可以不用写if，直接一行搞定</a></li>
+<li><a href="#org4e7f139">5. 把标准输出给多个管道做为标准输入</a></li>
+<li><a href="#org468cf74">6. shell中去掉前缀和后缀</a></li>
+<li><a href="#org0e5b25a">7. 数组</a></li>
+<li><a href="#org58dd2c4">8. 得到脚本存放的目录</a></li>
+<li><a href="#org2909f82">9. 脚本中使用cat输入很多内容</a></li>
+<li><a href="#org21049af">10. 根据进程是否启动来作不同的处理</a></li>
+<li><a href="#orgcc7b9a1">11. 方便地取得传入的参数</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org2fedb19" class="outline-2">
-<h2 id="org2fedb19"><span class="section-number-2">1</span> loop</h2>
+<div id="outline-container-org6d23ac9" class="outline-2">
+<h2 id="org6d23ac9"><span class="section-number-2">1</span> loop</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 下面的例子里，第一个 <code>SERVICE_NAME</code> 是一个数组。每二个我也不知道是啥，
@@ -288,8 +288,8 @@ loop
 </div>
 </div>
 
-<div id="outline-container-orgdbff225" class="outline-2">
-<h2 id="orgdbff225"><span class="section-number-2">2</span> 老一点的shell中的loop</h2>
+<div id="outline-container-org120aff3" class="outline-2">
+<h2 id="org120aff3"><span class="section-number-2">2</span> 老一点的shell中的loop</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 使用busybox时，需要这样做：
@@ -301,8 +301,8 @@ loop
 </div>
 </div>
 
-<div id="outline-container-orgb01901e" class="outline-2">
-<h2 id="orgb01901e"><span class="section-number-2">3</span> shell脚本中的判断</h2>
+<div id="outline-container-orgae48048" class="outline-2">
+<h2 id="orgae48048"><span class="section-number-2">3</span> shell脚本中的判断</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 下面的版本应该选择哪一个：
@@ -520,8 +520,8 @@ loop
     Note: The double bracket syntax [[...]] and the double parentheses syntax ((...)) are not supported by all shells.
 </pre>
 </div>
-<div id="outline-container-orgfe431a9" class="outline-3">
-<h3 id="orgfe431a9"><span class="section-number-3">3.1</span> 总结</h3>
+<div id="outline-container-org9765979" class="outline-3">
+<h3 id="org9765979"><span class="section-number-3">3.1</span> 总结</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 以string的方式来对比的话，下面几种方式是相同的，一个中括号和两个中
@@ -603,8 +603,8 @@ loop
 </div>
 </div>
 
-<div id="outline-container-orgfbe2090" class="outline-2">
-<h2 id="orgfbe2090"><span class="section-number-2">4</span> shell中的判断有时候可以不用写if，直接一行搞定</h2>
+<div id="outline-container-org5bbe7d8" class="outline-2">
+<h2 id="org5bbe7d8"><span class="section-number-2">4</span> shell中的判断有时候可以不用写if，直接一行搞定</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 判断是否是file还是dir
@@ -617,8 +617,8 @@ loop
 </div>
 </div>
 
-<div id="outline-container-org793a50c" class="outline-2">
-<h2 id="org793a50c"><span class="section-number-2">5</span> 把标准输出给多个管道做为标准输入</h2>
+<div id="outline-container-org4e7f139" class="outline-2">
+<h2 id="org4e7f139"><span class="section-number-2">5</span> 把标准输出给多个管道做为标准输入</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 zsh下可以这样：
@@ -631,8 +631,8 @@ zsh下可以这样：
 </div>
 </div>
 
-<div id="outline-container-org9271de6" class="outline-2">
-<h2 id="org9271de6"><span class="section-number-2">6</span> shell中去掉前缀和后缀</h2>
+<div id="outline-container-org468cf74" class="outline-2">
+<h2 id="org468cf74"><span class="section-number-2">6</span> shell中去掉前缀和后缀</h2>
 <div class="outline-text-2" id="text-6">
 <div class="org-src-container">
 <pre class="src src-sh">    <span style="color: #8fbc8f;">foo</span>=/Users/pengpengxp/Library/Application<span style="color: #ffa500;">\ </span>Support/Karabiner/private.xml
@@ -648,8 +648,8 @@ zsh下可以这样：
 </div>
 </div>
 
-<div id="outline-container-org00947c9" class="outline-2">
-<h2 id="org00947c9"><span class="section-number-2">7</span> 数组</h2>
+<div id="outline-container-org0e5b25a" class="outline-2">
+<h2 id="org0e5b25a"><span class="section-number-2">7</span> 数组</h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-sh">    <span style="color: #8fbc8f;">FILES</span>=(
@@ -715,8 +715,8 @@ zsh下可以这样：
 </div>
 </div>
 
-<div id="outline-container-org8a8a818" class="outline-2">
-<h2 id="org8a8a818"><span class="section-number-2">8</span> 得到脚本存放的目录</h2>
+<div id="outline-container-org58dd2c4" class="outline-2">
+<h2 id="org58dd2c4"><span class="section-number-2">8</span> 得到脚本存放的目录</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 脚本目录加入 <code>PATH</code> 变量后，可以在任何地方运行脚本。那么怎么得到脚本
@@ -732,8 +732,8 @@ zsh下可以这样：
 </div>
 </div>
 
-<div id="outline-container-org1f936e8" class="outline-2">
-<h2 id="org1f936e8"><span class="section-number-2">9</span> 脚本中使用cat输入很多内容</h2>
+<div id="outline-container-org2909f82" class="outline-2">
+<h2 id="org2909f82"><span class="section-number-2">9</span> 脚本中使用cat输入很多内容</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 下面这样的 <code>EOF</code> 可以换为其它，只要两个对应得上就可以。
@@ -747,8 +747,8 @@ zsh下可以这样：
 </div>
 </div>
 
-<div id="outline-container-org52dbcd7" class="outline-2">
-<h2 id="org52dbcd7"><span class="section-number-2">10</span> 根据进程是否启动来作不同的处理</h2>
+<div id="outline-container-org21049af" class="outline-2">
+<h2 id="org21049af"><span class="section-number-2">10</span> 根据进程是否启动来作不同的处理</h2>
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">!/bin/</span><span style="color: PaleYellow;">bash</span>
@@ -779,8 +779,8 @@ pgrep <span style="color: #ffa500;">"^rdm$"</span> || <span style="color: #b0c4d
 </div>
 </div>
 
-<div id="outline-container-orgb99e99d" class="outline-2">
-<h2 id="orgb99e99d"><span class="section-number-2">11</span> 方便地取得传入的参数</h2>
+<div id="outline-container-orgcc7b9a1" class="outline-2">
+<h2 id="orgcc7b9a1"><span class="section-number-2">11</span> 方便地取得传入的参数</h2>
 <div class="outline-text-2" id="text-11">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #8fbc8f;">option</span>=${<span style="color: #8fbc8f;">1</span>:-<span style="color: #ffa500;">"start"</span>}
@@ -803,7 +803,7 @@ pgrep <span style="color: #ffa500;">"^rdm$"</span> || <span style="color: #b0c4d
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:47</p>
+<p class="date">Created: 2019-03-25 一 17:50</p>
 <p class="validation"></p>
 </div>
 </body>

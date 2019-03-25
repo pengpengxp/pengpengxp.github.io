@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:37 -->
+<!-- 2019-03-25 一 17:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,150 +235,150 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org12a840a">1. <span class="done DONE">DONE</span> 使用percol配置文件管理器。</a>
+<li><a href="#orgea642c4">1. <span class="done DONE">DONE</span> 使用percol配置文件管理器。</a>
 <ul>
 <li>
 <ul>
-<li><a href="#orgf1e2ca7">1.0.1. 主要讲解在ubuntu 14.04中怎么配置：</a></li>
+<li><a href="#orgb81527c">1.0.1. 主要讲解在ubuntu 14.04中怎么配置：</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgc868468">2. 使用pgrep可以更好的找到正在运行的程序</a></li>
-<li><a href="#org3aeada0">3. 配置hostapd共享无线网络&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hostapd">hostapd</span></span></a>
+<li><a href="#org38f1db7">2. 使用pgrep可以更好的找到正在运行的程序</a></li>
+<li><a href="#org7ae791a">3. 配置hostapd共享无线网络&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hostapd">hostapd</span></span></a>
 <ul>
 <li>
 <ul>
-<li><a href="#orgd8e7623">3.0.1. 出现过的错误</a></li>
-<li><a href="#org347b162">3.0.2. <span class="todo TODO">TODO</span> 使用wpa加密方式用户名验证不能通过</a></li>
+<li><a href="#org86198c0">3.0.1. 出现过的错误</a></li>
+<li><a href="#org32a0e26">3.0.2. <span class="todo TODO">TODO</span> 使用wpa加密方式用户名验证不能通过</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgd40e1a2">4. xrandr设置linux分辨率</a></li>
-<li><a href="#org02d6912">5. ubuntu 安装virtualbox第三方增强</a></li>
-<li><a href="#orga429c0a">6. linux下显示dd命令的进度：</a></li>
-<li><a href="#org2432fa1">7. enca change file encoding&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enca">enca</span></span></a></li>
-<li><a href="#org2aca9e0">8. mosh</a></li>
-<li><a href="#org3713f1a">9. ubuntu配置开机启动</a></li>
-<li><a href="#org9554a98">10. ubuntu配置ssh</a>
+<li><a href="#org09a8c08">4. xrandr设置linux分辨率</a></li>
+<li><a href="#orgea54c48">5. ubuntu 安装virtualbox第三方增强</a></li>
+<li><a href="#orgffc64c2">6. linux下显示dd命令的进度：</a></li>
+<li><a href="#org5cd81cb">7. enca change file encoding&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enca">enca</span></span></a></li>
+<li><a href="#org6c6e9a5">8. mosh</a></li>
+<li><a href="#orgbee917f">9. ubuntu配置开机启动</a></li>
+<li><a href="#orgddc611d">10. ubuntu配置ssh</a>
 <ul>
-<li><a href="#org49f406d">10.1. 允许root登陆</a></li>
-<li><a href="#org91aaab9">10.2. ssh login慢</a></li>
-<li><a href="#orgdc2ce67">10.3. client端</a></li>
-<li><a href="#orge22d56e">10.4. 只能使用公钥来登陆</a></li>
+<li><a href="#org92d8cb8">10.1. 允许root登陆</a></li>
+<li><a href="#orgbec5f09">10.2. ssh login慢</a></li>
+<li><a href="#orgde9caf3">10.3. client端</a></li>
+<li><a href="#orgc0905c5">10.4. 只能使用公钥来登陆</a></li>
 </ul>
 </li>
-<li><a href="#orga246105">11. 在一个多网卡机器上确定哪个网卡上面插着网线</a></li>
-<li><a href="#orgba6f819">12. 给ubuntu安装boot loader（grub2）</a></li>
-<li><a href="#org5369b7e">13. ubuntu配置nic名字</a></li>
-<li><a href="#orgac3464a">14. interface设置</a></li>
-<li><a href="#org97d65bf">15. pandoc</a>
+<li><a href="#org84ab87b">11. 在一个多网卡机器上确定哪个网卡上面插着网线</a></li>
+<li><a href="#orgb5f4726">12. 给ubuntu安装boot loader（grub2）</a></li>
+<li><a href="#org9ab6c10">13. ubuntu配置nic名字</a></li>
+<li><a href="#org14f7da2">14. interface设置</a></li>
+<li><a href="#org2b20011">15. pandoc</a>
 <ul>
-<li><a href="#orgd9f1a91">15.1. 编码问题</a></li>
+<li><a href="#org07f0d93">15.1. 编码问题</a></li>
 </ul>
 </li>
-<li><a href="#org0e16104">16. lvm</a></li>
-<li><a href="#orgd469483">17. sort 来排列ip地址</a></li>
-<li><a href="#org53da98d">18. sudo不输密码</a></li>
-<li><a href="#org5bf3fb6">19. 查看cpu个数</a></li>
-<li><a href="#org532abcc">20. ssh隧道</a></li>
-<li><a href="#org254b701">21. iperf测网速</a></li>
-<li><a href="#orge75c05d">22. VirtualBox使用共享文件夹</a></li>
-<li><a href="#org44f527a">23. date命令</a>
+<li><a href="#orgffc150f">16. lvm</a></li>
+<li><a href="#org16b145a">17. sort 来排列ip地址</a></li>
+<li><a href="#org5a0e277">18. sudo不输密码</a></li>
+<li><a href="#org2c0fe66">19. 查看cpu个数</a></li>
+<li><a href="#org34f15ee">20. ssh隧道</a></li>
+<li><a href="#orgea1484a">21. iperf测网速</a></li>
+<li><a href="#orge0d34e2">22. VirtualBox使用共享文件夹</a></li>
+<li><a href="#org1ac0fc3">23. date命令</a>
 <ul>
-<li><a href="#org4f2b435">23.1. 使用date命令修改时间</a></li>
+<li><a href="#org8e86e96">23.1. 使用date命令修改时间</a></li>
 </ul>
 </li>
-<li><a href="#org214e65c">24. ps找程序</a>
+<li><a href="#org90357dc">24. ps找程序</a>
 <ul>
-<li><a href="#org150a58a">24.1. 根据pid找parrent：</a></li>
-<li><a href="#org8934cab">24.2. <span class="todo TODO">TODO</span> 根据pid找child:</a></li>
+<li><a href="#org4bbfe62">24.1. 根据pid找parrent：</a></li>
+<li><a href="#org14b5c1b">24.2. <span class="todo TODO">TODO</span> 根据pid找child:</a></li>
 </ul>
 </li>
-<li><a href="#orgd5acfb6">25. sudo不输密码</a></li>
-<li><a href="#org02c83e1">26. asscii font</a></li>
-<li><a href="#orge495fd6">27. wget</a></li>
-<li><a href="#org6d5f0fd">28. 十六进制表示说明</a></li>
-<li><a href="#org79c4c7d">29. 配置vnc4server</a></li>
-<li><a href="#orgb5c7d69">30. <span class="todo TODO">TODO</span> cp命令你真的懂吗？</a>
+<li><a href="#orgb077e81">25. sudo不输密码</a></li>
+<li><a href="#org999f551">26. asscii font</a></li>
+<li><a href="#orga166532">27. wget</a></li>
+<li><a href="#org20d8db4">28. 十六进制表示说明</a></li>
+<li><a href="#orgad37050">29. 配置vnc4server</a></li>
+<li><a href="#org4199f31">30. <span class="todo TODO">TODO</span> cp命令你真的懂吗？</a>
 <ul>
-<li><a href="#org87db268">30.1. <code>-a</code> 选项</a></li>
-<li><a href="#orgecf361f">30.2. <code>-f</code> 选项</a></li>
-<li><a href="#org166bc40">30.3. <code>-n</code> 选项</a></li>
+<li><a href="#orgf828fd1">30.1. <code>-a</code> 选项</a></li>
+<li><a href="#org7fdab14">30.2. <code>-f</code> 选项</a></li>
+<li><a href="#org57f2cb8">30.3. <code>-n</code> 选项</a></li>
 </ul>
 </li>
-<li><a href="#org767d2e6">31. <span class="todo TODO">TODO</span> <code>[0/1]</code> 特殊的文件权限</a>
+<li><a href="#org40fce71">31. <span class="todo TODO">TODO</span> <code>[0/1]</code> 特殊的文件权限</a>
 <ul>
-<li><a href="#orga857576">31.1. <code>st_uid</code></a></li>
-<li><a href="#org80fb9a2">31.2. <span class="todo TODO">TODO</span> <code>st_gid</code></a></li>
+<li><a href="#orga89b873">31.1. <code>st_uid</code></a></li>
+<li><a href="#orga02762c">31.2. <span class="todo TODO">TODO</span> <code>st_gid</code></a></li>
 </ul>
 </li>
-<li><a href="#orga3e11b8">32. ubuntu下载一个软件所有依赖的包</a></li>
-<li><a href="#orga927c52">33. 保存国内ubuntu的源</a></li>
-<li><a href="#org92867db">34. 挂载远程目录到本机</a></li>
-<li><a href="#orgddf0393">35. 可以这样查ip的详细信息</a></li>
-<li><a href="#orgcf8f600">36. <span class="todo TODO">TODO</span> ubuntu manage battery</a></li>
-<li><a href="#orgb3f4c8e">37. unzip解压乱码问题</a></li>
-<li><a href="#org4b929e9">38. grep只输出匹配的内容</a></li>
-<li><a href="#org59ef7db">39. 使用tmux&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tmux">tmux</span></span></a>
+<li><a href="#org15c0448">32. ubuntu下载一个软件所有依赖的包</a></li>
+<li><a href="#org1b02a86">33. 保存国内ubuntu的源</a></li>
+<li><a href="#org8f790f2">34. 挂载远程目录到本机</a></li>
+<li><a href="#orgf75f8a9">35. 可以这样查ip的详细信息</a></li>
+<li><a href="#org2509896">36. <span class="todo TODO">TODO</span> ubuntu manage battery</a></li>
+<li><a href="#orged63065">37. unzip解压乱码问题</a></li>
+<li><a href="#orgd13f1de">38. grep只输出匹配的内容</a></li>
+<li><a href="#orgbc2a54a">39. 使用tmux&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tmux">tmux</span></span></a>
 <ul>
-<li><a href="#orgb870c98">39.1. Mac中的配置</a></li>
-<li><a href="#org6d22255">39.2. tmux中的session</a></li>
-<li><a href="#org2b62d56">39.3. 多个pane中实现同时输入</a></li>
-<li><a href="#org6cbc0b6">39.4. copy-mode</a></li>
-<li><a href="#orge1a60be">39.5. 开启了mouse mode后如何使用鼠标选择区域来copy</a></li>
+<li><a href="#orgc89aea4">39.1. Mac中的配置</a></li>
+<li><a href="#orgb0ac953">39.2. tmux中的session</a></li>
+<li><a href="#orgd1035c4">39.3. 多个pane中实现同时输入</a></li>
+<li><a href="#org1fdae7f">39.4. copy-mode</a></li>
+<li><a href="#orgf048422">39.5. 开启了mouse mode后如何使用鼠标选择区域来copy</a></li>
 </ul>
 </li>
-<li><a href="#orgdc6fa54">40. 命令行中转换电子书格式</a></li>
-<li><a href="#orga977266">41. 命令行转换视频格式</a></li>
-<li><a href="#orgaae880e">42. 命令行网页视频下载工具you-get</a></li>
-<li><a href="#org515ea4f">43. web servers in one line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="http">http</span></span></a>
+<li><a href="#org736a4fe">40. 命令行中转换电子书格式</a></li>
+<li><a href="#orgcc35b12">41. 命令行转换视频格式</a></li>
+<li><a href="#org4365be6">42. 命令行网页视频下载工具you-get</a></li>
+<li><a href="#orgbef0d79">43. web servers in one line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="http">http</span></span></a>
 <ul>
-<li><a href="#orgbe997ae">43.1. Python 2.x</a></li>
-<li><a href="#orgccdb0ca">43.2. Python 3.x</a></li>
-<li><a href="#orgcde9a2e">43.3. Twisted (Python)</a></li>
-<li><a href="#org085378d">43.4. Ruby</a></li>
-<li><a href="#org43f5208">43.5. Ruby 1.9.2+</a></li>
-<li><a href="#org4dc8450">43.6. adsf (Ruby)</a></li>
-<li><a href="#orgd7d0d71">43.7. Sinatra (Ruby)</a></li>
-<li><a href="#org0109d66">43.8. Perl</a></li>
-<li><a href="#org472171f">43.9. Plack (Perl)</a></li>
-<li><a href="#org5922191">43.10. Mojolicious (Perl)</a></li>
-<li><a href="#orgee640d3">43.11. http-server (Node.js)</a></li>
-<li><a href="#org58cebbd">43.12. node-static (Node.js)</a></li>
-<li><a href="#org1065140">43.13. PHP (&gt;= 5.4)</a></li>
-<li><a href="#org0c9c2ef">43.14. Erlang</a></li>
-<li><a href="#org9b4a152">43.15. busybox httpd</a></li>
-<li><a href="#org2168ba2">43.16. webfs</a></li>
-<li><a href="#orga06ff40">43.17. IIS Express</a></li>
-<li><a href="#org2c3ecda">43.18. Meta</a></li>
+<li><a href="#org8dae33b">43.1. Python 2.x</a></li>
+<li><a href="#org424059b">43.2. Python 3.x</a></li>
+<li><a href="#org4dbf683">43.3. Twisted (Python)</a></li>
+<li><a href="#orgf5dcd14">43.4. Ruby</a></li>
+<li><a href="#orgf79f996">43.5. Ruby 1.9.2+</a></li>
+<li><a href="#org60840e0">43.6. adsf (Ruby)</a></li>
+<li><a href="#orgbbffd03">43.7. Sinatra (Ruby)</a></li>
+<li><a href="#org6b44d56">43.8. Perl</a></li>
+<li><a href="#org4bbf14d">43.9. Plack (Perl)</a></li>
+<li><a href="#orgb2bc29e">43.10. Mojolicious (Perl)</a></li>
+<li><a href="#orgb666fd2">43.11. http-server (Node.js)</a></li>
+<li><a href="#org358ee73">43.12. node-static (Node.js)</a></li>
+<li><a href="#org3b4c267">43.13. PHP (&gt;= 5.4)</a></li>
+<li><a href="#orge694dfa">43.14. Erlang</a></li>
+<li><a href="#orgf253313">43.15. busybox httpd</a></li>
+<li><a href="#orgade34f3">43.16. webfs</a></li>
+<li><a href="#org1148e0f">43.17. IIS Express</a></li>
+<li><a href="#org3076596">43.18. Meta</a></li>
 </ul>
 </li>
-<li><a href="#org09db91d">44. ruby gem使用国内源</a></li>
-<li><a href="#org8cfd442">45. 修改linux的改键绑定</a></li>
-<li><a href="#org45c65a0">46. 分区设定</a>
+<li><a href="#org6f3f88b">44. ruby gem使用国内源</a></li>
+<li><a href="#org508655c">45. 修改linux的改键绑定</a></li>
+<li><a href="#orgdca1ac6">46. 分区设定</a>
 <ul>
-<li><a href="#org0cc7316">46.1. 给新分区设置label</a></li>
-<li><a href="#org1c3950c">46.2. 格式化为 <code>fat32</code></a></li>
-<li><a href="#org492741c">46.3. change ntfs label</a></li>
-<li><a href="#org243f5ba">46.4. <span class="todo TODO">TODO</span> change ext label</a></li>
+<li><a href="#orga805f19">46.1. 给新分区设置label</a></li>
+<li><a href="#orgd7eb29a">46.2. 格式化为 <code>fat32</code></a></li>
+<li><a href="#org1278609">46.3. change ntfs label</a></li>
+<li><a href="#orga5bf31b">46.4. <span class="todo TODO">TODO</span> change ext label</a></li>
 </ul>
 </li>
-<li><a href="#orgb8111a9">47. rsync不同步某些文件</a></li>
-<li><a href="#orga156b51">48. wmctrl来控制窗口</a></li>
-<li><a href="#org469a56c">49. irony-mode和rtags等等都需要 <code>compile_commands.json</code> 文件</a></li>
-<li><a href="#org13c0cdc">50. lunar，ccal命令行下的日历</a></li>
-<li><a href="#org004e2b4">51. 不重启也不使用udev来修改系统中网卡的名字</a></li>
-<li><a href="#orgae9afda">52. 打开coredump选项，debug的时候比较方便</a></li>
-<li><a href="#org7dca158">53. ssh不用每次都添加到known<sub>hosts</sub></a></li>
-<li><a href="#org8cdca1a">54. aria2一个命令行下载工具</a></li>
+<li><a href="#org266870e">47. rsync不同步某些文件</a></li>
+<li><a href="#org85bc115">48. wmctrl来控制窗口</a></li>
+<li><a href="#orgee54add">49. irony-mode和rtags等等都需要 <code>compile_commands.json</code> 文件</a></li>
+<li><a href="#org8524148">50. lunar，ccal命令行下的日历</a></li>
+<li><a href="#org1d7e1a2">51. 不重启也不使用udev来修改系统中网卡的名字</a></li>
+<li><a href="#org909f9d7">52. 打开coredump选项，debug的时候比较方便</a></li>
+<li><a href="#org1d3a662">53. ssh不用每次都添加到known<sub>hosts</sub></a></li>
+<li><a href="#org5b2d921">54. aria2一个命令行下载工具</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org12a840a" class="outline-2">
-<h2 id="org12a840a"><span class="section-number-2">1</span> <span class="done DONE">DONE</span> 使用percol配置文件管理器。</h2>
+<div id="outline-container-orgea642c4" class="outline-2">
+<h2 id="orgea642c4"><span class="section-number-2">1</span> <span class="done DONE">DONE</span> 使用percol配置文件管理器。</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li>State "DONE"       from "DONE"       <span class="timestamp-wrapper"><span class="timestamp">[2014-11-09 日 17:02] </span></span> <br />
@@ -388,8 +388,8 @@ percol支持正则表达式还没有结果！！</li>
 据说这个是终极文件管理器？刚配置好开始使用。用一段时间再写。
 </p>
 </div>
-<div id="outline-container-orgf1e2ca7" class="outline-4">
-<h4 id="orgf1e2ca7"><span class="section-number-4">1.0.1</span> 主要讲解在ubuntu 14.04中怎么配置：</h4>
+<div id="outline-container-orgb81527c" class="outline-4">
+<h4 id="orgb81527c"><span class="section-number-4">1.0.1</span> 主要讲解在ubuntu 14.04中怎么配置：</h4>
 <div class="outline-text-4" id="text-1-0-1">
 <p>
 这个东西是python写的。我直接在ubuntu上使用：
@@ -506,16 +506,16 @@ ff中还调用了自己写的一个pclip函数。目的是每次filter出来的�
 </div>
 </div>
 
-<div id="outline-container-orgc868468" class="outline-2">
-<h2 id="orgc868468"><span class="section-number-2">2</span> 使用pgrep可以更好的找到正在运行的程序</h2>
+<div id="outline-container-org38f1db7" class="outline-2">
+<h2 id="org38f1db7"><span class="section-number-2">2</span> 使用pgrep可以更好的找到正在运行的程序</h2>
 <div class="outline-text-2" id="text-2">
 <pre class="example">
   pgrep -l emacs
 </pre>
 </div>
 </div>
-<div id="outline-container-org3aeada0" class="outline-2">
-<h2 id="org3aeada0"><span class="section-number-2">3</span> 配置hostapd共享无线网络&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hostapd">hostapd</span></span></h2>
+<div id="outline-container-org7ae791a" class="outline-2">
+<h2 id="org7ae791a"><span class="section-number-2">3</span> 配置hostapd共享无线网络&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hostapd">hostapd</span></span></h2>
 <div class="outline-text-2" id="text-3">
 <p>
 参考的 <a href="https://nims11.wordpress.com/2012/04/27/hostapd-the-linux-way-to-create-virtual-wifi-access-point/">这里</a> 和 <a href="https://nims11.wordpress.com/2013/05/22/using-hostapd-with-dnsmasq-to-create-virtual-wifi-access-point-in-linux/">这里</a>
@@ -636,8 +636,8 @@ hostapd的配置文件是这样的：
 然后就可以使用啦。
 </p>
 </div>
-<div id="outline-container-orgd8e7623" class="outline-4">
-<h4 id="orgd8e7623"><span class="section-number-4">3.0.1</span> 出现过的错误</h4>
+<div id="outline-container-org86198c0" class="outline-4">
+<h4 id="org86198c0"><span class="section-number-4">3.0.1</span> 出现过的错误</h4>
 <div class="outline-text-4" id="text-3-0-1">
 <p>
 使用第一种方法配置出来不能正常上网。使用第二种方法，网上说不能有太多的设备连接。我本来使用的就不多，这就OK啦。
@@ -652,8 +652,8 @@ hostapd的配置文件是这样的：
 </p>
 </div>
 </div>
-<div id="outline-container-org347b162" class="outline-4">
-<h4 id="org347b162"><span class="section-number-4">3.0.2</span> <span class="todo TODO">TODO</span> 使用wpa加密方式用户名验证不能通过</h4>
+<div id="outline-container-org32a0e26" class="outline-4">
+<h4 id="org32a0e26"><span class="section-number-4">3.0.2</span> <span class="todo TODO">TODO</span> 使用wpa加密方式用户名验证不能通过</h4>
 <div class="outline-text-4" id="text-3-0-2">
 <p>
 我直接没有要密码了。使用静态IP的方式来上。本来也就是进行一个补充的。最后hostapd的配置如下：
@@ -680,11 +680,11 @@ hostapd的配置文件是这样的：
 </div>
 </div>
 </div>
-<div id="outline-container-orgd40e1a2" class="outline-2">
-<h2 id="orgd40e1a2"><span class="section-number-2">4</span> xrandr设置linux分辨率</h2>
+<div id="outline-container-org09a8c08" class="outline-2">
+<h2 id="org09a8c08"><span class="section-number-2">4</span> xrandr设置linux分辨率</h2>
 </div>
-<div id="outline-container-org02d6912" class="outline-2">
-<h2 id="org02d6912"><span class="section-number-2">5</span> ubuntu 安装virtualbox第三方增强</h2>
+<div id="outline-container-orgea54c48" class="outline-2">
+<h2 id="orgea54c48"><span class="section-number-2">5</span> ubuntu 安装virtualbox第三方增强</h2>
 <div class="outline-text-2" id="text-5">
 <pre class="example">
      sudo apt-get install virtualbox-guest-utils
@@ -696,8 +696,8 @@ hostapd的配置文件是这样的：
 </div>
 </div>
 </div>
-<div id="outline-container-orga429c0a" class="outline-2">
-<h2 id="orga429c0a"><span class="section-number-2">6</span> linux下显示dd命令的进度：</h2>
+<div id="outline-container-orgffc64c2" class="outline-2">
+<h2 id="orgffc64c2"><span class="section-number-2">6</span> linux下显示dd命令的进度：</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 dd if=/dev/zero of=/tmp/zero.img bs=10M count=100000
@@ -734,8 +734,8 @@ while (ps auxww |grep " dd " |grep -v grep |awk '{print $2}' |while read pid; do
 </div>
 </div>
 
-<div id="outline-container-org2432fa1" class="outline-2">
-<h2 id="org2432fa1"><span class="section-number-2">7</span> enca change file encoding&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enca">enca</span></span></h2>
+<div id="outline-container-org5cd81cb" class="outline-2">
+<h2 id="org5cd81cb"><span class="section-number-2">7</span> enca change file encoding&#xa0;&#xa0;&#xa0;<span class="tag"><span class="enca">enca</span></span></h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">list supported charsets</span>
@@ -749,8 +749,8 @@ while (ps auxww |grep " dd " |grep -v grep |awk '{print $2}' |while read pid; do
 </div>
 </div>
 
-<div id="outline-container-org2aca9e0" class="outline-2">
-<h2 id="org2aca9e0"><span class="section-number-2">8</span> mosh</h2>
+<div id="outline-container-org6c6e9a5" class="outline-2">
+<h2 id="org6c6e9a5"><span class="section-number-2">8</span> mosh</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 安装完mosh后，需要配置一下防火墙，允许这些udp端口流量进来：
@@ -766,8 +766,8 @@ while (ps auxww |grep " dd " |grep -v grep |awk '{print $2}' |while read pid; do
 </div>
 </div>
 
-<div id="outline-container-org3713f1a" class="outline-2">
-<h2 id="org3713f1a"><span class="section-number-2">9</span> ubuntu配置开机启动</h2>
+<div id="outline-container-orgbee917f" class="outline-2">
+<h2 id="orgbee917f"><span class="section-number-2">9</span> ubuntu配置开机启动</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 <a href="http://blog.csdn.net/hcx25909/article/details/9068497">这里讲得还可以</a>
@@ -841,12 +841,12 @@ while (ps auxww |grep " dd " |grep -v grep |awk '{print $2}' |while read pid; do
 </div>
 </div>
 
-<div id="outline-container-org9554a98" class="outline-2">
-<h2 id="org9554a98"><span class="section-number-2">10</span> ubuntu配置ssh</h2>
+<div id="outline-container-orgddc611d" class="outline-2">
+<h2 id="orgddc611d"><span class="section-number-2">10</span> ubuntu配置ssh</h2>
 <div class="outline-text-2" id="text-10">
 </div>
-<div id="outline-container-org49f406d" class="outline-3">
-<h3 id="org49f406d"><span class="section-number-3">10.1</span> 允许root登陆</h3>
+<div id="outline-container-org92d8cb8" class="outline-3">
+<h3 id="org92d8cb8"><span class="section-number-3">10.1</span> 允许root登陆</h3>
 <div class="outline-text-3" id="text-10-1">
 <p>
 Simply adding a password for root is not enough for Ubuntu 14.04 Server.
@@ -876,8 +876,8 @@ service ssh restart
 </p>
 </div>
 </div>
-<div id="outline-container-org91aaab9" class="outline-3">
-<h3 id="org91aaab9"><span class="section-number-3">10.2</span> ssh login慢</h3>
+<div id="outline-container-orgbec5f09" class="outline-3">
+<h3 id="orgbec5f09"><span class="section-number-3">10.2</span> ssh login慢</h3>
 <div class="outline-text-3" id="text-10-2">
 <p>
 有时候ssh登陆server的时候特别慢，要等半天。可能是server的原因，也可
@@ -886,8 +886,8 @@ service ssh restart
 </p>
 </div>
 </div>
-<div id="outline-container-orgdc2ce67" class="outline-3">
-<h3 id="orgdc2ce67"><span class="section-number-3">10.3</span> client端</h3>
+<div id="outline-container-orgde9caf3" class="outline-3">
+<h3 id="orgde9caf3"><span class="section-number-3">10.3</span> client端</h3>
 <div class="outline-text-3" id="text-10-3">
 <p>
 ssh使用 <code>-p</code> 选项可以指定去连接的server的端口。scp需要使用大写 <code>-P</code>
@@ -906,8 +906,8 @@ ssh使用 <code>-p</code> 选项可以指定去连接的server的端口。scp需
 </pre>
 </div>
 </div>
-<div id="outline-container-orge22d56e" class="outline-3">
-<h3 id="orge22d56e"><span class="section-number-3">10.4</span> 只能使用公钥来登陆</h3>
+<div id="outline-container-orgc0905c5" class="outline-3">
+<h3 id="orgc0905c5"><span class="section-number-3">10.4</span> 只能使用公钥来登陆</h3>
 <div class="outline-text-3" id="text-10-4">
 <p>
 我自己的电脑在局域网里面我只希望通过我的公钥来登陆，禁止通过输入用
@@ -925,8 +925,8 @@ ssh使用 <code>-p</code> 选项可以指定去连接的server的端口。scp需
 </div>
 </div>
 
-<div id="outline-container-orga246105" class="outline-2">
-<h2 id="orga246105"><span class="section-number-2">11</span> 在一个多网卡机器上确定哪个网卡上面插着网线</h2>
+<div id="outline-container-org84ab87b" class="outline-2">
+<h2 id="org84ab87b"><span class="section-number-2">11</span> 在一个多网卡机器上确定哪个网卡上面插着网线</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 现实中有这么一个需求：在台机器有多个网卡，需要配置某个网卡为静态ip。
@@ -973,8 +973,8 @@ ubuntu下全部的网卡信息都在 <code>/sys/class/net</code> 下面。所以
 </div>
 </div>
 
-<div id="outline-container-orgba6f819" class="outline-2">
-<h2 id="orgba6f819"><span class="section-number-2">12</span> 给ubuntu安装boot loader（grub2）</h2>
+<div id="outline-container-orgb5f4726" class="outline-2">
+<h2 id="orgb5f4726"><span class="section-number-2">12</span> 给ubuntu安装boot loader（grub2）</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 一般都是安装grub2。
@@ -1019,8 +1019,8 @@ ubuntu下全部的网卡信息都在 <code>/sys/class/net</code> 下面。所以
 </p>
 </div>
 </div>
-<div id="outline-container-org5369b7e" class="outline-2">
-<h2 id="org5369b7e"><span class="section-number-2">13</span> ubuntu配置nic名字</h2>
+<div id="outline-container-org9ab6c10" class="outline-2">
+<h2 id="org9ab6c10"><span class="section-number-2">13</span> ubuntu配置nic名字</h2>
 <div class="outline-text-2" id="text-13">
 <p>
 有时候nic的名字不是eth0,可以这样来配置，写一个
@@ -1052,8 +1052,8 @@ ubuntu下全部的网卡信息都在 <code>/sys/class/net</code> 下面。所以
 </pre>
 </div>
 </div>
-<div id="outline-container-orgac3464a" class="outline-2">
-<h2 id="orgac3464a"><span class="section-number-2">14</span> interface设置</h2>
+<div id="outline-container-org14f7da2" class="outline-2">
+<h2 id="org14f7da2"><span class="section-number-2">14</span> interface设置</h2>
 <div class="outline-text-2" id="text-14">
 <p>
 <code>/etc/network/interface</code> 例子：
@@ -1077,8 +1077,8 @@ ubuntu下全部的网卡信息都在 <code>/sys/class/net</code> 下面。所以
 </pre>
 </div>
 </div>
-<div id="outline-container-org97d65bf" class="outline-2">
-<h2 id="org97d65bf"><span class="section-number-2">15</span> pandoc</h2>
+<div id="outline-container-org2b20011" class="outline-2">
+<h2 id="org2b20011"><span class="section-number-2">15</span> pandoc</h2>
 <div class="outline-text-2" id="text-15">
 <p>
 pandoc可以各种转格式，我主要使用它来转org文件。
@@ -1110,8 +1110,8 @@ pandoc还有一个 <code>--reference-docx</code> 选项。可以指定导出docx
 <a href="http://www.helongfei.com/blog/2016/0104/pandoc-ru-he-zi-ding-yi-docxyang-shi/">这里</a> 有一个使用指导。
 </p>
 </div>
-<div id="outline-container-orgd9f1a91" class="outline-3">
-<h3 id="orgd9f1a91"><span class="section-number-3">15.1</span> 编码问题</h3>
+<div id="outline-container-org07f0d93" class="outline-3">
+<h3 id="org07f0d93"><span class="section-number-3">15.1</span> 编码问题</h3>
 <div class="outline-text-3" id="text-15-1">
 <p>
 pandoc默认输入和输出都是使用utf-8编码，有时候输入不是utf-8编码时，
@@ -1147,8 +1147,8 @@ pandoc默认输入和输出都是使用utf-8编码，有时候输入不是utf-8�
 </div>
 </div>
 </div>
-<div id="outline-container-org0e16104" class="outline-2">
-<h2 id="org0e16104"><span class="section-number-2">16</span> lvm</h2>
+<div id="outline-container-orgffc150f" class="outline-2">
+<h2 id="orgffc150f"><span class="section-number-2">16</span> lvm</h2>
 <div class="outline-text-2" id="text-16">
 <p>
 <a href="https://en.wikipedia.org/wiki/Logical_volume_management">https://en.wikipedia.org/wiki/Logical_volume_management</a>
@@ -1266,8 +1266,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </pre>
 </div>
 </div>
-<div id="outline-container-orgd469483" class="outline-2">
-<h2 id="orgd469483"><span class="section-number-2">17</span> sort 来排列ip地址</h2>
+<div id="outline-container-org16b145a" class="outline-2">
+<h2 id="org16b145a"><span class="section-number-2">17</span> sort 来排列ip地址</h2>
 <div class="outline-text-2" id="text-17">
 <p>
 一个网络，就第四个位不同：
@@ -1284,8 +1284,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </div>
 </div>
 </div>
-<div id="outline-container-org53da98d" class="outline-2">
-<h2 id="org53da98d"><span class="section-number-2">18</span> sudo不输密码</h2>
+<div id="outline-container-org5a0e277" class="outline-2">
+<h2 id="org5a0e277"><span class="section-number-2">18</span> sudo不输密码</h2>
 <div class="outline-text-2" id="text-18">
 <div class="org-src-container">
 <pre class="src src-sh">    <span style="color: #b0c4de;">echo</span> <span style="color: #ffa500;">'password'</span>|sudo -S command
@@ -1293,8 +1293,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </div>
 </div>
 </div>
-<div id="outline-container-org5bf3fb6" class="outline-2">
-<h2 id="org5bf3fb6"><span class="section-number-2">19</span> 查看cpu个数</h2>
+<div id="outline-container-org2c0fe66" class="outline-2">
+<h2 id="org2c0fe66"><span class="section-number-2">19</span> 查看cpu个数</h2>
 <div class="outline-text-2" id="text-19">
 <pre class="example">
     # 总核数 = 物理CPU个数 X 每颗物理CPU的核数 
@@ -1311,8 +1311,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </pre>
 </div>
 </div>
-<div id="outline-container-org532abcc" class="outline-2">
-<h2 id="org532abcc"><span class="section-number-2">20</span> ssh隧道</h2>
+<div id="outline-container-org34f15ee" class="outline-2">
+<h2 id="org34f15ee"><span class="section-number-2">20</span> ssh隧道</h2>
 <div class="outline-text-2" id="text-20">
 <p>
 刚司机：
@@ -1344,8 +1344,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </pre>
 </div>
 </div>
-<div id="outline-container-org254b701" class="outline-2">
-<h2 id="org254b701"><span class="section-number-2">21</span> iperf测网速</h2>
+<div id="outline-container-orgea1484a" class="outline-2">
+<h2 id="orgea1484a"><span class="section-number-2">21</span> iperf测网速</h2>
 <div class="outline-text-2" id="text-21">
 <div class="org-src-container">
 <pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">server:&#39318;&#20808;&#22312; Server &#31471;&#65292;&#25105;&#20204;&#36816;&#34892;&#20197;&#19979;&#21629;&#20196;&#20351; iPerf &#30417;&#21548; 5001 &#31471;&#21475;&#65292;&#27599;</span>
@@ -1360,8 +1360,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </div>
 </div>
 </div>
-<div id="outline-container-orge75c05d" class="outline-2">
-<h2 id="orge75c05d"><span class="section-number-2">22</span> VirtualBox使用共享文件夹</h2>
+<div id="outline-container-orge0d34e2" class="outline-2">
+<h2 id="orge0d34e2"><span class="section-number-2">22</span> VirtualBox使用共享文件夹</h2>
 <div class="outline-text-2" id="text-22">
 <p>
 默认Linux客户机中的用户是没有权限访问共享文件夹 <code>/media/sf_xxx</code> 。需
@@ -1381,8 +1381,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </div>
 </div>
 </div>
-<div id="outline-container-org44f527a" class="outline-2">
-<h2 id="org44f527a"><span class="section-number-2">23</span> date命令</h2>
+<div id="outline-container-org1ac0fc3" class="outline-2">
+<h2 id="org1ac0fc3"><span class="section-number-2">23</span> date命令</h2>
 <div class="outline-text-2" id="text-23">
 <p>
 常用的需要在脚本中使用date来生成今天的日期：
@@ -1392,8 +1392,8 @@ LV（logical volume），在一个VG中可以分多个LV。每个LV对于OS来�
 </pre>
 </div>
 </div>
-<div id="outline-container-org4f2b435" class="outline-3">
-<h3 id="org4f2b435"><span class="section-number-3">23.1</span> 使用date命令修改时间</h3>
+<div id="outline-container-org8e86e96" class="outline-3">
+<h3 id="org8e86e96"><span class="section-number-3">23.1</span> 使用date命令修改时间</h3>
 <div class="outline-text-3" id="text-23-1">
 <pre class="example">
      date -s '2017-06-19 10:30:00'
@@ -1417,12 +1417,12 @@ date设置的是系统时间，还有一个硬件时间可以用 <code>hwclock</
 </div>
 </div>
 
-<div id="outline-container-org214e65c" class="outline-2">
-<h2 id="org214e65c"><span class="section-number-2">24</span> ps找程序</h2>
+<div id="outline-container-org90357dc" class="outline-2">
+<h2 id="org90357dc"><span class="section-number-2">24</span> ps找程序</h2>
 <div class="outline-text-2" id="text-24">
 </div>
-<div id="outline-container-org150a58a" class="outline-3">
-<h3 id="org150a58a"><span class="section-number-3">24.1</span> 根据pid找parrent：</h3>
+<div id="outline-container-org4bbfe62" class="outline-3">
+<h3 id="org4bbfe62"><span class="section-number-3">24.1</span> 根据pid找parrent：</h3>
 <div class="outline-text-3" id="text-24-1">
 <pre class="example">
     ps -o ppid= 2072
@@ -1430,13 +1430,13 @@ date设置的是系统时间，还有一个硬件时间可以用 <code>hwclock</
 </div>
 </div>
 
-<div id="outline-container-org8934cab" class="outline-3">
-<h3 id="org8934cab"><span class="section-number-3">24.2</span> <span class="todo TODO">TODO</span> 根据pid找child:</h3>
+<div id="outline-container-org14b5c1b" class="outline-3">
+<h3 id="org14b5c1b"><span class="section-number-3">24.2</span> <span class="todo TODO">TODO</span> 根据pid找child:</h3>
 </div>
 </div>
 
-<div id="outline-container-orgd5acfb6" class="outline-2">
-<h2 id="orgd5acfb6"><span class="section-number-2">25</span> sudo不输密码</h2>
+<div id="outline-container-orgb077e81" class="outline-2">
+<h2 id="orgb077e81"><span class="section-number-2">25</span> sudo不输密码</h2>
 <div class="outline-text-2" id="text-25">
 <p>
 使用 <code>visudo</code> 来编辑，然后在对应地方加入下面这句：
@@ -1447,8 +1447,8 @@ date设置的是系统时间，还有一个硬件时间可以用 <code>hwclock</
 </div>
 </div>
 
-<div id="outline-container-org02c83e1" class="outline-2">
-<h2 id="org02c83e1"><span class="section-number-2">26</span> asscii font</h2>
+<div id="outline-container-org999f551" class="outline-2">
+<h2 id="org999f551"><span class="section-number-2">26</span> asscii font</h2>
 <div class="outline-text-2" id="text-26">
 <pre class="example">
      ~/github/pengpengxp.github.io/ [master] figlet "xiepeng"
@@ -1462,8 +1462,8 @@ date设置的是系统时间，还有一个硬件时间可以用 <code>hwclock</
 </pre>
 </div>
 </div>
-<div id="outline-container-orge495fd6" class="outline-2">
-<h2 id="orge495fd6"><span class="section-number-2">27</span> wget</h2>
+<div id="outline-container-orga166532" class="outline-2">
+<h2 id="orga166532"><span class="section-number-2">27</span> wget</h2>
 <div class="outline-text-2" id="text-27">
 <div class="org-src-container">
 <pre class="src src-sh">    wget -r -p -np -k 
@@ -1530,8 +1530,8 @@ wget这样用很爽，可以直接把网站下载到本地，里面的链接也�
 </div>
 </div>
 
-<div id="outline-container-org6d5f0fd" class="outline-2">
-<h2 id="org6d5f0fd"><span class="section-number-2">28</span> 十六进制表示说明</h2>
+<div id="outline-container-org20d8db4" class="outline-2">
+<h2 id="org20d8db4"><span class="section-number-2">28</span> 十六进制表示说明</h2>
 <div class="outline-text-2" id="text-28">
 <p>
 <code>0xFF</code> 表示一个字节。gdb中的x打出来的、wireshark中的和tcpdump中输出
@@ -1541,8 +1541,8 @@ wget这样用很爽，可以直接把网站下载到本地，里面的链接也�
 </div>
 </div>
 
-<div id="outline-container-org79c4c7d" class="outline-2">
-<h2 id="org79c4c7d"><span class="section-number-2">29</span> 配置vnc4server</h2>
+<div id="outline-container-orgad37050" class="outline-2">
+<h2 id="orgad37050"><span class="section-number-2">29</span> 配置vnc4server</h2>
 <div class="outline-text-2" id="text-29">
 <p>
 安装：
@@ -1654,12 +1654,12 @@ wget这样用很爽，可以直接把网站下载到本地，里面的链接也�
 </div>
 </div>
 
-<div id="outline-container-orgb5c7d69" class="outline-2">
-<h2 id="orgb5c7d69"><span class="section-number-2">30</span> <span class="todo TODO">TODO</span> cp命令你真的懂吗？</h2>
+<div id="outline-container-org4199f31" class="outline-2">
+<h2 id="org4199f31"><span class="section-number-2">30</span> <span class="todo TODO">TODO</span> cp命令你真的懂吗？</h2>
 <div class="outline-text-2" id="text-30">
 </div>
-<div id="outline-container-org87db268" class="outline-3">
-<h3 id="org87db268"><span class="section-number-3">30.1</span> <code>-a</code> 选项</h3>
+<div id="outline-container-orgf828fd1" class="outline-3">
+<h3 id="orgf828fd1"><span class="section-number-3">30.1</span> <code>-a</code> 选项</h3>
 <div class="outline-text-3" id="text-30-1">
 <p>
 相关的东西都在这里：
@@ -1706,8 +1706,8 @@ wget这样用很爽，可以直接把网站下载到本地，里面的链接也�
 </ol>
 </div>
 </div>
-<div id="outline-container-orgecf361f" class="outline-3">
-<h3 id="orgecf361f"><span class="section-number-3">30.2</span> <code>-f</code> 选项</h3>
+<div id="outline-container-org7fdab14" class="outline-3">
+<h3 id="org7fdab14"><span class="section-number-3">30.2</span> <code>-f</code> 选项</h3>
 <div class="outline-text-3" id="text-30-2">
 <p>
 如果目标有同样的文件，直接覆盖它。
@@ -1715,8 +1715,8 @@ wget这样用很爽，可以直接把网站下载到本地，里面的链接也�
 </div>
 </div>
 
-<div id="outline-container-org166bc40" class="outline-3">
-<h3 id="org166bc40"><span class="section-number-3">30.3</span> <code>-n</code> 选项</h3>
+<div id="outline-container-org57f2cb8" class="outline-3">
+<h3 id="org57f2cb8"><span class="section-number-3">30.3</span> <code>-n</code> 选项</h3>
 <div class="outline-text-3" id="text-30-3">
 <p>
 不要覆盖已存在的文件。
@@ -1725,12 +1725,12 @@ wget这样用很爽，可以直接把网站下载到本地，里面的链接也�
 </div>
 </div>
 
-<div id="outline-container-org767d2e6" class="outline-2">
-<h2 id="org767d2e6"><span class="section-number-2">31</span> <span class="todo TODO">TODO</span> <code>[0/1]</code> 特殊的文件权限</h2>
+<div id="outline-container-org40fce71" class="outline-2">
+<h2 id="org40fce71"><span class="section-number-2">31</span> <span class="todo TODO">TODO</span> <code>[0/1]</code> 特殊的文件权限</h2>
 <div class="outline-text-2" id="text-31">
 </div>
-<div id="outline-container-orga857576" class="outline-3">
-<h3 id="orga857576"><span class="section-number-3">31.1</span> <code>st_uid</code></h3>
+<div id="outline-container-orga89b873" class="outline-3">
+<h3 id="orga89b873"><span class="section-number-3">31.1</span> <code>st_uid</code></h3>
 <div class="outline-text-3" id="text-31-1">
 <p>
 可以这样设置文件的 <code>st_uid</code> 。
@@ -1767,8 +1767,8 @@ id。
 </div>
 </div>
 
-<div id="outline-container-org80fb9a2" class="outline-3">
-<h3 id="org80fb9a2"><span class="section-number-3">31.2</span> <span class="todo TODO">TODO</span> <code>st_gid</code></h3>
+<div id="outline-container-orga02762c" class="outline-3">
+<h3 id="orga02762c"><span class="section-number-3">31.2</span> <span class="todo TODO">TODO</span> <code>st_gid</code></h3>
 <div class="outline-text-3" id="text-31-2">
 <ul class="org-ul">
 <li>State "TODO"       from              <span class="timestamp-wrapper"><span class="timestamp">[2017-06-19 一 17:14]</span></span></li>
@@ -1777,8 +1777,8 @@ id。
 </div>
 </div>
 
-<div id="outline-container-orga3e11b8" class="outline-2">
-<h2 id="orga3e11b8"><span class="section-number-2">32</span> ubuntu下载一个软件所有依赖的包</h2>
+<div id="outline-container-org15c0448" class="outline-2">
+<h2 id="org15c0448"><span class="section-number-2">32</span> ubuntu下载一个软件所有依赖的包</h2>
 <div class="outline-text-2" id="text-32">
 <p>
 <a href="https://stackoverflow.com/questions/13756800/how-to-download-all-dependencies-and-packages-to-directory">这里</a> 讲了如何下载到所有的安装包到一个目录：
@@ -1882,8 +1882,8 @@ id。
 </div>
 </div>
 
-<div id="outline-container-orga927c52" class="outline-2">
-<h2 id="orga927c52"><span class="section-number-2">33</span> 保存国内ubuntu的源</h2>
+<div id="outline-container-org1b02a86" class="outline-2">
+<h2 id="org1b02a86"><span class="section-number-2">33</span> 保存国内ubuntu的源</h2>
 <div class="outline-text-2" id="text-33">
 <p>
 <code>/etc/apt/sources.list</code>
@@ -1931,8 +1931,8 @@ id。
 </div>
 </div>
 
-<div id="outline-container-org92867db" class="outline-2">
-<h2 id="org92867db"><span class="section-number-2">34</span> 挂载远程目录到本机</h2>
+<div id="outline-container-org8f790f2" class="outline-2">
+<h2 id="org8f790f2"><span class="section-number-2">34</span> 挂载远程目录到本机</h2>
 <div class="outline-text-2" id="text-34">
 <p>
 需要安装 <code>sshfs</code> 。
@@ -1970,8 +1970,8 @@ id。
 </ol>
 </div>
 </div>
-<div id="outline-container-orgddf0393" class="outline-2">
-<h2 id="orgddf0393"><span class="section-number-2">35</span> 可以这样查ip的详细信息</h2>
+<div id="outline-container-orgf75f8a9" class="outline-2">
+<h2 id="orgf75f8a9"><span class="section-number-2">35</span> 可以这样查ip的详细信息</h2>
 <div class="outline-text-2" id="text-35">
 <div class="org-src-container">
 <pre class="src src-sh">    curl ipinfo.io/json
@@ -1979,8 +1979,8 @@ id。
 </div>
 </div>
 </div>
-<div id="outline-container-orgcf8f600" class="outline-2">
-<h2 id="orgcf8f600"><span class="section-number-2">36</span> <span class="todo TODO">TODO</span> ubuntu manage battery</h2>
+<div id="outline-container-org2509896" class="outline-2">
+<h2 id="org2509896"><span class="section-number-2">36</span> <span class="todo TODO">TODO</span> ubuntu manage battery</h2>
 <div class="outline-text-2" id="text-36">
 <ul class="org-ul">
 <li>State "TODO"       from              <span class="timestamp-wrapper"><span class="timestamp">[2017-08-22 二 22:24]</span></span></li>
@@ -1991,8 +1991,8 @@ id。
 </p>
 </div>
 </div>
-<div id="outline-container-orgb3f4c8e" class="outline-2">
-<h2 id="orgb3f4c8e"><span class="section-number-2">37</span> unzip解压乱码问题</h2>
+<div id="outline-container-orged63065" class="outline-2">
+<h2 id="orged63065"><span class="section-number-2">37</span> unzip解压乱码问题</h2>
 <div class="outline-text-2" id="text-37">
 <p>
 在windows上压缩的文件，是以系统默认编码中文来压缩文件。由于zip文件中
@@ -2052,8 +2052,8 @@ unzip -O CP936 xxx.zip (用GBK, GB18030也可以)
 </p>
 </div>
 </div>
-<div id="outline-container-org4b929e9" class="outline-2">
-<h2 id="org4b929e9"><span class="section-number-2">38</span> grep只输出匹配的内容</h2>
+<div id="outline-container-orgd13f1de" class="outline-2">
+<h2 id="orgd13f1de"><span class="section-number-2">38</span> grep只输出匹配的内容</h2>
 <div class="outline-text-2" id="text-38">
 <p>
 就是 <code>-o</code> 选项：
@@ -2066,8 +2066,8 @@ unzip -O CP936 xxx.zip (用GBK, GB18030也可以)
 </pre>
 </div>
 </div>
-<div id="outline-container-org59ef7db" class="outline-2">
-<h2 id="org59ef7db"><span class="section-number-2">39</span> 使用tmux&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tmux">tmux</span></span></h2>
+<div id="outline-container-orgbc2a54a" class="outline-2">
+<h2 id="orgbc2a54a"><span class="section-number-2">39</span> 使用tmux&#xa0;&#xa0;&#xa0;<span class="tag"><span class="tmux">tmux</span></span></h2>
 <div class="outline-text-2" id="text-39">
 <p>
 tmux启动后是一个damon，如果不小心iterm2退出了或对应的标签页半闭了。
@@ -2352,8 +2352,8 @@ tmux的配置在 <code>~/.tmux.conf</code> ：
 </pre>
 </div>
 </div>
-<div id="outline-container-orgb870c98" class="outline-3">
-<h3 id="orgb870c98"><span class="section-number-3">39.1</span> Mac中的配置</h3>
+<div id="outline-container-orgc89aea4" class="outline-3">
+<h3 id="orgc89aea4"><span class="section-number-3">39.1</span> Mac中的配置</h3>
 <div class="outline-text-3" id="text-39-1">
 <p>
 在iterm2中，可以使用 <code>Control-number</code> 来切换windows。iterm2可以设置
@@ -2369,8 +2369,8 @@ code达到目的。比如 <code>C-1</code> 发送 <code>0x60 0x31</code> ， <co
 </p>
 </div>
 </div>
-<div id="outline-container-org6d22255" class="outline-3">
-<h3 id="org6d22255"><span class="section-number-3">39.2</span> tmux中的session</h3>
+<div id="outline-container-orgb0ac953" class="outline-3">
+<h3 id="orgb0ac953"><span class="section-number-3">39.2</span> tmux中的session</h3>
 <div class="outline-text-3" id="text-39-2">
 <p>
 一个session可以看做是多个窗口的集合。可以不同的session来干不同的事
@@ -2430,8 +2430,8 @@ code达到目的。比如 <code>C-1</code> 发送 <code>0x60 0x31</code> ， <co
 </div>
 </div>
 
-<div id="outline-container-org2b62d56" class="outline-3">
-<h3 id="org2b62d56"><span class="section-number-3">39.3</span> 多个pane中实现同时输入</h3>
+<div id="outline-container-orgd1035c4" class="outline-3">
+<h3 id="orgd1035c4"><span class="section-number-3">39.3</span> 多个pane中实现同时输入</h3>
 <div class="outline-text-3" id="text-39-3">
 <p>
 可以这样：
@@ -2448,8 +2448,8 @@ code达到目的。比如 <code>C-1</code> 发送 <code>0x60 0x31</code> ， <co
 </div>
 </div>
 
-<div id="outline-container-org6cbc0b6" class="outline-3">
-<h3 id="org6cbc0b6"><span class="section-number-3">39.4</span> copy-mode</h3>
+<div id="outline-container-org1fdae7f" class="outline-3">
+<h3 id="org1fdae7f"><span class="section-number-3">39.4</span> copy-mode</h3>
 <div class="outline-text-3" id="text-39-4">
 <p>
 <a href="https://awhan.wordpress.com/2010/06/20/copy-paste-in-tmux/">referenced here</a>
@@ -2498,8 +2498,8 @@ code达到目的。比如 <code>C-1</code> 发送 <code>0x60 0x31</code> ， <co
 </div>
 </div>
 
-<div id="outline-container-orge1a60be" class="outline-3">
-<h3 id="orge1a60be"><span class="section-number-3">39.5</span> 开启了mouse mode后如何使用鼠标选择区域来copy</h3>
+<div id="outline-container-orgf048422" class="outline-3">
+<h3 id="orgf048422"><span class="section-number-3">39.5</span> 开启了mouse mode后如何使用鼠标选择区域来copy</h3>
 <div class="outline-text-3" id="text-39-5">
 <p>
 使用 <code>set mouse on</code> 开启鼠标输入后可以方便很多，但是选择区域就需要
@@ -2509,8 +2509,8 @@ code达到目的。比如 <code>C-1</code> 发送 <code>0x60 0x31</code> ， <co
 </div>
 </div>
 
-<div id="outline-container-orgdc6fa54" class="outline-2">
-<h2 id="orgdc6fa54"><span class="section-number-2">40</span> 命令行中转换电子书格式</h2>
+<div id="outline-container-org736a4fe" class="outline-2">
+<h2 id="org736a4fe"><span class="section-number-2">40</span> 命令行中转换电子书格式</h2>
 <div class="outline-text-2" id="text-40">
 <p>
 <code>epub to mobi</code>
@@ -2540,8 +2540,8 @@ ebook-convert org.html org.mobi
 </div>
 </div>
 
-<div id="outline-container-orga977266" class="outline-2">
-<h2 id="orga977266"><span class="section-number-2">41</span> 命令行转换视频格式</h2>
+<div id="outline-container-orgcc35b12" class="outline-2">
+<h2 id="orgcc35b12"><span class="section-number-2">41</span> 命令行转换视频格式</h2>
 <div class="outline-text-2" id="text-41">
 <div class="org-src-container">
 <pre class="src src-sh">    HandBrakeCLI -i xxx.avi -o xxx.mp4
@@ -2549,8 +2549,8 @@ ebook-convert org.html org.mobi
 </div>
 </div>
 </div>
-<div id="outline-container-orgaae880e" class="outline-2">
-<h2 id="orgaae880e"><span class="section-number-2">42</span> 命令行网页视频下载工具you-get</h2>
+<div id="outline-container-org4365be6" class="outline-2">
+<h2 id="org4365be6"><span class="section-number-2">42</span> 命令行网页视频下载工具you-get</h2>
 <div class="outline-text-2" id="text-42">
 <p>
 <a href="http://www.appinn.com/you-get/">http://www.appinn.com/you-get/</a>
@@ -2570,8 +2570,8 @@ ebook-convert org.html org.mobi
 </p>
 </div>
 </div>
-<div id="outline-container-org515ea4f" class="outline-2">
-<h2 id="org515ea4f"><span class="section-number-2">43</span> web servers in one line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="http">http</span></span></h2>
+<div id="outline-container-orgbef0d79" class="outline-2">
+<h2 id="orgbef0d79"><span class="section-number-2">43</span> web servers in one line&#xa0;&#xa0;&#xa0;<span class="tag"><span class="http">http</span></span></h2>
 <div class="outline-text-2" id="text-43">
 <p>
 Each of these commands will run an ad hoc http static server in your
@@ -2584,8 +2584,8 @@ current (or specified) directory, available at
 </p>
 </div>
 
-<div id="outline-container-orgbe997ae" class="outline-3">
-<h3 id="orgbe997ae"><span class="section-number-3">43.1</span> Python 2.x</h3>
+<div id="outline-container-org8dae33b" class="outline-3">
+<h3 id="org8dae33b"><span class="section-number-3">43.1</span> Python 2.x</h3>
 <div class="outline-text-3" id="text-43-1">
 <pre class="example">
        $ python -m SimpleHTTPServer 8000
@@ -2593,8 +2593,8 @@ current (or specified) directory, available at
 </div>
 </div>
 
-<div id="outline-container-orgccdb0ca" class="outline-3">
-<h3 id="orgccdb0ca"><span class="section-number-3">43.2</span> Python 3.x</h3>
+<div id="outline-container-org424059b" class="outline-3">
+<h3 id="org424059b"><span class="section-number-3">43.2</span> Python 3.x</h3>
 <div class="outline-text-3" id="text-43-2">
 <pre class="example">
        $ python -m http.server 8000
@@ -2602,8 +2602,8 @@ current (or specified) directory, available at
 </div>
 </div>
 
-<div id="outline-container-orgcde9a2e" class="outline-3">
-<h3 id="orgcde9a2e"><span class="section-number-3">43.3</span> Twisted (Python)</h3>
+<div id="outline-container-org4dbf683" class="outline-3">
+<h3 id="org4dbf683"><span class="section-number-3">43.3</span> Twisted (Python)</h3>
 <div class="outline-text-3" id="text-43-3">
 <pre class="example">
        $ twistd -n web -p 8000 --path .
@@ -2623,8 +2623,8 @@ Depends on <a href="http://twistedmatrix.com/trac/wiki/Downloads">Twisted</a>.
 </div>
 </div>
 
-<div id="outline-container-org085378d" class="outline-3">
-<h3 id="org085378d"><span class="section-number-3">43.4</span> Ruby</h3>
+<div id="outline-container-orgf5dcd14" class="outline-3">
+<h3 id="orgf5dcd14"><span class="section-number-3">43.4</span> Ruby</h3>
 <div class="outline-text-3" id="text-43-4">
 <pre class="example">
        $ ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port =&gt; 8000, :DocumentRoot =&gt; Dir.pwd).start'
@@ -2638,8 +2638,8 @@ Iguana</a>
 </div>
 </div>
 
-<div id="outline-container-org43f5208" class="outline-3">
-<h3 id="org43f5208"><span class="section-number-3">43.5</span> Ruby 1.9.2+</h3>
+<div id="outline-container-orgf79f996" class="outline-3">
+<h3 id="orgf79f996"><span class="section-number-3">43.5</span> Ruby 1.9.2+</h3>
 <div class="outline-text-3" id="text-43-5">
 <pre class="example">
        $ ruby -run -ehttpd . -p8000
@@ -2651,8 +2651,8 @@ Credit: <a href="https://gist.github.com/willurd/5720255#comment-855952">nobu</a
 </div>
 </div>
 
-<div id="outline-container-org4dc8450" class="outline-3">
-<h3 id="org4dc8450"><span class="section-number-3">43.6</span> adsf (Ruby)</h3>
+<div id="outline-container-org60840e0" class="outline-3">
+<h3 id="org60840e0"><span class="section-number-3">43.6</span> adsf (Ruby)</h3>
 <div class="outline-text-3" id="text-43-6">
 <pre class="example">
        $ gem install adsf   # install dependency
@@ -2670,8 +2670,8 @@ Credit:
 </div>
 </div>
 
-<div id="outline-container-orgd7d0d71" class="outline-3">
-<h3 id="orgd7d0d71"><span class="section-number-3">43.7</span> Sinatra (Ruby)</h3>
+<div id="outline-container-orgbbffd03" class="outline-3">
+<h3 id="orgbbffd03"><span class="section-number-3">43.7</span> Sinatra (Ruby)</h3>
 <div class="outline-text-3" id="text-43-7">
 <pre class="example">
        $ gem install sinatra   # install dependency
@@ -2684,8 +2684,8 @@ Credit:
 </div>
 </div>
 
-<div id="outline-container-org0109d66" class="outline-3">
-<h3 id="org0109d66"><span class="section-number-3">43.8</span> Perl</h3>
+<div id="outline-container-org6b44d56" class="outline-3">
+<h3 id="org6b44d56"><span class="section-number-3">43.8</span> Perl</h3>
 <div class="outline-text-3" id="text-43-8">
 <pre class="example">
        $ cpan HTTP::Server::Brick   # install dependency
@@ -2698,8 +2698,8 @@ Credit: <a href="http://www.perlmonks.org/?node_id=865239">Anonymous Monk</a>
 </div>
 </div>
 
-<div id="outline-container-org472171f" class="outline-3">
-<h3 id="org472171f"><span class="section-number-3">43.9</span> Plack (Perl)</h3>
+<div id="outline-container-org4bbf14d" class="outline-3">
+<h3 id="org4bbf14d"><span class="section-number-3">43.9</span> Plack (Perl)</h3>
 <div class="outline-text-3" id="text-43-9">
 <pre class="example">
        $ cpan Plack   # install dependency
@@ -2713,8 +2713,8 @@ Credit:
 </div>
 </div>
 
-<div id="outline-container-org5922191" class="outline-3">
-<h3 id="org5922191"><span class="section-number-3">43.10</span> Mojolicious (Perl)</h3>
+<div id="outline-container-orgb2bc29e" class="outline-3">
+<h3 id="orgb2bc29e"><span class="section-number-3">43.10</span> Mojolicious (Perl)</h3>
 <div class="outline-text-3" id="text-43-10">
 <pre class="example">
        $ cpan Mojolicious::Lite   # install dependency
@@ -2727,8 +2727,8 @@ Credit:
 </div>
 </div>
 
-<div id="outline-container-orgee640d3" class="outline-3">
-<h3 id="orgee640d3"><span class="section-number-3">43.11</span> http-server (Node.js)</h3>
+<div id="outline-container-orgb666fd2" class="outline-3">
+<h3 id="orgb666fd2"><span class="section-number-3">43.11</span> http-server (Node.js)</h3>
 <div class="outline-text-3" id="text-43-11">
 <pre class="example">
        $ npm install -g http-server   # install dependency
@@ -2744,8 +2744,8 @@ go to <code>/test</code>, but will treat relative paths as if they were coming f
 </div>
 </div>
 
-<div id="outline-container-org58cebbd" class="outline-3">
-<h3 id="org58cebbd"><span class="section-number-3">43.12</span> node-static (Node.js)</h3>
+<div id="outline-container-org358ee73" class="outline-3">
+<h3 id="org358ee73"><span class="section-number-3">43.12</span> node-static (Node.js)</h3>
 <div class="outline-text-3" id="text-43-12">
 <pre class="example">
        $ npm install -g node-static   # install dependency
@@ -2758,8 +2758,8 @@ go to <code>/test</code>, but will treat relative paths as if they were coming f
 </div>
 </div>
 
-<div id="outline-container-org1065140" class="outline-3">
-<h3 id="org1065140"><span class="section-number-3">43.13</span> PHP (&gt;= 5.4)</h3>
+<div id="outline-container-org3b4c267" class="outline-3">
+<h3 id="org3b4c267"><span class="section-number-3">43.13</span> PHP (&gt;= 5.4)</h3>
 <div class="outline-text-3" id="text-43-13">
 <pre class="example">
        $ php -S 127.0.0.1:8000
@@ -2778,8 +2778,8 @@ and
 </div>
 </div>
 
-<div id="outline-container-org0c9c2ef" class="outline-3">
-<h3 id="org0c9c2ef"><span class="section-number-3">43.14</span> Erlang</h3>
+<div id="outline-container-orge694dfa" class="outline-3">
+<h3 id="orge694dfa"><span class="section-number-3">43.14</span> Erlang</h3>
 <div class="outline-text-3" id="text-43-14">
 <pre class="example">
        $ erl -s inets -eval 'inets:start(httpd,[{server_name,"NAME"},{document_root, "."},{server_root, "."},{port, 8000},{mime_types,[{"html","text/html"},{"htm","text/html"},{"js","text/javascript"},{"css","text/css"},{"gif","image/gif"},{"jpg","image/jpeg"},{"jpeg","image/jpeg"},{"png","image/png"}]}]).'
@@ -2797,8 +2797,8 @@ Credit:
 </div>
 </div>
 
-<div id="outline-container-org9b4a152" class="outline-3">
-<h3 id="org9b4a152"><span class="section-number-3">43.15</span> busybox httpd</h3>
+<div id="outline-container-orgf253313" class="outline-3">
+<h3 id="orgf253313"><span class="section-number-3">43.15</span> busybox httpd</h3>
 <div class="outline-text-3" id="text-43-15">
 <pre class="example">
        $ busybox httpd -f -p 8000
@@ -2810,8 +2810,8 @@ Credit: <a href="https://gist.github.com/willurd/5720255#comment-841915">lvm</a>
 </div>
 </div>
 
-<div id="outline-container-org2168ba2" class="outline-3">
-<h3 id="org2168ba2"><span class="section-number-3">43.16</span> webfs</h3>
+<div id="outline-container-orgade34f3" class="outline-3">
+<h3 id="orgade34f3"><span class="section-number-3">43.16</span> webfs</h3>
 <div class="outline-text-3" id="text-43-16">
 <pre class="example">
        $ webfsd -F -p 8000
@@ -2823,8 +2823,8 @@ Depends on <a href="http://linux.bytesex.org/misc/webfs.html">webfs</a>.
 </div>
 </div>
 
-<div id="outline-container-orga06ff40" class="outline-3">
-<h3 id="orga06ff40"><span class="section-number-3">43.17</span> IIS Express</h3>
+<div id="outline-container-org1148e0f" class="outline-3">
+<h3 id="org1148e0f"><span class="section-number-3">43.17</span> IIS Express</h3>
 <div class="outline-text-3" id="text-43-17">
 <pre class="example">
        C:\&gt; "C:\Program Files (x86)\IIS Express\iisexpress.exe" /path:C:\MyWeb /port:8000
@@ -2847,8 +2847,8 @@ Credit:
 </div>
 </div>
 
-<div id="outline-container-org2c3ecda" class="outline-3">
-<h3 id="org2c3ecda"><span class="section-number-3">43.18</span> Meta</h3>
+<div id="outline-container-org3076596" class="outline-3">
+<h3 id="org3076596"><span class="section-number-3">43.18</span> Meta</h3>
 <div class="outline-text-3" id="text-43-18">
 <p>
 If you have any suggestions, drop them in the comments below or on the
@@ -2871,8 +2871,8 @@ daemons)</li>
 </div>
 </div>
 
-<div id="outline-container-org09db91d" class="outline-2">
-<h2 id="org09db91d"><span class="section-number-2">44</span> ruby gem使用国内源</h2>
+<div id="outline-container-org6f3f88b" class="outline-2">
+<h2 id="org6f3f88b"><span class="section-number-2">44</span> ruby gem使用国内源</h2>
 <div class="outline-text-2" id="text-44">
 <pre class="example">
     $ gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
@@ -2884,8 +2884,8 @@ daemons)</li>
 </div>
 </div>
 
-<div id="outline-container-org8cfd442" class="outline-2">
-<h2 id="org8cfd442"><span class="section-number-2">45</span> 修改linux的改键绑定</h2>
+<div id="outline-container-org508655c" class="outline-2">
+<h2 id="org508655c"><span class="section-number-2">45</span> 修改linux的改键绑定</h2>
 <div class="outline-text-2" id="text-45">
 <ul class="org-ul">
 <li>console下，用showkeys查看键值，用dumpkey来查看当前的绑定（可以直接重
@@ -2936,12 +2936,12 @@ X-windows下：用xev来查看键值和对应的名字。用xmodmap来查看当�
 </ul>
 </div>
 </div>
-<div id="outline-container-org45c65a0" class="outline-2">
-<h2 id="org45c65a0"><span class="section-number-2">46</span> 分区设定</h2>
+<div id="outline-container-orgdca1ac6" class="outline-2">
+<h2 id="orgdca1ac6"><span class="section-number-2">46</span> 分区设定</h2>
 <div class="outline-text-2" id="text-46">
 </div>
-<div id="outline-container-org0cc7316" class="outline-3">
-<h3 id="org0cc7316"><span class="section-number-3">46.1</span> 给新分区设置label</h3>
+<div id="outline-container-orga805f19" class="outline-3">
+<h3 id="orga805f19"><span class="section-number-3">46.1</span> 给新分区设置label</h3>
 <div class="outline-text-3" id="text-46-1">
 <p>
 ext4:
@@ -2961,8 +2961,8 @@ fat：
 </div>
 </div>
 </div>
-<div id="outline-container-org1c3950c" class="outline-3">
-<h3 id="org1c3950c"><span class="section-number-3">46.2</span> 格式化为 <code>fat32</code></h3>
+<div id="outline-container-orgd7eb29a" class="outline-3">
+<h3 id="orgd7eb29a"><span class="section-number-3">46.2</span> 格式化为 <code>fat32</code></h3>
 <div class="outline-text-3" id="text-46-2">
 <div class="org-src-container">
 <pre class="src src-sh">sudo mkfs.vfat -F 32 /dev/sdXn
@@ -2984,20 +2984,20 @@ Because those filesystems are very similar, they're usually handled by the same 
 </pre>
 </div>
 </div>
-<div id="outline-container-org492741c" class="outline-3">
-<h3 id="org492741c"><span class="section-number-3">46.3</span> change ntfs label</h3>
+<div id="outline-container-org1278609" class="outline-3">
+<h3 id="org1278609"><span class="section-number-3">46.3</span> change ntfs label</h3>
 <div class="outline-text-3" id="text-46-3">
 <p>
 <code>ntfslabel</code>
 </p>
 </div>
 </div>
-<div id="outline-container-org243f5ba" class="outline-3">
-<h3 id="org243f5ba"><span class="section-number-3">46.4</span> <span class="todo TODO">TODO</span> change ext label</h3>
+<div id="outline-container-orga5bf31b" class="outline-3">
+<h3 id="orga5bf31b"><span class="section-number-3">46.4</span> <span class="todo TODO">TODO</span> change ext label</h3>
 </div>
 </div>
-<div id="outline-container-orgb8111a9" class="outline-2">
-<h2 id="orgb8111a9"><span class="section-number-2">47</span> rsync不同步某些文件</h2>
+<div id="outline-container-org266870e" class="outline-2">
+<h2 id="org266870e"><span class="section-number-2">47</span> rsync不同步某些文件</h2>
 <div class="outline-text-2" id="text-47">
 <p>
 有些编译出来的 <code>.o</code> 文件等我不想同步。可以使用rsync的 <code>--exclude</code> 选
@@ -3057,8 +3057,8 @@ rsync -azP --exclude=.git --exclude-from=$(<span style="color: #fa8072;">git</sp
 </div>
 </div>
 </div>
-<div id="outline-container-orga156b51" class="outline-2">
-<h2 id="orga156b51"><span class="section-number-2">48</span> wmctrl来控制窗口</h2>
+<div id="outline-container-org85bc115" class="outline-2">
+<h2 id="org85bc115"><span class="section-number-2">48</span> wmctrl来控制窗口</h2>
 <div class="outline-text-2" id="text-48">
 <p>
 ubuntu 16.04中可以直接使用apt来安装：
@@ -3083,8 +3083,8 @@ ubuntu 16.04中可以直接使用apt来安装：
 </p>
 </div>
 </div>
-<div id="outline-container-org469a56c" class="outline-2">
-<h2 id="org469a56c"><span class="section-number-2">49</span> irony-mode和rtags等等都需要 <code>compile_commands.json</code> 文件</h2>
+<div id="outline-container-orgee54add" class="outline-2">
+<h2 id="orgee54add"><span class="section-number-2">49</span> irony-mode和rtags等等都需要 <code>compile_commands.json</code> 文件</h2>
 <div class="outline-text-2" id="text-49">
 <p>
 使用 <code>bear make</code> 就可以了。有时只需要得到这个文件，可以忽略所有的
@@ -3102,8 +3102,8 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 /path/to/src
 </pre>
 </div>
 </div>
-<div id="outline-container-org13c0cdc" class="outline-2">
-<h2 id="org13c0cdc"><span class="section-number-2">50</span> lunar，ccal命令行下的日历</h2>
+<div id="outline-container-org8524148" class="outline-2">
+<h2 id="org8524148"><span class="section-number-2">50</span> lunar，ccal命令行下的日历</h2>
 <div class="outline-text-2" id="text-50">
 <p>
 查一天的详情：
@@ -3144,8 +3144,8 @@ ccal可能更好用一点：
 </div>
 </div>
 </div>
-<div id="outline-container-org004e2b4" class="outline-2">
-<h2 id="org004e2b4"><span class="section-number-2">51</span> 不重启也不使用udev来修改系统中网卡的名字</h2>
+<div id="outline-container-org1d7e1a2" class="outline-2">
+<h2 id="org1d7e1a2"><span class="section-number-2">51</span> 不重启也不使用udev来修改系统中网卡的名字</h2>
 <div class="outline-text-2" id="text-51">
 <div class="org-src-container">
 <pre class="src src-sh">ifconfig peth0 down  
@@ -3155,8 +3155,8 @@ ifconfig eth0 up
 </div>
 </div>
 </div>
-<div id="outline-container-orgae9afda" class="outline-2">
-<h2 id="orgae9afda"><span class="section-number-2">52</span> 打开coredump选项，debug的时候比较方便</h2>
+<div id="outline-container-org909f9d7" class="outline-2">
+<h2 id="org909f9d7"><span class="section-number-2">52</span> 打开coredump选项，debug的时候比较方便</h2>
 <div class="outline-text-2" id="text-52">
 <p>
 这样就会产生coredump文件啦：
@@ -3174,8 +3174,8 @@ ifconfig eth0 up
 </div>
 </div>
 </div>
-<div id="outline-container-org7dca158" class="outline-2">
-<h2 id="org7dca158"><span class="section-number-2">53</span> ssh不用每次都添加到known<sub>hosts</sub></h2>
+<div id="outline-container-org1d3a662" class="outline-2">
+<h2 id="org1d3a662"><span class="section-number-2">53</span> ssh不用每次都添加到known<sub>hosts</sub></h2>
 <div class="outline-text-2" id="text-53">
 <p>
 有时debug，有些设置一直都在重启，不需要每次都加进去。这样写ssh的配置：
@@ -3196,8 +3196,8 @@ ifconfig eth0 up
 </p>
 </div>
 </div>
-<div id="outline-container-org8cdca1a" class="outline-2">
-<h2 id="org8cdca1a"><span class="section-number-2">54</span> aria2一个命令行下载工具</h2>
+<div id="outline-container-org5b2d921" class="outline-2">
+<h2 id="org5b2d921"><span class="section-number-2">54</span> aria2一个命令行下载工具</h2>
 <div class="outline-text-2" id="text-54">
 <pre class="example">
 Download from WEB:
@@ -3233,7 +3233,7 @@ $ aria2c -i uris.txt
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:37</p>
+<p class="date">Created: 2019-03-25 一 17:49</p>
 <p class="validation"></p>
 </div>
 </body>

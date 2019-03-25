@@ -1,4 +1,4 @@
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 #+TITLE: Nginx wiki
 
 

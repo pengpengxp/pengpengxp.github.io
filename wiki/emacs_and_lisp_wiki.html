@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:23 -->
+<!-- 2019-03-25 一 17:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs and Lisp wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -257,136 +257,136 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org4aa14c3">1. 我的emacs学习笔记 <code>[3/4]</code></a>
+<li><a href="#org17261bc">1. 我的emacs学习笔记 <code>[3/4]</code></a>
 <ul>
-<li><a href="#org865375c">1.1. 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="shell">shell</span>&#xa0;<span class="command">command</span></span></a></li>
-<li><a href="#org3ed11d2">1.2. <span class="done DONE">DONE</span> 自己把一些emacs文档制作成为mobi格式方便kindle阅读。</a></li>
-<li><a href="#org87b1c1b">1.3. <span class="done DONE">DONE</span> 对emacs的kill-ring的理解</a></li>
-<li><a href="#org7e2745e">1.4. <span class="done DONE">DONE</span> 使用org-mode来管理GTD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="blog">blog</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span></span></a></li>
-<li><a href="#org1c73b32">1.5. emacs下关的一些学习资料</a></li>
-<li><a href="#orgb2f503c">1.6. emacs中判断系统的版本</a></li>
+<li><a href="#orgf7d9aad">1.1. 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="shell">shell</span>&#xa0;<span class="command">command</span></span></a></li>
+<li><a href="#org5d1c06b">1.2. <span class="done DONE">DONE</span> 自己把一些emacs文档制作成为mobi格式方便kindle阅读。</a></li>
+<li><a href="#org8d50b32">1.3. <span class="done DONE">DONE</span> 对emacs的kill-ring的理解</a></li>
+<li><a href="#org667259d">1.4. <span class="done DONE">DONE</span> 使用org-mode来管理GTD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="blog">blog</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span></span></a></li>
+<li><a href="#org0fa06ff">1.5. emacs下关的一些学习资料</a></li>
+<li><a href="#org1c67d74">1.6. emacs中判断系统的版本</a></li>
 <li><a href="#eshell">1.7. eshell	<code>[0/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="eshell">eshell</span></span></a>
 <ul>
-<li><a href="#org3b288bf">1.7.1. 进入之前进入过的文件夹</a></li>
-<li><a href="#org81ad00a">1.7.2. 不使用eshell中用lisp编译的命令</a></li>
-<li><a href="#org1361ae7">1.7.3. 使用jobs控制eemacs中的子进程</a></li>
-<li><a href="#org0144597">1.7.4. 一些有用的快捷键</a></li>
-<li><a href="#orga5f40e9">1.7.5. 在eshell中使用 <code>**</code> 代替 <code>*</code></a></li>
-<li><a href="#orgee14d36">1.7.6. Eshell中执行bash脚本</a></li>
-<li><a href="#orgb05b432">1.7.7. <span class="todo TODO">TODO</span> 一些期待改进的功能 <code>[0/7]</code></a></li>
+<li><a href="#org83daa30">1.7.1. 进入之前进入过的文件夹</a></li>
+<li><a href="#org8274ad2">1.7.2. 不使用eshell中用lisp编译的命令</a></li>
+<li><a href="#org9cb910d">1.7.3. 使用jobs控制eemacs中的子进程</a></li>
+<li><a href="#orgca9b330">1.7.4. 一些有用的快捷键</a></li>
+<li><a href="#orgde36151">1.7.5. 在eshell中使用 <code>**</code> 代替 <code>*</code></a></li>
+<li><a href="#org7f15776">1.7.6. Eshell中执行bash脚本</a></li>
+<li><a href="#org13429d3">1.7.7. <span class="todo TODO">TODO</span> 一些期待改进的功能 <code>[0/7]</code></a></li>
 </ul>
 </li>
-<li><a href="#orgaaaf31b">1.8. C/C++ IDE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ide">ide</span>&#xa0;<span class="C">C</span>&#xa0;<span class="C">C</span></span></a>
+<li><a href="#org606e335">1.8. C/C++ IDE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ide">ide</span>&#xa0;<span class="C">C</span>&#xa0;<span class="C">C</span></span></a>
 <ul>
-<li><a href="#orgcd51b7b">1.8.1. 使用ecb</a></li>
-<li><a href="#orgcf17272">1.8.2. <span class="todo TODO">TODO</span> cedet</a></li>
+<li><a href="#orgc171854">1.8.1. 使用ecb</a></li>
+<li><a href="#orgff29a32">1.8.2. <span class="todo TODO">TODO</span> cedet</a></li>
 </ul>
 </li>
-<li><a href="#org9b01ac6">1.9. 闹钟&#xa0;&#xa0;&#xa0;<span class="tag"><span class="alarm">alarm</span></span></a></li>
-<li><a href="#org8908710">1.10. 使用过tramp编辑远程文件后eshell的问题</a></li>
-<li><a href="#org8f9d0c3">1.11. 重新安装helm&#xa0;&#xa0;&#xa0;<span class="tag"><span class="helm">helm</span></span></a></li>
-<li><a href="#org83c954f">1.12. 在emacs中使用zsh</a></li>
-<li><a href="#org408112b">1.13. company-mode自动补全</a>
+<li><a href="#org2ae7e29">1.9. 闹钟&#xa0;&#xa0;&#xa0;<span class="tag"><span class="alarm">alarm</span></span></a></li>
+<li><a href="#org24f20f0">1.10. 使用过tramp编辑远程文件后eshell的问题</a></li>
+<li><a href="#org3f88c92">1.11. 重新安装helm&#xa0;&#xa0;&#xa0;<span class="tag"><span class="helm">helm</span></span></a></li>
+<li><a href="#org61ef9ac">1.12. 在emacs中使用zsh</a></li>
+<li><a href="#org83d0a95">1.13. company-mode自动补全</a>
 <ul>
-<li><a href="#orge8962e6">1.13.1. 基本内容</a></li>
-<li><a href="#orgd3030fc">1.13.2. <span class="todo TODO">TODO</span> 不同的mode使用不同的backend</a></li>
+<li><a href="#org628aa9d">1.13.1. 基本内容</a></li>
+<li><a href="#org66e5577">1.13.2. <span class="todo TODO">TODO</span> 不同的mode使用不同的backend</a></li>
 </ul>
 </li>
-<li><a href="#orgc143125">1.14. emacsclient</a></li>
-<li><a href="#org8d4e9ba">1.15. cua-mode</a></li>
-<li><a href="#org1dbfe22">1.16. <span class="todo TODO">TODO</span> cscope&#xa0;&#xa0;&#xa0;<span class="tag"><span class="cscope">cscope</span></span></a></li>
+<li><a href="#orgae17cf9">1.14. emacsclient</a></li>
+<li><a href="#org1c11a51">1.15. cua-mode</a></li>
+<li><a href="#org500206f">1.16. <span class="todo TODO">TODO</span> cscope&#xa0;&#xa0;&#xa0;<span class="tag"><span class="cscope">cscope</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org16f4c1c">2. 我的lisp学习笔记</a>
+<li><a href="#org4cdb146">2. 我的lisp学习笔记</a>
 <ul>
-<li><a href="#org4f626f9">2.1. <span class="done DONE">DONE</span> scheme中的define&#xa0;&#xa0;&#xa0;<span class="tag"><span class="scheme">scheme</span></span></a></li>
-<li><a href="#orgb61f979">2.2. 写一个自动转换org到pdf的脚本。这里 可以看看。我是想批量转换我的org文件。&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notperfect">notperfect</span></span></a></li>
-<li><a href="#org395a808">2.3. copy-keymap</a></li>
-<li><a href="#orged54490">2.4. 其它笔记</a></li>
+<li><a href="#orge4805d8">2.1. <span class="done DONE">DONE</span> scheme中的define&#xa0;&#xa0;&#xa0;<span class="tag"><span class="scheme">scheme</span></span></a></li>
+<li><a href="#org34ea706">2.2. 写一个自动转换org到pdf的脚本。这里 可以看看。我是想批量转换我的org文件。&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notperfect">notperfect</span></span></a></li>
+<li><a href="#orgeb4d354">2.3. copy-keymap</a></li>
+<li><a href="#orgcfb842c">2.4. 其它笔记</a></li>
 </ul>
 </li>
-<li><a href="#org57b4559">3. 我的emacs习惯</a>
+<li><a href="#orgfed3377">3. 我的emacs习惯</a>
 <ul>
-<li><a href="#orgdbb6e5d">3.1. 插件</a></li>
+<li><a href="#orga240483">3.1. 插件</a></li>
 </ul>
 </li>
-<li><a href="#org2fec577">4. config irony-mode</a></li>
-<li><a href="#orgb791861">5. config ycmd</a>
+<li><a href="#org88eb253">4. config irony-mode</a></li>
+<li><a href="#orgc34ad31">5. config ycmd</a>
 <ul>
-<li><a href="#org44fc986">5.1. config ycm for my own project:</a></li>
-<li><a href="#org6b551ba">5.2. 编译ycmd时可能出错</a></li>
-<li><a href="#org7f6fa32">5.3. ycmd介绍</a></li>
-<li><a href="#org5894795">5.4. build.py选项</a></li>
-<li><a href="#orgbd19502">5.5. emacs-ycmd</a></li>
+<li><a href="#orgb713015">5.1. config ycm for my own project:</a></li>
+<li><a href="#org68d19cc">5.2. 编译ycmd时可能出错</a></li>
+<li><a href="#orgc931d13">5.3. ycmd介绍</a></li>
+<li><a href="#org145cb52">5.4. build.py选项</a></li>
+<li><a href="#org243ecba">5.5. emacs-ycmd</a></li>
 </ul>
 </li>
-<li><a href="#org8874c33">6. elpy for python</a></li>
-<li><a href="#org2081b7a">7. 使用emacs加密文件</a></li>
-<li><a href="#org0b47ecb">8. use of markdown-mode</a></li>
-<li><a href="#orgf38e6bb">9. ssh-terminal in emacs</a></li>
-<li><a href="#org4ba9b91">10. hex-mode</a></li>
-<li><a href="#orgac8b8b9">11. tramp</a>
+<li><a href="#org5ee8042">6. elpy for python</a></li>
+<li><a href="#org9af7fb8">7. 使用emacs加密文件</a></li>
+<li><a href="#orgc0ae854">8. use of markdown-mode</a></li>
+<li><a href="#org6bd9583">9. ssh-terminal in emacs</a></li>
+<li><a href="#org4df75ad">10. hex-mode</a></li>
+<li><a href="#org423ed4a">11. tramp</a>
 <ul>
-<li><a href="#orgea0bbc3">11.1. tramp multi-hop 在远程通过sudo编辑文件</a></li>
-<li><a href="#org0210c8c">11.2. host down后emacs可能会 <code>waiting for prompts from remote shell</code></a></li>
+<li><a href="#orgf2e38c9">11.1. tramp multi-hop 在远程通过sudo编辑文件</a></li>
+<li><a href="#orgf61e1ad">11.2. host down后emacs可能会 <code>waiting for prompts from remote shell</code></a></li>
 </ul>
 </li>
-<li><a href="#orga2fb45b">12. find and grep</a></li>
-<li><a href="#org2f23672">13. <span class="done DONE">DONE</span> lexical and dynamic scoping  box's blog 词法作用域和动态作用域</a></li>
-<li><a href="#orgbbe20bf">14. org tangle</a></li>
-<li><a href="#orge5f704c">15. org exec code block</a></li>
-<li><a href="#org151e0ea">16. org exports</a></li>
-<li><a href="#orgf3e655f">17. theme</a></li>
-<li><a href="#orga98f6f4">18. elisp check if string is empty</a></li>
-<li><a href="#orgc3d340c">19. emacs python parser</a></li>
-<li><a href="#org26683d6">20. 使用workgroup来完善我的工作流</a></li>
-<li><a href="#org717e877">21. 使用ditaa</a></li>
-<li><a href="#org13bea52">22. emacs对齐</a></li>
-<li><a href="#org7c02dcf">23. 正则表达式</a></li>
-<li><a href="#org9276699">24. 使用emacs来查看python代码</a>
+<li><a href="#org6b59cff">12. find and grep</a></li>
+<li><a href="#orga6f7453">13. <span class="done DONE">DONE</span> lexical and dynamic scoping  box's blog 词法作用域和动态作用域</a></li>
+<li><a href="#org314b8d1">14. org tangle</a></li>
+<li><a href="#org3ab41a1">15. org exec code block</a></li>
+<li><a href="#orgff2ce16">16. org exports</a></li>
+<li><a href="#org673e518">17. theme</a></li>
+<li><a href="#org734c01a">18. elisp check if string is empty</a></li>
+<li><a href="#org13f2fc9">19. emacs python parser</a></li>
+<li><a href="#org968f3cd">20. 使用workgroup来完善我的工作流</a></li>
+<li><a href="#org3a34551">21. 使用ditaa</a></li>
+<li><a href="#org5af661d">22. emacs对齐</a></li>
+<li><a href="#orgfb3b170">23. 正则表达式</a></li>
+<li><a href="#org5d7f1bb">24. 使用emacs来查看python代码</a>
 <ul>
-<li><a href="#org5cad753">24.1. elpy</a></li>
-<li><a href="#orgda1951b">24.2. 基于tag</a></li>
-<li><a href="#org79a21e0">24.3. cscope</a></li>
-<li><a href="#org035636d">24.4. ag</a></li>
+<li><a href="#orga2cea7a">24.1. elpy</a></li>
+<li><a href="#org5be6aaf">24.2. 基于tag</a></li>
+<li><a href="#orgbcb24ea">24.3. cscope</a></li>
+<li><a href="#org251aca6">24.4. ag</a></li>
 </ul>
 </li>
-<li><a href="#orge0a97b3">25. replace-regexp中输入换行newline</a></li>
-<li><a href="#org0ce9b51">26. 结合helm-ag来进行multi-edit</a></li>
-<li><a href="#orgcab2b60">27. ibuffer</a></li>
-<li><a href="#org73d2d8e">28. 写一个判断是否有 <code>universal-argument</code> 的函数</a></li>
-<li><a href="#org806c981">29. 读写文件</a></li>
-<li><a href="#org35174fe">30. convert string to list object</a></li>
-<li><a href="#org49f8ee1">31. artist mode</a></li>
-<li><a href="#org2450cd5">32. org-mode代码块</a></li>
-<li><a href="#orgab60da4">33. ivy和helm的写法</a></li>
-<li><a href="#org5a738a0">34. emacs把行号添加到文件中</a></li>
-<li><a href="#org472362b">35. org-mode publish时太慢的解决办法</a></li>
-<li><a href="#org193b4c8">36. bookmark plus</a></li>
-<li><a href="#orgd7380c3">37. elisp函数根据有没有按 <code>C-u</code> 来走不同的流程</a></li>
-<li><a href="#org8c88852">38. 启动加速</a></li>
-<li><a href="#orgbc6e8e5">39. 我的 <code>cc-mode</code></a></li>
-<li><a href="#orgf98e802">40. use exwm</a></li>
-<li><a href="#org12716d7">41. 在elisp函数中使用 <code>C-u</code></a></li>
-<li><a href="#org9ae6dc2">42. cscope和gtags不包括某些目录</a></li>
-<li><a href="#orgbd363b9">43. 为org-mode自动添加目录</a></li>
-<li><a href="#org9ad9c76">44. org-mode tangle整个head</a></li>
-<li><a href="#org6a1e83d">45. 直接查看info文件</a></li>
-<li><a href="#org7a8209c">46. 在elisp中模拟按键的输入</a></li>
-<li><a href="#org0d83d49">47. emacs中的长table导出pdf的问题</a></li>
-<li><a href="#org2f2dc76">48. org-mode中以root用户执行命令</a></li>
-<li><a href="#org1e9b1ed">49. eshell中定义alias</a></li>
-<li><a href="#org0c4006b">50. 在emacs中执行shell脚本</a></li>
+<li><a href="#org31154fc">25. replace-regexp中输入换行newline</a></li>
+<li><a href="#org808fdd4">26. 结合helm-ag来进行multi-edit</a></li>
+<li><a href="#orga396eba">27. ibuffer</a></li>
+<li><a href="#org3861041">28. 写一个判断是否有 <code>universal-argument</code> 的函数</a></li>
+<li><a href="#org3a91498">29. 读写文件</a></li>
+<li><a href="#org2710bb9">30. convert string to list object</a></li>
+<li><a href="#org8b73036">31. artist mode</a></li>
+<li><a href="#orgf1c34b2">32. org-mode代码块</a></li>
+<li><a href="#org46b4b74">33. ivy和helm的写法</a></li>
+<li><a href="#orgd4fe454">34. emacs把行号添加到文件中</a></li>
+<li><a href="#org09f4433">35. org-mode publish时太慢的解决办法</a></li>
+<li><a href="#org352138a">36. bookmark plus</a></li>
+<li><a href="#org45fb8e4">37. elisp函数根据有没有按 <code>C-u</code> 来走不同的流程</a></li>
+<li><a href="#org7d5cc59">38. 启动加速</a></li>
+<li><a href="#orgdfaa6a0">39. 我的 <code>cc-mode</code></a></li>
+<li><a href="#org6531dfa">40. use exwm</a></li>
+<li><a href="#org7eccaeb">41. 在elisp函数中使用 <code>C-u</code></a></li>
+<li><a href="#org0108aea">42. cscope和gtags不包括某些目录</a></li>
+<li><a href="#org8306c46">43. 为org-mode自动添加目录</a></li>
+<li><a href="#orge48b930">44. org-mode tangle整个head</a></li>
+<li><a href="#orgcb16d2b">45. 直接查看info文件</a></li>
+<li><a href="#org7999a50">46. 在elisp中模拟按键的输入</a></li>
+<li><a href="#orgaf5cc6f">47. emacs中的长table导出pdf的问题</a></li>
+<li><a href="#orgc3cae09">48. org-mode中以root用户执行命令</a></li>
+<li><a href="#org14f7de8">49. eshell中定义alias</a></li>
+<li><a href="#orgae7268c">50. 在emacs中执行shell脚本</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org4aa14c3" class="outline-2">
-<h2 id="org4aa14c3"><span class="section-number-2">1</span> 我的emacs学习笔记 <code>[3/4]</code></h2>
+<div id="outline-container-org17261bc" class="outline-2">
+<h2 id="org17261bc"><span class="section-number-2">1</span> 我的emacs学习笔记 <code>[3/4]</code></h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org865375c" class="outline-3">
-<h3 id="org865375c"><span class="section-number-3">1.1</span> 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="shell">shell</span>&#xa0;<span class="command">command</span></span></h3>
+<div id="outline-container-orgf7d9aad" class="outline-3">
+<h3 id="orgf7d9aad"><span class="section-number-3">1.1</span> 每次多个执行shell-command或者async-shell-command都会问是否需要重新开一个buffer&#xa0;&#xa0;&#xa0;<span class="tag"><span class="shell">shell</span>&#xa0;<span class="command">command</span></span></h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 其实就是没次默认开的都是\verb+*Async Shell Command*+这个buffer-name。
@@ -423,8 +423,8 @@ buffer。避免每次都问我。见下：
 </div>
 </div>
 </div>
-<div id="outline-container-org3ed11d2" class="outline-3">
-<h3 id="org3ed11d2"><span class="section-number-3">1.2</span> <span class="done DONE">DONE</span> 自己把一些emacs文档制作成为mobi格式方便kindle阅读。</h3>
+<div id="outline-container-org5d1c06b" class="outline-3">
+<h3 id="org5d1c06b"><span class="section-number-3">1.2</span> <span class="done DONE">DONE</span> 自己把一些emacs文档制作成为mobi格式方便kindle阅读。</h3>
 <div class="outline-text-3" id="text-1-2">
 <ul class="org-ul">
 <li><p>
@@ -504,8 +504,8 @@ Create your mobi version! Have fun ☺<br />
 </div>
 </div>
 
-<div id="outline-container-org87b1c1b" class="outline-3">
-<h3 id="org87b1c1b"><span class="section-number-3">1.3</span> <span class="done DONE">DONE</span> 对emacs的kill-ring的理解</h3>
+<div id="outline-container-org8d50b32" class="outline-3">
+<h3 id="org8d50b32"><span class="section-number-3">1.3</span> <span class="done DONE">DONE</span> 对emacs的kill-ring的理解</h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li>State "DONE"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2014-11-06 四 21:16]</span></span></li>
@@ -522,8 +522,8 @@ properties的指针。这两个symbol都是指向变量的指针这在起作用�
 </div>
 </div>
 
-<div id="outline-container-org7e2745e" class="outline-3">
-<h3 id="org7e2745e"><span class="section-number-3">1.4</span> <span class="done DONE">DONE</span> 使用org-mode来管理GTD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="blog">blog</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span></span></h3>
+<div id="outline-container-org667259d" class="outline-3">
+<h3 id="org667259d"><span class="section-number-3">1.4</span> <span class="done DONE">DONE</span> 使用org-mode来管理GTD&#xa0;&#xa0;&#xa0;<span class="tag"><span class="blog">blog</span>&#xa0;<span class="org">org</span>&#xa0;<span class="mode">mode</span></span></h3>
 <div class="outline-text-3" id="text-1-4">
 <ul class="org-ul">
 <li><p>
@@ -603,8 +603,8 @@ org-todo-keywords这个变量。可以自定义事件不同的状态。
 </div>
 </div>
 
-<div id="outline-container-org1c73b32" class="outline-3">
-<h3 id="org1c73b32"><span class="section-number-3">1.5</span> emacs下关的一些学习资料</h3>
+<div id="outline-container-org0fa06ff" class="outline-3">
+<h3 id="org0fa06ff"><span class="section-number-3">1.5</span> emacs下关的一些学习资料</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 看tuhdo的emacs mini manual，里面有写 关于gtags+semantic ， 目前最快的方法
@@ -652,8 +652,8 @@ org-todo-keywords这个变量。可以自定义事件不同的状态。
 </p>
 </div>
 </div>
-<div id="outline-container-orgb2f503c" class="outline-3">
-<h3 id="orgb2f503c"><span class="section-number-3">1.6</span> emacs中判断系统的版本</h3>
+<div id="outline-container-org1c67d74" class="outline-3">
+<h3 id="org1c67d74"><span class="section-number-3">1.6</span> emacs中判断系统的版本</h3>
 <div class="outline-text-3" id="text-1-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">check OS type</span>
@@ -676,12 +676,12 @@ org-todo-keywords这个变量。可以自定义事件不同的状态。
 </div>
 </div>
 </div>
-<div id="outline-container-org293641b" class="outline-3">
-<h3 id="eshell"><a id="org293641b"></a><span class="section-number-3">1.7</span> eshell	<code>[0/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="eshell">eshell</span></span></h3>
+<div id="outline-container-org20e0e0c" class="outline-3">
+<h3 id="eshell"><a id="org20e0e0c"></a><span class="section-number-3">1.7</span> eshell	<code>[0/1]</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="eshell">eshell</span></span></h3>
 <div class="outline-text-3" id="text-eshell">
 </div>
-<div id="outline-container-org3b288bf" class="outline-4">
-<h4 id="org3b288bf"><span class="section-number-4">1.7.1</span> 进入之前进入过的文件夹</h4>
+<div id="outline-container-org83daa30" class="outline-4">
+<h4 id="org83daa30"><span class="section-number-4">1.7.1</span> 进入之前进入过的文件夹</h4>
 <div class="outline-text-4" id="text-1-7-1">
 <p>
 `cd ='可以查看历史文件夹。
@@ -696,16 +696,16 @@ org-todo-keywords这个变量。可以自定义事件不同的状态。
 </p>
 </div>
 </div>
-<div id="outline-container-org81ad00a" class="outline-4">
-<h4 id="org81ad00a"><span class="section-number-4">1.7.2</span> 不使用eshell中用lisp编译的命令</h4>
+<div id="outline-container-org8274ad2" class="outline-4">
+<h4 id="org8274ad2"><span class="section-number-4">1.7.2</span> 不使用eshell中用lisp编译的命令</h4>
 <div class="outline-text-4" id="text-1-7-2">
 <p>
 使用lisp编译的版本效率实在太低。在info中看到可以使用*ls来调用系统原始的合令。其它也一样。 <a href="https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Built_002dins">eshell#Built-ins</a>
 </p>
 </div>
 </div>
-<div id="outline-container-org1361ae7" class="outline-4">
-<h4 id="org1361ae7"><span class="section-number-4">1.7.3</span> 使用jobs控制eemacs中的子进程</h4>
+<div id="outline-container-org9cb910d" class="outline-4">
+<h4 id="org9cb910d"><span class="section-number-4">1.7.3</span> 使用jobs控制eemacs中的子进程</h4>
 <div class="outline-text-4" id="text-1-7-3">
 <p>
 使用jobs可以查看emacs中的所有子进程。kill可以子进程。kill不仅可以接进程id，还可以接`project object'。
@@ -716,8 +716,8 @@ org-todo-keywords这个变量。可以自定义事件不同的状态。
 </p>
 </div>
 </div>
-<div id="outline-container-org0144597" class="outline-4">
-<h4 id="org0144597"><span class="section-number-4">1.7.4</span> 一些有用的快捷键</h4>
+<div id="outline-container-orgca9b330" class="outline-4">
+<h4 id="orgca9b330"><span class="section-number-4">1.7.4</span> 一些有用的快捷键</h4>
 <div class="outline-text-4" id="text-1-7-4">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -757,8 +757,8 @@ org-todo-keywords这个变量。可以自定义事件不同的状态。
 </table>
 </div>
 </div>
-<div id="outline-container-orga5f40e9" class="outline-4">
-<h4 id="orga5f40e9"><span class="section-number-4">1.7.5</span> 在eshell中使用 <code>**</code> 代替 <code>*</code></h4>
+<div id="outline-container-orgde36151" class="outline-4">
+<h4 id="orgde36151"><span class="section-number-4">1.7.5</span> 在eshell中使用 <code>**</code> 代替 <code>*</code></h4>
 <div class="outline-text-4" id="text-1-7-5">
 <p>
 eshell在只使用一个 <code>*</code> 的时候会触发自动补全。最后发现使用 <code>**</code> 可以达到原来一个 <code>*</code> 的效果。
@@ -769,8 +769,8 @@ eshell在只使用一个 <code>*</code> 的时候会触发自动补全。最后�
 </p>
 </div>
 </div>
-<div id="outline-container-orgee14d36" class="outline-4">
-<h4 id="orgee14d36"><span class="section-number-4">1.7.6</span> Eshell中执行bash脚本</h4>
+<div id="outline-container-org7f15776" class="outline-4">
+<h4 id="org7f15776"><span class="section-number-4">1.7.6</span> Eshell中执行bash脚本</h4>
 <div class="outline-text-4" id="text-1-7-6">
 <p>
 比如执行下面的代码：
@@ -789,8 +789,8 @@ eshell在只使用一个 <code>*</code> 的时候会触发自动补全。最后�
 </p>
 </div>
 </div>
-<div id="outline-container-orgb05b432" class="outline-4">
-<h4 id="orgb05b432"><span class="section-number-4">1.7.7</span> <span class="todo TODO">TODO</span> 一些期待改进的功能 <code>[0/7]</code></h4>
+<div id="outline-container-org13429d3" class="outline-4">
+<h4 id="org13429d3"><span class="section-number-4">1.7.7</span> <span class="todo TODO">TODO</span> 一些期待改进的功能 <code>[0/7]</code></h4>
 <div class="outline-text-4" id="text-1-7-7">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> grep可以显示颜色</li>
@@ -822,20 +822,20 @@ eshell在只使用一个 <code>*</code> 的时候会触发自动补全。最后�
 </div>
 </div>
 
-<div id="outline-container-orgaaaf31b" class="outline-3">
-<h3 id="orgaaaf31b"><span class="section-number-3">1.8</span> C/C++ IDE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ide">ide</span>&#xa0;<span class="C">C</span>&#xa0;<span class="C">C</span></span></h3>
+<div id="outline-container-org606e335" class="outline-3">
+<h3 id="org606e335"><span class="section-number-3">1.8</span> C/C++ IDE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ide">ide</span>&#xa0;<span class="C">C</span>&#xa0;<span class="C">C</span></span></h3>
 <div class="outline-text-3" id="text-1-8">
 </div>
-<div id="outline-container-orgcd51b7b" class="outline-4">
-<h4 id="orgcd51b7b"><span class="section-number-4">1.8.1</span> 使用ecb</h4>
+<div id="outline-container-orgc171854" class="outline-4">
+<h4 id="orgc171854"><span class="section-number-4">1.8.1</span> 使用ecb</h4>
 <div class="outline-text-4" id="text-1-8-1">
 <p>
 可以更加方便地浏览代码。在`init.el'中将(require 'init-ecb)打开就可以使用。我使用过的函数大概是`ecb-expand-method-nodes'和`ecb-expand-directory-*'和`ecb-toggle-layout'这些。还没有对其进行仔细地配置，以后用到再说。
 </p>
 </div>
 </div>
-<div id="outline-container-orgcf17272" class="outline-4">
-<h4 id="orgcf17272"><span class="section-number-4">1.8.2</span> <span class="todo TODO">TODO</span> cedet</h4>
+<div id="outline-container-orgff29a32" class="outline-4">
+<h4 id="orgff29a32"><span class="section-number-4">1.8.2</span> <span class="todo TODO">TODO</span> cedet</h4>
 <div class="outline-text-4" id="text-1-8-2">
 <p>
 emacs24中应该是已经集成了。还没有使用到。
@@ -843,8 +843,8 @@ emacs24中应该是已经集成了。还没有使用到。
 </div>
 </div>
 </div>
-<div id="outline-container-org9b01ac6" class="outline-3">
-<h3 id="org9b01ac6"><span class="section-number-3">1.9</span> 闹钟&#xa0;&#xa0;&#xa0;<span class="tag"><span class="alarm">alarm</span></span></h3>
+<div id="outline-container-org2ae7e29" class="outline-3">
+<h3 id="org2ae7e29"><span class="section-number-3">1.9</span> 闹钟&#xa0;&#xa0;&#xa0;<span class="tag"><span class="alarm">alarm</span></span></h3>
 <div class="outline-text-3" id="text-1-9">
 <p>
 在mac中，使用的是`terminal-notifier'做为输出。
@@ -858,11 +858,11 @@ emacs24中应该是已经集成了。还没有使用到。
      <span style="color: #cd5c5c;">;; </span>
      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Filename: alarm.el</span>
      <span style="color: #cd5c5c;">;; </span>
-     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Description: &#20174;&#32593;&#19978;&#19979;&#36733;&#30340;&#12290;&#25105;&#20462;&#25913;&#20102;&#19968;&#19979;&#12290;&#22312;mac&#19978;&#38656;&#35201;&#23433;&#35013;`</span><span style="color: #7fffd4;">terminal-notifier</span><span style="color: #cd5c5c;">'&#26469;&#20135;&#29983;alarm</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Description: \344\273\216\347\275\221\344\270\212\344\270\213\350\275\275\347\232\204\343\200\202\346\210\221\344\277\256\346\224\271\344\272\206\344\270\200\344\270\213\343\200\202\345\234\250mac\344\270\212\351\234\200\350\246\201\345\256\211\350\243\205`</span><span style="color: #7fffd4;">terminal-notifier</span><span style="color: #cd5c5c;">'\346\235\245\344\272\247\347\224\237alarm</span>
      <span style="color: #cd5c5c;">;; </span>
      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Author: pengpengxp</span>
      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Email: pengpengxppri@gmail.com</span>
-     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Created: &#20108;  3 17 20:43:28 2015 (+0800)</span>
+     <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Created: \344\272\214  3 17 20:43:28 2015 (+0800)</span>
      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Version: </span>
      <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">Last-Updated: </span>
      <span style="color: #cd5c5c;">;; </span>
@@ -917,8 +917,8 @@ emacs24中应该是已经集成了。还没有使用到。
 </p>
 </div>
 </div>
-<div id="outline-container-org8908710" class="outline-3">
-<h3 id="org8908710"><span class="section-number-3">1.10</span> 使用过tramp编辑远程文件后eshell的问题</h3>
+<div id="outline-container-org24f20f0" class="outline-3">
+<h3 id="org24f20f0"><span class="section-number-3">1.10</span> 使用过tramp编辑远程文件后eshell的问题</h3>
 <div class="outline-text-3" id="text-1-10">
 <p>
 使用过tramp编辑远程文件以后，eshell每次切换目录时候都自动登陆，然后就一直等待或是手动`C-g'。其实可以在`~/.emacs.d/eshell/lastdir'中将以`/ssh'和`/scp'这些开头的目录删掉就可以了。这些都是默认被记录下来了。
@@ -929,8 +929,8 @@ emacs24中应该是已经集成了。还没有使用到。
 </p>
 </div>
 </div>
-<div id="outline-container-org8f9d0c3" class="outline-3">
-<h3 id="org8f9d0c3"><span class="section-number-3">1.11</span> 重新安装helm&#xa0;&#xa0;&#xa0;<span class="tag"><span class="helm">helm</span></span></h3>
+<div id="outline-container-org3f88c92" class="outline-3">
+<h3 id="org3f88c92"><span class="section-number-3">1.11</span> 重新安装helm&#xa0;&#xa0;&#xa0;<span class="tag"><span class="helm">helm</span></span></h3>
 <div class="outline-text-3" id="text-1-11">
 <p>
 需要在helm-master中使用make来编译一下才行。这里需要用到`cask'。到现在不知道是干什么的。
@@ -941,8 +941,8 @@ emacs24中应该是已经集成了。还没有使用到。
 </p>
 </div>
 </div>
-<div id="outline-container-org83c954f" class="outline-3">
-<h3 id="org83c954f"><span class="section-number-3">1.12</span> 在emacs中使用zsh</h3>
+<div id="outline-container-org61ef9ac" class="outline-3">
+<h3 id="org61ef9ac"><span class="section-number-3">1.12</span> 在emacs中使用zsh</h3>
 <div class="outline-text-3" id="text-1-12">
 <p>
 可以通过使用`sudo chsh -u pengpengxp -s /bin/zsh'设置默认shell为zsh。
@@ -969,12 +969,12 @@ emacs24中应该是已经集成了。还没有使用到。
 </p>
 </div>
 </div>
-<div id="outline-container-org408112b" class="outline-3">
-<h3 id="org408112b"><span class="section-number-3">1.13</span> company-mode自动补全</h3>
+<div id="outline-container-org83d0a95" class="outline-3">
+<h3 id="org83d0a95"><span class="section-number-3">1.13</span> company-mode自动补全</h3>
 <div class="outline-text-3" id="text-1-13">
 </div>
-<div id="outline-container-orge8962e6" class="outline-4">
-<h4 id="orge8962e6"><span class="section-number-4">1.13.1</span> 基本内容</h4>
+<div id="outline-container-org628aa9d" class="outline-4">
+<h4 id="org628aa9d"><span class="section-number-4">1.13.1</span> 基本内容</h4>
 <div class="outline-text-4" id="text-1-13-1">
 <p>
 company-mode可以有许多的backends。可以查看`company-backends'。
@@ -1009,12 +1009,12 @@ backend可以分组。上面原始的就有一个分组，中间的那个：
 </p>
 </div>
 </div>
-<div id="outline-container-orgd3030fc" class="outline-4">
-<h4 id="orgd3030fc"><span class="section-number-4">1.13.2</span> <span class="todo TODO">TODO</span> 不同的mode使用不同的backend</h4>
+<div id="outline-container-org66e5577" class="outline-4">
+<h4 id="org66e5577"><span class="section-number-4">1.13.2</span> <span class="todo TODO">TODO</span> 不同的mode使用不同的backend</h4>
 </div>
 </div>
-<div id="outline-container-orgc143125" class="outline-3">
-<h3 id="orgc143125"><span class="section-number-3">1.14</span> emacsclient</h3>
+<div id="outline-container-orgae17cf9" class="outline-3">
+<h3 id="orgae17cf9"><span class="section-number-3">1.14</span> emacsclient</h3>
 <div class="outline-text-3" id="text-1-14">
 <p>
 默认是开启GUI，使用`-nw'参数就可以在当前的tty下访问了。
@@ -1025,8 +1025,8 @@ mac下的emacsclient是系统默认的emacs22的。我的emacs24不能使用。�
 </p>
 </div>
 </div>
-<div id="outline-container-org8d4e9ba" class="outline-3">
-<h3 id="org8d4e9ba"><span class="section-number-3">1.15</span> cua-mode</h3>
+<div id="outline-container-org1c11a51" class="outline-3">
+<h3 id="org1c11a51"><span class="section-number-3">1.15</span> cua-mode</h3>
 <div class="outline-text-3" id="text-1-15">
 <p>
 cua-mode下可以用以下命令进行列操作：
@@ -1129,8 +1129,8 @@ cua-mode下可以用以下命令进行列操作：
 </table>
 </div>
 </div>
-<div id="outline-container-org1dbfe22" class="outline-3">
-<h3 id="org1dbfe22"><span class="section-number-3">1.16</span> <span class="todo TODO">TODO</span> cscope&#xa0;&#xa0;&#xa0;<span class="tag"><span class="cscope">cscope</span></span></h3>
+<div id="outline-container-org500206f" class="outline-3">
+<h3 id="org500206f"><span class="section-number-3">1.16</span> <span class="todo TODO">TODO</span> cscope&#xa0;&#xa0;&#xa0;<span class="tag"><span class="cscope">cscope</span></span></h3>
 <div class="outline-text-3" id="text-1-16">
 <p>
 cscope是一个独立的程序，也可以在emacs中使用。安装过程不说了。下载放入加载就行了。
@@ -1205,12 +1205,12 @@ emacs中还没有找到方法。
 </div>
 </div>
 
-<div id="outline-container-org16f4c1c" class="outline-2">
-<h2 id="org16f4c1c"><span class="section-number-2">2</span> 我的lisp学习笔记</h2>
+<div id="outline-container-org4cdb146" class="outline-2">
+<h2 id="org4cdb146"><span class="section-number-2">2</span> 我的lisp学习笔记</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org4f626f9" class="outline-3">
-<h3 id="org4f626f9"><span class="section-number-3">2.1</span> <span class="done DONE">DONE</span> scheme中的define&#xa0;&#xa0;&#xa0;<span class="tag"><span class="scheme">scheme</span></span></h3>
+<div id="outline-container-orge4805d8" class="outline-3">
+<h3 id="orge4805d8"><span class="section-number-3">2.1</span> <span class="done DONE">DONE</span> scheme中的define&#xa0;&#xa0;&#xa0;<span class="tag"><span class="scheme">scheme</span></span></h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
 <li><p>
@@ -1242,8 +1242,8 @@ State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb61f979" class="outline-3">
-<h3 id="orgb61f979"><span class="section-number-3">2.2</span> 写一个自动转换org到pdf的脚本。<a href="http://stackoverflow.com/questions/22072773/batch-export-of-org-mode-files-from-the-command-line">这里</a> 可以看看。我是想批量转换我的org文件。&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notperfect">notperfect</span></span></h3>
+<div id="outline-container-org34ea706" class="outline-3">
+<h3 id="org34ea706"><span class="section-number-3">2.2</span> 写一个自动转换org到pdf的脚本。<a href="http://stackoverflow.com/questions/22072773/batch-export-of-org-mode-files-from-the-command-line">这里</a> 可以看看。我是想批量转换我的org文件。&#xa0;&#xa0;&#xa0;<span class="tag"><span class="notperfect">notperfect</span></span></h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 emacs的batch-mode可以看看。
@@ -1286,8 +1286,8 @@ emacs的batch-mode可以看看。
 </p>
 </div>
 </div>
-<div id="outline-container-org395a808" class="outline-3">
-<h3 id="org395a808"><span class="section-number-3">2.3</span> copy-keymap</h3>
+<div id="outline-container-orgeb4d354" class="outline-3">
+<h3 id="orgeb4d354"><span class="section-number-3">2.3</span> copy-keymap</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 想要保存一个keymap不能简单的使用setq：
@@ -1306,8 +1306,8 @@ emacs的batch-mode可以看看。
 </div>
 </div>
 </div>
-<div id="outline-container-orged54490" class="outline-3">
-<h3 id="orged54490"><span class="section-number-3">2.4</span> 其它笔记</h3>
+<div id="outline-container-orgcfb842c" class="outline-3">
+<h3 id="orgcfb842c"><span class="section-number-3">2.4</span> 其它笔记</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 据说lisp的宏在本质上是一个由编译器自动为你动行的代码生成器。
@@ -1329,12 +1329,12 @@ emacs的batch-mode可以看看。
 </div>
 </div>
 
-<div id="outline-container-org57b4559" class="outline-2">
-<h2 id="org57b4559"><span class="section-number-2">3</span> 我的emacs习惯</h2>
+<div id="outline-container-orgfed3377" class="outline-2">
+<h2 id="orgfed3377"><span class="section-number-2">3</span> 我的emacs习惯</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgdbb6e5d" class="outline-3">
-<h3 id="orgdbb6e5d"><span class="section-number-3">3.1</span> 插件</h3>
+<div id="outline-container-orga240483" class="outline-3">
+<h3 id="orga240483"><span class="section-number-3">3.1</span> 插件</h3>
 <div class="outline-text-3" id="text-3-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1702,8 +1702,8 @@ emacs的batch-mode可以看看。
 </div>
 </div>
 
-<div id="outline-container-org2fec577" class="outline-2">
-<h2 id="org2fec577"><span class="section-number-2">4</span> config irony-mode</h2>
+<div id="outline-container-org88eb253" class="outline-2">
+<h2 id="org88eb253"><span class="section-number-2">4</span> config irony-mode</h2>
 <div class="outline-text-2" id="text-4">
 <ol class="org-ol">
 <li>down source code;</li>
@@ -1743,8 +1743,8 @@ projectExample .clang<sub>complete</sub> file:
 </div>
 </div>
 
-<div id="outline-container-orgb791861" class="outline-2">
-<h2 id="orgb791861"><span class="section-number-2">5</span> config ycmd</h2>
+<div id="outline-container-orgc34ad31" class="outline-2">
+<h2 id="orgc34ad31"><span class="section-number-2">5</span> config ycmd</h2>
 <div class="outline-text-2" id="text-5">
 <ol class="org-ol">
 <li>git clone XXX</li>
@@ -1763,8 +1763,8 @@ configure it:
 </div></li>
 </ol>
 </div>
-<div id="outline-container-org44fc986" class="outline-3">
-<h3 id="org44fc986"><span class="section-number-3">5.1</span> config ycm for my own project:</h3>
+<div id="outline-container-orgb713015" class="outline-3">
+<h3 id="orgb713015"><span class="section-number-3">5.1</span> config ycm for my own project:</h3>
 <div class="outline-text-3" id="text-5-1">
 <ul class="org-ul">
 <li>need to write .ycm<sub>extra</sub><sub>conf.py</sub> files to tell ycm where the
@@ -1790,8 +1790,8 @@ set `ycmd-global-config' for a global config
 </ul>
 </div>
 </div>
-<div id="outline-container-org6b551ba" class="outline-3">
-<h3 id="org6b551ba"><span class="section-number-3">5.2</span> 编译ycmd时可能出错</h3>
+<div id="outline-container-org68d19cc" class="outline-3">
+<h3 id="org68d19cc"><span class="section-number-3">5.2</span> 编译ycmd时可能出错</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 第一次编译时，需要更新到最新，然后把git子模块也更新到最新。
@@ -1841,8 +1841,8 @@ set `ycmd-global-config' for a global config
 </p>
 </div>
 </div>
-<div id="outline-container-org7f6fa32" class="outline-3">
-<h3 id="org7f6fa32"><span class="section-number-3">5.3</span> ycmd介绍</h3>
+<div id="outline-container-orgc931d13" class="outline-3">
+<h3 id="orgc931d13"><span class="section-number-3">5.3</span> ycmd介绍</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 它本来是vim上的插件 <code>YouCompleteMe</code> 。现在整成了一个通用的。
@@ -1911,8 +1911,8 @@ below.这后面还有这样一段：
 </ol>
 </div>
 </div>
-<div id="outline-container-org5894795" class="outline-3">
-<h3 id="org5894795"><span class="section-number-3">5.4</span> build.py选项</h3>
+<div id="outline-container-org145cb52" class="outline-3">
+<h3 id="org145cb52"><span class="section-number-3">5.4</span> build.py选项</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
 使用 <code>./build.py --help</code> 查看一下：
@@ -1960,8 +1960,8 @@ below.这后面还有这样一段：
 </ul>
 </div>
 </div>
-<div id="outline-container-orgbd19502" class="outline-3">
-<h3 id="orgbd19502"><span class="section-number-3">5.5</span> emacs-ycmd</h3>
+<div id="outline-container-org243ecba" class="outline-3">
+<h3 id="org243ecba"><span class="section-number-3">5.5</span> emacs-ycmd</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
 在emacs中使用，可以直接使用 <code>emacs-ycmd</code> 这个插件。
@@ -1970,8 +1970,8 @@ below.这后面还有这样一段：
 </div>
 </div>
 
-<div id="outline-container-org8874c33" class="outline-2">
-<h2 id="org8874c33"><span class="section-number-2">6</span> elpy for python</h2>
+<div id="outline-container-org5ee8042" class="outline-2">
+<h2 id="org5ee8042"><span class="section-number-2">6</span> elpy for python</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 直接使用官网教程，先使用pip把需要的第三方工具安装好，然后使用package
@@ -2013,8 +2013,8 @@ below.这后面还有这样一段：
 </div>
 </div>
 
-<div id="outline-container-org2081b7a" class="outline-2">
-<h2 id="org2081b7a"><span class="section-number-2">7</span> 使用emacs加密文件</h2>
+<div id="outline-container-org9af7fb8" class="outline-2">
+<h2 id="org9af7fb8"><span class="section-number-2">7</span> 使用emacs加密文件</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 修改好文件后，使用 `epa-encrypt-file'就可以加密。默认加密完成后，会
@@ -2027,8 +2027,8 @@ below.这后面还有这样一段：
 </p>
 </div>
 </div>
-<div id="outline-container-org0b47ecb" class="outline-2">
-<h2 id="org0b47ecb"><span class="section-number-2">8</span> use of markdown-mode</h2>
+<div id="outline-container-orgc0ae854" class="outline-2">
+<h2 id="orgc0ae854"><span class="section-number-2">8</span> use of markdown-mode</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 markdown #1 ### 使用 ###
@@ -2110,8 +2110,8 @@ M-{,M-},C-M-a,C-M-e,C-M-h 快速跳转，和 Emacs 基础快捷键操作一样
 </p>
 </div>
 </div>
-<div id="outline-container-orgf38e6bb" class="outline-2">
-<h2 id="orgf38e6bb"><span class="section-number-2">9</span> ssh-terminal in emacs</h2>
+<div id="outline-container-org6bd9583" class="outline-2">
+<h2 id="org6bd9583"><span class="section-number-2">9</span> ssh-terminal in emacs</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 It turns out, there is what you want:
@@ -2130,8 +2130,8 @@ and then M-x rlogin RET &lt;myhost&gt; RET will do that.
 </p>
 </div>
 </div>
-<div id="outline-container-org4ba9b91" class="outline-2">
-<h2 id="org4ba9b91"><span class="section-number-2">10</span> hex-mode</h2>
+<div id="outline-container-org4df75ad" class="outline-2">
+<h2 id="org4df75ad"><span class="section-number-2">10</span> hex-mode</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 `hexl-insert-hex-char'可以按照16进制来修改文件。输入37就对应修改为了
@@ -2139,24 +2139,24 @@ and then M-x rlogin RET &lt;myhost&gt; RET will do that.
 </p>
 </div>
 </div>
-<div id="outline-container-orgac8b8b9" class="outline-2">
-<h2 id="orgac8b8b9"><span class="section-number-2">11</span> tramp</h2>
+<div id="outline-container-org423ed4a" class="outline-2">
+<h2 id="org423ed4a"><span class="section-number-2">11</span> tramp</h2>
 <div class="outline-text-2" id="text-11">
 </div>
-<div id="outline-container-orgea0bbc3" class="outline-3">
-<h3 id="orgea0bbc3"><span class="section-number-3">11.1</span> tramp multi-hop 在远程通过sudo编辑文件</h3>
+<div id="outline-container-orgf2e38c9" class="outline-3">
+<h3 id="orgf2e38c9"><span class="section-number-3">11.1</span> tramp multi-hop 在远程通过sudo编辑文件</h3>
 <div class="outline-text-3" id="text-11-1">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#20351;tramp&#21487;&#20197;&#20351;&#29992;`</span><span style="color: #7fffd4;">/sudo:root@host:/etc</span><span style="color: #cd5c5c;">'&#36825;&#26679;&#30340;&#24418;&#24335;&#26469;&#22312;&#36828;&#31243;&#20351;&#29992;`</span><span style="color: #7fffd4;">sudo</span><span style="color: #cd5c5c;">'</span>
-     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#32534;&#36753;&#25991;&#20214;&#65292;&#29978;&#33267;&#21487;&#20197;&#20351;&#29992;`</span><span style="color: #7fffd4;">cd</span><span style="color: #cd5c5c;">'&#30452;&#25509;&#36827;&#21435;&#12290;&#22330;&#26223;&#26159;&#19981;&#33021;&#36890;&#36807;root&#29992;&#25143;&#36828;&#31243;&#30331;&#38470;&#65292;</span>
-     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#20294;&#26159;&#21448;&#38656;&#35201;&#20351;&#29992;root&#30340;&#26435;&#38480;&#26469;&#32534;&#36753;&#25991;&#20214;&#12290;</span>
+<pre class="src src-emacs-lisp">     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">\344\275\277tramp\345\217\257\344\273\245\344\275\277\347\224\250`</span><span style="color: #7fffd4;">/sudo:root@host:/etc</span><span style="color: #cd5c5c;">'\350\277\231\346\240\267\347\232\204\345\275\242\345\274\217\346\235\245\345\234\250\350\277\234\347\250\213\344\275\277\347\224\250`</span><span style="color: #7fffd4;">sudo</span><span style="color: #cd5c5c;">'</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">\347\274\226\350\276\221\346\226\207\344\273\266\357\274\214\347\224\232\350\207\263\345\217\257\344\273\245\344\275\277\347\224\250`</span><span style="color: #7fffd4;">cd</span><span style="color: #cd5c5c;">'\347\233\264\346\216\245\350\277\233\345\216\273\343\200\202\345\234\272\346\231\257\346\230\257\344\270\215\350\203\275\351\200\232\350\277\207root\347\224\250\346\210\267\350\277\234\347\250\213\347\231\273\351\231\206\357\274\214</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">\344\275\206\346\230\257\345\217\210\351\234\200\350\246\201\344\275\277\347\224\250root\347\232\204\346\235\203\351\231\220\346\235\245\347\274\226\350\276\221\346\226\207\344\273\266\343\200\202</span>
      (add-to-list 'tramp-default-proxies-alist
                   '(nil <span style="color: #ffa500;">"\\`</span><span style="color: #7fffd4;">root\\</span><span style="color: #ffa500;">'"</span> <span style="color: #ffa500;">"/ssh:%h:"</span>))
      (add-to-list 'tramp-default-proxies-alist
                   '((regexp-quote (system-name)) nil nil))
 
-     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#26412;&#26426;&#20013;&#20351;&#29992;`</span><span style="color: #7fffd4;">localhost</span><span style="color: #cd5c5c;">'&#36825;&#20010;HOST&#26469;&#20351;&#29992;sudo&#65292;&#35774;&#32622;&#22312;&#26412;&#26426;&#26102;&#30340;user&#21644;proxy</span>
-     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">&#37117;&#26159;&#40664;&#35748;&#20540;nil</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">\346\234\254\346\234\272\344\270\255\344\275\277\347\224\250`</span><span style="color: #7fffd4;">localhost</span><span style="color: #cd5c5c;">'\350\277\231\344\270\252HOST\346\235\245\344\275\277\347\224\250sudo\357\274\214\350\256\276\347\275\256\345\234\250\346\234\254\346\234\272\346\227\266\347\232\204user\345\222\214proxy</span>
+     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">\351\203\275\346\230\257\351\273\230\350\256\244\345\200\274nil</span>
      (add-to-list 'tramp-default-proxies-alist
                   '((regexp-quote <span style="color: #ffa500;">"localhost"</span>) nil nil))
 </pre>
@@ -2167,8 +2167,8 @@ and then M-x rlogin RET &lt;myhost&gt; RET will do that.
 </p>
 </div>
 </div>
-<div id="outline-container-org0210c8c" class="outline-3">
-<h3 id="org0210c8c"><span class="section-number-3">11.2</span> host down后emacs可能会 <code>waiting for prompts from remote shell</code></h3>
+<div id="outline-container-orgf61e1ad" class="outline-3">
+<h3 id="orgf61e1ad"><span class="section-number-3">11.2</span> host down后emacs可能会 <code>waiting for prompts from remote shell</code></h3>
 <div class="outline-text-3" id="text-11-2">
 <p>
 删除 <code>~/.emacs.d/tramp</code> 文件就可以了。这个文件应该是cache的一些认证
@@ -2186,8 +2186,8 @@ and then M-x rlogin RET &lt;myhost&gt; RET will do that.
 </div>
 </div>
 </div>
-<div id="outline-container-orga2fb45b" class="outline-2">
-<h2 id="orga2fb45b"><span class="section-number-2">12</span> find and grep</h2>
+<div id="outline-container-org6b59cff" class="outline-2">
+<h2 id="org6b59cff"><span class="section-number-2">12</span> find and grep</h2>
 <div class="outline-text-2" id="text-12">
 <ul class="org-ul">
 <li>in file or buffer: helm-occur, swiper</li>
@@ -2196,8 +2196,8 @@ and then M-x rlogin RET &lt;myhost&gt; RET will do that.
 </ul>
 </div>
 </div>
-<div id="outline-container-org2f23672" class="outline-2">
-<h2 id="org2f23672"><span class="section-number-2">13</span> <span class="done DONE">DONE</span> lexical and dynamic scoping  <a href="https://yoo2080.wordpress.com/2011/12/31/lexical-scoping-and-dynamic-scoping-in-emacs-lisp/">box's blog</a> 词法作用域和动态作用域</h2>
+<div id="outline-container-orga6f7453" class="outline-2">
+<h2 id="orga6f7453"><span class="section-number-2">13</span> <span class="done DONE">DONE</span> lexical and dynamic scoping  <a href="https://yoo2080.wordpress.com/2011/12/31/lexical-scoping-and-dynamic-scoping-in-emacs-lisp/">box's blog</a> 词法作用域和动态作用域</h2>
 <div class="outline-text-2" id="text-13">
 <ul class="org-ul">
 <li>State "DONE"       from "PLAN"       <span class="timestamp-wrapper"><span class="timestamp">[2016-10-12 三 09:40]</span></span></li>
@@ -2254,8 +2254,8 @@ lexical scoping, it is determined by <b>where</b> my-print-a is
 </p>
 </div>
 </div>
-<div id="outline-container-orgbbe20bf" class="outline-2">
-<h2 id="orgbbe20bf"><span class="section-number-2">14</span> org tangle</h2>
+<div id="outline-container-org314b8d1" class="outline-2">
+<h2 id="org314b8d1"><span class="section-number-2">14</span> org tangle</h2>
 <div class="outline-text-2" id="text-14">
 <p>
 org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode中这样写，然后
@@ -2282,8 +2282,8 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </div>
 </div>
 </div>
-<div id="outline-container-orge5f704c" class="outline-2">
-<h2 id="orge5f704c"><span class="section-number-2">15</span> org exec code block</h2>
+<div id="outline-container-org3ab41a1" class="outline-2">
+<h2 id="org3ab41a1"><span class="section-number-2">15</span> org exec code block</h2>
 <div class="outline-text-2" id="text-15">
 <p>
 默认result中不会有脚本向STDOUT输出的内容。加入 <code>:result output</code>
@@ -2298,8 +2298,8 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </div>
 </div>
 </div>
-<div id="outline-container-org151e0ea" class="outline-2">
-<h2 id="org151e0ea"><span class="section-number-2">16</span> org exports</h2>
+<div id="outline-container-orgff2ce16" class="outline-2">
+<h2 id="orgff2ce16"><span class="section-number-2">16</span> org exports</h2>
 <div class="outline-text-2" id="text-16">
 <p>
 下面这样，生成html的时候才会把结果导出出来。
@@ -2311,16 +2311,16 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </div>
 </div>
 
-<div id="outline-container-orgf3e655f" class="outline-2">
-<h2 id="orgf3e655f"><span class="section-number-2">17</span> theme</h2>
+<div id="outline-container-org673e518" class="outline-2">
+<h2 id="org673e518"><span class="section-number-2">17</span> theme</h2>
 <div class="outline-text-2" id="text-17">
 <p>
 <a href="https://emacsthemes.com/">这里有很多emacs的theme</a>
 </p>
 </div>
 </div>
-<div id="outline-container-orga98f6f4" class="outline-2">
-<h2 id="orga98f6f4"><span class="section-number-2">18</span> elisp check if string is empty</h2>
+<div id="outline-container-org734c01a" class="outline-2">
+<h2 id="org734c01a"><span class="section-number-2">18</span> elisp check if string is empty</h2>
 <div class="outline-text-2" id="text-18">
 <div class="org-src-container">
 <pre class="src src-elisp">    (= 0 (length <span style="color: #ffa500;">""</span>))
@@ -2328,8 +2328,8 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </div>
 </div>
 </div>
-<div id="outline-container-orgc3d340c" class="outline-2">
-<h2 id="orgc3d340c"><span class="section-number-2">19</span> emacs python parser</h2>
+<div id="outline-container-org13f2fc9" class="outline-2">
+<h2 id="org13f2fc9"><span class="section-number-2">19</span> emacs python parser</h2>
 <div class="outline-text-2" id="text-19">
 <p>
 <code>orgnode.py</code> 源码在这里：
@@ -2682,8 +2682,8 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </div>
 </div>
 </div>
-<div id="outline-container-org26683d6" class="outline-2">
-<h2 id="org26683d6"><span class="section-number-2">20</span> 使用workgroup来完善我的工作流</h2>
+<div id="outline-container-org968f3cd" class="outline-2">
+<h2 id="org968f3cd"><span class="section-number-2">20</span> 使用workgroup来完善我的工作流</h2>
 <div class="outline-text-2" id="text-20">
 <ol class="org-ol">
 <li>使用workgroup2,每一个workgroup就干一件事情。它比bookmark的优势在
@@ -2709,8 +2709,8 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </ol>
 </div>
 </div>
-<div id="outline-container-org717e877" class="outline-2">
-<h2 id="org717e877"><span class="section-number-2">21</span> 使用ditaa</h2>
+<div id="outline-container-org3a34551" class="outline-2">
+<h2 id="org3a34551"><span class="section-number-2">21</span> 使用ditaa</h2>
 <div class="outline-text-2" id="text-21">
 <p>
 在Mac上使用brew来安装ditaa：
@@ -2738,7 +2738,7 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 <span style="color: #b3b3b3;">        |      |     |     |     |            +---------------+---------------+    |</span>
 <span style="color: #b3b3b3;">        |      |     |     |     |            |                               |    |</span>
 <span style="color: #b3b3b3;">        |      |     |     |     +-----------&gt;+                               |    |</span>
-<span style="color: #b3b3b3;">        |      |     |     |                  |        &#20320;&#22909;       &#20320;&#22909;        |    |</span>
+<span style="color: #b3b3b3;">        |      |     |     |                  |        \344\275\240\345\245\275       \344\275\240\345\245\275        |    |</span>
 <span style="color: #b3b3b3;">        |      |     |     +-----------------&gt;+                               |    |</span>
 <span style="color: #b3b3b3;">        |      |     |                        |           bridge-eth6         |    |</span>
 <span style="color: #b3b3b3;">        |      |     +-----------------------&gt;+                               |    |</span>
@@ -2756,8 +2756,8 @@ org可以文学编程，使用 <code>:tangle</code> 来导出src块。org-mode�
 </div>
 </div>
 </div>
-<div id="outline-container-org13bea52" class="outline-2">
-<h2 id="org13bea52"><span class="section-number-2">22</span> emacs对齐</h2>
+<div id="outline-container-org5af661d" class="outline-2">
+<h2 id="org5af661d"><span class="section-number-2">22</span> emacs对齐</h2>
 <div class="outline-text-2" id="text-22">
 <ol class="org-ol">
 <li class="off"><code>[&#xa0;]</code> <p>
@@ -2914,8 +2914,8 @@ will be quite useful when you need it. (Big thanks to Jon Snader and
 </div>
 </div>
 
-<div id="outline-container-org7c02dcf" class="outline-2">
-<h2 id="org7c02dcf"><span class="section-number-2">23</span> 正则表达式</h2>
+<div id="outline-container-orgfb3b170" class="outline-2">
+<h2 id="orgfb3b170"><span class="section-number-2">23</span> 正则表达式</h2>
 <div class="outline-text-2" id="text-23">
 <p>
 emacs中的正则和其它我觉得没有太大区别。唯一不同是 <code>\</code> 在emacs的
@@ -2925,20 +2925,20 @@ string中有特殊的含义。所以使用string来表示emacs中的正则时，
 </p>
 </div>
 </div>
-<div id="outline-container-org9276699" class="outline-2">
-<h2 id="org9276699"><span class="section-number-2">24</span> 使用emacs来查看python代码</h2>
+<div id="outline-container-org5d7f1bb" class="outline-2">
+<h2 id="org5d7f1bb"><span class="section-number-2">24</span> 使用emacs来查看python代码</h2>
 <div class="outline-text-2" id="text-24">
 </div>
-<div id="outline-container-org5cad753" class="outline-3">
-<h3 id="org5cad753"><span class="section-number-3">24.1</span> elpy</h3>
+<div id="outline-container-orga2cea7a" class="outline-3">
+<h3 id="orga2cea7a"><span class="section-number-3">24.1</span> elpy</h3>
 <div class="outline-text-3" id="text-24-1">
 <p>
 优先使用elpy，感觉它可以“理解”python代码。也很精确。
 </p>
 </div>
 </div>
-<div id="outline-container-orgda1951b" class="outline-3">
-<h3 id="orgda1951b"><span class="section-number-3">24.2</span> 基于tag</h3>
+<div id="outline-container-org5be6aaf" class="outline-3">
+<h3 id="org5be6aaf"><span class="section-number-3">24.2</span> 基于tag</h3>
 <div class="outline-text-3" id="text-24-2">
 <p>
 使用ctags等工具制做好tags后来使用。tag相对来说要精确一些。
@@ -2951,14 +2951,14 @@ ctags指定文件列表制做tag：
 <pre class="src src-sh">     find -type f -name <span style="color: #ffa500;">"*.py"</span> &gt; tags.files
      ctags -e -L tags.files
 
-     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#19979;&#38754;&#36825;&#20010;&#21487;&#20197;&#19981;&#35201;test&#30446;&#24405;</span>
+     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">\344\270\213\351\235\242\350\277\231\344\270\252\345\217\257\344\273\245\344\270\215\350\246\201test\347\233\256\345\275\225</span>
      gfind  -type f -name <span style="color: #ffa500;">"*.py"</span> -not -path <span style="color: #ffa500;">"./tests/*"</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org79a21e0" class="outline-3">
-<h3 id="org79a21e0"><span class="section-number-3">24.3</span> cscope</h3>
+<div id="outline-container-orgbcb24ea" class="outline-3">
+<h3 id="orgbcb24ea"><span class="section-number-3">24.3</span> cscope</h3>
 <div class="outline-text-3" id="text-24-3">
 <p>
 cscope可以后于tag来使用。它的搜索范围要大些。
@@ -2975,8 +2975,8 @@ cscope指定文件列表制做database：
 </div>
 </div>
 
-<div id="outline-container-org035636d" class="outline-3">
-<h3 id="org035636d"><span class="section-number-3">24.4</span> ag</h3>
+<div id="outline-container-org251aca6" class="outline-3">
+<h3 id="org251aca6"><span class="section-number-3">24.4</span> ag</h3>
 <div class="outline-text-3" id="text-24-4">
 <p>
 `projectile-ag'来全局搜，效果很不错。
@@ -2985,8 +2985,8 @@ cscope指定文件列表制做database：
 </div>
 </div>
 
-<div id="outline-container-orge0a97b3" class="outline-2">
-<h2 id="orge0a97b3"><span class="section-number-2">25</span> replace-regexp中输入换行newline</h2>
+<div id="outline-container-org31154fc" class="outline-2">
+<h2 id="org31154fc"><span class="section-number-2">25</span> replace-regexp中输入换行newline</h2>
 <div class="outline-text-2" id="text-25">
 <p>
 需要使用 <code>C-q C-j</code> 。
@@ -2998,8 +2998,8 @@ cscope指定文件列表制做database：
 </div>
 </div>
 
-<div id="outline-container-org0ce9b51" class="outline-2">
-<h2 id="org0ce9b51"><span class="section-number-2">26</span> 结合helm-ag来进行multi-edit</h2>
+<div id="outline-container-org808fdd4" class="outline-2">
+<h2 id="org808fdd4"><span class="section-number-2">26</span> 结合helm-ag来进行multi-edit</h2>
 <div class="outline-text-2" id="text-26">
 <p>
 先使用helm-ag搜出来东西。然后 `C-c C-e' 进入helm-edit-mode。把需要的
@@ -3113,8 +3113,8 @@ cscope指定文件列表制做database：
 </div>
 </div>
 
-<div id="outline-container-orgcab2b60" class="outline-2">
-<h2 id="orgcab2b60"><span class="section-number-2">27</span> ibuffer</h2>
+<div id="outline-container-orga396eba" class="outline-2">
+<h2 id="orga396eba"><span class="section-number-2">27</span> ibuffer</h2>
 <div class="outline-text-2" id="text-27">
 <p>
 ibuffer可以这样设置来分组：
@@ -3190,8 +3190,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org73d2d8e" class="outline-2">
-<h2 id="org73d2d8e"><span class="section-number-2">28</span> 写一个判断是否有 <code>universal-argument</code> 的函数</h2>
+<div id="outline-container-org3861041" class="outline-2">
+<h2 id="org3861041"><span class="section-number-2">28</span> 写一个判断是否有 <code>universal-argument</code> 的函数</h2>
 <div class="outline-text-2" id="text-28">
 <div class="org-src-container">
 <pre class="src src-elisp">    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">my-test</span> (x)
@@ -3205,8 +3205,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org806c981" class="outline-2">
-<h2 id="org806c981"><span class="section-number-2">29</span> 读写文件</h2>
+<div id="outline-container-org3a91498" class="outline-2">
+<h2 id="org3a91498"><span class="section-number-2">29</span> 读写文件</h2>
 <div class="outline-text-2" id="text-29">
 <div class="org-src-container">
 <pre class="src src-elisp">    <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">Read File Content into a String</span>
@@ -3215,7 +3215,7 @@ ibuffer可以这样设置来分组：
       (<span style="color: PaleYellow;">with-temp-buffer</span>
         (insert-file-contents filePath)
         (buffer-string)))
-    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">thanks to &#8220;Pascal J Bourguignon&#8221; and &#8220;TheFlyingDutchman &#12308;zzbba&#8230;@aol.com&#12309;&#8221;. 2010-09-02</span>
+    <span style="color: #cd5c5c;">;; </span><span style="color: #cd5c5c;">thanks to \342\200\234Pascal J Bourguignon\342\200\235 and \342\200\234TheFlyingDutchman \343\200\224zzbba\342\200\246@aol.com\343\200\225\342\200\235. 2010-09-02</span>
 
     <span style="color: #cd5c5c;">;;; </span><span style="color: #cd5c5c;">Read File Content as List of Lines</span>
     (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">read-lines</span> (filePath)
@@ -3234,8 +3234,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org35174fe" class="outline-2">
-<h2 id="org35174fe"><span class="section-number-2">30</span> convert string to list object</h2>
+<div id="outline-container-org2710bb9" class="outline-2">
+<h2 id="org2710bb9"><span class="section-number-2">30</span> convert string to list object</h2>
 <div class="outline-text-2" id="text-30">
 <p>
 使用`read'可以完成，它可以从buffer、string等很多中读取出list object：
@@ -3267,8 +3267,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org49f8ee1" class="outline-2">
-<h2 id="org49f8ee1"><span class="section-number-2">31</span> artist mode</h2>
+<div id="outline-container-org8b73036" class="outline-2">
+<h2 id="org8b73036"><span class="section-number-2">31</span> artist mode</h2>
 <div class="outline-text-2" id="text-31">
 <p>
 使用 <code>artist-select-op-text-see-thru</code> 可以来画assicc字体。 <code>M-x</code> 调
@@ -3277,8 +3277,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org2450cd5" class="outline-2">
-<h2 id="org2450cd5"><span class="section-number-2">32</span> org-mode代码块</h2>
+<div id="outline-container-orgf1c34b2" class="outline-2">
+<h2 id="orgf1c34b2"><span class="section-number-2">32</span> org-mode代码块</h2>
 <div class="outline-text-2" id="text-32">
 <p>
 按键绑定
@@ -3327,8 +3327,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-orgab60da4" class="outline-2">
-<h2 id="orgab60da4"><span class="section-number-2">33</span> ivy和helm的写法</h2>
+<div id="outline-container-org46b4b74" class="outline-2">
+<h2 id="org46b4b74"><span class="section-number-2">33</span> ivy和helm的写法</h2>
 <div class="outline-text-2" id="text-33">
 <div class="org-src-container">
 <pre class="src src-elisp">    (ivy-read <span style="color: #ffa500;">"Pick:"</span> (mapcar #'number-to-string (number-sequence 1 10)))
@@ -3359,8 +3359,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org5a738a0" class="outline-2">
-<h2 id="org5a738a0"><span class="section-number-2">34</span> emacs把行号添加到文件中</h2>
+<div id="outline-container-orgd4fe454" class="outline-2">
+<h2 id="orgd4fe454"><span class="section-number-2">34</span> emacs把行号添加到文件中</h2>
 <div class="outline-text-2" id="text-34">
 <p>
 选中后使用 <code>C-x r N(rectangle-number-lines))</code> 就可以啦。
@@ -3368,8 +3368,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org472362b" class="outline-2">
-<h2 id="org472362b"><span class="section-number-2">35</span> org-mode publish时太慢的解决办法</h2>
+<div id="outline-container-org09f4433" class="outline-2">
+<h2 id="org09f4433"><span class="section-number-2">35</span> org-mode publish时太慢的解决办法</h2>
 <div class="outline-text-2" id="text-35">
 <p>
 <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">参考是这个博客</a>
@@ -3410,8 +3410,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org193b4c8" class="outline-2">
-<h2 id="org193b4c8"><span class="section-number-2">36</span> bookmark plus</h2>
+<div id="outline-container-org352138a" class="outline-2">
+<h2 id="org352138a"><span class="section-number-2">36</span> bookmark plus</h2>
 <div class="outline-text-2" id="text-36">
 <p>
 这个玩意可以把w3m的页面也当成bookmark。但是它还是做不到给w3m的书签分
@@ -3420,8 +3420,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-orgd7380c3" class="outline-2">
-<h2 id="orgd7380c3"><span class="section-number-2">37</span> elisp函数根据有没有按 <code>C-u</code> 来走不同的流程</h2>
+<div id="outline-container-org45fb8e4" class="outline-2">
+<h2 id="org45fb8e4"><span class="section-number-2">37</span> elisp函数根据有没有按 <code>C-u</code> 来走不同的流程</h2>
 <div class="outline-text-2" id="text-37">
 <div class="org-src-container">
 <pre class="src src-elisp">    (<span style="color: PaleYellow;">defun</span> <span style="color: #9acd32;">peng-test</span> (arg)
@@ -3434,8 +3434,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-org8c88852" class="outline-2">
-<h2 id="org8c88852"><span class="section-number-2">38</span> 启动加速</h2>
+<div id="outline-container-org7d5cc59" class="outline-2">
+<h2 id="org7d5cc59"><span class="section-number-2">38</span> 启动加速</h2>
 <div class="outline-text-2" id="text-38">
 <p>
 编译所有 <code>site-lisp</code> 目录下的 <code>.el</code> ：
@@ -3450,8 +3450,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-orgbc6e8e5" class="outline-2">
-<h2 id="orgbc6e8e5"><span class="section-number-2">39</span> 我的 <code>cc-mode</code></h2>
+<div id="outline-container-orgdfaa6a0" class="outline-2">
+<h2 id="orgdfaa6a0"><span class="section-number-2">39</span> 我的 <code>cc-mode</code></h2>
 <div class="outline-text-2" id="text-39">
 <p>
 <del>查看代码主要使用 <code>counsel-gtags, cscope, counsel-rg</code> 。</del>
@@ -3463,8 +3463,8 @@ ibuffer可以这样设置来分组：
 </div>
 </div>
 
-<div id="outline-container-orgf98e802" class="outline-2">
-<h2 id="orgf98e802"><span class="section-number-2">40</span> use exwm</h2>
+<div id="outline-container-org6531dfa" class="outline-2">
+<h2 id="org6531dfa"><span class="section-number-2">40</span> use exwm</h2>
 <div class="outline-text-2" id="text-40">
 <pre class="example">
     1. Add following lines to your .emacs:
@@ -3502,8 +3502,8 @@ start exwm:
 </div>
 </div>
 </div>
-<div id="outline-container-org12716d7" class="outline-2">
-<h2 id="org12716d7"><span class="section-number-2">41</span> 在elisp函数中使用 <code>C-u</code></h2>
+<div id="outline-container-org7eccaeb" class="outline-2">
+<h2 id="org7eccaeb"><span class="section-number-2">41</span> 在elisp函数中使用 <code>C-u</code></h2>
 <div class="outline-text-2" id="text-41">
 <p>
 下面这段代码可以就和使用 <code>C-u</code> 来调用 <code>counsel-gtags-update-tags</code> 实
@@ -3520,8 +3520,8 @@ start exwm:
 </div>
 </div>
 </div>
-<div id="outline-container-org9ae6dc2" class="outline-2">
-<h2 id="org9ae6dc2"><span class="section-number-2">42</span> cscope和gtags不包括某些目录</h2>
+<div id="outline-container-org0108aea" class="outline-2">
+<h2 id="org0108aea"><span class="section-number-2">42</span> cscope和gtags不包括某些目录</h2>
 <div class="outline-text-2" id="text-42">
 <p>
 cscope和gtags都支持指定文件。选项不同而已。先用find找出来。然后指定
@@ -3535,8 +3535,8 @@ cat cscope.files|gtags -f -
 </div>
 </div>
 </div>
-<div id="outline-container-orgbd363b9" class="outline-2">
-<h2 id="orgbd363b9"><span class="section-number-2">43</span> 为org-mode自动添加目录</h2>
+<div id="outline-container-org8306c46" class="outline-2">
+<h2 id="org8306c46"><span class="section-number-2">43</span> 为org-mode自动添加目录</h2>
 <div class="outline-text-2" id="text-43">
 <p>
 <a href="https://github.com/snosov1/toc-org">readme在这里</a>
@@ -3557,7 +3557,7 @@ cat cscope.files|gtags -f -
 以在需要添加目录的地方，可以搞一个这样的head：
 </p>
 <div class="org-src-container">
-<pre class="src src-org"><span style="color: #9acd32;">* &#30446;&#24405;                                                                  </span><span style="color: #9acd32; font-weight: bold;">:TOC:</span>
+<pre class="src src-org"><span style="color: #9acd32;">* \347\233\256\345\275\225                                                                  </span><span style="color: #9acd32; font-weight: bold;">:TOC:</span>
 </pre>
 </div>
 
@@ -3581,8 +3581,8 @@ cat cscope.files|gtags -f -
 </pre>
 </div>
 </div>
-<div id="outline-container-org9ad9c76" class="outline-2">
-<h2 id="org9ad9c76"><span class="section-number-2">44</span> org-mode tangle整个head</h2>
+<div id="outline-container-orge48b930" class="outline-2">
+<h2 id="orge48b930"><span class="section-number-2">44</span> org-mode tangle整个head</h2>
 <div class="outline-text-2" id="text-44">
 <p>
 可以加一个 <code>header-args</code> ，值就是对应写 <code>tangle=的值： =:tangle
@@ -3605,16 +3605,16 @@ cat cscope.files|gtags -f -
 </div>
 </div>
 </div>
-<div id="outline-container-org6a1e83d" class="outline-2">
-<h2 id="org6a1e83d"><span class="section-number-2">45</span> 直接查看info文件</h2>
+<div id="outline-container-orgcb16d2b" class="outline-2">
+<h2 id="orgcb16d2b"><span class="section-number-2">45</span> 直接查看info文件</h2>
 <div class="outline-text-2" id="text-45">
 <p>
 <code>C-u M-x info</code> 就可以了。
 </p>
 </div>
 </div>
-<div id="outline-container-org7a8209c" class="outline-2">
-<h2 id="org7a8209c"><span class="section-number-2">46</span> 在elisp中模拟按键的输入</h2>
+<div id="outline-container-org7999a50" class="outline-2">
+<h2 id="org7999a50"><span class="section-number-2">46</span> 在elisp中模拟按键的输入</h2>
 <div class="outline-text-2" id="text-46">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(call-interactively 'compile)
@@ -3622,8 +3622,8 @@ cat cscope.files|gtags -f -
 </div>
 </div>
 </div>
-<div id="outline-container-org0d83d49" class="outline-2">
-<h2 id="org0d83d49"><span class="section-number-2">47</span> emacs中的长table导出pdf的问题</h2>
+<div id="outline-container-orgaf5cc6f" class="outline-2">
+<h2 id="orgaf5cc6f"><span class="section-number-2">47</span> emacs中的长table导出pdf的问题</h2>
 <div class="outline-text-2" id="text-47">
 <p>
 如果一个table太宽了，导出成pdf时会超出页面。把它搞成longtable就可以
@@ -3700,8 +3700,8 @@ cat cscope.files|gtags -f -
 </div>
 </div>
 
-<div id="outline-container-org2f2dc76" class="outline-2">
-<h2 id="org2f2dc76"><span class="section-number-2">48</span> org-mode中以root用户执行命令</h2>
+<div id="outline-container-orgc3cae09" class="outline-2">
+<h2 id="orgc3cae09"><span class="section-number-2">48</span> org-mode中以root用户执行命令</h2>
 <div class="outline-text-2" id="text-48">
 <p>
 直接在org-mode中可以执行block中的命令，然而有些时候我需要使用root用
@@ -3719,8 +3719,8 @@ cat cscope.files|gtags -f -
 </div>
 </div>
 
-<div id="outline-container-org1e9b1ed" class="outline-2">
-<h2 id="org1e9b1ed"><span class="section-number-2">49</span> eshell中定义alias</h2>
+<div id="outline-container-org14f7de8" class="outline-2">
+<h2 id="org14f7de8"><span class="section-number-2">49</span> eshell中定义alias</h2>
 <div class="outline-text-2" id="text-49">
 <p>
 直接写入 <code>eshell-aliases-file</code> 文件就可以了，比如当前我的是这些：
@@ -3734,8 +3734,8 @@ alias gck git checkout
 </div>
 </div>
 
-<div id="outline-container-org0c4006b" class="outline-2">
-<h2 id="org0c4006b"><span class="section-number-2">50</span> 在emacs中执行shell脚本</h2>
+<div id="outline-container-orgae7268c" class="outline-2">
+<h2 id="orgae7268c"><span class="section-number-2">50</span> 在emacs中执行shell脚本</h2>
 <div class="outline-text-2" id="text-50">
 <p>
 <a href="http://ergoemacs.org/emacs/elisp_call_shell_command.html">xah的blog</a>
@@ -3779,7 +3779,7 @@ the command to the terminal and run it by yourself.</div></div>
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:23</p>
+<p class="date">Created: 2019-03-25 一 17:49</p>
 <p class="validation"></p>
 </div>
 </body>

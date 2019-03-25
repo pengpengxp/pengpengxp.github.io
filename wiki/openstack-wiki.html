@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:46 -->
+<!-- 2019-03-25 一 17:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Openstack wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,64 +235,64 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge1033c7">1. metadata service</a></li>
-<li><a href="#orgba00796">2. links</a>
+<li><a href="#org834a812">1. metadata service</a></li>
+<li><a href="#orgdcdfea0">2. links</a>
 <ul>
-<li><a href="#org8958c89">2.1. 2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference&#xa0;&#xa0;&#xa0;<span class="tag"><span class="commandline">commandline</span></span></a></li>
-<li><a href="#org264e345">2.2. 2016-09-28 OpenStack Docs: Network focused</a></li>
-<li><a href="#orgb6f5d7c">2.3. oreilly-openstack-ops-guide.epub&#xa0;&#xa0;&#xa0;<span class="tag"><span class="book">book</span></span></a></li>
+<li><a href="#org1a92971">2.1. 2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference&#xa0;&#xa0;&#xa0;<span class="tag"><span class="commandline">commandline</span></span></a></li>
+<li><a href="#org4a74a61">2.2. 2016-09-28 OpenStack Docs: Network focused</a></li>
+<li><a href="#org31ea5d1">2.3. oreilly-openstack-ops-guide.epub&#xa0;&#xa0;&#xa0;<span class="tag"><span class="book">book</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orga997649">3. Networking website&#xa0;&#xa0;&#xa0;<span class="tag"><span class="neutron">neutron</span></span></a>
+<li><a href="#orgf1ba80e">3. Networking website&#xa0;&#xa0;&#xa0;<span class="tag"><span class="neutron">neutron</span></span></a>
 <ul>
-<li><a href="#orgfd63b42">3.1. arp</a></li>
-<li><a href="#orgbe57b89">3.2. nat</a></li>
-<li><a href="#org62a6617">3.3. nova-network:</a></li>
-<li><a href="#org867490d">3.4. neutron-network:</a></li>
-<li><a href="#orga16b700">3.5. difference betweent nova-networking and neutron</a></li>
-<li><a href="#org9b8984b">3.6. Firewalls and default ports</a></li>
-<li><a href="#orgccb770a">3.7. newtron preinstall</a></li>
+<li><a href="#orgb02e63b">3.1. arp</a></li>
+<li><a href="#orgf5b1271">3.2. nat</a></li>
+<li><a href="#org7247ea3">3.3. nova-network:</a></li>
+<li><a href="#orga715a63">3.4. neutron-network:</a></li>
+<li><a href="#org7bd463c">3.5. difference betweent nova-networking and neutron</a></li>
+<li><a href="#org0b23da8">3.6. Firewalls and default ports</a></li>
+<li><a href="#org3356987">3.7. newtron preinstall</a></li>
 </ul>
 </li>
-<li><a href="#org61f71e9">4. Compute&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nova">nova</span></span></a></li>
-<li><a href="#org7690c1e">5. Orchestration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="heat">heat</span></span></a></li>
-<li><a href="#org8f347b9">6. Object storage&#xa0;&#xa0;&#xa0;<span class="tag"><span class="swift">swift</span></span></a>
+<li><a href="#orgdfa39b7">4. Compute&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nova">nova</span></span></a></li>
+<li><a href="#org478beff">5. Orchestration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="heat">heat</span></span></a></li>
+<li><a href="#org71c5277">6. Object storage&#xa0;&#xa0;&#xa0;<span class="tag"><span class="swift">swift</span></span></a>
 <ul>
-<li><a href="#org05e076f">6.1. swift install on object node</a></li>
-<li><a href="#org00adf75">6.2. swift install on controller node</a></li>
-<li><a href="#orgc07056c">6.3. start service</a></li>
-<li><a href="#org19b4847">6.4. recreate rings on controller</a></li>
-<li><a href="#org39d00a6">6.5. recreate endpoint on controller</a></li>
+<li><a href="#org6c18ee1">6.1. swift install on object node</a></li>
+<li><a href="#org80ee468">6.2. swift install on controller node</a></li>
+<li><a href="#org74f6849">6.3. start service</a></li>
+<li><a href="#orgc7b0513">6.4. recreate rings on controller</a></li>
+<li><a href="#orgfa30f3e">6.5. recreate endpoint on controller</a></li>
 </ul>
 </li>
-<li><a href="#orgee47568">7. Image service&#xa0;&#xa0;&#xa0;<span class="tag"><span class="glance">glance</span></span></a></li>
-<li><a href="#org07ae23e">8. launch instance</a></li>
-<li><a href="#org384933f">9. 如何查看一对veth中某interface对应的peer</a></li>
-<li><a href="#org7216a9b">10. <code>eth0:0,tap,veth,vlan,bridge</code> 等</a></li>
-<li><a href="#org1c43887">11. openstack float ip&#xa0;&#xa0;&#xa0;<span class="tag"><span class="float_ip">float_ip</span></span></a></li>
-<li><a href="#org0f4df23">12. openstack sdk document api实现先按照这个来</a></li>
+<li><a href="#orgf77a89d">7. Image service&#xa0;&#xa0;&#xa0;<span class="tag"><span class="glance">glance</span></span></a></li>
+<li><a href="#org8aa3c5e">8. launch instance</a></li>
+<li><a href="#org5b92dbf">9. 如何查看一对veth中某interface对应的peer</a></li>
+<li><a href="#org56d6dfb">10. <code>eth0:0,tap,veth,vlan,bridge</code> 等</a></li>
+<li><a href="#org69f1f54">11. openstack float ip&#xa0;&#xa0;&#xa0;<span class="tag"><span class="float_ip">float_ip</span></span></a></li>
+<li><a href="#orgb0c6b35">12. openstack sdk document api实现先按照这个来</a></li>
 <li><a href="#cloud_init">13. cloud-init</a></li>
-<li><a href="#orgf255743">14. curl restfull api example</a></li>
-<li><a href="#org9e82b1a">15. cinder</a></li>
-<li><a href="#org460a971">16. openstack python sdk区别</a></li>
-<li><a href="#org2b1dd53">17. 给openstack上的机器根目录扩容</a>
+<li><a href="#org36401e2">14. curl restfull api example</a></li>
+<li><a href="#org2b149ee">15. cinder</a></li>
+<li><a href="#org206ce25">16. openstack python sdk区别</a></li>
+<li><a href="#org27de837">17. 给openstack上的机器根目录扩容</a>
 <ul>
-<li><a href="#org04d10b8">17.1. 新建volume并attach到对应的机器上</a></li>
-<li><a href="#org1c1a666">17.2. 扩大lvm</a></li>
+<li><a href="#org22883ee">17.1. 新建volume并attach到对应的机器上</a></li>
+<li><a href="#org844fd5c">17.2. 扩大lvm</a></li>
 </ul>
 </li>
-<li><a href="#org32c6d85">18. 直接使用python来给虚拟机attach其它硬盘</a></li>
-<li><a href="#org83cf3fe">19. userdata和metadata</a></li>
-<li><a href="#org4b461c2">20. openstack region availability<sub>zone</sub></a></li>
+<li><a href="#org8eb5147">18. 直接使用python来给虚拟机attach其它硬盘</a></li>
+<li><a href="#orgb7a44bf">19. userdata和metadata</a></li>
+<li><a href="#org188ac7b">20. openstack region availability<sub>zone</sub></a></li>
 <li><a href="#user_domain_project_role">21. domains, user, project, role</a></li>
-<li><a href="#org6e28e89">22. block查询剩余多少空间</a></li>
-<li><a href="#org73df79c">23. ephemeral disk</a></li>
-<li><a href="#org1b7a56c">24. image的size可能小于flavor的disk</a></li>
-<li><a href="#orgb5deda6">25. compute的安装步骤</a></li>
-<li><a href="#org692e533">26. <span class="todo TODO">TODO</span> Question</a>
+<li><a href="#org88cde2c">22. block查询剩余多少空间</a></li>
+<li><a href="#orgbdb6b4a">23. ephemeral disk</a></li>
+<li><a href="#orgb35eea3">24. image的size可能小于flavor的disk</a></li>
+<li><a href="#org6837f28">25. compute的安装步骤</a></li>
+<li><a href="#org7654cd9">26. <span class="todo TODO">TODO</span> Question</a>
 <ul>
-<li><a href="#org2dbecf8">26.1. <span class="todo TODO">TODO</span> openstack curl restfull api example  这个链接可以参考</a></li>
-<li><a href="#orgd3f6d61">26.2. <span class="todo TODO">TODO</span> openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？</a></li>
+<li><a href="#org205c7d2">26.1. <span class="todo TODO">TODO</span> openstack curl restfull api example  这个链接可以参考</a></li>
+<li><a href="#orga32c45e">26.2. <span class="todo TODO">TODO</span> openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？</a></li>
 </ul>
 </li>
 </ul>
@@ -300,8 +300,8 @@ for the JavaScript code in this tag.
 </div>
 
 
-<div id="outline-container-orge1033c7" class="outline-2">
-<h2 id="orge1033c7"><span class="section-number-2">1</span> metadata service</h2>
+<div id="outline-container-org834a812" class="outline-2">
+<h2 id="org834a812"><span class="section-number-2">1</span> metadata service</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 <code>====================================================================</code>
@@ -427,26 +427,26 @@ metadata service可以是nova-api或者nova-api-metadata来实现。只不过后
 </pre>
 </div>
 </div>
-<div id="outline-container-orgba00796" class="outline-2">
-<h2 id="orgba00796"><span class="section-number-2">2</span> links</h2>
+<div id="outline-container-orgdcdfea0" class="outline-2">
+<h2 id="orgdcdfea0"><span class="section-number-2">2</span> links</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org8958c89" class="outline-3">
-<h3 id="org8958c89"><span class="section-number-3">2.1</span> <a href="http://docs.openstack.org/cli-reference/">2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="commandline">commandline</span></span></h3>
+<div id="outline-container-org1a92971" class="outline-3">
+<h3 id="org1a92971"><span class="section-number-3">2.1</span> <a href="http://docs.openstack.org/cli-reference/">2016-10-17 OpenStack Docs: OpenStack Command-Line Interface Reference</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="commandline">commandline</span></span></h3>
 </div>
-<div id="outline-container-org264e345" class="outline-3">
-<h3 id="org264e345"><span class="section-number-3">2.2</span> <a href="http://docs.openstack.org/arch-design/network-focus.html">2016-09-28 OpenStack Docs: Network focused</a></h3>
+<div id="outline-container-org4a74a61" class="outline-3">
+<h3 id="org4a74a61"><span class="section-number-3">2.2</span> <a href="http://docs.openstack.org/arch-design/network-focus.html">2016-09-28 OpenStack Docs: Network focused</a></h3>
 </div>
-<div id="outline-container-orgb6f5d7c" class="outline-3">
-<h3 id="orgb6f5d7c"><span class="section-number-3">2.3</span> <a href="file:///home/pengpengxp/Downloads/oreilly-openstack-ops-guide.epub">oreilly-openstack-ops-guide.epub</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="book">book</span></span></h3>
+<div id="outline-container-org31ea5d1" class="outline-3">
+<h3 id="org31ea5d1"><span class="section-number-3">2.3</span> <a href="file:///home/pengpengxp/Downloads/oreilly-openstack-ops-guide.epub">oreilly-openstack-ops-guide.epub</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="book">book</span></span></h3>
 </div>
 </div>
-<div id="outline-container-orga997649" class="outline-2">
-<h2 id="orga997649"><span class="section-number-2">3</span> Networking <a href="http://docs.openstack.org/mitaka/networking-guide/intro.html">website</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="neutron">neutron</span></span></h2>
+<div id="outline-container-orgf1ba80e" class="outline-2">
+<h2 id="orgf1ba80e"><span class="section-number-2">3</span> Networking <a href="http://docs.openstack.org/mitaka/networking-guide/intro.html">website</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="neutron">neutron</span></span></h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgfd63b42" class="outline-3">
-<h3 id="orgfd63b42"><span class="section-number-3">3.1</span> arp</h3>
+<div id="outline-container-orgb02e63b" class="outline-3">
+<h3 id="orgb02e63b"><span class="section-number-3">3.1</span> arp</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 ARP assumes that all machines that are in the same subnet are on
@@ -454,8 +454,8 @@ the same local network(Ethernet network).
 </p>
 </div>
 </div>
-<div id="outline-container-orgbe57b89" class="outline-3">
-<h3 id="orgbe57b89"><span class="section-number-3">3.2</span> nat</h3>
+<div id="outline-container-orgf5b1271" class="outline-3">
+<h3 id="orgf5b1271"><span class="section-number-3">3.2</span> nat</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>DNAT: OpenStack uses DNAT to route packets from instances to the
@@ -465,8 +465,8 @@ of instances to connect out to the public Internet.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org62a6617" class="outline-3">
-<h3 id="org62a6617"><span class="section-number-3">3.3</span> nova-network:</h3>
+<div id="outline-container-org7247ea3" class="outline-3">
+<h3 id="org7247ea3"><span class="section-number-3">3.3</span> nova-network:</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 The Network Controller manages the networking resources on host
@@ -485,8 +485,8 @@ machines.
 </pre>
 </div>
 </div>
-<div id="outline-container-org867490d" class="outline-3">
-<h3 id="org867490d"><span class="section-number-3">3.4</span> neutron-network:</h3>
+<div id="outline-container-orga715a63" class="outline-3">
+<h3 id="orga715a63"><span class="section-number-3">3.4</span> neutron-network:</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 The OpenStack Networking service provides an API that allows users
@@ -496,8 +496,8 @@ cloud.
 </div>
 </div>
 
-<div id="outline-container-orga16b700" class="outline-3">
-<h3 id="orga16b700"><span class="section-number-3">3.5</span> difference betweent nova-networking and neutron</h3>
+<div id="outline-container-org7bd463c" class="outline-3">
+<h3 id="org7bd463c"><span class="section-number-3">3.5</span> difference betweent nova-networking and neutron</h3>
 <div class="outline-text-3" id="text-3-5">
 <pre class="example">
      First there was nova-network
@@ -543,11 +543,11 @@ cloud.
 </pre>
 </div>
 </div>
-<div id="outline-container-org9b8984b" class="outline-3">
-<h3 id="org9b8984b"><span class="section-number-3">3.6</span> <a href="http://docs.openstack.org/mitaka/config-reference/firewalls-default-ports.html">Firewalls and default ports</a></h3>
+<div id="outline-container-org0b23da8" class="outline-3">
+<h3 id="org0b23da8"><span class="section-number-3">3.6</span> <a href="http://docs.openstack.org/mitaka/config-reference/firewalls-default-ports.html">Firewalls and default ports</a></h3>
 </div>
-<div id="outline-container-orgccb770a" class="outline-3">
-<h3 id="orgccb770a"><span class="section-number-3">3.7</span> newtron preinstall</h3>
+<div id="outline-container-org3356987" class="outline-3">
+<h3 id="org3356987"><span class="section-number-3">3.7</span> newtron preinstall</h3>
 <div class="outline-text-3" id="text-3-7">
 <div class="org-src-container">
 <pre class="src src-sh">     apt-get install software-properties-common
@@ -560,8 +560,8 @@ cloud.
 </div>
 </div>
 </div>
-<div id="outline-container-org61f71e9" class="outline-2">
-<h2 id="org61f71e9"><span class="section-number-2">4</span> Compute&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nova">nova</span></span></h2>
+<div id="outline-container-orgdfa39b7" class="outline-2">
+<h2 id="orgdfa39b7"><span class="section-number-2">4</span> Compute&#xa0;&#xa0;&#xa0;<span class="tag"><span class="nova">nova</span></span></h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26597;&#30475;&#25152;&#26377;compute&#33410;&#28857;</span>
@@ -575,8 +575,8 @@ cloud.
 </div>
 </div>
 
-<div id="outline-container-org7690c1e" class="outline-2">
-<h2 id="org7690c1e"><span class="section-number-2">5</span> Orchestration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="heat">heat</span></span></h2>
+<div id="outline-container-org478beff" class="outline-2">
+<h2 id="org478beff"><span class="section-number-2">5</span> Orchestration&#xa0;&#xa0;&#xa0;<span class="tag"><span class="heat">heat</span></span></h2>
 <div class="outline-text-2" id="text-5">
 <p>
 <a href="https://wiki.openstack.org/wiki/Heat">Openstack wiki</a>
@@ -686,12 +686,12 @@ Orchestration服务完全配置好它。</li>
 </div>
 </div>
 
-<div id="outline-container-org8f347b9" class="outline-2">
-<h2 id="org8f347b9"><span class="section-number-2">6</span> Object storage&#xa0;&#xa0;&#xa0;<span class="tag"><span class="swift">swift</span></span></h2>
+<div id="outline-container-org71c5277" class="outline-2">
+<h2 id="org71c5277"><span class="section-number-2">6</span> Object storage&#xa0;&#xa0;&#xa0;<span class="tag"><span class="swift">swift</span></span></h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org05e076f" class="outline-3">
-<h3 id="org05e076f"><span class="section-number-3">6.1</span> swift install on object node</h3>
+<div id="outline-container-org6c18ee1" class="outline-3">
+<h3 id="org6c18ee1"><span class="section-number-3">6.1</span> swift install on object node</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 These operation has been done in the <code>object-newton.img</code> :
@@ -774,8 +774,8 @@ edit /etc/fstab for auto-mount:
 </pre>
 </div>
 </div>
-<div id="outline-container-org00adf75" class="outline-3">
-<h3 id="org00adf75"><span class="section-number-3">6.2</span> swift install on controller node</h3>
+<div id="outline-container-org80ee468" class="outline-3">
+<h3 id="org80ee468"><span class="section-number-3">6.2</span> swift install on controller node</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 proxy<sub>conf</sub>:
@@ -832,8 +832,8 @@ swift<sub>config</sub> file and start:
 </div>
 </div>
 </div>
-<div id="outline-container-orgc07056c" class="outline-3">
-<h3 id="orgc07056c"><span class="section-number-3">6.3</span> start service</h3>
+<div id="outline-container-org74f6849" class="outline-3">
+<h3 id="org74f6849"><span class="section-number-3">6.3</span> start service</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 on controller:
@@ -853,8 +853,8 @@ on each object node:
 </div>
 </div>
 </div>
-<div id="outline-container-org19b4847" class="outline-3">
-<h3 id="org19b4847"><span class="section-number-3">6.4</span> recreate rings on controller</h3>
+<div id="outline-container-orgc7b0513" class="outline-3">
+<h3 id="orgc7b0513"><span class="section-number-3">6.4</span> recreate rings on controller</h3>
 <div class="outline-text-3" id="text-6-4">
 <div class="org-src-container">
 <pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">recreate rings</span>
@@ -890,8 +890,8 @@ on each object node:
 </div>
 </div>
 </div>
-<div id="outline-container-org39d00a6" class="outline-3">
-<h3 id="org39d00a6"><span class="section-number-3">6.5</span> recreate endpoint on controller</h3>
+<div id="outline-container-orgfa30f3e" class="outline-3">
+<h3 id="orgfa30f3e"><span class="section-number-3">6.5</span> recreate endpoint on controller</h3>
 <div class="outline-text-3" id="text-6-5">
 <div class="org-src-container">
 <pre class="src src-sh">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">recreate endpoint</span>
@@ -906,8 +906,8 @@ on each object node:
 </div>
 </div>
 </div>
-<div id="outline-container-orgee47568" class="outline-2">
-<h2 id="orgee47568"><span class="section-number-2">7</span> Image service&#xa0;&#xa0;&#xa0;<span class="tag"><span class="glance">glance</span></span></h2>
+<div id="outline-container-orgf77a89d" class="outline-2">
+<h2 id="orgf77a89d"><span class="section-number-2">7</span> Image service&#xa0;&#xa0;&#xa0;<span class="tag"><span class="glance">glance</span></span></h2>
 <div class="outline-text-2" id="text-7">
 <p>
 glance是不存image的。Object Storage或者filesystem这些存的。
@@ -1001,8 +1001,8 @@ disk-format是指镜像包实际的格式。container-format现在并没有什�
 </div>
 </div>
 
-<div id="outline-container-org07ae23e" class="outline-2">
-<h2 id="org07ae23e"><span class="section-number-2">8</span> launch instance</h2>
+<div id="outline-container-org8aa3c5e" class="outline-2">
+<h2 id="org8aa3c5e"><span class="section-number-2">8</span> launch instance</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
 <pre class="src src-sh">
@@ -1062,8 +1062,8 @@ disk-format是指镜像包实际的格式。container-format现在并没有什�
 </div>
 </div>
 
-<div id="outline-container-org384933f" class="outline-2">
-<h2 id="org384933f"><span class="section-number-2">9</span> 如何查看一对veth中某interface对应的peer</h2>
+<div id="outline-container-org5b92dbf" class="outline-2">
+<h2 id="org5b92dbf"><span class="section-number-2">9</span> 如何查看一对veth中某interface对应的peer</h2>
 <div class="outline-text-2" id="text-9">
 <div class="org-src-container">
 <pre class="src src-sh">    ethtool -S veth0
@@ -1084,8 +1084,8 @@ disk-format是指镜像包实际的格式。container-format现在并没有什�
 </div>
 </div>
 
-<div id="outline-container-org7216a9b" class="outline-2">
-<h2 id="org7216a9b"><span class="section-number-2">10</span> <code>eth0:0,tap,veth,vlan,bridge</code> 等</h2>
+<div id="outline-container-org56d6dfb" class="outline-2">
+<h2 id="org56d6dfb"><span class="section-number-2">10</span> <code>eth0:0,tap,veth,vlan,bridge</code> 等</h2>
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 <pre class="src src-sh">    ifconfig eth0:1 192.168.56.2 netmask 255.255.255.0
@@ -1195,8 +1195,8 @@ bridge就是一个傻瓜交换机。
 </p>
 </div>
 </div>
-<div id="outline-container-org1c43887" class="outline-2">
-<h2 id="org1c43887"><span class="section-number-2">11</span> openstack float ip&#xa0;&#xa0;&#xa0;<span class="tag"><span class="float_ip">float_ip</span></span></h2>
+<div id="outline-container-org69f1f54" class="outline-2">
+<h2 id="org69f1f54"><span class="section-number-2">11</span> openstack float ip&#xa0;&#xa0;&#xa0;<span class="tag"><span class="float_ip">float_ip</span></span></h2>
 <div class="outline-text-2" id="text-11">
 <p>
 <a href="https://www.rdoproject.org/networking/difference-between-floating-ip-and-private-ip/">这里讲得不错</a>
@@ -1209,11 +1209,11 @@ bridge就是一个傻瓜交换机。
 </ul>
 </div>
 </div>
-<div id="outline-container-org0f4df23" class="outline-2">
-<h2 id="org0f4df23"><span class="section-number-2">12</span> <a href="http://developer.openstack.org/sdks/python/openstacksdk/users/index.html">openstack sdk document api实现先按照这个来</a></h2>
+<div id="outline-container-orgb0c6b35" class="outline-2">
+<h2 id="orgb0c6b35"><span class="section-number-2">12</span> <a href="http://developer.openstack.org/sdks/python/openstacksdk/users/index.html">openstack sdk document api实现先按照这个来</a></h2>
 </div>
-<div id="outline-container-org7363cd2" class="outline-2">
-<h2 id="cloud_init"><a id="org7363cd2"></a><span class="section-number-2">13</span> cloud-init</h2>
+<div id="outline-container-orga0208a8" class="outline-2">
+<h2 id="cloud_init"><a id="orga0208a8"></a><span class="section-number-2">13</span> cloud-init</h2>
 <div class="outline-text-2" id="text-cloud_init">
 <p>
 <code>====================================================================</code>
@@ -1270,8 +1270,8 @@ cloud-init默认就会在launch的时候执行该脚本。
 </p>
 </div>
 </div>
-<div id="outline-container-orgf255743" class="outline-2">
-<h2 id="orgf255743"><span class="section-number-2">14</span> curl restfull api example</h2>
+<div id="outline-container-org36401e2" class="outline-2">
+<h2 id="org36401e2"><span class="section-number-2">14</span> curl restfull api example</h2>
 <div class="outline-text-2" id="text-14">
 <div class="org-src-container">
 <pre class="src src-sh">    curl -i <span style="color: #ffa500;">\</span>
@@ -1295,8 +1295,8 @@ cloud-init默认就会在launch的时候执行该脚本。
 </div>
 </div>
 </div>
-<div id="outline-container-org9e82b1a" class="outline-2">
-<h2 id="org9e82b1a"><span class="section-number-2">15</span> cinder</h2>
+<div id="outline-container-org2b149ee" class="outline-2">
+<h2 id="org2b149ee"><span class="section-number-2">15</span> cinder</h2>
 <div class="outline-text-2" id="text-15">
 <p>
 查询block总量：
@@ -1316,8 +1316,8 @@ cloud-init默认就会在launch的时候执行该脚本。
 </div>
 </div>
 </div>
-<div id="outline-container-org460a971" class="outline-2">
-<h2 id="org460a971"><span class="section-number-2">16</span> openstack python sdk区别</h2>
+<div id="outline-container-org206ce25" class="outline-2">
+<h2 id="org206ce25"><span class="section-number-2">16</span> openstack python sdk区别</h2>
 <div class="outline-text-2" id="text-16">
 <p>
 <a href="https://wiki.openstack.org/wiki/SDKs#Python">python sdk</a>
@@ -1353,8 +1353,8 @@ OpenStack clouds.
 </div>
 </div>
 
-<div id="outline-container-org2b1dd53" class="outline-2">
-<h2 id="org2b1dd53"><span class="section-number-2">17</span> 给openstack上的机器根目录扩容</h2>
+<div id="outline-container-org27de837" class="outline-2">
+<h2 id="org27de837"><span class="section-number-2">17</span> 给openstack上的机器根目录扩容</h2>
 <div class="outline-text-2" id="text-17">
 <p>
 很多主机在刚拉起的时候，磁盘的空间都很少，好在一般我们的磁盘一般都是使
@@ -1362,8 +1362,8 @@ OpenStack clouds.
 </p>
 </div>
 
-<div id="outline-container-org04d10b8" class="outline-3">
-<h3 id="org04d10b8"><span class="section-number-3">17.1</span> 新建volume并attach到对应的机器上</h3>
+<div id="outline-container-org22883ee" class="outline-3">
+<h3 id="org22883ee"><span class="section-number-3">17.1</span> 新建volume并attach到对应的机器上</h3>
 <div class="outline-text-3" id="text-17-1">
 <div class="org-src-container">
 <pre class="src src-sh">     openstack volume create --size 30 volume_haiyan
@@ -1373,8 +1373,8 @@ OpenStack clouds.
 </div>
 </div>
 
-<div id="outline-container-org1c1a666" class="outline-3">
-<h3 id="org1c1a666"><span class="section-number-3">17.2</span> 扩大lvm</h3>
+<div id="outline-container-org844fd5c" class="outline-3">
+<h3 id="org844fd5c"><span class="section-number-3">17.2</span> 扩大lvm</h3>
 <div class="outline-text-3" id="text-17-2">
 <p>
 磁盘attach到机器上后，在对应的虚拟机中会增加一个磁盘。这里我们假定是
@@ -1398,8 +1398,8 @@ OpenStack clouds.
 </div>
 </div>
 </div>
-<div id="outline-container-org32c6d85" class="outline-2">
-<h2 id="org32c6d85"><span class="section-number-2">18</span> 直接使用python来给虚拟机attach其它硬盘</h2>
+<div id="outline-container-org8eb5147" class="outline-2">
+<h2 id="org8eb5147"><span class="section-number-2">18</span> 直接使用python来给虚拟机attach其它硬盘</h2>
 <div class="outline-text-2" id="text-18">
 <p>
 需要使用 <code>python-novaclient</code> 这个单独的库，而不是cinder：
@@ -1449,8 +1449,8 @@ OpenStack clouds.
 </div>
 </div>
 </div>
-<div id="outline-container-org83cf3fe" class="outline-2">
-<h2 id="org83cf3fe"><span class="section-number-2">19</span> userdata和metadata</h2>
+<div id="outline-container-orgb7a44bf" class="outline-2">
+<h2 id="orgb7a44bf"><span class="section-number-2">19</span> userdata和metadata</h2>
 <div class="outline-text-2" id="text-19">
 <p>
 metadata是拉起机器后openstack默认保存的一些值。比如hostname等。在拉
@@ -1474,8 +1474,8 @@ userdata是用户传入的，在 <code>sdk</code> 的 <code>create_server</code>
 </div>
 </div>
 
-<div id="outline-container-org4b461c2" class="outline-2">
-<h2 id="org4b461c2"><span class="section-number-2">20</span> openstack region availability<sub>zone</sub></h2>
+<div id="outline-container-org188ac7b" class="outline-2">
+<h2 id="org188ac7b"><span class="section-number-2">20</span> openstack region availability<sub>zone</sub></h2>
 <div class="outline-text-2" id="text-20">
 <p>
 <a href="http://www.guruadvisor.net/en/cloud/121-openstack-regions-and-availability-zones">这篇英文文档把四个概念都讲了</a>
@@ -1515,8 +1515,8 @@ openstack平台的时候初始化keystone时写入的。 <a href="http://docs.op
 </div>
 </div>
 
-<div id="outline-container-orgabfb03d" class="outline-2">
-<h2 id="user_domain_project_role"><a id="orgabfb03d"></a><span class="section-number-2">21</span> domains, user, project, role</h2>
+<div id="outline-container-org7fafcda" class="outline-2">
+<h2 id="user_domain_project_role"><a id="org7fafcda"></a><span class="section-number-2">21</span> domains, user, project, role</h2>
 <div class="outline-text-2" id="text-user_domain_project_role">
 <p>
 这四个概念的解释可以在 <a href="http://docs.openstack.org/liberty/install-guide-obs/keystone-users.html">这里</a> 查看：
@@ -1597,8 +1597,8 @@ role：权限。一个用户和role关联后，只有该role中的权限。
 </div>
 </div>
 
-<div id="outline-container-org6e28e89" class="outline-2">
-<h2 id="org6e28e89"><span class="section-number-2">22</span> block查询剩余多少空间</h2>
+<div id="outline-container-org88cde2c" class="outline-2">
+<h2 id="org88cde2c"><span class="section-number-2">22</span> block查询剩余多少空间</h2>
 <div class="outline-text-2" id="text-22">
 <p>
 当前没法通过api直接查询，可以到block节点上查询。
@@ -1619,8 +1619,8 @@ block上是使用lvm来搞的。使用vgs查询就知道了。
 </div>
 </div>
 
-<div id="outline-container-org73df79c" class="outline-2">
-<h2 id="org73df79c"><span class="section-number-2">23</span> ephemeral disk</h2>
+<div id="outline-container-orgbdb6b4a" class="outline-2">
+<h2 id="orgbdb6b4a"><span class="section-number-2">23</span> ephemeral disk</h2>
 <div class="outline-text-2" id="text-23">
 <pre class="example">
     openstack flavor create --vcpus 2 --ephemeral 1 --ram 4096 --disk 0 peng-test-flavor
@@ -1633,8 +1633,8 @@ block上是使用lvm来搞的。使用vgs查询就知道了。
 </div>
 </div>
 
-<div id="outline-container-org1b7a56c" class="outline-2">
-<h2 id="org1b7a56c"><span class="section-number-2">24</span> image的size可能小于flavor的disk</h2>
+<div id="outline-container-orgb35eea3" class="outline-2">
+<h2 id="orgb35eea3"><span class="section-number-2">24</span> image的size可能小于flavor的disk</h2>
 <div class="outline-text-2" id="text-24">
 <p>
 原来使用的时候，一定要flavor的磁盘大小大于image中的disk。这样大于的
@@ -1648,8 +1648,8 @@ block上是使用lvm来搞的。使用vgs查询就知道了。
 </div>
 </div>
 
-<div id="outline-container-orgb5deda6" class="outline-2">
-<h2 id="orgb5deda6"><span class="section-number-2">25</span> compute的安装步骤</h2>
+<div id="outline-container-org6837f28" class="outline-2">
+<h2 id="org6837f28"><span class="section-number-2">25</span> compute的安装步骤</h2>
 <div class="outline-text-2" id="text-25">
 <pre class="example">
     1、用live盘启动新装compute节点。
@@ -1672,8 +1672,8 @@ block上是使用lvm来搞的。使用vgs查询就知道了。
 </pre>
 </div>
 </div>
-<div id="outline-container-org692e533" class="outline-2">
-<h2 id="org692e533"><span class="section-number-2">26</span> <span class="todo TODO">TODO</span> Question</h2>
+<div id="outline-container-org7654cd9" class="outline-2">
+<h2 id="org7654cd9"><span class="section-number-2">26</span> <span class="todo TODO">TODO</span> Question</h2>
 <div class="outline-text-2" id="text-26">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> openstack VM中的tap是不是虚拟网卡？ <code>eth0:0</code> 这种的。如果不是，
@@ -1686,8 +1686,8 @@ block上是使用lvm来搞的。使用vgs查询就知道了。
 镜像？</li>
 </ul>
 </div>
-<div id="outline-container-org2dbecf8" class="outline-3">
-<h3 id="org2dbecf8"><span class="section-number-3">26.1</span> <span class="todo TODO">TODO</span> <a href="file:///home/pengpengxp/work/ras-cloud/openstack.html#MissingReference">openstack curl restfull api example</a>  <a href="http://developer.openstack.org/zh_CN/api-guide/quick-start/api-quick-start.html">这个链接可以参考</a></h3>
+<div id="outline-container-org205c7d2" class="outline-3">
+<h3 id="org205c7d2"><span class="section-number-3">26.1</span> <span class="todo TODO">TODO</span> <a href="file:///home/pengpengxp/work/ras-cloud/openstack.html#MissingReference">openstack curl restfull api example</a>  <a href="http://developer.openstack.org/zh_CN/api-guide/quick-start/api-quick-start.html">这个链接可以参考</a></h3>
 <div class="outline-text-3" id="text-26-1">
 <ul class="org-ul">
 <li>State "TODO"       from "待办"       <span class="timestamp-wrapper"><span class="timestamp">[2017-02-09 四 10:45]</span></span></li>
@@ -1695,8 +1695,8 @@ block上是使用lvm来搞的。使用vgs查询就知道了。
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd3f6d61" class="outline-3">
-<h3 id="orgd3f6d61"><span class="section-number-3">26.2</span> <span class="todo TODO">TODO</span> openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？</h3>
+<div id="outline-container-orga32c45e" class="outline-3">
+<h3 id="orga32c45e"><span class="section-number-3">26.2</span> <span class="todo TODO">TODO</span> openstack多个region需不需要多次认证？ 同一个用户在不同的region中是不能使用？</h3>
 <div class="outline-text-3" id="text-26-2">
 <ul class="org-ul">
 <li>State "TODO"       from "待办"       <span class="timestamp-wrapper"><span class="timestamp">[2017-02-09 四 10:45]</span></span></li>
@@ -1719,7 +1719,7 @@ region做了用户隔离的。
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:46</p>
+<p class="date">Created: 2019-03-25 一 17:50</p>
 <p class="validation"></p>
 </div>
 </body>

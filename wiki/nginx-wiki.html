@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:46 -->
+<!-- 2019-03-25 一 17:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nginx wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,17 +235,17 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6c218fa">1. nginx打印ngx<sub>str</sub><sub>t到日志</sub></a></li>
-<li><a href="#orge5e855a">2. 4层和7层load-balance</a></li>
-<li><a href="#org76c6bfb">3. nginx四层lb的配置</a></li>
-<li><a href="#org6053f5f">4. nginx编译的顺序和模块选择</a></li>
+<li><a href="#org5875b57">1. nginx打印ngx<sub>str</sub><sub>t到日志</sub></a></li>
+<li><a href="#org6c9cd93">2. 4层和7层load-balance</a></li>
+<li><a href="#org1f2a096">3. nginx四层lb的配置</a></li>
+<li><a href="#org3e90338">4. nginx编译的顺序和模块选择</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org6c218fa" class="outline-2">
-<h2 id="org6c218fa"><span class="section-number-2">1</span> nginx打印ngx<sub>str</sub><sub>t到日志</sub></h2>
+<div id="outline-container-org5875b57" class="outline-2">
+<h2 id="org5875b57"><span class="section-number-2">1</span> nginx打印ngx<sub>str</sub><sub>t到日志</sub></h2>
 <div class="outline-text-2" id="text-1">
 <p>
 因为ngx<sub>str</sub><sub>t默认不是以</sub> <code>\0</code> 结尾的。所以不能直接使用printf来打印。
@@ -263,8 +263,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orge5e855a" class="outline-2">
-<h2 id="orge5e855a"><span class="section-number-2">2</span> 4层和7层load-balance</h2>
+<div id="outline-container-org6c9cd93" class="outline-2">
+<h2 id="org6c9cd93"><span class="section-number-2">2</span> 4层和7层load-balance</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 <a href="https://www.nginx.com/resources/glossary/layer-4-load-balancing/">https://www.nginx.com/resources/glossary/layer-4-load-balancing/</a>
@@ -320,8 +320,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org76c6bfb" class="outline-2">
-<h2 id="org76c6bfb"><span class="section-number-2">3</span> nginx四层lb的配置</h2>
+<div id="outline-container-org1f2a096" class="outline-2">
+<h2 id="org1f2a096"><span class="section-number-2">3</span> nginx四层lb的配置</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 自己手动编译的 <code>1.11.3</code> 版本。编译时需要加入 <code>--with-stream</code> 选项。
@@ -371,8 +371,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org6053f5f" class="outline-2">
-<h2 id="org6053f5f"><span class="section-number-2">4</span> nginx编译的顺序和模块选择</h2>
+<div id="outline-container-org3e90338" class="outline-2">
+<h2 id="org3e90338"><span class="section-number-2">4</span> nginx编译的顺序和模块选择</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 configure中进来。有些模块需要根据来决定是否启用（如
@@ -394,7 +394,7 @@ configure会调用到 <code>auto/modules</code> ，这个里面是实际加载�
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:46</p>
+<p class="date">Created: 2019-03-25 一 17:49</p>
 <p class="validation"></p>
 </div>
 </body>

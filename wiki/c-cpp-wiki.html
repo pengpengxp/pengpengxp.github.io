@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:38 -->
+<!-- 2019-03-25 一 17:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>c-cpp-wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,43 +235,43 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge629ea0">1. <code>C++</code> 中的多态</a></li>
-<li><a href="#orgf70ac4a">2. memmove</a></li>
-<li><a href="#org9e9ae09">3. 实用函数</a>
+<li><a href="#org403c127">1. <code>C++</code> 中的多态</a></li>
+<li><a href="#org3f3aa52">2. memmove</a></li>
+<li><a href="#org1ee6692">3. 实用函数</a>
 <ul>
-<li><a href="#orgcb92c06">3.1. debug时打印日志到文件中</a></li>
+<li><a href="#orga95a547">3.1. debug时打印日志到文件中</a></li>
 </ul>
 </li>
-<li><a href="#org83d7d3c">4. 子进程和父进程共享已打开的描述符</a></li>
-<li><a href="#org6c3a98a">5. 动态链接库可以多个进程共同使用，但是extern出来的变量每个进程都是独一个</a></li>
-<li><a href="#org6495da4">6. 一个简单的telnet服务器例子</a></li>
-<li><a href="#org30f8f66">7. <span class="todo TODO">TODO</span> 动态分配二维矩阵</a></li>
-<li><a href="#org74662bc">8. <span class="todo TODO">TODO</span> 主要说明c和c++中的static和const关键字的区别联系。</a>
+<li><a href="#org404baa0">4. 子进程和父进程共享已打开的描述符</a></li>
+<li><a href="#org8bda416">5. 动态链接库可以多个进程共同使用，但是extern出来的变量每个进程都是独一个</a></li>
+<li><a href="#org00a6cf9">6. 一个简单的telnet服务器例子</a></li>
+<li><a href="#org5a93f2b">7. <span class="todo TODO">TODO</span> 动态分配二维矩阵</a></li>
+<li><a href="#org61f4f1b">8. <span class="todo TODO">TODO</span> 主要说明c和c++中的static和const关键字的区别联系。</a>
 <ul>
-<li><a href="#org556c6ea">8.1. c</a></li>
-<li><a href="#org99bf8b4">8.2. c++</a>
+<li><a href="#orgf6507e8">8.1. c</a></li>
+<li><a href="#orgfda3b41">8.2. c++</a>
 <ul>
-<li><a href="#org6e13bff">8.2.1. static</a></li>
-<li><a href="#orgde9e46b">8.2.2. const</a></li>
+<li><a href="#org62ab8a2">8.2.1. static</a></li>
+<li><a href="#org173cb50">8.2.2. const</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org3804c79">9. show ip address detail</a></li>
-<li><a href="#orge3674f4">10. 带参数的宏的扩展</a></li>
-<li><a href="#org76184c7">11. volatile关键字</a></li>
-<li><a href="#org9ec5d95">12. 使用strsep来切分字符串</a></li>
-<li><a href="#org468cb93">13. makefile中的两个冒号</a></li>
-<li><a href="#org1074e48">14. 测试系统是大端还是小端</a></li>
-<li><a href="#org7e0a66b">15. 查看gcc默认定义的宏</a></li>
-<li><a href="#org3f5f57e">16. 固定结构体以1字节对齐</a></li>
-<li><a href="#orgc88adad">17. 统计一段操作的耗时</a></li>
+<li><a href="#org0226bdf">9. show ip address detail</a></li>
+<li><a href="#org82d84b2">10. 带参数的宏的扩展</a></li>
+<li><a href="#orgad022df">11. volatile关键字</a></li>
+<li><a href="#orgeaaeb58">12. 使用strsep来切分字符串</a></li>
+<li><a href="#org48f769a">13. makefile中的两个冒号</a></li>
+<li><a href="#org03a411b">14. 测试系统是大端还是小端</a></li>
+<li><a href="#org4a80e95">15. 查看gcc默认定义的宏</a></li>
+<li><a href="#org39b085d">16. 固定结构体以1字节对齐</a></li>
+<li><a href="#orgcffc27b">17. 统计一段操作的耗时</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge629ea0" class="outline-2">
-<h2 id="orge629ea0"><span class="section-number-2">1</span> <code>C++</code> 中的多态</h2>
+<div id="outline-container-org403c127" class="outline-2">
+<h2 id="org403c127"><span class="section-number-2">1</span> <code>C++</code> 中的多态</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 <a href="http://www.jianshu.com/p/c8e74ef95091">这里讲得不错。</a>
@@ -329,8 +329,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgf70ac4a" class="outline-2">
-<h2 id="orgf70ac4a"><span class="section-number-2">2</span> memmove</h2>
+<div id="outline-container-org3f3aa52" class="outline-2">
+<h2 id="org3f3aa52"><span class="section-number-2">2</span> memmove</h2>
 <div class="outline-text-2" id="text-2">
 <pre class="example">
     #include &lt;string.h&gt;
@@ -344,12 +344,12 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org9e9ae09" class="outline-2">
-<h2 id="org9e9ae09"><span class="section-number-2">3</span> 实用函数</h2>
+<div id="outline-container-org1ee6692" class="outline-2">
+<h2 id="org1ee6692"><span class="section-number-2">3</span> 实用函数</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgcb92c06" class="outline-3">
-<h3 id="orgcb92c06"><span class="section-number-3">3.1</span> debug时打印日志到文件中</h3>
+<div id="outline-container-orga95a547" class="outline-3">
+<h3 id="orga95a547"><span class="section-number-3">3.1</span> debug时打印日志到文件中</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-C"><span style="color: #7fffd4;">     #include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
@@ -376,8 +376,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org83d7d3c" class="outline-2">
-<h2 id="org83d7d3c"><span class="section-number-2">4</span> 子进程和父进程共享已打开的描述符</h2>
+<div id="outline-container-org404baa0" class="outline-2">
+<h2 id="org404baa0"><span class="section-number-2">4</span> 子进程和父进程共享已打开的描述符</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-C"><span style="color: #7fffd4;">    #include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
@@ -417,8 +417,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org6c3a98a" class="outline-2">
-<h2 id="org6c3a98a"><span class="section-number-2">5</span> 动态链接库可以多个进程共同使用，但是extern出来的变量每个进程都是独一个</h2>
+<div id="outline-container-org8bda416" class="outline-2">
+<h2 id="org8bda416"><span class="section-number-2">5</span> 动态链接库可以多个进程共同使用，但是extern出来的变量每个进程都是独一个</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 <code>lib.c</code> ：
@@ -532,8 +532,8 @@ buf is (null)
 </div>
 </div>
 
-<div id="outline-container-org6495da4" class="outline-2">
-<h2 id="org6495da4"><span class="section-number-2">6</span> 一个简单的telnet服务器例子</h2>
+<div id="outline-container-org00a6cf9" class="outline-2">
+<h2 id="org00a6cf9"><span class="section-number-2">6</span> 一个简单的telnet服务器例子</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 <code>server.c</code> ：
@@ -631,8 +631,8 @@ buf is (null)
 </div>
 </div>
 
-<div id="outline-container-org30f8f66" class="outline-2">
-<h2 id="org30f8f66"><span class="section-number-2">7</span> <span class="todo TODO">TODO</span> 动态分配二维矩阵</h2>
+<div id="outline-container-org5a93f2b" class="outline-2">
+<h2 id="org5a93f2b"><span class="section-number-2">7</span> <span class="todo TODO">TODO</span> 动态分配二维矩阵</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 C语言中，动态分配一个矩阵的话。我现在找到了一个“模拟”的方法：使用指
@@ -745,12 +745,12 @@ C语言中，动态分配一个矩阵的话。我现在找到了一个“模拟�
 </div>
 </div>
 </div>
-<div id="outline-container-org74662bc" class="outline-2">
-<h2 id="org74662bc"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> 主要说明c和c++中的static和const关键字的区别联系。</h2>
+<div id="outline-container-org61f4f1b" class="outline-2">
+<h2 id="org61f4f1b"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> 主要说明c和c++中的static和const关键字的区别联系。</h2>
 <div class="outline-text-2" id="text-8">
 </div>
-<div id="outline-container-org556c6ea" class="outline-3">
-<h3 id="org556c6ea"><span class="section-number-3">8.1</span> c</h3>
+<div id="outline-container-orgf6507e8" class="outline-3">
+<h3 id="orgf6507e8"><span class="section-number-3">8.1</span> c</h3>
 <div class="outline-text-3" id="text-8-1">
 <p>
 c中static针对变量来说主要两个作用:
@@ -853,12 +853,12 @@ makefile如下：
 </div>
 </div>
 </div>
-<div id="outline-container-org99bf8b4" class="outline-3">
-<h3 id="org99bf8b4"><span class="section-number-3">8.2</span> c++</h3>
+<div id="outline-container-orgfda3b41" class="outline-3">
+<h3 id="orgfda3b41"><span class="section-number-3">8.2</span> c++</h3>
 <div class="outline-text-3" id="text-8-2">
 </div>
-<div id="outline-container-org6e13bff" class="outline-4">
-<h4 id="org6e13bff"><span class="section-number-4">8.2.1</span> static</h4>
+<div id="outline-container-org62ab8a2" class="outline-4">
+<h4 id="org62ab8a2"><span class="section-number-4">8.2.1</span> static</h4>
 <div class="outline-text-4" id="text-8-2-1">
 <p>
 c++中static应该和c是兼容的。但是这个我还没有实际测试过。另外，c++中
@@ -869,8 +869,8 @@ static在类中使用的时候是另一种特殊的方式。类中的static变�
 </div>
 </div>
 
-<div id="outline-container-orgde9e46b" class="outline-4">
-<h4 id="orgde9e46b"><span class="section-number-4">8.2.2</span> const</h4>
+<div id="outline-container-org173cb50" class="outline-4">
+<h4 id="org173cb50"><span class="section-number-4">8.2.2</span> const</h4>
 <div class="outline-text-4" id="text-8-2-2">
 <p>
 c++中const其实有了一些static的功能。另外，const还有一些特殊的功能。
@@ -890,8 +890,8 @@ cosnt定义的外部变量本身是局部的。不能直接通过extern就在其
 </div>
 </div>
 
-<div id="outline-container-org3804c79" class="outline-2">
-<h2 id="org3804c79"><span class="section-number-2">9</span> show ip address detail</h2>
+<div id="outline-container-org0226bdf" class="outline-2">
+<h2 id="org0226bdf"><span class="section-number-2">9</span> show ip address detail</h2>
 <div class="outline-text-2" id="text-9">
 <div class="org-src-container">
 <pre class="src src-C">
@@ -954,8 +954,8 @@ using <span style="color: #00ff00;">namespace</span> <span style="color: #8fbc8f
 </div>
 </div>
 
-<div id="outline-container-orge3674f4" class="outline-2">
-<h2 id="orge3674f4"><span class="section-number-2">10</span> 带参数的宏的扩展</h2>
+<div id="outline-container-org82d84b2" class="outline-2">
+<h2 id="org82d84b2"><span class="section-number-2">10</span> 带参数的宏的扩展</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 带参数的宏，后面可能有一个 <code>#</code> 和两个 <code>##</code> 。意思如下：
@@ -993,8 +993,8 @@ using <span style="color: #00ff00;">namespace</span> <span style="color: #8fbc8f
 </div>
 </div>
 
-<div id="outline-container-org76184c7" class="outline-2">
-<h2 id="org76184c7"><span class="section-number-2">11</span> volatile关键字</h2>
+<div id="outline-container-orgad022df" class="outline-2">
+<h2 id="orgad022df"><span class="section-number-2">11</span> volatile关键字</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 <a href="http://www.cnblogs.com/yc_sunniwell/archive/2010/06/24/1764231.html">参考：详解C中volatile关键字</a>
@@ -1056,8 +1056,8 @@ flag的值会被别的程序修改，因此在它进行优化的时候，可能�
 </div>
 </div>
 
-<div id="outline-container-org9ec5d95" class="outline-2">
-<h2 id="org9ec5d95"><span class="section-number-2">12</span> 使用strsep来切分字符串</h2>
+<div id="outline-container-orgeaaeb58" class="outline-2">
+<h2 id="orgeaaeb58"><span class="section-number-2">12</span> 使用strsep来切分字符串</h2>
 <div class="outline-text-2" id="text-12">
 <div class="org-src-container">
 <pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
@@ -1088,8 +1088,8 @@ flag的值会被别的程序修改，因此在它进行优化的时候，可能�
 </div>
 </div>
 
-<div id="outline-container-org468cb93" class="outline-2">
-<h2 id="org468cb93"><span class="section-number-2">13</span> makefile中的两个冒号</h2>
+<div id="outline-container-org48f769a" class="outline-2">
+<h2 id="org48f769a"><span class="section-number-2">13</span> makefile中的两个冒号</h2>
 <div class="outline-text-2" id="text-13">
 <p>
 两个冒号比一个冒号就是可以定义同名的目标。比如下面的makefile的输出是
@@ -1155,8 +1155,8 @@ haha
 </div>
 </div>
 
-<div id="outline-container-org1074e48" class="outline-2">
-<h2 id="org1074e48"><span class="section-number-2">14</span> 测试系统是大端还是小端</h2>
+<div id="outline-container-org03a411b" class="outline-2">
+<h2 id="org03a411b"><span class="section-number-2">14</span> 测试系统是大端还是小端</h2>
 <div class="outline-text-2" id="text-14">
 <div class="org-src-container">
 <pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
@@ -1200,8 +1200,8 @@ haha
 </div>
 </div>
 </div>
-<div id="outline-container-org7e0a66b" class="outline-2">
-<h2 id="org7e0a66b"><span class="section-number-2">15</span> 查看gcc默认定义的宏</h2>
+<div id="outline-container-org4a80e95" class="outline-2">
+<h2 id="org4a80e95"><span class="section-number-2">15</span> 查看gcc默认定义的宏</h2>
 <div class="outline-text-2" id="text-15">
 <div class="org-src-container">
 <pre class="src src-sh">gcc -E -dM - &lt;/dev/null
@@ -1209,8 +1209,8 @@ haha
 </div>
 </div>
 </div>
-<div id="outline-container-org3f5f57e" class="outline-2">
-<h2 id="org3f5f57e"><span class="section-number-2">16</span> 固定结构体以1字节对齐</h2>
+<div id="outline-container-org39b085d" class="outline-2">
+<h2 id="org39b085d"><span class="section-number-2">16</span> 固定结构体以1字节对齐</h2>
 <div class="outline-text-2" id="text-16">
 <div class="org-src-container">
 <pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;stdio.h&gt;</span>
@@ -1240,8 +1240,8 @@ haha
 </div>
 </div>
 </div>
-<div id="outline-container-orgc88adad" class="outline-2">
-<h2 id="orgc88adad"><span class="section-number-2">17</span> 统计一段操作的耗时</h2>
+<div id="outline-container-orgcffc27b" class="outline-2">
+<h2 id="orgcffc27b"><span class="section-number-2">17</span> 统计一段操作的耗时</h2>
 <div class="outline-text-2" id="text-17">
 <div class="org-src-container">
 <pre class="src src-C"><span style="color: #7fffd4;">#include</span> <span style="color: #ffa500;">&lt;sys/time.h&gt;</span>
@@ -1275,7 +1275,7 @@ haha
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:38</p>
+<p class="date">Created: 2019-03-25 一 17:49</p>
 <p class="validation"></p>
 </div>
 </body>

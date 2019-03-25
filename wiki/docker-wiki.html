@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:47 -->
+<!-- 2019-03-25 一 17:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Docker wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,21 +235,21 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org236861e">1. 国内镜像市场daocloud</a></li>
-<li><a href="#orga535611">2. install docker on ubuntu 14.04</a></li>
-<li><a href="#orge9ce399">3. 网桥配置相关命令</a></li>
-<li><a href="#org33e9ebf">4. docker on mac</a></li>
-<li><a href="#org979a939">5. 存入导出镜像</a></li>
-<li><a href="#org4e565f0">6. 容器导入导出</a></li>
-<li><a href="#orgd35d2b8">7. 虚拟机中使用ras搞docker</a></li>
-<li><a href="#orgfb7fae1">8. SaaS, PaaS, IaaS</a></li>
+<li><a href="#org6e15ed9">1. 国内镜像市场daocloud</a></li>
+<li><a href="#org01ac182">2. install docker on ubuntu 14.04</a></li>
+<li><a href="#org8a1eb3e">3. 网桥配置相关命令</a></li>
+<li><a href="#org63adc5c">4. docker on mac</a></li>
+<li><a href="#org633cbd9">5. 存入导出镜像</a></li>
+<li><a href="#orgaa6f15d">6. 容器导入导出</a></li>
+<li><a href="#org7a61a1e">7. 虚拟机中使用ras搞docker</a></li>
+<li><a href="#org392f5b1">8. SaaS, PaaS, IaaS</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org236861e" class="outline-2">
-<h2 id="org236861e"><span class="section-number-2">1</span> <a href="https://hub.daocloud.io/">国内镜像市场daocloud</a></h2>
+<div id="outline-container-org6e15ed9" class="outline-2">
+<h2 id="org6e15ed9"><span class="section-number-2">1</span> <a href="https://hub.daocloud.io/">国内镜像市场daocloud</a></h2>
 <div class="outline-text-2" id="text-1">
 <p>
 直接ssh登进去：
@@ -290,8 +290,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orga535611" class="outline-2">
-<h2 id="orga535611"><span class="section-number-2">2</span> install docker on ubuntu 14.04</h2>
+<div id="outline-container-org01ac182" class="outline-2">
+<h2 id="org01ac182"><span class="section-number-2">2</span> install docker on ubuntu 14.04</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 ubuntu 14.04里安装，是安装 <code>docker.io</code> 这个包。然后还需要把当前用户
@@ -306,8 +306,8 @@ ubuntu 14.04里安装，是安装 <code>docker.io</code> 这个包。然后还�
 </div>
 </div>
 
-<div id="outline-container-orge9ce399" class="outline-2">
-<h2 id="orge9ce399"><span class="section-number-2">3</span> 网桥配置相关命令</h2>
+<div id="outline-container-org8a1eb3e" class="outline-2">
+<h2 id="org8a1eb3e"><span class="section-number-2">3</span> 网桥配置相关命令</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-sh">    <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">&#26597;&#30475;&#24403;&#21069;&#25152;&#26377;&#32593;&#26725;&#20449;&#24687;</span>
@@ -335,8 +335,8 @@ ubuntu 14.04里安装，是安装 <code>docker.io</code> 这个包。然后还�
 </div>
 </div>
 
-<div id="outline-container-org33e9ebf" class="outline-2">
-<h2 id="org33e9ebf"><span class="section-number-2">4</span> docker on mac</h2>
+<div id="outline-container-org63adc5c" class="outline-2">
+<h2 id="org63adc5c"><span class="section-number-2">4</span> docker on mac</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 <a href="https://docs.docker.com/docker-for-mac/networking/">docker在mac的网络方面可以看这里</a>
@@ -354,8 +354,8 @@ Mac上host是ping不通container的。坑！！
 </div>
 </div>
 
-<div id="outline-container-org979a939" class="outline-2">
-<h2 id="org979a939"><span class="section-number-2">5</span> 存入导出镜像</h2>
+<div id="outline-container-org633cbd9" class="outline-2">
+<h2 id="org633cbd9"><span class="section-number-2">5</span> 存入导出镜像</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 docker save -o image.tar &lt;contanier&gt;:latest
@@ -364,8 +364,8 @@ docker load &#x2013;input image.tar
 </div>
 </div>
 
-<div id="outline-container-org4e565f0" class="outline-2">
-<h2 id="org4e565f0"><span class="section-number-2">6</span> 容器导入导出</h2>
+<div id="outline-container-orgaa6f15d" class="outline-2">
+<h2 id="orgaa6f15d"><span class="section-number-2">6</span> 容器导入导出</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 docker export XXX &gt; ubuntu.tar
@@ -374,8 +374,8 @@ cat ubuntu.tar|docker import - containername:latest
 </div>
 </div>
 
-<div id="outline-container-orgd35d2b8" class="outline-2">
-<h2 id="orgd35d2b8"><span class="section-number-2">7</span> 虚拟机中使用ras搞docker</h2>
+<div id="outline-container-org7a61a1e" class="outline-2">
+<h2 id="org7a61a1e"><span class="section-number-2">7</span> 虚拟机中使用ras搞docker</h2>
 <div class="outline-text-2" id="text-7">
 <ol class="org-ol">
 <li>一定要桥接。</li>
@@ -383,8 +383,8 @@ cat ubuntu.tar|docker import - containername:latest
 </ol>
 </div>
 </div>
-<div id="outline-container-orgfb7fae1" class="outline-2">
-<h2 id="orgfb7fae1"><span class="section-number-2">8</span> SaaS, PaaS, IaaS</h2>
+<div id="outline-container-org392f5b1" class="outline-2">
+<h2 id="org392f5b1"><span class="section-number-2">8</span> SaaS, PaaS, IaaS</h2>
 <div class="outline-text-2" id="text-8">
 <ol class="org-ol">
 <li>SaaS(Software as a Service): 应用做为服务提供给用户。主要面向普通
@@ -407,7 +407,7 @@ PaaS基于IaaS)，因为首先SaaS可以是基于PaaS或者直接部署于IaaS�
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:47</p>
+<p class="date">Created: 2019-03-25 一 17:49</p>
 <p class="validation"></p>
 </div>
 </body>

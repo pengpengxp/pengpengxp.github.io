@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:50 -->
+<!-- 2019-03-25 一 17:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>tcpdump-wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,19 +235,19 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge7a7c1b">1. 命令行参数</a></li>
-<li><a href="#org926ab50">2. vlan</a></li>
-<li><a href="#org58d0437">3. snmp</a></li>
-<li><a href="#org30b0c77">4. dhcp</a></li>
-<li><a href="#orga3e9386">5. 捕获所有接口的数据</a></li>
-<li><a href="#org5404191">6. http</a></li>
-<li><a href="#org2268986">7. lldp</a></li>
+<li><a href="#org9686e27">1. 命令行参数</a></li>
+<li><a href="#org09d6d54">2. vlan</a></li>
+<li><a href="#orga0a4d1d">3. snmp</a></li>
+<li><a href="#org6fc6d87">4. dhcp</a></li>
+<li><a href="#orgf42624b">5. 捕获所有接口的数据</a></li>
+<li><a href="#org60cf899">6. http</a></li>
+<li><a href="#orgf82bbaf">7. lldp</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge7a7c1b" class="outline-2">
-<h2 id="orge7a7c1b"><span class="section-number-2">1</span> 命令行参数</h2>
+<div id="outline-container-org9686e27" class="outline-2">
+<h2 id="org9686e27"><span class="section-number-2">1</span> 命令行参数</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 加 <code>-S</code> 据说会显示理详细的信息。 -nnvv可以默认开启， <code>-xx</code> 比较关键，
@@ -261,8 +261,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org926ab50" class="outline-2">
-<h2 id="org926ab50"><span class="section-number-2">2</span> vlan</h2>
+<div id="outline-container-org09d6d54" class="outline-2">
+<h2 id="org09d6d54"><span class="section-number-2">2</span> vlan</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-sh">tcpdump -i eth0 -en vlan
@@ -271,8 +271,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org58d0437" class="outline-2">
-<h2 id="org58d0437"><span class="section-number-2">3</span> snmp</h2>
+<div id="outline-container-orga0a4d1d" class="outline-2">
+<h2 id="orga0a4d1d"><span class="section-number-2">3</span> snmp</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 参考 <a href="https://communities.ca.com/thread/101923301">这里</a> 。
@@ -283,8 +283,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org30b0c77" class="outline-2">
-<h2 id="org30b0c77"><span class="section-number-2">4</span> dhcp</h2>
+<div id="outline-container-org6fc6d87" class="outline-2">
+<h2 id="org6fc6d87"><span class="section-number-2">4</span> dhcp</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-sh">     sudo tcpdump -n  -i &lt;interface&gt; port 67 or port 68 -e
@@ -294,8 +294,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orga3e9386" class="outline-2">
-<h2 id="orga3e9386"><span class="section-number-2">5</span> 捕获所有接口的数据</h2>
+<div id="outline-container-orgf42624b" class="outline-2">
+<h2 id="orgf42624b"><span class="section-number-2">5</span> 捕获所有接口的数据</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 interface弄成any就可以了：
@@ -307,8 +307,8 @@ interface弄成any就可以了：
 </div>
 </div>
 
-<div id="outline-container-org5404191" class="outline-2">
-<h2 id="org5404191"><span class="section-number-2">6</span> http</h2>
+<div id="outline-container-org60cf899" class="outline-2">
+<h2 id="org60cf899"><span class="section-number-2">6</span> http</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Use TCPDUMP to Monitor HTTP Traffic
@@ -358,8 +358,8 @@ To monitor HTTP traffic including request and response headers and message body 
 </div>
 </div>
 
-<div id="outline-container-org2268986" class="outline-2">
-<h2 id="org2268986"><span class="section-number-2">7</span> lldp</h2>
+<div id="outline-container-orgf82bbaf" class="outline-2">
+<h2 id="orgf82bbaf"><span class="section-number-2">7</span> lldp</h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-sh">tcpdump -i eth0 -ne ether proto 0x88cc
@@ -370,7 +370,7 @@ To monitor HTTP traffic including request and response headers and message body 
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:50</p>
+<p class="date">Created: 2019-03-25 一 17:50</p>
 <p class="validation"></p>
 </div>
 </body>

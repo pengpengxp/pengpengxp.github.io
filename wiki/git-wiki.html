@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:47 -->
+<!-- 2019-03-25 一 17:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Git wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -257,90 +257,90 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga77eef8">1. git reset</a>
+<li><a href="#orgf21f81c">1. git reset</a>
 <ul>
-<li><a href="#org79f0e0d">1.1. git reset base</a></li>
-<li><a href="#org880d899">1.2. git reset with path or files</a></li>
+<li><a href="#org0bc9bfa">1.1. git reset base</a></li>
+<li><a href="#orgbfe7e0d">1.2. git reset with path or files</a></li>
 </ul>
 </li>
-<li><a href="#orgdb8b135">2. git checkout with path or file</a></li>
-<li><a href="#org86e1a50">3. git blame</a></li>
-<li><a href="#org4dd66fb">4. git merge</a>
+<li><a href="#orgdbea065">2. git checkout with path or file</a></li>
+<li><a href="#org0da6181">3. git blame</a></li>
+<li><a href="#org271adea">4. git merge</a>
 <ul>
-<li><a href="#orgd4b559f">4.1. git 解决merge冲突的经验和技巧</a></li>
-<li><a href="#orgb775b87">4.2. git merge conflict 以某一分支为准直接应用</a></li>
-<li><a href="#org877b2cb">4.3. git merge-base</a></li>
+<li><a href="#org74909ff">4.1. git 解决merge冲突的经验和技巧</a></li>
+<li><a href="#orgc1d8e1b">4.2. git merge conflict 以某一分支为准直接应用</a></li>
+<li><a href="#org6b6e10c">4.3. git merge-base</a></li>
 </ul>
 </li>
-<li><a href="#orgcf66108">5. git merge rebase and cherry-pick</a></li>
-<li><a href="#org9eb1e1a">6. git stash</a></li>
+<li><a href="#org2ccaa84">5. git merge rebase and cherry-pick</a></li>
+<li><a href="#orga972583">6. git stash</a></li>
 <li><a href="#git_config">7. git config</a>
 <ul>
-<li><a href="#org97d2872">7.1. git config base</a></li>
-<li><a href="#org56a3d28">7.2. git config的 <code>--global</code> 选项</a></li>
+<li><a href="#org4fd3e83">7.1. git config base</a></li>
+<li><a href="#org198bc30">7.2. git config的 <code>--global</code> 选项</a></li>
 </ul>
 </li>
-<li><a href="#orga916225">8. git reflog和git log</a></li>
-<li><a href="#org637f68b">9. git revert</a></li>
+<li><a href="#orgc630349">8. git reflog和git log</a></li>
+<li><a href="#org6551dd9">9. git revert</a></li>
 <li><a href="#git-push">10. git push</a>
 <ul>
-<li><a href="#org4d30211">10.1. 常规用法</a></li>
-<li><a href="#orgc6dffba">10.2. 具体解释</a></li>
+<li><a href="#org88a1087">10.1. 常规用法</a></li>
+<li><a href="#org9eaf89c">10.2. 具体解释</a></li>
 <li><a href="#git-push-default">10.3. push.default</a></li>
 </ul>
 </li>
 <li><a href="#git-track">11. git track							  :git track:</a></li>
 <li><a href="#git-fetch">12. git fetch</a></li>
 <li><a href="#git-pull">13. git pull</a></li>
-<li><a href="#orgb63cde1">14. git remote</a>
+<li><a href="#orga6a1118">14. git remote</a>
 <ul>
-<li><a href="#org1d1b7a2">14.1. git remote base</a></li>
-<li><a href="#orgae917b3">14.2. git remote add &amp; git fetch</a></li>
+<li><a href="#orgae7d084">14.1. git remote base</a></li>
+<li><a href="#orgdbcba7b">14.2. git remote add &amp; git fetch</a></li>
 </ul>
 </li>
-<li><a href="#org14774e7">15. git diff</a></li>
-<li><a href="#org1eb5268">16. git clean</a></li>
-<li><a href="#orgec54083">17. git 工具</a>
+<li><a href="#org74c2adc">15. git diff</a></li>
+<li><a href="#org9f73b08">16. git clean</a></li>
+<li><a href="#org02752f9">17. git 工具</a>
 <ul>
-<li><a href="#org365819f">17.1. tig</a>
+<li><a href="#orgd68fcf3">17.1. tig</a>
 <ul>
-<li><a href="#orgee69341">17.1.1. 命令行下的git interface</a></li>
-<li><a href="#org4bad1cb">17.1.2. status view(s)</a></li>
+<li><a href="#org9804004">17.1.1. 命令行下的git interface</a></li>
+<li><a href="#orgd622a55">17.1.2. status view(s)</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#git-example">18. 一个实际的例子</a>
 <ul>
-<li><a href="#org0604421">18.1. 传是去以后还有一些文件夹没有实际上传</a></li>
-<li><a href="#org6b6ed1a">18.2. 配置ssh，不需要每次输入密码</a></li>
+<li><a href="#org1dbeeab">18.1. 传是去以后还有一些文件夹没有实际上传</a></li>
+<li><a href="#org91d8681">18.2. 配置ssh，不需要每次输入密码</a></li>
 </ul>
 </li>
-<li><a href="#orgd49cbf2">19. git submodule</a></li>
-<li><a href="#orgacef3c2">20. MISC</a>
+<li><a href="#orgb693221">19. git submodule</a></li>
+<li><a href="#org6cbed87">20. MISC</a>
 <ul>
-<li><a href="#orga8cf460">20.1. 找一个库中someone修改过的文件</a></li>
-<li><a href="#org710eb57">20.2. Doc</a></li>
-<li><a href="#org2cee985">20.3. git clone只能克隆master分支，需要所有分支的时候不知道怎么办？</a></li>
-<li><a href="#orgdca1546">20.4. 远程怎么删除分支</a></li>
-<li><a href="#orgc6dd896">20.5. 在emacs使用magit与远程进行交互</a></li>
+<li><a href="#org8cef51f">20.1. 找一个库中someone修改过的文件</a></li>
+<li><a href="#orgd76c2d3">20.2. Doc</a></li>
+<li><a href="#org4e59e51">20.3. git clone只能克隆master分支，需要所有分支的时候不知道怎么办？</a></li>
+<li><a href="#orgaca066c">20.4. 远程怎么删除分支</a></li>
+<li><a href="#org6768b5d">20.5. 在emacs使用magit与远程进行交互</a></li>
 </ul>
 </li>
-<li><a href="#orgfacde93">21. <span class="todo TODO">TODO</span> 自已配置一个git server自已使用</a></li>
-<li><a href="#org3833f20">22. 定义自己本地的 <code>.gitignore</code></a></li>
-<li><a href="#org4234e55">23. magit</a></li>
-<li><a href="#org2ce4656">24. 使用gitlab直接在command line中gitlab发merge request</a></li>
-<li><a href="#org74ea53c">25. git显示一个文件的所有历史修改记录</a></li>
+<li><a href="#orgef56a7e">21. <span class="todo TODO">TODO</span> 自已配置一个git server自已使用</a></li>
+<li><a href="#orgaae5824">22. 定义自己本地的 <code>.gitignore</code></a></li>
+<li><a href="#orgfb688ba">23. magit</a></li>
+<li><a href="#orgebbeffb">24. 使用gitlab直接在command line中gitlab发merge request</a></li>
+<li><a href="#orgdeb1bcb">25. git显示一个文件的所有历史修改记录</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orga77eef8" class="outline-2">
-<h2 id="orga77eef8"><span class="section-number-2">1</span> git reset</h2>
+<div id="outline-container-orgf21f81c" class="outline-2">
+<h2 id="orgf21f81c"><span class="section-number-2">1</span> git reset</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org79f0e0d" class="outline-3">
-<h3 id="org79f0e0d"><span class="section-number-3">1.1</span> git reset base</h3>
+<div id="outline-container-org0bc9bfa" class="outline-3">
+<h3 id="org0bc9bfa"><span class="section-number-3">1.1</span> git reset base</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 reset其实就是在move HEAD指针。顺便会改变几个空间中的内容。
@@ -377,8 +377,8 @@ reset其实就是在move HEAD指针。顺便会改变几个空间中的内容。
 </div>
 </div>
 </div>
-<div id="outline-container-org880d899" class="outline-3">
-<h3 id="org880d899"><span class="section-number-3">1.2</span> git reset with path or files</h3>
+<div id="outline-container-orgbfe7e0d" class="outline-3">
+<h3 id="orgbfe7e0d"><span class="section-number-3">1.2</span> git reset with path or files</h3>
 <div class="outline-text-3" id="text-1-2">
 <pre class="example">
       +----------------------------------------------------------------------+
@@ -439,8 +439,8 @@ commit<sub>id中的的file放到Index</sub>（暂存区）中。
 </div>
 </div>
 
-<div id="outline-container-orgdb8b135" class="outline-2">
-<h2 id="orgdb8b135"><span class="section-number-2">2</span> git checkout with path or file</h2>
+<div id="outline-container-orgdbea065" class="outline-2">
+<h2 id="orgdbea065"><span class="section-number-2">2</span> git checkout with path or file</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 <code>git checkout commid_id file</code> 和 <code>git reset commid_id file</code> 的区别
@@ -482,8 +482,8 @@ commit<sub>id中的的file放到Index</sub>（暂存区）中。
 </div>
 </div>
 
-<div id="outline-container-org86e1a50" class="outline-2">
-<h2 id="org86e1a50"><span class="section-number-2">3</span> git blame</h2>
+<div id="outline-container-org0da6181" class="outline-2">
+<h2 id="org0da6181"><span class="section-number-2">3</span> git blame</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <code>git blame &lt;filename&gt;</code> 可以查看一个文件被谁修改过，这个在debug的时候
@@ -492,12 +492,12 @@ commit<sub>id中的的file放到Index</sub>（暂存区）中。
 </div>
 </div>
 
-<div id="outline-container-org4dd66fb" class="outline-2">
-<h2 id="org4dd66fb"><span class="section-number-2">4</span> git merge</h2>
+<div id="outline-container-org271adea" class="outline-2">
+<h2 id="org271adea"><span class="section-number-2">4</span> git merge</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgd4b559f" class="outline-3">
-<h3 id="orgd4b559f"><span class="section-number-3">4.1</span> git 解决merge冲突的经验和技巧</h3>
+<div id="outline-container-org74909ff" class="outline-3">
+<h3 id="org74909ff"><span class="section-number-3">4.1</span> git 解决merge冲突的经验和技巧</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 <a href="https://www.zhihu.com/question/21215715">对于解决 Git 的 Merge Conflict 你有哪些经验和技巧？</a>
@@ -520,8 +520,8 @@ commit<sub>id中的的file放到Index</sub>（暂存区）中。
 </div>
 </div>
 
-<div id="outline-container-orgb775b87" class="outline-3">
-<h3 id="orgb775b87"><span class="section-number-3">4.2</span> git merge conflict 以某一分支为准直接应用</h3>
+<div id="outline-container-orgc1d8e1b" class="outline-3">
+<h3 id="orgc1d8e1b"><span class="section-number-3">4.2</span> git merge conflict 以某一分支为准直接应用</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 By default, when Git sees a conflict between two branches being
@@ -547,8 +547,8 @@ the merge command either a -Xours or -Xtheirs.
 </div>
 </div>
 </div>
-<div id="outline-container-org877b2cb" class="outline-3">
-<h3 id="org877b2cb"><span class="section-number-3">4.3</span> git merge-base</h3>
+<div id="outline-container-org6b6e10c" class="outline-3">
+<h3 id="org6b6e10c"><span class="section-number-3">4.3</span> git merge-base</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 可以找到两个commit的共同的祖先。这个在想找到分支的交叉点的时候很有
@@ -562,8 +562,8 @@ the merge command either a -Xours or -Xtheirs.
 </div>
 </div>
 
-<div id="outline-container-orgcf66108" class="outline-2">
-<h2 id="orgcf66108"><span class="section-number-2">5</span> git merge rebase and cherry-pick</h2>
+<div id="outline-container-org2ccaa84" class="outline-2">
+<h2 id="org2ccaa84"><span class="section-number-2">5</span> git merge rebase and cherry-pick</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 merge在history上是直接汇总两个分支。
@@ -582,8 +582,8 @@ cherry-pick: <code>A cherry-pick in Git is like a rebase for a single
 </div>
 </div>
 
-<div id="outline-container-org9eb1e1a" class="outline-2">
-<h2 id="org9eb1e1a"><span class="section-number-2">6</span> git stash</h2>
+<div id="outline-container-orga972583" class="outline-2">
+<h2 id="orga972583"><span class="section-number-2">6</span> git stash</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 可以暂存当前工作区的内容，以待后续使用。它是以栈的形式存在的。使用
@@ -610,12 +610,12 @@ cherry-pick: <code>A cherry-pick in Git is like a rebase for a single
 </div>
 </div>
 
-<div id="outline-container-org72a5066" class="outline-2">
-<h2 id="git_config"><a id="org72a5066"></a><span class="section-number-2">7</span> git config</h2>
+<div id="outline-container-org232c208" class="outline-2">
+<h2 id="git_config"><a id="org232c208"></a><span class="section-number-2">7</span> git config</h2>
 <div class="outline-text-2" id="text-git_config">
 </div>
-<div id="outline-container-org97d2872" class="outline-3">
-<h3 id="org97d2872"><span class="section-number-3">7.1</span> git config base</h3>
+<div id="outline-container-org4fd3e83" class="outline-3">
+<h3 id="org4fd3e83"><span class="section-number-3">7.1</span> git config base</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 使用git时最先需要设置的是就是用户名和邮箱：
@@ -645,8 +645,8 @@ cherry-pick: <code>A cherry-pick in Git is like a rebase for a single
 </div>
 </div>
 
-<div id="outline-container-org56a3d28" class="outline-3">
-<h3 id="org56a3d28"><span class="section-number-3">7.2</span> git config的 <code>--global</code> 选项</h3>
+<div id="outline-container-org198bc30" class="outline-3">
+<h3 id="org198bc30"><span class="section-number-3">7.2</span> git config的 <code>--global</code> 选项</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 可以看到上一小节中我们在配置时都带了 <code>--global</code> 选项。从名字中可以
@@ -694,8 +694,8 @@ cherry-pick: <code>A cherry-pick in Git is like a rebase for a single
 </div>
 </div>
 
-<div id="outline-container-orga916225" class="outline-2">
-<h2 id="orga916225"><span class="section-number-2">8</span> git reflog和git log</h2>
+<div id="outline-container-orgc630349" class="outline-2">
+<h2 id="orgc630349"><span class="section-number-2">8</span> git reflog和git log</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 <code>git reflog</code> 是暂存本地自己的commit、pull、checkout等操作的，感觉就
@@ -726,8 +726,8 @@ cherry-pick: <code>A cherry-pick in Git is like a rebase for a single
 </div>
 </div>
 
-<div id="outline-container-org637f68b" class="outline-2">
-<h2 id="org637f68b"><span class="section-number-2">9</span> git revert</h2>
+<div id="outline-container-org6551dd9" class="outline-2">
+<h2 id="org6551dd9"><span class="section-number-2">9</span> git revert</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 git revert commit<sub>id会把对应的commit的修改找出来干掉</sub>，如果有冲突就
@@ -742,12 +742,12 @@ commit<sub>id对应的内容</sub>。原来的那些提交都在的。
 </div>
 </div>
 
-<div id="outline-container-org0745676" class="outline-2">
-<h2 id="git-push"><a id="org0745676"></a><span class="section-number-2">10</span> git push</h2>
+<div id="outline-container-org09bbd6f" class="outline-2">
+<h2 id="git-push"><a id="org09bbd6f"></a><span class="section-number-2">10</span> git push</h2>
 <div class="outline-text-2" id="text-git-push">
 </div>
-<div id="outline-container-org4d30211" class="outline-3">
-<h3 id="org4d30211"><span class="section-number-3">10.1</span> 常规用法</h3>
+<div id="outline-container-org88a1087" class="outline-3">
+<h3 id="org88a1087"><span class="section-number-3">10.1</span> 常规用法</h3>
 <div class="outline-text-3" id="text-10-1">
 <pre class="example">
      git push origin local-branch-name:server-branch-name
@@ -765,8 +765,8 @@ branch，如果没有，则新建。
 </div>
 </div>
 
-<div id="outline-container-orgc6dffba" class="outline-3">
-<h3 id="orgc6dffba"><span class="section-number-3">10.2</span> 具体解释</h3>
+<div id="outline-container-org9eaf89c" class="outline-3">
+<h3 id="org9eaf89c"><span class="section-number-3">10.2</span> 具体解释</h3>
 <div class="outline-text-3" id="text-10-2">
 <hr />
 <p>
@@ -801,8 +801,8 @@ localserverfix是本地branch的名字，remoteserverfix是remote端branch的名
 <hr />
 </div>
 </div>
-<div id="outline-container-org2ddd5b7" class="outline-3">
-<h3 id="git-push-default"><a id="org2ddd5b7"></a><span class="section-number-3">10.3</span> push.default</h3>
+<div id="outline-container-orgd0d5f03" class="outline-3">
+<h3 id="git-push-default"><a id="orgd0d5f03"></a><span class="section-number-3">10.3</span> push.default</h3>
 <div class="outline-text-3" id="text-git-push-default">
 <p>
 设置这个选项，可以不用每次都显示的指定需要push的分支，设置对了，以后就
@@ -856,8 +856,8 @@ localserverfix是本地branch的名字，remoteserverfix是remote端branch的名
 </div>
 </div>
 
-<div id="outline-container-orgf16347c" class="outline-2">
-<h2 id="git-track"><a id="orgf16347c"></a><span class="section-number-2">11</span> git track							  :git track:</h2>
+<div id="outline-container-org19b46e3" class="outline-2">
+<h2 id="git-track"><a id="org19b46e3"></a><span class="section-number-2">11</span> git track							  :git track:</h2>
 <div class="outline-text-2" id="text-git-track">
 <p>
 <b>原文</b>
@@ -897,8 +897,8 @@ rather than making a new local branch?</li>
 </div>
 </div>
 
-<div id="outline-container-org39339bc" class="outline-2">
-<h2 id="git-fetch"><a id="org39339bc"></a><span class="section-number-2">12</span> git fetch</h2>
+<div id="outline-container-orgb99f0e2" class="outline-2">
+<h2 id="git-fetch"><a id="orgb99f0e2"></a><span class="section-number-2">12</span> git fetch</h2>
 <div class="outline-text-2" id="text-git-fetch">
 <p>
 我理解如下：
@@ -930,8 +930,8 @@ git fetch可以选择fetch不同的remote：
 </div>
 </div>
 
-<div id="outline-container-org6c07d6e" class="outline-2">
-<h2 id="git-pull"><a id="org6c07d6e"></a><span class="section-number-2">13</span> git pull</h2>
+<div id="outline-container-orga3662ca" class="outline-2">
+<h2 id="git-pull"><a id="orga3662ca"></a><span class="section-number-2">13</span> git pull</h2>
 <div class="outline-text-2" id="text-git-pull">
 <p>
 <code>git pull</code> 全等于 <code>git fetch; git merge FETCH_END</code>
@@ -948,12 +948,12 @@ progit上这么写的：
 </div>
 </div>
 
-<div id="outline-container-orgb63cde1" class="outline-2">
-<h2 id="orgb63cde1"><span class="section-number-2">14</span> git remote</h2>
+<div id="outline-container-orga6a1118" class="outline-2">
+<h2 id="orga6a1118"><span class="section-number-2">14</span> git remote</h2>
 <div class="outline-text-2" id="text-14">
 </div>
-<div id="outline-container-org1d1b7a2" class="outline-3">
-<h3 id="org1d1b7a2"><span class="section-number-3">14.1</span> git remote base</h3>
+<div id="outline-container-orgae7d084" class="outline-3">
+<h3 id="orgae7d084"><span class="section-number-3">14.1</span> git remote base</h3>
 <div class="outline-text-3" id="text-14-1">
 <p>
 git可以是一个本地库，但是它更多地，应该是和远端做交互，以进行多人协
@@ -988,8 +988,8 @@ git和远端进行交互，有两种方式可选：ssh和https。不过一般htt
 </div>
 </div>
 
-<div id="outline-container-orgae917b3" class="outline-3">
-<h3 id="orgae917b3"><span class="section-number-3">14.2</span> git remote add &amp; git fetch</h3>
+<div id="outline-container-orgdbcba7b" class="outline-3">
+<h3 id="orgdbcba7b"><span class="section-number-3">14.2</span> git remote add &amp; git fetch</h3>
 <div class="outline-text-3" id="text-14-2">
 <p>
 <b>我的理解</b>
@@ -1034,8 +1034,8 @@ base it off your remote branch:
 </div>
 </div>
 </div>
-<div id="outline-container-org14774e7" class="outline-2">
-<h2 id="org14774e7"><span class="section-number-2">15</span> git diff</h2>
+<div id="outline-container-org74c2adc" class="outline-2">
+<h2 id="org74c2adc"><span class="section-number-2">15</span> git diff</h2>
 <div class="outline-text-2" id="text-15">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1070,8 +1070,8 @@ base it off your remote branch:
 </table>
 </div>
 </div>
-<div id="outline-container-org1eb5268" class="outline-2">
-<h2 id="org1eb5268"><span class="section-number-2">16</span> git clean</h2>
+<div id="outline-container-org9f73b08" class="outline-2">
+<h2 id="org9f73b08"><span class="section-number-2">16</span> git clean</h2>
 <div class="outline-text-2" id="text-16">
 <p>
 删除没有跟踪的文件。
@@ -1115,16 +1115,16 @@ base it off your remote branch:
 </div>
 </div>
 
-<div id="outline-container-orgec54083" class="outline-2">
-<h2 id="orgec54083"><span class="section-number-2">17</span> git 工具</h2>
+<div id="outline-container-org02752f9" class="outline-2">
+<h2 id="org02752f9"><span class="section-number-2">17</span> git 工具</h2>
 <div class="outline-text-2" id="text-17">
 </div>
-<div id="outline-container-org365819f" class="outline-3">
-<h3 id="org365819f"><span class="section-number-3">17.1</span> tig</h3>
+<div id="outline-container-orgd68fcf3" class="outline-3">
+<h3 id="orgd68fcf3"><span class="section-number-3">17.1</span> tig</h3>
 <div class="outline-text-3" id="text-17-1">
 </div>
-<div id="outline-container-orgee69341" class="outline-4">
-<h4 id="orgee69341"><span class="section-number-4">17.1.1</span> 命令行下的git interface</h4>
+<div id="outline-container-org9804004" class="outline-4">
+<h4 id="org9804004"><span class="section-number-4">17.1.1</span> 命令行下的git interface</h4>
 <div class="outline-text-4" id="text-17-1-1">
 <p>
 tig可认通过edit命令直接调出编辑器来编辑对应行的文件。我希望配置成
@@ -1144,8 +1144,8 @@ editor是等待的。对于tig，我不希望等待。可以通过设置 <code>G
 </div>
 </div>
 
-<div id="outline-container-org4bad1cb" class="outline-4">
-<h4 id="org4bad1cb"><span class="section-number-4">17.1.2</span> status view(s)</h4>
+<div id="outline-container-orgd622a55" class="outline-4">
+<h4 id="orgd622a55"><span class="section-number-4">17.1.2</span> status view(s)</h4>
 <div class="outline-text-4" id="text-17-1-2">
 <ul class="org-ul">
 <li><code>R</code>: refresh</li>
@@ -1162,8 +1162,8 @@ editor是等待的。对于tig，我不希望等待。可以通过设置 <code>G
 </div>
 </div>
 </div>
-<div id="outline-container-org5c1ee7e" class="outline-2">
-<h2 id="git-example"><a id="org5c1ee7e"></a><span class="section-number-2">18</span> 一个实际的例子</h2>
+<div id="outline-container-org61fc126" class="outline-2">
+<h2 id="git-example"><a id="org61fc126"></a><span class="section-number-2">18</span> 一个实际的例子</h2>
 <div class="outline-text-2" id="text-git-example">
 <p>
 本地有一个git仓库，我想把它放到github上去。
@@ -1203,8 +1203,8 @@ github上把我的mka的公钥传上去了。这样以后push都不需要密码�
 </p>
 </div>
 
-<div id="outline-container-org0604421" class="outline-3">
-<h3 id="org0604421"><span class="section-number-3">18.1</span> 传是去以后还有一些文件夹没有实际上传</h3>
+<div id="outline-container-org1dbeeab" class="outline-3">
+<h3 id="org1dbeeab"><span class="section-number-3">18.1</span> 传是去以后还有一些文件夹没有实际上传</h3>
 <div class="outline-text-3" id="text-18-1">
 <p>
 原因是这些文件夹都是我通过使用`git clone'下来的。里面被理解成了
@@ -1215,8 +1215,8 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </div>
 </div>
 
-<div id="outline-container-org6b6ed1a" class="outline-3">
-<h3 id="org6b6ed1a"><span class="section-number-3">18.2</span> 配置ssh，不需要每次输入密码</h3>
+<div id="outline-container-org91d8681" class="outline-3">
+<h3 id="org91d8681"><span class="section-number-3">18.2</span> 配置ssh，不需要每次输入密码</h3>
 <div class="outline-text-3" id="text-18-2">
 <p>
 可以使用ssh的方式来和github仓库交互，配置默认无密码后，每次提交都不需
@@ -1242,8 +1242,8 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </div>
 </div>
 
-<div id="outline-container-orgd49cbf2" class="outline-2">
-<h2 id="orgd49cbf2"><span class="section-number-2">19</span> git submodule</h2>
+<div id="outline-container-orgb693221" class="outline-2">
+<h2 id="orgb693221"><span class="section-number-2">19</span> git submodule</h2>
 <div class="outline-text-2" id="text-19">
 <p>
 一个仓库下也许某个子目录也是一个git仓库。这个目录就是一个
@@ -1261,12 +1261,12 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </div>
 </div>
 
-<div id="outline-container-orgacef3c2" class="outline-2">
-<h2 id="orgacef3c2"><span class="section-number-2">20</span> MISC</h2>
+<div id="outline-container-org6cbed87" class="outline-2">
+<h2 id="org6cbed87"><span class="section-number-2">20</span> MISC</h2>
 <div class="outline-text-2" id="text-20">
 </div>
-<div id="outline-container-orga8cf460" class="outline-3">
-<h3 id="orga8cf460"><span class="section-number-3">20.1</span> 找一个库中someone修改过的文件</h3>
+<div id="outline-container-org8cef51f" class="outline-3">
+<h3 id="org8cef51f"><span class="section-number-3">20.1</span> 找一个库中someone修改过的文件</h3>
 <div class="outline-text-3" id="text-20-1">
 <div class="org-src-container">
 <pre class="src src-sh">     git log --pretty=<span style="color: #ffa500;">"%H"</span> --author=<span style="color: #ffa500;">"authorname"</span> |
@@ -1278,16 +1278,16 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </div>
 </div>
 </div>
-<div id="outline-container-org710eb57" class="outline-3">
-<h3 id="org710eb57"><span class="section-number-3">20.2</span> Doc</h3>
+<div id="outline-container-orgd76c2d3" class="outline-3">
+<h3 id="orgd76c2d3"><span class="section-number-3">20.2</span> Doc</h3>
 <div class="outline-text-3" id="text-20-2">
 <p>
 <a href="https://git-scm.com/book/zh/v1/">中文的doc</a>
 </p>
 </div>
 </div>
-<div id="outline-container-org2cee985" class="outline-3">
-<h3 id="org2cee985"><span class="section-number-3">20.3</span> git clone只能克隆master分支，需要所有分支的时候不知道怎么办？</h3>
+<div id="outline-container-org4e59e51" class="outline-3">
+<h3 id="org4e59e51"><span class="section-number-3">20.3</span> git clone只能克隆master分支，需要所有分支的时候不知道怎么办？</h3>
 <div class="outline-text-3" id="text-20-3">
 <p>
 其实是都在的，只不过是被隐藏了。使用下面的命令可以看到的。
@@ -1303,8 +1303,8 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </pre>
 </div>
 </div>
-<div id="outline-container-orgdca1546" class="outline-3">
-<h3 id="orgdca1546"><span class="section-number-3">20.4</span> 远程怎么删除分支</h3>
+<div id="outline-container-orgaca066c" class="outline-3">
+<h3 id="orgaca066c"><span class="section-number-3">20.4</span> 远程怎么删除分支</h3>
 <div class="outline-text-3" id="text-20-4">
 <p>
 使用下面的命令删除远程分支：
@@ -1320,8 +1320,8 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc6dd896" class="outline-3">
-<h3 id="orgc6dd896"><span class="section-number-3">20.5</span> 在emacs使用magit与远程进行交互</h3>
+<div id="outline-container-org6768b5d" class="outline-3">
+<h3 id="org6768b5d"><span class="section-number-3">20.5</span> 在emacs使用magit与远程进行交互</h3>
 <div class="outline-text-3" id="text-20-5">
 <p>
 在magit的状态下，使用P，有&#x2013;force选项，直接按-f，然后再按一次P就行了。
@@ -1330,11 +1330,11 @@ submodule这种东西了。黙认它们应该是跟踪对应的repo去了。所�
 </div>
 </div>
 
-<div id="outline-container-orgfacde93" class="outline-2">
-<h2 id="orgfacde93"><span class="section-number-2">21</span> <span class="todo TODO">TODO</span> 自已配置一个git server自已使用</h2>
+<div id="outline-container-orgef56a7e" class="outline-2">
+<h2 id="orgef56a7e"><span class="section-number-2">21</span> <span class="todo TODO">TODO</span> 自已配置一个git server自已使用</h2>
 </div>
-<div id="outline-container-org3833f20" class="outline-2">
-<h2 id="org3833f20"><span class="section-number-2">22</span> 定义自己本地的 <code>.gitignore</code></h2>
+<div id="outline-container-orgaae5824" class="outline-2">
+<h2 id="orgaae5824"><span class="section-number-2">22</span> 定义自己本地的 <code>.gitignore</code></h2>
 <div class="outline-text-2" id="text-22">
 <p>
 我使用 <code>gtags, cscope</code> 等文件，会生成一些tags和cscope开头的索引文件。
@@ -1363,8 +1363,8 @@ cscope.*
 </p>
 </div>
 </div>
-<div id="outline-container-org4234e55" class="outline-2">
-<h2 id="org4234e55"><span class="section-number-2">23</span> magit</h2>
+<div id="outline-container-orgfb688ba" class="outline-2">
+<h2 id="orgfb688ba"><span class="section-number-2">23</span> magit</h2>
 <div class="outline-text-2" id="text-23">
 <p>
 <code>magit-log-buffer-file</code> 可以显示出来一个文件对应修改的commit。选中区
@@ -1373,8 +1373,8 @@ cscope.*
 </p>
 </div>
 </div>
-<div id="outline-container-org2ce4656" class="outline-2">
-<h2 id="org2ce4656"><span class="section-number-2">24</span> 使用gitlab直接在command line中gitlab发merge request</h2>
+<div id="outline-container-orgebbeffb" class="outline-2">
+<h2 id="orgebbeffb"><span class="section-number-2">24</span> 使用gitlab直接在command line中gitlab发merge request</h2>
 <div class="outline-text-2" id="text-24">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #cd5c5c;">#</span><span style="color: #cd5c5c;">!/bin/</span><span style="color: PaleYellow;">bash</span>
@@ -1397,8 +1397,8 @@ gitlab create_merge_request zhangjm/test <span style="color: #ffa500;">"New merg
 </div>
 </div>
 </div>
-<div id="outline-container-org74ea53c" class="outline-2">
-<h2 id="org74ea53c"><span class="section-number-2">25</span> git显示一个文件的所有历史修改记录</h2>
+<div id="outline-container-orgdeb1bcb" class="outline-2">
+<h2 id="orgdeb1bcb"><span class="section-number-2">25</span> git显示一个文件的所有历史修改记录</h2>
 <div class="outline-text-2" id="text-25">
 <div class="org-src-container">
 <pre class="src src-sh">git log --follow -p -- &lt;file&gt;
@@ -1409,7 +1409,7 @@ gitlab create_merge_request zhangjm/test <span style="color: #ffa500;">"New merg
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:47</p>
+<p class="date">Created: 2019-03-25 一 17:49</p>
 <p class="validation"></p>
 </div>
 </body>

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:43 -->
+<!-- 2019-03-25 一 17:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>python进阶笔记</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,61 +235,61 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org1286acb">1. Collections</a>
+<li><a href="#org311048f">1. Collections</a>
 <ul>
-<li><a href="#orgfeb3020">1.1. <span class="todo TODO">TODO</span> defaultdict 这儿没懂</a></li>
-<li><a href="#orgfe58e23">1.2. counter</a></li>
-<li><a href="#org575bb26">1.3. deque</a></li>
-<li><a href="#org16f9f49">1.4. namedtuple</a></li>
-<li><a href="#orgec0fbec">1.5. enum.Enum</a></li>
+<li><a href="#org2138ed8">1.1. <span class="todo TODO">TODO</span> defaultdict 这儿没懂</a></li>
+<li><a href="#org42d47a3">1.2. counter</a></li>
+<li><a href="#org6ff6d27">1.3. deque</a></li>
+<li><a href="#orga944ff0">1.4. namedtuple</a></li>
+<li><a href="#org25f0f9c">1.5. enum.Enum</a></li>
 </ul>
 </li>
-<li><a href="#orga9b7f3b">2. lambda</a></li>
+<li><a href="#orge3aa9b1">2. lambda</a></li>
 <li><a href="#tuidaoshi">3. 推导式</a></li>
-<li><a href="#org263f0b3">4. 上下文管理</a></li>
-<li><a href="#org96ff175">5. 装钸器</a></li>
-<li><a href="#org4cc8950">6. 函数式编程</a>
+<li><a href="#orgcc432a8">4. 上下文管理</a></li>
+<li><a href="#org295ff99">5. 装钸器</a></li>
+<li><a href="#org50386c0">6. 函数式编程</a>
 <ul>
-<li><a href="#org1f57083">6.1. Map</a></li>
-<li><a href="#org6871f9a">6.2. Filter</a></li>
-<li><a href="#orgede05b7">6.3. Reduce</a></li>
+<li><a href="#org063109c">6.1. Map</a></li>
+<li><a href="#org25b48c4">6.2. Filter</a></li>
+<li><a href="#org2110c14">6.3. Reduce</a></li>
 </ul>
 </li>
-<li><a href="#org4cb8ebc">7. set 数据结构</a></li>
-<li><a href="#orgf1658b8">8. 三元运算符</a></li>
-<li><a href="#org46089b4">9. Global</a></li>
+<li><a href="#org1a3d2fe">7. set 数据结构</a></li>
+<li><a href="#org55a04f7">8. 三元运算符</a></li>
+<li><a href="#orgdb282f7">9. Global</a></li>
 <li><a href="#mutable_or_unmutable">10. 可变对象和不可变对象</a>
 <ul>
-<li><a href="#org9149096">10.1. 总结可变类型和不可变类型</a></li>
+<li><a href="#org4ed7572">10.1. 总结可变类型和不可变类型</a></li>
 </ul>
 </li>
-<li><a href="#orgb625af3">11. python实用命令</a>
+<li><a href="#org3516014">11. python实用命令</a>
 <ul>
-<li><a href="#org33d8232">11.1. 共享文件目录</a></li>
-<li><a href="#org5905ce2">11.2. 脚本性能分析</a></li>
-<li><a href="#orgbf34335">11.3. CSV转换为json</a></li>
-<li><a href="#orgc396aa8">11.4. 列表辗平</a></li>
-<li><a href="#org288c880">11.5. 一行式的构造器</a></li>
-<li><a href="#org6e6344f">11.6. 命令行下编译py文件</a></li>
+<li><a href="#org4f2dab9">11.1. 共享文件目录</a></li>
+<li><a href="#orga3e6dbe">11.2. 脚本性能分析</a></li>
+<li><a href="#org72d4c15">11.3. CSV转换为json</a></li>
+<li><a href="#org23d1c97">11.4. 列表辗平</a></li>
+<li><a href="#orge66f819">11.5. 一行式的构造器</a></li>
+<li><a href="#org92d770a">11.6. 命令行下编译py文件</a></li>
 </ul>
 </li>
-<li><a href="#org0048e56">12. 对象自省</a>
+<li><a href="#org507f6cb">12. 对象自省</a>
 <ul>
-<li><a href="#org6401ca9">12.1. dir</a></li>
-<li><a href="#org12ed21f">12.2. type和id</a></li>
-<li><a href="#orge089b5c">12.3. inspect</a></li>
+<li><a href="#orgb1d2b9a">12.1. dir</a></li>
+<li><a href="#org4fa2e19">12.2. type和id</a></li>
+<li><a href="#orge9616d6">12.3. inspect</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org1286acb" class="outline-2">
-<h2 id="org1286acb"><span class="section-number-2">1</span> Collections</h2>
+<div id="outline-container-org311048f" class="outline-2">
+<h2 id="org311048f"><span class="section-number-2">1</span> Collections</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgfeb3020" class="outline-3">
-<h3 id="orgfeb3020"><span class="section-number-3">1.1</span> <span class="todo TODO">TODO</span> defaultdict <a href="#orgb20b311">这儿没懂</a></h3>
+<div id="outline-container-org2138ed8" class="outline-3">
+<h3 id="org2138ed8"><span class="section-number-3">1.1</span> <span class="todo TODO">TODO</span> defaultdict <a href="#org4198f79">这儿没懂</a></h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 它可以在初始化时设置数据的类型，感觉有点像 <code>C++</code> 中的 <code>&lt;list&gt;</code> 这些
@@ -354,7 +354,7 @@ for the JavaScript code in this tag.
 </div>
 
 <p>
-使用defaultdict可以解决。这个代码硬是没看懂。 <a id="orgb20b311"></a>
+使用defaultdict可以解决。这个代码硬是没看懂。 <a id="org4198f79"></a>
 </p>
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: PaleYellow;">import</span> collections
@@ -367,8 +367,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgfe58e23" class="outline-3">
-<h3 id="orgfe58e23"><span class="section-number-3">1.2</span> counter</h3>
+<div id="outline-container-org42d47a3" class="outline-3">
+<h3 id="org42d47a3"><span class="section-number-3">1.2</span> counter</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 我看reference，它是dict的一个子类。键对应的就是需要统计的元素，值就
@@ -416,8 +416,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org575bb26" class="outline-3">
-<h3 id="org575bb26"><span class="section-number-3">1.3</span> deque</h3>
+<div id="outline-container-org6ff6d27" class="outline-3">
+<h3 id="org6ff6d27"><span class="section-number-3">1.3</span> deque</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 双端队列
@@ -466,8 +466,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org16f9f49" class="outline-3">
-<h3 id="org16f9f49"><span class="section-number-3">1.4</span> namedtuple</h3>
+<div id="outline-container-orga944ff0" class="outline-3">
+<h3 id="orga944ff0"><span class="section-number-3">1.4</span> namedtuple</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 命名元组和元组一样，都是不可变的。但是你可以不用索引来访问其中的元
@@ -539,8 +539,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgec0fbec" class="outline-3">
-<h3 id="orgec0fbec"><span class="section-number-3">1.5</span> enum.Enum</h3>
+<div id="outline-container-org25f0f9c" class="outline-3">
+<h3 id="org25f0f9c"><span class="section-number-3">1.5</span> enum.Enum</h3>
 <div class="outline-text-3" id="text-1-5">
 <div class="org-src-container">
 <pre class="src src-python">     <span style="color: #cd5c5c;"># </span><span style="color: #cd5c5c;">-*- coding: utf-8; -*-</span>
@@ -582,8 +582,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orga9b7f3b" class="outline-2">
-<h2 id="orga9b7f3b"><span class="section-number-2">2</span> lambda</h2>
+<div id="outline-container-orge3aa9b1" class="outline-2">
+<h2 id="orge3aa9b1"><span class="section-number-2">2</span> lambda</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 和elisp一样，它就是匿名函数。其函数原型如下：
@@ -638,8 +638,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgbb3837e" class="outline-2">
-<h2 id="tuidaoshi"><a id="orgbb3837e"></a><span class="section-number-2">3</span> 推导式</h2>
+<div id="outline-container-orgaf09470" class="outline-2">
+<h2 id="tuidaoshi"><a id="orgaf09470"></a><span class="section-number-2">3</span> 推导式</h2>
 <div class="outline-text-2" id="text-tuidaoshi">
 <p>
 集合推导式
@@ -697,8 +697,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org263f0b3" class="outline-2">
-<h2 id="org263f0b3"><span class="section-number-2">4</span> 上下文管理</h2>
+<div id="outline-container-orgcc432a8" class="outline-2">
+<h2 id="orgcc432a8"><span class="section-number-2">4</span> 上下文管理</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 使用with进行上下文管理，非常方便：
@@ -799,8 +799,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org96ff175" class="outline-2">
-<h2 id="org96ff175"><span class="section-number-2">5</span> 装钸器</h2>
+<div id="outline-container-org295ff99" class="outline-2">
+<h2 id="org295ff99"><span class="section-number-2">5</span> 装钸器</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 在python中，函数是对象。可以进行赋值等操作：
@@ -1060,7 +1060,7 @@ web应用认证的时候常用装钸器来这样写：
 如果需要定义带参数的装钸器：
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org9b7c2c7">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
+<pre class="src src-python" id="org5cf6ad7">    <span style="color: PaleYellow;">from</span> functools <span style="color: PaleYellow;">import</span> wraps
 
     <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">logit</span>(logfile=<span style="color: #ffa500;">'out.log'</span>):
         <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">logging_decorator</span>(func):
@@ -1158,7 +1158,7 @@ web应用认证的时候常用装钸器来这样写：
 </div>
 
 <p>
-它比 <a href="#org9b7c2c7">嵌套函数的方式</a> 更整洁一些。而且扩展也很方便啦，现在我们可以定义
+它比 <a href="#org5cf6ad7">嵌套函数的方式</a> 更整洁一些。而且扩展也很方便啦，现在我们可以定义
 一个可以发邮件的子类：
 </p>
 <div class="org-src-container">
@@ -1216,12 +1216,12 @@ web应用认证的时候常用装钸器来这样写：
 </div>
 </div>
 
-<div id="outline-container-org4cc8950" class="outline-2">
-<h2 id="org4cc8950"><span class="section-number-2">6</span> 函数式编程</h2>
+<div id="outline-container-org50386c0" class="outline-2">
+<h2 id="org50386c0"><span class="section-number-2">6</span> 函数式编程</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org1f57083" class="outline-3">
-<h3 id="org1f57083"><span class="section-number-3">6.1</span> Map</h3>
+<div id="outline-container-org063109c" class="outline-3">
+<h3 id="org063109c"><span class="section-number-3">6.1</span> Map</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 把一个函数映射到一个列表中的每个元素。一般和匿名函数（lambda）结合
@@ -1283,8 +1283,8 @@ map写一个把所有list中字符串转换为首字母大写其它小写的形�
 </div>
 </div>
 
-<div id="outline-container-org6871f9a" class="outline-3">
-<h3 id="org6871f9a"><span class="section-number-3">6.2</span> Filter</h3>
+<div id="outline-container-org25b48c4" class="outline-3">
+<h3 id="org25b48c4"><span class="section-number-3">6.2</span> Filter</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 和map类似的用法，它可以过滤满足条件的元素出来。
@@ -1302,8 +1302,8 @@ filter是内置函数，它类似于for，但是更快。但是大部分情况�
 </div>
 </div>
 
-<div id="outline-container-orgede05b7" class="outline-3">
-<h3 id="orgede05b7"><span class="section-number-3">6.3</span> Reduce</h3>
+<div id="outline-container-org2110c14" class="outline-3">
+<h3 id="org2110c14"><span class="section-number-3">6.3</span> Reduce</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 reduce把一个函数作用在一个序列[x1, x2, x3&#x2026;]上，这个函数必须接收两
@@ -1405,8 +1405,8 @@ reduce求积：
 </div>
 </div>
 
-<div id="outline-container-org4cb8ebc" class="outline-2">
-<h2 id="org4cb8ebc"><span class="section-number-2">7</span> set 数据结构</h2>
+<div id="outline-container-org1a3d2fe" class="outline-2">
+<h2 id="org1a3d2fe"><span class="section-number-2">7</span> set 数据结构</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 它与列表类似，但是不能包括重复的值，它可以根据一个list来初始化：
@@ -1463,8 +1463,8 @@ reduce求积：
 </div>
 </div>
 
-<div id="outline-container-orgf1658b8" class="outline-2">
-<h2 id="orgf1658b8"><span class="section-number-2">8</span> 三元运算符</h2>
+<div id="outline-container-org55a04f7" class="outline-2">
+<h2 id="org55a04f7"><span class="section-number-2">8</span> 三元运算符</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 看看下面的例子：
@@ -1482,8 +1482,8 @@ reduce求积：
 </div>
 </div>
 
-<div id="outline-container-org46089b4" class="outline-2">
-<h2 id="org46089b4"><span class="section-number-2">9</span> Global</h2>
+<div id="outline-container-orgdb282f7" class="outline-2">
+<h2 id="orgdb282f7"><span class="section-number-2">9</span> Global</h2>
 <div class="outline-text-2" id="text-9">
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: PaleYellow;">def</span> <span style="color: #9acd32;">fun</span>():
@@ -1503,8 +1503,8 @@ reduce求积：
 </div>
 </div>
 
-<div id="outline-container-org0549305" class="outline-2">
-<h2 id="mutable_or_unmutable"><a id="org0549305"></a><span class="section-number-2">10</span> 可变对象和不可变对象</h2>
+<div id="outline-container-org7a4cfa0" class="outline-2">
+<h2 id="mutable_or_unmutable"><a id="org7a4cfa0"></a><span class="section-number-2">10</span> 可变对象和不可变对象</h2>
 <div class="outline-text-2" id="text-mutable_or_unmutable">
 <p>
 可变就是可以被改动，不可变就是常量的意思。
@@ -1557,8 +1557,8 @@ reduce求积：
 </div>
 </div>
 
-<div id="outline-container-org9149096" class="outline-3">
-<h3 id="org9149096"><span class="section-number-3">10.1</span> 总结可变类型和不可变类型</h3>
+<div id="outline-container-org4ed7572" class="outline-3">
+<h3 id="org4ed7572"><span class="section-number-3">10.1</span> 总结可变类型和不可变类型</h3>
 <div class="outline-text-3" id="text-10-1">
 <p>
 不可变类型：
@@ -1668,12 +1668,12 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-orgb625af3" class="outline-2">
-<h2 id="orgb625af3"><span class="section-number-2">11</span> python实用命令</h2>
+<div id="outline-container-org3516014" class="outline-2">
+<h2 id="org3516014"><span class="section-number-2">11</span> python实用命令</h2>
 <div class="outline-text-2" id="text-11">
 </div>
-<div id="outline-container-org33d8232" class="outline-3">
-<h3 id="org33d8232"><span class="section-number-3">11.1</span> 共享文件目录</h3>
+<div id="outline-container-org4f2dab9" class="outline-3">
+<h3 id="org4f2dab9"><span class="section-number-3">11.1</span> 共享文件目录</h3>
 <div class="outline-text-3" id="text-11-1">
 <p>
 直接进到目录这样：
@@ -1688,8 +1688,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 </div>
-<div id="outline-container-org5905ce2" class="outline-3">
-<h3 id="org5905ce2"><span class="section-number-3">11.2</span> 脚本性能分析</h3>
+<div id="outline-container-orga3e6dbe" class="outline-3">
+<h3 id="orga3e6dbe"><span class="section-number-3">11.2</span> 脚本性能分析</h3>
 <div class="outline-text-3" id="text-11-2">
 <div class="org-src-container">
 <pre class="src src-python">     python -m cProfile main.py
@@ -1702,8 +1702,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-orgbf34335" class="outline-3">
-<h3 id="orgbf34335"><span class="section-number-3">11.3</span> CSV转换为json</h3>
+<div id="outline-container-org72d4c15" class="outline-3">
+<h3 id="org72d4c15"><span class="section-number-3">11.3</span> CSV转换为json</h3>
 <div class="outline-text-3" id="text-11-3">
 <div class="org-src-container">
 <pre class="src src-sh">     python -c <span style="color: #ffa500;">"import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"</span>
@@ -1712,8 +1712,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-orgc396aa8" class="outline-3">
-<h3 id="orgc396aa8"><span class="section-number-3">11.4</span> 列表辗平</h3>
+<div id="outline-container-org23d1c97" class="outline-3">
+<h3 id="org23d1c97"><span class="section-number-3">11.4</span> 列表辗平</h3>
 <div class="outline-text-3" id="text-11-4">
 <div class="org-src-container">
 <pre class="src src-python">     <span style="color: PaleYellow;">import</span> itertools
@@ -1725,8 +1725,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-org288c880" class="outline-3">
-<h3 id="org288c880"><span class="section-number-3">11.5</span> 一行式的构造器</h3>
+<div id="outline-container-orge66f819" class="outline-3">
+<h3 id="orge66f819"><span class="section-number-3">11.5</span> 一行式的构造器</h3>
 <div class="outline-text-3" id="text-11-5">
 <p>
 避免类初始化时大量重复的赋值语句:
@@ -1756,8 +1756,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-org6e6344f" class="outline-3">
-<h3 id="org6e6344f"><span class="section-number-3">11.6</span> 命令行下编译py文件</h3>
+<div id="outline-container-org92d770a" class="outline-3">
+<h3 id="org92d770a"><span class="section-number-3">11.6</span> 命令行下编译py文件</h3>
 <div class="outline-text-3" id="text-11-6">
 <div class="org-src-container">
 <pre class="src src-sh">     python -m py_compile file.py file2.py
@@ -1768,8 +1768,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 
 
-<div id="outline-container-org0048e56" class="outline-2">
-<h2 id="org0048e56"><span class="section-number-2">12</span> 对象自省</h2>
+<div id="outline-container-org507f6cb" class="outline-2">
+<h2 id="org507f6cb"><span class="section-number-2">12</span> 对象自省</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 自省(introspection)，在计算机编程领域里，是指在运行时来判断一个对象
@@ -1778,8 +1778,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </p>
 </div>
 
-<div id="outline-container-org6401ca9" class="outline-3">
-<h3 id="org6401ca9"><span class="section-number-3">12.1</span> dir</h3>
+<div id="outline-container-orgb1d2b9a" class="outline-3">
+<h3 id="orgb1d2b9a"><span class="section-number-3">12.1</span> dir</h3>
 <div class="outline-text-3" id="text-12-1">
 <p>
 它返回一个列表，列出了一个对象的所有属性和方法。
@@ -1802,8 +1802,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-org12ed21f" class="outline-3">
-<h3 id="org12ed21f"><span class="section-number-3">12.2</span> type和id</h3>
+<div id="outline-container-org4fa2e19" class="outline-3">
+<h3 id="org4fa2e19"><span class="section-number-3">12.2</span> type和id</h3>
 <div class="outline-text-3" id="text-12-2">
 <div class="org-src-container">
 <pre class="src src-python">     <span style="color: PaleYellow;">print</span>(<span style="color: #b0c4de;">type</span>(1))
@@ -1816,8 +1816,8 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 </div>
 
-<div id="outline-container-orge089b5c" class="outline-3">
-<h3 id="orge089b5c"><span class="section-number-3">12.3</span> inspect</h3>
+<div id="outline-container-orge9616d6" class="outline-3">
+<h3 id="orge9616d6"><span class="section-number-3">12.3</span> inspect</h3>
 <div class="outline-text-3" id="text-12-3">
 <div class="org-src-container">
 <pre class="src src-python">     <span style="color: PaleYellow;">import</span> inspect
@@ -1836,7 +1836,7 @@ python函数调用的时候都是传递的引用，也就是传给函数原变�
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:43</p>
+<p class="date">Created: 2019-03-25 一 17:50</p>
 <p class="validation"></p>
 </div>
 </body>

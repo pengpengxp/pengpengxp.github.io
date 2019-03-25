@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-03-18 一 16:51 -->
+<!-- 2019-03-25 一 17:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>snmp wiki</title>
@@ -180,7 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://pengpengxp.github.io/css/wiki.css" />
+<link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -235,21 +235,21 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5ed5175">1. snmp中的oid和instance</a></li>
-<li><a href="#org862c2e5">2. snmp的scalar和table的区别</a></li>
-<li><a href="#orgc4dec7c">3. mib table中的index含义</a></li>
-<li><a href="#org5a0cc8b">4. 如何根据mib文件生成对应的C代码</a></li>
-<li><a href="#orgdcdecca">5. 如何添加一个临时的mib文件</a></li>
-<li><a href="#orgc58a7c7">6. 如何把mib文件添加到系统</a></li>
-<li><a href="#org2f19223">7. ubuntu中配置snmpd</a></li>
-<li><a href="#org79f522e">8. mib中admin string, display string和octet sring的区别</a></li>
-<li><a href="#org9f13f18">9. integer和integer32的区别</a></li>
+<li><a href="#orgf97b660">1. snmp中的oid和instance</a></li>
+<li><a href="#orgec286e8">2. snmp的scalar和table的区别</a></li>
+<li><a href="#org0bb2faf">3. mib table中的index含义</a></li>
+<li><a href="#org9d2528e">4. 如何根据mib文件生成对应的C代码</a></li>
+<li><a href="#org82232cd">5. 如何添加一个临时的mib文件</a></li>
+<li><a href="#org39a2c24">6. 如何把mib文件添加到系统</a></li>
+<li><a href="#orgeaced48">7. ubuntu中配置snmpd</a></li>
+<li><a href="#org6503e3d">8. mib中admin string, display string和octet sring的区别</a></li>
+<li><a href="#orgba91b06">9. integer和integer32的区别</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org5ed5175" class="outline-2">
-<h2 id="org5ed5175"><span class="section-number-2">1</span> snmp中的oid和instance</h2>
+<div id="outline-container-orgf97b660" class="outline-2">
+<h2 id="orgf97b660"><span class="section-number-2">1</span> snmp中的oid和instance</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 oid是指对象id，instance是指对象实例。
@@ -266,8 +266,8 @@ scalar的实例都是 <code>oid.0</code> 。table的实例都是 <code>oid.index
 </div>
 </div>
 
-<div id="outline-container-org862c2e5" class="outline-2">
-<h2 id="org862c2e5"><span class="section-number-2">2</span> snmp的scalar和table的区别</h2>
+<div id="outline-container-orgec286e8" class="outline-2">
+<h2 id="orgec286e8"><span class="section-number-2">2</span> snmp的scalar和table的区别</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 参考 <a href="https://www.webnms.com/cagent/help/technology_used/c_snmp_overview.html">snmp overview</a> 。
@@ -295,8 +295,8 @@ columnar对象（table）中，这类对象中可以有多个实例。
 </div>
 </div>
 
-<div id="outline-container-orgc4dec7c" class="outline-2">
-<h2 id="orgc4dec7c"><span class="section-number-2">3</span> mib table中的index含义</h2>
+<div id="outline-container-org0bb2faf" class="outline-2">
+<h2 id="org0bb2faf"><span class="section-number-2">3</span> mib table中的index含义</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 参考 <a href="https://www.webnms.com/snmp/help/snmpapi/snmpv3/table_handling/snmptables_basics.html">SNMP Table Basics</a> 。
@@ -483,8 +483,8 @@ TcpConnEntry ::=
 </div>
 </div>
 
-<div id="outline-container-org5a0cc8b" class="outline-2">
-<h2 id="org5a0cc8b"><span class="section-number-2">4</span> 如何根据mib文件生成对应的C代码</h2>
+<div id="outline-container-org9d2528e" class="outline-2">
+<h2 id="org9d2528e"><span class="section-number-2">4</span> 如何根据mib文件生成对应的C代码</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 以命令为例：
@@ -555,8 +555,8 @@ Dave
 </div>
 </div>
 
-<div id="outline-container-orgdcdecca" class="outline-2">
-<h2 id="orgdcdecca"><span class="section-number-2">5</span> 如何添加一个临时的mib文件</h2>
+<div id="outline-container-org82232cd" class="outline-2">
+<h2 id="org82232cd"><span class="section-number-2">5</span> 如何添加一个临时的mib文件</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 参考 <a href="http://net-snmp.sourceforge.net/wiki/index.php/TUT:Using_and_loading_MIBS">TUT:Using and loading MIBS</a> 。
@@ -595,8 +595,8 @@ linux中如果安装好snmp后默认会安装一些标准的mib。snmp相关的�
 </div>
 </div>
 
-<div id="outline-container-orgc58a7c7" class="outline-2">
-<h2 id="orgc58a7c7"><span class="section-number-2">6</span> 如何把mib文件添加到系统</h2>
+<div id="outline-container-org39a2c24" class="outline-2">
+<h2 id="org39a2c24"><span class="section-number-2">6</span> 如何把mib文件添加到系统</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 参考 <a href="http://net-snmp.sourceforge.net/wiki/index.php/TUT:Using_and_loading_MIBS">TUT:Using and loading MIBS</a> 。
@@ -633,8 +633,8 @@ mibs +FHOS-STATS
 </div>
 </div>
 
-<div id="outline-container-org2f19223" class="outline-2">
-<h2 id="org2f19223"><span class="section-number-2">7</span> ubuntu中配置snmpd</h2>
+<div id="outline-container-orgeaced48" class="outline-2">
+<h2 id="orgeaced48"><span class="section-number-2">7</span> ubuntu中配置snmpd</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 参考的 <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an-snmp-daemon-and-client-on-ubuntu-14-04">How To Install and Configure an SNMP Daemon and Client on
@@ -643,8 +643,8 @@ Ubuntu 14.04</a> 。
 </div>
 </div>
 
-<div id="outline-container-org79f522e" class="outline-2">
-<h2 id="org79f522e"><span class="section-number-2">8</span> mib中admin string, display string和octet sring的区别</h2>
+<div id="outline-container-org6503e3d" class="outline-2">
+<h2 id="org6503e3d"><span class="section-number-2">8</span> mib中admin string, display string和octet sring的区别</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 参考 <a href="https://sourceforge.net/p/net-snmp/mailman/message/29558225/">这里</a> 。
@@ -689,8 +689,8 @@ DisplayingString和SnmpAdminString才是真正指定 <b>可打印</b> 字符的�
 </div>
 </div>
 
-<div id="outline-container-org9f13f18" class="outline-2">
-<h2 id="org9f13f18"><span class="section-number-2">9</span> integer和integer32的区别</h2>
+<div id="outline-container-orgba91b06" class="outline-2">
+<h2 id="orgba91b06"><span class="section-number-2">9</span> integer和integer32的区别</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 参考 <a href="https://tools.ietf.org/html/rfc2578#section-7.1.1">这里</a> 。
@@ -729,7 +729,7 @@ modules converted from SMIv1 which did allow hyphens).
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: pengpengxp</p>
-<p class="date">Created: 2019-03-18 一 16:51</p>
+<p class="date">Created: 2019-03-25 一 17:50</p>
 <p class="validation"></p>
 </div>
 </body>
