@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+    <script defer src="../js/main.js"></script>
+
+    <title>神奇的发包工具scapy</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="linux_blog.html">Linux Blog</a></li>
+          <hr>
+          <li><a href="#vlan">调试VLAN</a></li>
+          <li><a href="#igmp">调试IGMP</a></li>
+          <li><a href="#customize">自己定制协议</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+
+        <h1>神奇的发包工具scapy</h1>
+        <hr>
+
+        <div class="peng-time">
+          <time>2019-03-25</time>
+        </div>
+
+        <p>之前就写过好几次 <a class="sorc" href="https://scapy.net/" data-accessed="2019-03-25">scapy</a> 。
+          每次需要自己构造报文的时候都会发现： <b>它好强大</b> 。</p>
+
+        <h2 id="vlan">调试VLAN</h2>
+
+        <p>测试协议vlan的时候，需要构造一些二层报文。刚开始同事推荐了一下ipop。试用了一下老是发不出报来。于是在网上搜到了 <a class="sorc" href="https://scapy.net/" data-accessed="2019-02-13">scapy</a> 。</p>
+
+        <p>原来在测试igmp的时候，我就用过这货。当时还记录在了 <a href="../archive/before-2018-11-10/2018-03-26-Linux下的工具.html#org397ade1">2018-03-26-Linux下的工具</a> 。</p>
+
+        <p>当时完成写在python文件中的，这次我查了一下文档 <a class="sorc" href="https://scapy.readthedocs.io/en/latest/" data-accessed="2019-02-13">https://scapy.readthedocs.io</a> 。可以有好几种方式来使用它。</p>
+
+        <p>直接运行scapy，然后一行一行地运行其实是很方便的，比如文档的中的例子：
+          <pre class="code">&gt;&gt;&gt; a=IP(ttl=10)
+&gt;&gt;&gt; a
+&lt; IP ttl=10 |&gt;
+&gt;&gt;&gt; a.src
+&#8217;127.0.0.1&#8217;
+&gt;&gt;&gt; a.dst=<span class="string">"192.168.1.1"</span>
+&gt;&gt;&gt; a
+&lt; IP ttl=10 dst=192.168.1.1 |&gt;
+&gt;&gt;&gt; a.src
+&#8217;192.168.8.14&#8217;
+&gt;&gt;&gt; del(a.ttl)
+&gt;&gt;&gt; a
+&lt; IP dst=192.168.1.1 |&gt;
+&gt;&gt;&gt; a.ttl
+64</pre></p>
+
+        <p>发送报文也很简单：<pre class="code">&gt;&gt;&gt; send(IP(dst=<span class="string">"1.2.3.4"</span>)/ICMP())
+.
+Sent 1 packets.
+&gt;&gt;&gt; sendp(Ether()/IP(dst=<span class="string">"1.2.3.4"</span>,ttl=(1,4)), iface=<span class="string">"eth1"</span>)
+....
+Sent 4 packets.
+&gt;&gt;&gt; sendp(<span class="string">"I'm travelling on Ethernet"</span>, iface=<span class="string">"eth1"</span>, loop=1, inter=0.2)
+................^C
+Sent 16 packets.
+&gt;&gt;&gt; sendp(rdpcap(<span class="string">"/tmp/pcapfile"</span>)) # tcpreplay
+...........
+Sent 11 packets.
+
+Returns packets sent by send()
+&gt;&gt;&gt; send(IP(dst='127.0.0.1'), return_packets=True)
+.
+Sent 1 packets.
+&lt;PacketList: TCP:0 UDP:0 ICMP:0 Other:1&gt;
+</pre></p>
+
+
+        <p>我写了一个简单地python的例子，这个例子中，主要是修改了ether_type字段，也修改了每个报文的mac地址，这是为了方便我调试协议VLAN：<pre class="python"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/python
+</span>
+<span class="keyword">from</span> scapy.<span class="builtin">all</span> <span class="keyword">import</span> *
+<span class="keyword">from</span> scapy.contrib.igmp <span class="keyword">import</span> IGMP
+<span class="keyword">import</span> random
+
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:01"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0801)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:02"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0802)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:03"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0803)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:04"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0804)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:05"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0805)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:06"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0806)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:07"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0807)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:08"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0808)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:09"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0809)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:0a"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x080a)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:0b"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x080b)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:0c"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x080c)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:0d"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x080d)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:0e"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x080e)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:0f"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x080f)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+sendp(Ether(src=<span class="string">"f8:09:23:00:00:10"</span>, dst=<span class="string">"f8:07:24:00:00:01"</span>, <span class="builtin">type</span>=0x0810)/IP(dst=<span class="string">"192.168.30.2"</span>, ttl=(1, 1)), iface=<span class="string">"eth0"</span>, inter=0.2)
+
+</pre>
+
+          后面可以在这上面再做定制。</p>
+
+        <h2 id="igmp">调试IGMP</h2>
+
+        <p>发送report报文：</p>
+<pre class="python"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/python
+</span>
+<span class="keyword">from</span> scapy.<span class="builtin">all</span> <span class="keyword">import</span> *
+<span class="keyword">from</span> scapy.contrib.igmp <span class="keyword">import</span> IGMP
+<span class="keyword">import</span> random
+
+
+<span class="variable-name">src_ip</span> = <span class="string">"192.168.1.1"</span>
+<span class="variable-name">multicast_ip</span> = <span class="string">"239.255.12.45"</span>
+<span class="variable-name">interface</span> = <span class="string">"eth0"</span>
+
+<span class="keyword">def</span> <span class="function-name">send_igmp_report</span>(dst):
+        <span class="variable-name">a</span>=Ether(src=<span class="string">"94:c6:91:02:56:d6"</span>)
+        <span class="variable-name">b</span>=IP(src=src_ip)
+        <span class="variable-name">c</span>=IGMP(<span class="builtin">type</span>=0x16, gaddr=dst)
+        c.igmpize(b, a)
+        <span class="keyword">print</span> <span class="string">"Joining IP "</span> + c.gaddr + <span class="string">" MAC "</span> + a.dst
+        sendp(a/b/c, iface=interface)
+
+send_igmp_report(multicast_ip)</pre>
+
+        <p>发送leave报文：</p>
+<pre class="python"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/python
+</span>
+<span class="keyword">from</span> scapy.<span class="builtin">all</span> <span class="keyword">import</span> *
+<span class="keyword">from</span> scapy.contrib.igmp <span class="keyword">import</span> IGMP
+<span class="keyword">import</span> random
+
+<span class="variable-name">src_ip</span> = <span class="string">"192.168.1.1"</span>
+<span class="variable-name">src_mac</span> = <span class="string">"94:c6:91:02:56:d6"</span>
+<span class="variable-name">interface</span> = <span class="string">"eth0"</span>
+<span class="variable-name">multicast_ip</span> = <span class="string">"224.239.12.45"</span>
+
+
+<span class="keyword">def</span> <span class="function-name">send_igmp_leave</span>(dst):
+        <span class="variable-name">a</span>=Ether(src=src_mac)
+        <span class="variable-name">b</span>=IP(src=src_ip)
+        <span class="variable-name">c</span>=IGMP(<span class="builtin">type</span>=0x17, gaddr=dst)
+        c.igmpize(b, a)
+        <span class="keyword">print</span> <span class="string">"Joining IP "</span> + c.gaddr + <span class="string">" MAC "</span> + a.dst
+        sendp(a/b/c, iface=interface)
+
+
+send_igmp_leave(multicast_ip);
+</pre>
+
+        <p>发送普通查询：</p>
+<pre class="python"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/python
+</span>
+<span class="keyword">from</span> scapy.<span class="builtin">all</span> <span class="keyword">import</span> *
+<span class="keyword">from</span> scapy.contrib.igmp <span class="keyword">import</span> IGMP
+<span class="keyword">import</span> random
+
+
+<span class="variable-name">src_ip</span> = <span class="string">"192.168.1.1"</span>
+<span class="variable-name">interface</span> = <span class="string">"eth0"</span>
+<span class="variable-name">multicast_ip</span> = <span class="string">"224.0.0.1"</span>
+
+
+<span class="keyword">def</span> <span class="function-name">send_igmp_ordinary_query</span>():
+        <span class="variable-name">a</span>=Ether(src=<span class="string">"94:c6:91:02:56:d6"</span>)
+        <span class="variable-name">b</span>=IP(src=src_ip, dst=multicast_ip)
+        <span class="variable-name">c</span>=IGMP(<span class="builtin">type</span>=0x11)
+        c.igmpize(b, a)
+        sendp(a/b/c, iface=interface)
+
+send_igmp_ordinary_query()</pre>
+
+        <p>发送特定组查询：</p>
+<pre class="python"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/python
+</span>
+<span class="keyword">from</span> scapy.<span class="builtin">all</span> <span class="keyword">import</span> *
+<span class="keyword">from</span> scapy.contrib.igmp <span class="keyword">import</span> IGMP
+<span class="keyword">import</span> random
+
+
+<span class="variable-name">src_ip</span> = <span class="string">"192.168.1.1"</span>
+<span class="variable-name">interface</span> = <span class="string">"eth0"</span>
+<span class="variable-name">multicast_ip</span> = <span class="string">"239.255.12.45"</span>
+
+
+<span class="keyword">def</span> <span class="function-name">send_igmp_specified_query</span>(dst):
+        <span class="variable-name">a</span>=Ether(src=<span class="string">"94:c6:91:02:56:d6"</span>)
+        <span class="variable-name">b</span>=IP(src=src_ip)
+        <span class="variable-name">c</span>=IGMP(<span class="builtin">type</span>=0x11, gaddr=dst)
+        c.igmpize(b, a)
+        sendp(a/b/c, iface=interface)
+
+
+send_igmp_specified_query(multicast_ip)</pre>
+
+        <h2 id="customize">自己定制协议</h2>
+        <p>如果遇到一些“非常规”的协议，比如这次我需要试一下GVRP协议。可以直接自己定义对应的类。比如：</p>
+<pre class="python"><span class="keyword">from</span> scapy.<span class="builtin">all</span> <span class="keyword">import</span> *
+<span class="keyword">import</span> random
+
+<span class="keyword">class</span> <span class="type">Ether8023</span>(Packet):
+    <span class="variable-name">name</span> = <span class="string">"8023Ether packet"</span>
+    <span class="variable-name">fields_desc</span> = [ DestMACField(<span class="string">"dst"</span>),
+                    SourceMACField(<span class="string">"src"</span>),
+                    ShortField(<span class="string">"len"</span>, 12) ]
+
+<span class="keyword">class</span> <span class="type">GVRP</span>(Packet):
+    <span class="variable-name">name</span> = <span class="string">"gvrp packete"</span>
+    <span class="variable-name">fields_desc</span>=[
+        ShortField(<span class="string">"protocol_id"</span>, 1),
+        XByteField(<span class="string">"type"</span>, 1),
+        XByteField(<span class="string">"len"</span>, 4),
+        XByteField(<span class="string">"event"</span>, 1),
+        ShortField(<span class="string">"value"</span>, 100),
+        XByteField(<span class="string">"endattr"</span>, 0),
+        XByteField(<span class="string">"endmessage"</span>, 0)
+    ]
+
+<span class="comment-delimiter"># </span><span class="comment">Join Empty
+</span>sendp(Ether(src=<span class="string">"f8:09:23:00:00:01"</span>, dst=<span class="string">"01:80:c2:00:00:21"</span>)/LLC(dsap=0x42, ssap=0x42, ctrl=0x03)/GVRP(event=1), iface=<span class="string">"eth0"</span>)
+
+<span class="comment-delimiter"># </span><span class="comment">Join In
+</span><span class="comment-delimiter"># </span><span class="comment">sendp(Ether8023(src="f8:09:23:00:00:01", dst="01:80:c2:00:00:21")/LLC(dsap=0x42, ssap=0x42, ctrl=0x03)/GVRP(event=2), iface="eth0")
+</span><span class="comment-delimiter"># </span><span class="comment">sendp(Ether8023(src="f8:09:23:00:00:01", dst="01:80:c2:00:00:21")/LLC(dsap=0x42, ssap=0x42, ctrl=0x03)/GVRP(event=2), iface="eth0")
+</span></pre>
+
+        <p>Ether8023这个类我是按照Ether类直接写的。GVRP里面，主要就是填fields_desc。
+          ShortField("protocol_id", 1)表式两个字节的数据，使用protocol_id标识，默认值为1。具体的文档在 <a class="sorc" href="https://scapy.readthedocs.io/en/latest/build_dissect.html#" data-accessed="2019-03-25">这里</a>。 </p>
+
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
