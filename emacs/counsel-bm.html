@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+    <script defer src="../js/main.js"></script>
+
+
+    <title>结合ivy来使用bm-bookmarks</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="emacs_blog.html">Emacs Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <h1>结合ivy来使用bm-bookmarks</h1>
+        <div class="peng-time">
+          <time>2019-04-11</time>
+        </div>
+
+        <p>我一直都在用 <a class="sorc" href="https://github.com/joodland/bm" data-accessed="2019-04-11">bm</a> 来在多个buffer中的固定位置进行跳转。</p>
+
+        <p>最开始的时候，是直接使用bm提供的show，next等函数来进行跳转。</p>
+
+        <p>然后我发现了 <a class="sorc" href="https://github.com/yasuyk/helm-bm" data-accessed="2019-04-11">helm-bm</a> 可以利用helm来进行交互式的选择。</p>
+
+        <p><b>但是，我发现其实这样的效率也不是特别高。</b>毕竟有时候，如果bm的bookmark太多时，只看那一行的内容是不太好确定跳转过去的是自己需要的位置。</p>
+
+        <p>然后我发现swiper-all这个函数，可以在搜索buffer的字符的时候，提供预览的功能。我感觉这个功能很实用。</p>
+
+        <p>网上搜了一下，<a class="sorc" href="https://www.reddit.com/r/emacs/comments/700xck/ivy_with_bmel_bookmark_manager/" data-accessed="2019-04-11">在 reddit 上有人实现了一个简单的版本。</a> 
+        只是这个版本和helm-bm一样，没有提供预览的功能。于是我在它的基础上，实现了下面的函数：</p>
+<pre class="emacs-lisp">
+(<span class="keyword">defun</span> bm-counsel-get-list (bookmark-overlays)
+  (-map (<span class="keyword">lambda</span> (bm)
+          (<span class="keyword">with-current-buffer</span> (<span class="function-name">overlay-buffer</span> bm)
+            (<span class="keyword">let*</span> ((line (<span class="function-name">replace-regexp-in-string</span> <span class="string">"\n$"</span> <span class="string">""</span> (<span class="function-name">buffer-substring</span> (<span class="function-name">overlay-start</span> bm)
+                                                                              (<span class="function-name">overlay-end</span> bm))))
+                   <span class="comment-delimiter">;; </span><span class="comment">line numbers start on 1
+</span>                   (line-num (+ 1 (<span class="function-name">count-lines</span> (<span class="function-name">point-min</span>) (<span class="function-name">overlay-start</span> bm))))
+                   (name (<span class="function-name">format</span> <span class="string">"%s:%d - %s"</span> (<span class="function-name">buffer-name</span>) line-num line)))
+
+              `(,name . ,bm))))
+        bookmark-overlays))
+
+(<span class="keyword">defun</span> counsel-bm-update-input ()
+  <span class="string">"Update fn for counsel-bm."</span>
+  (with-ivy-window
+    (<span class="keyword">when</span> (&gt; (<span class="function-name">length</span> (ivy-state-current ivy-last)) 0)
+      (<span class="keyword">let*</span> ((chosen (ivy-state-current ivy-last))
+             (bookmark (<span class="function-name">gethash</span> chosen bm-hash-table)))
+        (<span class="keyword">if</span> chosen
+            (<span class="keyword">save-restriction</span>
+              (with-ivy-window
+                (<span class="xah-elisp-command">switch-to-buffer</span> (<span class="function-name">overlay-buffer</span> bookmark))
+                (bm-goto bookmark)))
+          <span class="builtin">nil</span>)))))
+
+(<span class="keyword">defun</span> counsel-bm (<span class="builtin">&amp;optional</span> initial-input)
+  <span class="string">"Use ivy to select bm bookmarks.
+It has the ability to preview the bookmarks like `swiper-all'."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">let*</span> ((bm-list (bm-counsel-get-list (bm-overlays-lifo-order <span class="builtin">t</span>)))
+         (bm-hash-table (<span class="function-name">make-hash-table</span> <span class="builtin">:test</span> '<span class="function-name">equal</span>))
+         (search-list (-map (<span class="keyword">lambda</span> (bm) (<span class="function-name">car</span> bm)) bm-list)))
+
+    (-each bm-list (<span class="keyword">lambda</span> (bm)
+                     (<span class="function-name">puthash</span> (<span class="function-name">car</span> bm) (<span class="function-name">cdr</span> bm) bm-hash-table)))
+
+    (<span class="keyword">if</span> search-list
+        (ivy-read <span class="string">"Find bookmark: "</span>
+                  search-list
+                  <span class="builtin">:keymap</span> counsel-describe-map
+
+                  <span class="builtin">:action</span> (<span class="keyword">lambda</span> (chosen)
+                            (<span class="keyword">let</span> ((bookmark (<span class="function-name">gethash</span> chosen bm-hash-table)))
+                              (<span class="xah-elisp-command">switch-to-buffer</span> (<span class="function-name">overlay-buffer</span> bookmark))
+                              (bm-goto bookmark)))
+
+                  <span class="builtin">:update</span>-fn #'counsel-bm-update-input
+
+                  <span class="builtin">:initial</span>-input initial-input
+                  <span class="builtin">:caller</span> 'counsel-bm
+                  )
+      (<span class="function-name">message</span> <span class="string">"%s"</span> <span class="string">"No bookmark now."</span>))))
+
+(<span class="keyword">defun</span> counsel-bm-from-isearch ()
+  <span class="string">"Invoke `counsel-bmr' from isearch."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">let</span> ((query (<span class="keyword">if</span> isearch-regexp
+                   isearch-string
+                 (<span class="function-name">regexp-quote</span> isearch-string))))
+    (isearch-exit)
+    (counsel-bm query)))
+
+(<span class="function-name">provide</span> 'counsel-bm)
+</pre>
+
+        <p>还有一个counsel-bm-from-isearch，可以在isearch搜索的时候，或者完成isearch搜索后调用。我是把它绑定到了isearch-mode-map上：</p>
+<pre class="emacs-lisp"><span class="hl-line">(</span><span class="function-name"><span class="hl-line">define-key</span></span><span class="hl-line"> isearch-mode-map (</span><span class="function-name"><span class="hl-line">kbd</span></span><span class="hl-line"> </span><span class="string"><span class="hl-line">"&lt;M-return&gt;"</span></span><span class="hl-line">) 'counsel-bm-from-isearch)</span></pre>
+
+        <p>设置好bm的bookmark后，直接使用counsel-bm就可以了。效果如下图:</p>
+
+        <figure>
+          <img src="images/counsel-bm-example.gif" alt="counsel-bm-example" width="949" height="1000" />
+          <figcaption>
+            Counsel Bm Example
+          </figcaption>
+        </figure>
+
+
+        <section>
+          <div>
+            <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> </b></p>
+          </div>
+        </section>
+
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+        <script>
+          var gitalk = new Gitalk({
+              clientID: '3c74db23d6478d210434',
+              clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+              repo: 'pengpengxp.github.io',
+              owner: 'pengpengxp',
+              admin: ['pengpengxp'],
+              id: '',
+          })
+          gitalk.render('gitalk-container')
+        </script>
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html> 

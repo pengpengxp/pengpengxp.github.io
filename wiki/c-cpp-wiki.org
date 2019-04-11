@@ -795,6 +795,7 @@ int main(void)
 
     gettimeofday(&t0, 0);
     /* ... YOUR CODE HERE ... */
+    sleep(1);
     gettimeofday(&t1, 0);
 
     elapsed = timedifference_msec(t0, t1);
@@ -806,4 +807,4 @@ int main(void)
   #+END_SRC
 
   #+RESULTS:
-  : Code executed in 0.000000 milliseconds.
+  : Code executed in 1000.119995 milliseconds.

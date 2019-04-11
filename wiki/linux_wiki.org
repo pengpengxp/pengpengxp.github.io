@@ -2125,3 +2125,7 @@ Download URIs found in text file:
 
 $ aria2c -i uris.txt
 #+END_EXAMPLE
+* one line ftp server
+#+BEGIN_SRC sh
+twistd -n ftp ./
+#+END_SRC
