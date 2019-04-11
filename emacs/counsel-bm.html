@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <!-- keywords for search engin -->
-    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="keywords" content="emacs,ivy,counsel,bm,bookmarks">
     <meta name="author" content="Peng Xie">
     <meta name="description" content="">
     <link rel="stylesheet" href="../css/indexlayout.css" />
@@ -44,7 +44,7 @@
         <p>然后我发现swiper-all这个函数，可以在搜索buffer的字符的时候，提供预览的功能。我感觉这个功能很实用。</p>
 
         <p>网上搜了一下，<a class="sorc" href="https://www.reddit.com/r/emacs/comments/700xck/ivy_with_bmel_bookmark_manager/" data-accessed="2019-04-11">在 reddit 上有人实现了一个简单的版本。</a> 
-        只是这个版本和helm-bm一样，没有提供预览的功能。于是我在它的基础上，实现了下面的函数：</p>
+        只是这个版本和helm-bm一样，没有提供预览的功能。于是我在它的基础上， <b>添加了update-fn</b> ，这样就可以在选择的时候先查看一下是否需要跳到这里：</p>
 <pre class="emacs-lisp">
 (<span class="keyword">defun</span> bm-counsel-get-list (bookmark-overlays)
   (-map (<span class="keyword">lambda</span> (bm)
