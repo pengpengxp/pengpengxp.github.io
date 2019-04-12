@@ -73,7 +73,65 @@ void main()
          return 0;
      }
    #+END_SRC
+** 打印一片内存数据到buf中
+#+BEGIN_SRC c
+static int hex_dump_to_buf(const char *data, const int data_len, char *buf, const int buf_len)
+{
+    int   rc;
+    int   offset = 0;
+    int   i      = 0;
+    char *p      = buf;
 
+    while (i < data_len)
+    {
+        rc = snprintf(p, buf_len - offset, "%02X ", data[i]);
+        if (rc < 0)
+        {
+            break;
+        }
+
+        offset += rc;
+        p += rc;
+
+        i++;
+        if (!(i & 0xF))
+        {
+            rc = snprintf(p, buf_len - offset, "\n");
+            if (rc < 0)
+            {
+                break;
+            }
+
+            offset += rc;
+            p += rc;
+        }
+    }
+
+    return offset;
+}
+#+END_SRC
+
+** 打印一片数据到stdout
+#+BEGIN_SRC C
+static int hex_dump_to_stdout(const char *data, const int data_len)
+{
+    int   i      = 0;
+
+    while (i < data_len)
+    {
+        printf("%02X ", data[i]);
+
+        i++;
+        if (!(i & 0xF))
+        {
+            printf("\n");
+        }
+    }
+
+    return 0;
+}
+
+#+END_SRC
 * 子进程和父进程共享已打开的描述符
   #+BEGIN_SRC C
     #include <stdio.h>
