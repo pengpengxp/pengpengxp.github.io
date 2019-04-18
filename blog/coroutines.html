@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+    <script defer src="../js/main.js"></script>
+
+
+    <title>Coroutins－协程</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <hr>
+        <div class="peng-time">
+          <time>2019-04-18</time>
+        </div>
+        <p>以前一听人说起Coroutins这个概念，都感觉是很高大上。最近看了 <a class="sorc" href="https://www.instapaper.com/read/1182432026" data-accessed="2019-04-18">Coroutins in C</a> 这篇文章。
+          基本上搞清楚它是个什么东西了。</p>
+
+        <p>考虑一个生产者和一个消费者的情况。正常情况下，可以把它们分别放入两个线程或者进程中，生产者可以通过管道，把生产的数据写入管道，消费者从管道中取出数据来处理。</p>
+
+<pre class="cpp"><span class="comment-delimiter">/* </span><span class="comment">They are running in different thread or process </span><span class="comment-delimiter">*/</span>
+
+<span class="type">int</span> <span class="function-name">producer</span> ()
+{
+    <span class="comment-delimiter">/* </span><span class="comment">produce data and send to pipe </span><span class="comment-delimiter">*/</span>
+}
+
+
+<span class="type">int</span> <span class="function-name">consumer</span> ()
+{
+    <span class="comment-delimiter">/* </span><span class="comment">read from pipe and handle the data </span><span class="comment-delimiter">*/</span>
+}
+</pre>
+
+        <p>这样的办法，在一些情况下显得太“重”了，也不是可移植的。对于一些简单情况，我们也不太想为这么简单的问题用多线程。</p>
+
+        <p>协程，就是为了满足这个需求来的。</p>
+
+        <p>我们可以修改生产者的实现，每次调用生产者的时候，直接返回需要处理的数据，这样消费者就可以直接循环调用生产者。</p>
+<pre class="cpp"><span class="type">int</span> <span class="function-name">consumer</span> ()
+{
+    <span class="keyword">while</span> (data = producer())
+    {
+        <span class="comment-delimiter">/* </span><span class="comment">handle the data </span><span class="comment-delimiter">*/</span>
+    }
+}
+
+
+<span class="type">int</span> <span class="function-name">producer</span> ()
+{
+    <span class="comment-delimiter">/* </span><span class="comment">return the right data each time it is called </span><span class="comment-delimiter">*/</span>
+}
+
+
+</pre>
+
+        <p>也可以修改消费者，每次都把需要处理的数据以参数的形式提供给它。这样的话，消费者可以每次以需要处理的数据为形参直接调用生产者。</p>
+<pre class="cpp"><span class="type">int</span> <span class="function-name">producer</span> ()
+{
+    <span class="keyword">while</span> (data)
+    {
+        consumer (data);
+    }
+}
+
+<span class="type">int</span> <span class="function-name">consumer</span> (data)
+{
+    <span class="comment-delimiter">/* </span><span class="comment">handle the data and return. </span><span class="comment-delimiter">*/</span>
+}
+</pre>
+
+        <p>这两种修改方法，只需要改一种就可以了。无论改成哪一种，看起来我们现在也需发一个线程就可以了。
+          不过，这两种改法，都需要解决如果保存函数的上下文的问题。
+          简单来说，改法一，每次调用producer，产生的数据应该是不同的，直到最后没有数据产出。
+        改法二，每次消费者处理了数据后，应该保存其状态，因为很多时候后面的数据依赖于前面数据的处理结果，比如累加。</p>
+
+        <p>不同的人对这个问题有不同的解法，不同的语言应该也有不同的实现，英文原文把C的实现讲得很清楚。这里拷一个改生产者的C代码过来：</p>
+<pre class="cpp"><span class="type">int</span> <span class="function-name">function</span>(<span class="type">void</span>) {
+    <span class="keyword">static</span> <span class="type">int</span> <span class="variable-name">i</span>, <span class="variable-name">state</span> = 0;
+    <span class="keyword">switch</span> (state) {
+        <span class="keyword">case</span> 0: <span class="keyword">goto</span> <span class="constant">LABEL0</span>;
+        <span class="keyword">case</span> 1: <span class="keyword">goto</span> <span class="constant">LABEL1</span>;
+    }
+    <span class="constant">LABEL0</span>: <span class="comment-delimiter">/* </span><span class="comment">start of function </span><span class="comment-delimiter">*/</span>
+    <span class="keyword">for</span> (i = 0; i &lt; 10; i++) {
+        state = 1; <span class="comment-delimiter">/* </span><span class="comment">so we will come back to LABEL1 </span><span class="comment-delimiter">*/</span>
+        <span class="keyword">return</span> i;
+        <span class="constant">LABEL1</span>:; <span class="comment-delimiter">/* </span><span class="comment">resume control straight after the return </span><span class="comment-delimiter">*/</span>
+    }
+<span class="hl-line">}</span></pre>
+
+        <p>这个例子，循环调用这个function，可以顺序产生0到9的数。是用静态变量和goto来做的。</p>
+
+        <p>后面还有用switch来实现的宏。具体请参考原文。</p>
+
+        <section>
+          <div>
+            <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> </b></p>
+          </div>
+        </section>
+
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+        <script>
+          var gitalk = new Gitalk({
+              clientID: '3c74db23d6478d210434',
+              clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+              repo: 'pengpengxp.github.io',
+              owner: 'pengpengxp',
+              admin: ['pengpengxp'],
+              id: 'blog/coroutines.html',
+          })
+          gitalk.render('gitalk-container')
+        </script>
+
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
