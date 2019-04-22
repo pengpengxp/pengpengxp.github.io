@@ -1,3 +1,4 @@
+# -*- coding: utf-8; -*-
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
 
 #+Title: Emacs and Lisp wiki
@@ -2036,3 +2037,4 @@ continuing, use start-process or start-process-shell-command
      (start-process "" nil "xdg-open" x)) )
  filePathList)
   #+END_EXAMPLE
+

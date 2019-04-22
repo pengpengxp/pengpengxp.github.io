@@ -1,0 +1,14 @@
+# -*- word-wrap: nil; -*-
+#+OPTIONS: ^:{}
+#+STARTUP: align
+#+STARTUP: content
+#+OPTIONS: toc:nil
+
+# -*- coding: utf-8; -*-
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://pengpengxp.github.io/css/wiki.css" />
+
+#+Title: 我的网址搜集器
+
+* [[https://emacs-china.org/t/smtpmail-el/9072][用 smtpmail.el 发送邮件]]
+  这是一个使用如何使用smtpmail发邮件的测试方法，可以直接用python在本地
+  启动一个smtp的server来测试 。
