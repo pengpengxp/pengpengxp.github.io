@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+<script defer src="../js/main.js"></script>
+<link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>Linux中的同步问题</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+ <div class="nav">
+        <br />
+        <ul>
+          <li><a href="linux_blog.html">Linux Blog</a></li>
+        </ul>
+      </div>
+
+ <div class="article">
+
+<div class="peng-time">
+            <time>2019-04-26</time>
+          </div>
+<hr>
+
+<h1>Linux中的同步问题</h1>
+<h2>什么时候需要解决同步问题</h2>
+
+<p>
+<ul>
+<li>多个进程同时访问同一资源时，比如多个进程同时访问共享内存。</li>
+<li>多线程编程时，多个线程同时访问某些资源。</li>
+</ul>
+
+</p>
+
+<h2>常用的几种同步方法</h2>
+<h3>原子操作</h3>
+
+<p>
+原子操作是意思是把对临界资源的操作全部放入api接口内部实现，这样就不需
+要加锁了。Linux实现方式依赖于平台，每个平台都不一样，有些平台是直接用
+汇编语言实现的，有些平台则是通过关中断的方法来实现的（如何通过关中断来实现这里我不太清楚）。
+</p>
+
+<p>
+当需要保护的数据比较少的时候，使用原子操作是比较好的。一般情况下，就是
+一些整型数等等。原子操作提供了一些比如加1减1,读取等的简单接口。
+</p>
+
+<h3>互斥量</h3>
+
+<p>
+这应该就是我们常用的锁。一个线程锁住后，后面所有线程都不能进入临界区。
+</p>
+
+<h3>Spinlocks（自旋锁？）</h3>
+<p>
+自旋锁的意思是，线程A首先拿到这个锁，然后执行。线程B拿不到这个锁时，就
+在那儿等（自旋一会儿），还是占着cpu的。注意这里A和B是在不同的cpu上执行
+的。等A执行完后，B马上就可以执行。自旋锁是效率是很高的，因为一般被锁住
+的资源会很快被释放的。
+</p>
+
+<p>
+自旋锁是在多核的情况下才有用的，维基百科是这样说的：
+
+<pre class="output">
+显然，单核CPU不适于使用自旋锁，这里的单核CPU指的是单核单线程的CPU，因为，在同一时间只有一个线程是处在运行状态，假设运行线程A发现无法获取锁，只能等待解锁，但因为A自身不挂起，所以那个持有锁的线程B没有办法进入运行状态，只能等到操作系统分给A的时间片用完，才能有机会被调度。这种情况下使用自旋锁的代价很高。
+</pre>
+</p>
+
+<p>
+自旋锁之前有一个问题，如果核很多，同时等待临界资源的线程也很多，最坏的
+情况下，有一个线程总是得不到资源，需要等待很久。于是后面有人给自旋锁加
+入了排队机制： <a class="sorc"
+href="https://www.ibm.com/developerworks/cn/linux/l-cn-spinlock/index.html"
+data-accessed="2019-04-26">Linux 内核的排队自旋锁(FIFO Ticket
+Spinlock)</a>
+</p>
+
+<p style="color:red">
+问题：一般的锁，如果锁不住，会把cpu还给内核让它调度后面的线程吗？
+</p>
+
+<h3>读写锁</h3>
+
+<p>
+临界资源，有多个读和一个写时，这是比较有用的。没有写的线程时，多个读可
+以同时进行。有写的线程时，读和写都必须等待。
+</p>
+
+<h3>条件变量</h3>
+
+<p>
+条件变量就是对应的P,V操作吧。一个线程P出来一个资源，就可以唤醒一个等待
+的线程来V它。如果资源就是1时，条件变量其实就是互斥锁啦。
+</p>
+
+<p>
+条件变量和普通的锁的区别是：
+
+<ul>
+<li>条件变量可以有多个，也就是说，如果资源有多个，可能同时有多个线程在
+执行。而普通的锁，只能是一个线程在访问临界资源。
+</li>
+<li>普通锁，解锁的线程必须正好是锁信它的线程 <span style="color:red">
+这个我还不太确定。</span>。而对于条件变量来说，任何一个线程都可以
+"signal"一个条件。任何一个线程也可以通过广播的方式唤醒所有等待中的线
+程 <span id="style:red">这个还没有做过实验，但是我的问题是：条件变量一
+般和互斥量一起使用，应该没有同时等待的多个线程吧？</span>。
+</li>
+
+</ul>
+
+</p>
+
+<h2>参考资料</h2>
+
+<ol>
+
+<p>
+<li><a class="sorc" href="https://www.ibm.com/developerworks/library/l-linux-synchronization/index.html" data-accessed="2019-04-26">Anatomy of Linux synchronization methods</a></li>
+</p>
+
+<p>
+<li><a class="wikipedia-69128" href="https://zh.wikipedia.org/wiki/%E8%87%AA%E6%97%8B%E9%94%81" data-accessed="2019-04-26">维基百科： 自旋锁</a></li>
+</p>
+
+<p>
+<li><a class="sorc" href="https://www.ibm.com/developerworks/cn/linux/l-cn-spinlock/index.html" data-accessed="2019-04-26">Linux 内核的排队自旋锁(FIFO Ticket Spinlock)</a></li>
+</p>
+
+<p>
+<li><a class="sorc" href="https://lwn.net/Articles/267968/" data-accessed="2019-04-26"><span style="color:red">TODO: </span>Ticket spinlocks</a></li>
+</p>
+
+</ol>
+
+<section>
+<div>
+      <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> </b></p>
+    </div>
+</section>
+
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+      clientID: '3c74db23d6478d210434',
+      clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+      repo: 'pengpengxp.github.io',
+      owner: 'pengpengxp',
+      admin: ['pengpengxp'],
+      id: 'linux/synchronize_mechanism_of_linux.html',
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
