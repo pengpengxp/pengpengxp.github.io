@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh_cn">
+  <head>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- keywords for search engin -->
+    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+    <meta name="author" content="Peng Xie">
+    <meta name="description" content="">
+    <script defer src="../js/main.js"></script>
+    <link rel="stylesheet" href="../css/indexlayout.css" />
+
+    <title>Linux驱动入门笔记</title>
+
+  </head>
+
+  <body>
+
+    <div class="main">
+      <div class="nav">
+        <br />
+        <ul>
+          <li><a href="linux_blog.html">Linux Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="article">
+        <div class="peng-time">
+          <time>2019-04-24</time>
+        </div>
+
+        <h1>Linux驱动入门笔记</h1>
+        <hr>
+
+        <h2>笔记</h2>
+
+        <ul>
+          <li>Linux驱动可以动态加载和卸载。这样的好处是使内核不用太大，坏处就是要为每个设备都保存一份驱动代码。</li>
+          <li>驱动程序都是运行在内核态的。它们是可以被打断的。即是说，需要考虑在多核的情况下，并行执行到驱动程序内部也不会出问题。</li>
+        </ul>
+
+        <h2>参考资料</h2>
+
+        <ol>
+
+          <p>
+            <li><a class="sorc" href="http://derekmolloy.ie/writing-a-linux-kernel-module-part-1-introduction/#prettyPhoto" data-accessed="2019-04-24">Writing a Linux Kernel Module — Part 1: Introduction</a></li>
+          </p>
+
+          <p>
+            <li><a class="sorc" href="https://www.apriorit.com/dev-blog/195-simple-driver-for-linux-os" data-accessed="2019-04-24">Linux Driver Tutorial: How to Write a Simple Linux Device Driver</a></li>
+            介绍一个最简单的驱动程序，有完整的例子和编译Makefile。里面只有打印。不过文章说明了很多源文件中Lisene等等相关的内容。
+          </p>
+
+          <p>
+            <li><a class="sorc" href="http://derekmolloy.ie/writing-a-linux-kernel-module-part-2-a-character-device/" data-accessed="2019-04-24">Writing a Linux Kernel Module — Part 2: A Character Device</a></li>
+
+            <ul>
+              <li>详细介绍了如何写一个字符设备驱动程序。</li>
+              <li>如何写一个udev的rule，来改变驱动对应/dev/ebbchar的权限，使普通用户对他也有读写权限。</li>
+              <li>解释了权限位的最后一位，sticky位。如果此位置为t，表示对该文件有写入权限，并不意味着对它有删除权限。
+                比如/tmp/目录，每个用户都可以在这个目录创建文件，但是用户A不能随变删除用户B的文件。</li>
+              <li>使用了锁，解决了多进程同时和该驱动程序通信的问题。</li>
+            </ul>
+
+          </p>
+
+          <p>
+            <li><a class="sorc" href="http://derekmolloy.ie/kernel-gpio-programming-buttons-and-leds/#prettyPhoto" data-accessed="2019-04-24">Writing a Linux Kernel Module — Part 3: Buttons and LEDs</a></li>
+
+<ul>
+<li>一个例子是在用户空间直接设置GPIO。</li>
+<li>一个例子是通过驱动程序在内核空间设置GPIO。通过中断（这里应该是按下开关产生的硬件中断）来设置GPIO。
+GPIO115是input状态，用于读开关状态。
+GPIO49是output状态，用于设置led灯。开关按下提起会导致该GPIO产生中断，调到中断处理函数中，处理函数通过设置GPIO49就能控制led灯的亮和灭。</li>
+<li>关于本文中介绍的GPIO，可以参考 <a class="sorc" href="https://lwn.net/Articles/532714/" data-accessed="2019-04-24">GPIO in the kernel: an introduction</a> 这篇文章。</li>
+<li>最后一个例子，是在内核空间中使用kthread来演示内核态中的多线程。</li>
+<li>大概讲了一下kobject，我没搞太懂。</li>
+</ul>
+
+          </p>
+
+        </ol>
+
+        <section>
+          <div>
+            <p><b>如果你觉得本文不错，欢迎 <a href="../images/pay_to_paul_2.png">donate</a> </b></p>
+          </div>
+        </section>
+
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+        <script>
+          var gitalk = new Gitalk({
+              clientID: '3c74db23d6478d210434',
+              clientSecret: '3aa514809d4fbf7d526dc5349213190efb4b800a',
+              repo: 'pengpengxp.github.io',
+              owner: 'pengpengxp',
+              admin: ['pengpengxp'],
+              id: 'linux/linux_driver_tutorial.html',
+          })
+          gitalk.render('gitalk-container')
+        </script>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
