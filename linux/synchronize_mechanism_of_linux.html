@@ -44,6 +44,15 @@
 
 </p>
 
+<h2>名词</h2>
+
+<ul>
+<li><b>critical section: </b> code that can be excuted by only one
+thead at any given time. <a class="sorc"
+href="https://lwn.net/Kernel/LDD3/"
+data-accessed="2019-04-26">Linux Device Drivers, Third Edition</a></li>
+</ul>
+
 <h2>常用的几种同步方法</h2>
 <h3>原子操作</h3>
 
@@ -58,18 +67,48 @@
 一些整型数等等。原子操作提供了一些比如加1减1,读取等的简单接口。
 </p>
 
-<h3>互斥量</h3>
+<h3>信号量和互斥量</h3>
 
 <p>
-这应该就是我们常用的锁。一个线程锁住后，后面所有线程都不能进入临界区。
+<a class="sorc" href="https://lwn.net/Kernel/LDD3/" data-accessed="2019-04-26">LDD3: Chapter 5: Concurrency and Race Conditions</a> 中说得很清楚：
+
+<pre class="output">
+Semaphores are a well-understood concept in computer science. At its core, a sema-
+phore is a single integer value combined with a pair of functions that are typically
+called P and V. A process wishing to enter a critical section will call P on the relevant
+semaphore; if the semaphore’s value is greater than zero, that value is decremented
+by one and the process continues. If, instead, the semaphore’s value is 0 (or less), the
+process must wait until somebody else releases the semaphore. Unlocking a sema-
+phore is accomplished by calling V; this function increments the value of the sema-
+phore and, if necessary, wakes up processes that are waiting.
+
+When semaphores are used for mutual exclusion—keeping multiple processes from
+running within a critical section simultaneously—their value will be initially set to 1 .
+Such a semaphore can be held only by a single process or thread at any given time. A
+semaphore used in this mode is sometimes called a mutex, which is, of course, an
+abbreviation for “mutual exclusion.” Almost all semaphores found in the Linux ker-
+nel are used for mutual exclusion.
+
+</pre>
+
 </p>
+
+<ul>
+
+<li>信号量根本上就是一个整数个两个操作：P，V。</li>
+<li>如果整数大于0，需要访问临界资源的线程调P，对整数減一，然后进入临界区操作。</li>
+<li>如果整数小于或等于0，需要访问临界资源的线程等待，直到该整数大于0。</li>
+<li>线程访问完临界区后，调V，为整数加1，如果有的话，唤醒一个之前在P等待资源的线程。</li>
+<li>初始化整数为1时，其实就是互斥锁啦。使用互斥锁，一次只可能有一个线程访问临界区。</li>
+</ul>
 
 <h3>Spinlocks（自旋锁？）</h3>
 <p>
 自旋锁的意思是，线程A首先拿到这个锁，然后执行。线程B拿不到这个锁时，就
-在那儿等（自旋一会儿），还是占着cpu的。注意这里A和B是在不同的cpu上执行
-的。等A执行完后，B马上就可以执行。自旋锁是效率是很高的，因为一般被锁住
-的资源会很快被释放的。
+在那儿等（自旋一会儿），还是占着cpu的（如果是信号量或者是互斥量的话，
+可能它们这时候就不占用cpu啦。）。注意这里A和B是在不同的cpu上执行的。等
+A执行完后，B马上就可以执行。自旋锁是效率是很高的，因为一般被锁住的资源
+会很快被释放的。
 </p>
 
 <p>
@@ -90,7 +129,7 @@ Spinlock)</a>
 </p>
 
 <p style="color:red">
-问题：一般的锁，如果锁不住，会把cpu还给内核让它调度后面的线程吗？
+问题：一般的锁，如果锁不住，会把cpu还给内核让它调度后面的线程吗？我现在理解应该是会的。
 </p>
 
 <h3>读写锁</h3>
@@ -100,11 +139,11 @@ Spinlock)</a>
 以同时进行。有写的线程时，读和写都必须等待。
 </p>
 
-<h3>条件变量</h3>
+<h3 style="color:red">条件变量 （这个是不是就是上面的信号？）</h3>
 
 <p>
-条件变量就是对应的P,V操作吧。一个线程P出来一个资源，就可以唤醒一个等待
-的线程来V它。如果资源就是1时，条件变量其实就是互斥锁啦。
+条件变量就是对应的P,V操作吧。一个线程V出来一个资源，就可以唤醒一个等待
+的线程来P它。如果资源就是1时，条件变量其实就是互斥锁啦。
 </p>
 
 <p>
