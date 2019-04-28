@@ -1,40 +1,39 @@
 <!doctype html>
 <html lang="zh_cn">
-  <head>
-    <!-- Required meta tags -->
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <!-- keywords for search engin -->
-    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
-    <meta name="author" content="Peng Xie">
-    <meta name="description" content="">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!-- keywords for search engin -->
+<meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+<meta name="author" content="Peng Xie">
+<meta name="description" content="">
 <script defer src="../js/main.js"></script>
 <link rel="stylesheet" href="../css/indexlayout.css" />
 
-    <title>Linux中的同步问题</title>
+<title>Linux中的race condition方案</title>
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div class="main">
+<div class="main">
  <div class="nav">
-        <br />
-        <ul>
-          <li><a href="linux_blog.html">Linux Blog</a></li>
-        </ul>
-      </div>
+<br />
+<ul>
+<li><a href="linux_blog.html">Linux Blog</a></li>
+</ul>
+</div>
 
  <div class="article">
 
 <div class="peng-time">
-            <time>2019-04-26</time>
-          </div>
+<time>2019-04-26</time>
+</div>
 <hr>
 
-<h1>Linux中的同步问题</h1>
-<h2>什么时候需要解决同步问题</h2>
+<h1>Linux中的race condition方案</h1>
+<h2>什么时候需要解决race condition问题</h2>
 
 <p>
 <ul>
@@ -53,21 +52,9 @@ href="https://lwn.net/Kernel/LDD3/"
 data-accessed="2019-04-26">Linux Device Drivers, Third Edition</a></li>
 </ul>
 
-<h2>常用的几种同步方法</h2>
-<h3>原子操作</h3>
+<h2>常用的几种方法</h2>
 
-<p>
-原子操作是意思是把对临界资源的操作全部放入api接口内部实现，这样就不需
-要加锁了。Linux实现方式依赖于平台，每个平台都不一样，有些平台是直接用
-汇编语言实现的，有些平台则是通过关中断的方法来实现的（如何通过关中断来实现这里我不太清楚）。
-</p>
-
-<p>
-当需要保护的数据比较少的时候，使用原子操作是比较好的。一般情况下，就是
-一些整型数等等。原子操作提供了一些比如加1减1,读取等的简单接口。
-</p>
-
-<h3>信号量和互斥量</h3>
+<h3>信号量和互斥锁</h3>
 
 <p>
 <a class="sorc" href="https://lwn.net/Kernel/LDD3/" data-accessed="2019-04-26">LDD3: Chapter 5: Concurrency and Race Conditions</a> 中说得很清楚：
@@ -100,23 +87,74 @@ nel are used for mutual exclusion.
 <li>如果整数小于或等于0，需要访问临界资源的线程等待，直到该整数大于0。</li>
 <li>线程访问完临界区后，调V，为整数加1，如果有的话，唤醒一个之前在P等待资源的线程。</li>
 <li>初始化整数为1时，其实就是互斥锁啦。使用互斥锁，一次只可能有一个线程访问临界区。</li>
+<li>我认为，《UNIX环境高级编程》一书中，线程同步中的条件变量，应该就是这种信号量。 <a href="#condition_variable">条件变量</a> </li>
 </ul>
+
+<h4 id="read_and_write_semaphores">读写信号量</h4>
+
+<p>
+正如 <a href="#read_and_write">读写锁</a> 一节讲的，内核中也有读写信号量 struct rw_semaphore。
+
+</p>
+
+<h3>Completions</h3>
+
+<p>
+有这类情况：线程A需要等待线程B执行后，才往下执行。使用信号量完全可以实
+现上述情形的同步。不过，这种情况下使用信号量又感觉性能上不太好。因为此
+时线程A可以确定一定会在信号量上等待，直到线程B执行完后释放信号量。
+
+</p>
+
+<p>
+于是内核引入了Completions。它就是简直的让一个线程告诉另一个线程，事情搞
+定了。
+</p>
+
+<p>
+Completion是一次性的，用完就完了。如果需要再用，就需要重新初始化一下。
+</p>
 
 <h3>Spinlocks（自旋锁？）</h3>
 <p>
 自旋锁的意思是，线程A首先拿到这个锁，然后执行。线程B拿不到这个锁时，就
-在那儿等（自旋一会儿），还是占着cpu的（如果是信号量或者是互斥量的话，
-可能它们这时候就不占用cpu啦。）。注意这里A和B是在不同的cpu上执行的。等
-A执行完后，B马上就可以执行。自旋锁是效率是很高的，因为一般被锁住的资源
-会很快被释放的。
+在那儿等（自旋一会儿），还是占着cpu的（如果是信号量的话，可能它们这时
+候就不占用cpu，可以sleep啦。）。注意这里A和B是在不同的cpu上执行的。等A
+执行完后，B马上就可以执行。
 </p>
 
 <p>
-自旋锁是在多核的情况下才有用的，维基百科是这样说的：
+一般情况下，自旋锁是效率比信号量高，因为一般被锁住的资源会很快被释放的。
+但是它也有限制条件。
+
+<ol>
+
+<li>获得自旋锁后的操作，一般来说需要是原子操作，它们不能sleep。也就是
+说不能在获得了自旋锁后，又放弃了cpu。如果出现这种情况，别的程序来获取
+自旋锁时，永远都会“自旋”啦。但是可能导致sleep的操作很多，比如
+copy_to_user，kmalloc等等。在使用自旋锁的时候，需要很小心。</li>
+
+<li>自旋锁的代码中已经处理了抢断。在程序获得了自旋锁后，在执行该程序的
+cpu上，抢断会被关闭。使得此时该程序在获得自旋锁后可以一直占着该cpu。
+</li>
+
+<li>自旋锁还有接口，可以在获得自旋锁前，关闭该cpu上的中断。目的也是使
+得此时该程序在获得自旋锁后可以一直占着该cpu</li>
+
+<li>还有一个原则是，自旋锁应该尽可能少得的被占用。因为占用时间越多，可
+能等待的线程就越多。浪费的cpu也就越多。</li>
+</ol>
+
+</p>
+
+<p>
+总的来说，自旋锁可以在支持抢断式的单核，或者多核系统上使用。在不支持抢
+断式的单核设备上不能使用自旋锁。维基百科是这样说的：
 
 <pre class="output">
 显然，单核CPU不适于使用自旋锁，这里的单核CPU指的是单核单线程的CPU，因为，在同一时间只有一个线程是处在运行状态，假设运行线程A发现无法获取锁，只能等待解锁，但因为A自身不挂起，所以那个持有锁的线程B没有办法进入运行状态，只能等到操作系统分给A的时间片用完，才能有机会被调度。这种情况下使用自旋锁的代价很高。
 </pre>
+
 </p>
 
 <p>
@@ -132,35 +170,106 @@ Spinlock)</a>
 问题：一般的锁，如果锁不住，会把cpu还给内核让它调度后面的线程吗？我现在理解应该是会的。
 </p>
 
-<h3>读写锁</h3>
+<h4>读写自旋锁</h4>
 
+<p>
+和 <a href="#read_and_write_semaphores">读写信号量</a> 一样，也有读写自旋锁。
+</p>
+
+<h3 id="read_and_write">读写锁</h3>
 <p>
 临界资源，有多个读和一个写时，这是比较有用的。没有写的线程时，多个读可
 以同时进行。有写的线程时，读和写都必须等待。
 </p>
 
-<h3 style="color:red">条件变量 （这个是不是就是上面的信号？）</h3>
+<h3 style="color:red" id="condition_variable">条件变量 （这个是不是就是上面的信号量？）</h3>
 
 <p>
-条件变量就是对应的P,V操作吧。一个线程V出来一个资源，就可以唤醒一个等待
-的线程来P它。如果资源就是1时，条件变量其实就是互斥锁啦。
+在《UNIX环境高级编程》一书中，条件变量就是对应的P,V操作吧。一个线程V出
+来一个资源，就可以唤醒一个等待的线程来P它。条件变量和互斥锁一起使用，
+可以实现线程间的同步。
+</p>
+
+<h3>无锁算法</h3>
+
+<p>
+可以通过一些设计优良的算法来避免使用锁。比如 circular buffer（循环队
+列）。它用于生产消费模型，不过只有一个reader和一个writer。writer不停得
+往队尾写数据，reader不停地从队首读数据。仔细编写地话，这样的一个模型就可以不用锁。
+
+</p>
+
+<h3>原子操作</h3>
+<p>
+原子操作是意思是把对临界资源的操作全部放入api接口内部实现，这样就不需
+要加锁了。Linux实现方式依赖于平台，每个平台都不一样，有些平台是直接用
+汇编语言实现的，有些平台则是通过关中断的方法来实现的（如何通过关中断来实现这里我不太清楚）。
 </p>
 
 <p>
-条件变量和普通的锁的区别是：
+当需要保护的数据比较少的时候，使用原子操作是比较好的。一般情况下，就是
+一些整型数等等。原子操作提供了一些比如加1减1，读取等的简单接口。
+</p>
 
-<ul>
-<li>条件变量可以有多个，也就是说，如果资源有多个，可能同时有多个线程在
-执行。而普通的锁，只能是一个线程在访问临界资源。
-</li>
-<li>普通锁，解锁的线程必须正好是锁信它的线程 <span style="color:red">
-这个我还不太确定。</span>。而对于条件变量来说，任何一个线程都可以
-"signal"一个条件。任何一个线程也可以通过广播的方式唤醒所有等待中的线
-程 <span id="style:red">这个还没有做过实验，但是我的问题是：条件变量一
-般和互斥量一起使用，应该没有同时等待的多个线程吧？</span>。
-</li>
+<h3>位操作</h3>
 
-</ul>
+<p>
+我理解位操作（读，写）都可以直接只由一条机器指令执行。所以就不存在race
+condition？<span style="color:red">如果是多核也不存在吗？</span>
+</p>
+
+<p>
+使用位操作，可以实现自旋锁，比如：
+<pre class="cpp">
+<span class="comment-delimiter">/* </span><span class="comment">try to set lock */</span>
+<span class="keyword">while</span> (test_and_set_bit(nr, addr) != 0)
+wait_for_a_while( );
+<span class="comment-delimiter">/* </span><span class="comment">do your work */</span>
+<span class="comment-delimiter">/* </span><span class="comment">release lock, and check... */</span>
+<span class="keyword">if</span> (test_and_clear_bit(nr, addr) = = 0)
+something_went_wrong( ); <span class="comment-delimiter">/* </span><span class="comment">already released: error */</span>
+</pre>
+
+</p>
+
+<h3>seqlocks</h3>
+
+<p>
+这个比较好玩。读的线程read不管三七二十一直接先读数据，读完后，看这个数
+据在它读的时候是否被writer动过，如果动过，丢弃当前读的重新再读一次。看
+起来像这样：
+<pre class="cpp">
+<span class="type">unsigned</span> <span class="type">int</span> <span class="variable-name">seq</span>;
+<span class="keyword">do</span> {
+seq = read_seqbegin(&amp;the_lock);
+<span class="comment-delimiter">/* </span><span class="comment">Do what you need to do */</span>
+} <span class="keyword">while</span> read_seqretry(&amp;the_lock, seq);
+</pre>
+</p>
+
+<p>
+其中，seq就是来查看是否数据被writer动过的。seqlock的read还有关中断的接
+口。writer写的时候需要拿一个锁－－自旋锁。所以自旋锁相关的限制对它也有。
+</p>
+
+<p>
+seqlock一般锁的是简单，比较一致的数据。 <b>它不能锁有指针的数据。</b>
+因为如果writer正在修改数据，谁也不知道reader读出来的指针是指向哪里的。
+
+</p>
+
+<h3>Read-Copy-Update</h3>
+<p>
+<ol>
+<li>用在读很常见，写少见的情况。</li>
+<li>reader除了关闭抢断，啥也不管，读就是了，不过在读的操作，必须是原子
+的。</li>
+<li>数据全是通过指针访问。</li>
+<li>申请新的空间，把旧的指针拷贝过来。</li>
+<li>在新申请的空间中更新指针。这个时候，新的reader就直接访问新申请的空间的指针了。</li>
+<li>writer还需要等所有访问old数据的reader访问完成后，释放old数据。</li>
+
+</ol>
 
 </p>
 
