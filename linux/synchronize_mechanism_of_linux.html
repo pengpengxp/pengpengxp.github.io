@@ -50,6 +50,9 @@
 thead at any given time. <a class="sorc"
 href="https://lwn.net/Kernel/LDD3/"
 data-accessed="2019-04-26">Linux Device Drivers, Third Edition</a></li>
+<li> <b>atomic context: </b>an atomic context is sim- ply a state
+where multiple steps must be performed without any sort of concurrent
+access.</li>
 </ul>
 
 <h2>常用的几种方法</h2>
@@ -168,6 +171,29 @@ Spinlock)</a>
 
 <p style="color:red">
 问题：一般的锁，如果锁不住，会把cpu还给内核让它调度后面的线程吗？我现在理解应该是会的。
+
+</p>
+
+<p>
+<a class="sorc" href="https://lwn.net/Kernel/LDD3/"
+data-accessed="2019-04-26">Linux Device Drivers, Third Edition</a> 上说得很清楚：
+<pre class="output">
+an atomic context is simply a state where multiple steps must be
+performed without any sort of concurrent access. What that means, with
+regard to sleeping, is that your driver cannot sleep while holding a
+spinlock, seqlock, or RCU lock. You also cannot sleep if you have
+disabled interrupts. It is legal to sleep while holding a semaphore,
+but you should look very carefully at any code that does so. If code
+sleeps while holding a sema- phore, any other thread waiting for that
+semaphore also sleeps. So any sleeps that happen while holding
+semaphores should be short, and you should convince your- self that,
+by holding the semaphore, you are not blocking the process that will
+even- tually wake you up.
+</pre>
+
+在得到一个信号量后，是可以sleep的，也就是放弃cpu。其它等待该信号量的线
+程也会sleep。其它比如自旋锁，是不行的。
+
 </p>
 
 <h4>读写自旋锁</h4>
