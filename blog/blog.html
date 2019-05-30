@@ -1,33 +1,87 @@
 <!doctype html>
 <html lang="zh_cn">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <!-- keywords for search engin -->
-    <meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
-    <meta name="author" content="Peng Xie">
-    <meta name="description" content="">
-    <link rel="stylesheet" href="../css/indexlayout.css" />
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<!-- keywords for search engin -->
+<meta name="keywords" content="emacs,org,shell,linux,c,python,js,html,css">
+<meta name="author" content="Peng Xie">
+<meta name="description" content="">
+<link rel="stylesheet" href="../css/indexlayout.css" />
 
-    <title>Blog</title>
+<title>Blog</title>
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div class="main">
-      <div class="nav">
-        <br />
-        <ul>
-          <li><a href="../index.html">Back to Pengpengxp</a></li>
-          <hr>
-        </ul>
-      </div>
+<div class="main">
+<div class="nav">
+<br />
+<ul>
+<li><a href="../index.html">Back to Pengpengxp</a></li>
+<hr>
+</ul>
+</div>
 
-      <div class="article">
+<div class="article">
 
-        <h1>Blog</h1>
+<h1>Blog</h1>
+<section>
+<div class="peng-time">
+<time>2019-05-30</time>
+
+<p>
+昨天试了下 <a class="sorc" href="https://docs.rsshub.app/en/" data-accessed="2019-05-30">Rsshub</a> 。感觉还不错。
+</p>
+
+<p>
+直接使用docker来安装的： <span>docker pull diygod/rsshub</span> 。然后直接拉起，把1200端口映射出来就安装好了：
+<pre class="bash">docker run -d --name rsshub --env <span class="variable-name">NODE_ENV</span>=production -p 1200:1200 diygod/rsshub</pre>
+</p>
+
+<p>
+
+<a class="sorc" href="https://docs.rsshub.app/" data-accessed="2019-05-30">官网</a> 有提供很多的路由。我先用来订阅微信公众号。使用的是这个：
+<pre class="code">
+公众号（瓦斯来源）
+
+作者: @DIYgod
+
+举例: https://rsshub.app/wechat/wasi/5b575db858e5c4583338db11
+
+路由: /wechat/wasi/:id
+
+参数:
+
+    id, 必选 -
+
+    瓦斯公众号 id, 可在瓦斯搜索公众号, 打开公众号页, 在 URL 中找到 id
+</pre>
+</p>
+
+<p>
+比如我的机器的域名是 xxxx.com，则我可以订阅 <span>http://xxx.com:1200/wechat/wasi/5b575db858e5c4583338db11</span> 这个rss源。
+不同的id就是不同的公众号，对应的id可以去 <a class="sorc" href="https://qnmlgb.tech/" data-accessed="2019-05-30">瓦斯</a> 里面搜公众号名字，找到后点进去，url后面的id就是这里使用的id。
+</p>
+
+<p>
+这样的rss不是全文的，看文档，可以使用efb来借telegram中转一下获得全文，但是，这需要一个空闲的微信来登陆efb。我没有，所以我没法使用这个办法。
+</p>
+
+<p>
+
+不过，我发现instapaper可以帮我干这个事情。
+现在我一般是，用在inoreader中订阅这些公众号，手机上用reeder看。
+觉得需要读的，就在reeder中发送到instapaper中。
+由instapaper负责帮我把全文拉下来。我instapaper主要是在电子书上看的。
+最后，需要看的文章都在instapaper中，电子书定期联网就拉下来了。而且都是全文哦。
+</p>
+
+</div>
+</section>
+
 <section>
 <div class="peng-time">
 <time>2019-05-23</time>
@@ -58,7 +112,6 @@ ebook-convert index.html book.epub
             </div>
             <p>使用callibre抓取instapaper保存的文章时，总是最新的文章在最前，这样看起来不太爽。因为我总是希望最先阅读最旧的文章。</p>
 
-
             <p>然后我就找到了callibre的recipe中有这样一个功能：
               <pre class="python"><span class="variable-name">reverse_article_order</span> = <span class="constant">True</span></pre>
               直接就可以把抓取的文章顺序反转。使用方法就是直接使用高级修改callibre的recipe，加入下面一句就可以了（默认好像它是被注释掉了）。
@@ -70,7 +123,6 @@ ebook-convert index.html book.epub
 </span><span class="comment-delimiter"># </span><span class="comment">Source: https://github.com/kovidgoyal/calibre/blob/master/recipes/instapaper.recipe
 </span>
 <span class="keyword">from</span> calibre.web.feeds.news <span class="keyword">import</span> BasicNewsRecipe
-
 
 <span class="keyword">class</span> <span class="type">AdvancedUserRecipe1299694372</span>(BasicNewsRecipe):
     <span class="variable-name">title</span> = u<span class="string">'Instapaper'</span>
